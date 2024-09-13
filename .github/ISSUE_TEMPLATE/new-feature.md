@@ -1,10 +1,9 @@
 ---
 name: NEW FEATURE
 about: Make new feautre for development
-title: "[part name] Add XXX page"
+title: '[part name] Add XXX page (4H)'
 labels: ''
 assignees: ''
-
 ---
 
 ## Feature Name
