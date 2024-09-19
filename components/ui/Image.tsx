@@ -16,7 +16,7 @@ function SImage({
   width = 400,
   height = 250,
   alt = '',
-  fit = 'contain',
+  fit = 'cover',
 }: ImageProps): JSX.Element {
   const imgRef = useRef<HTMLDivElement | null>(null);
 

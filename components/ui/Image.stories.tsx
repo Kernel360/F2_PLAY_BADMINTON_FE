@@ -52,3 +52,14 @@ export const Default: Story = {
     fit: 'cover',
   },
 };
+
+export const Avatar: Story = {
+  args: {
+    src: 'https://dummyimage.com/50x50/000/ffffff',
+    radius: 'circular',
+    width: 50,
+    height: 50,
+    alt: '',
+    fit: 'cover',
+  },
+};
