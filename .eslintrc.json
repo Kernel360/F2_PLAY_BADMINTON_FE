@@ -1,0 +1,69 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "airbnb",
+    "prettier",
+    "airbnb-typescript",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "plugin:prettier/recommended", // prettier 설정 추가,
+    "next/core-web-vitals",
+    "next/typescript"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["react", "@typescript-eslint", "jsx-a11y", "import", "prettier"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "import/prefer-default-export": "off", //파일에서 export를 하나만 할때 default export를 쓰라고 하는 eslint off
+    "no-confusing-arrow": [
+      "error",
+      { "allowParens": true, "onlyOneSimpleParam": true }
+    ],
+    "react/require-default-props": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      //절대경로 사용을 위한 설정 이게 없으면 eslint 에러가 남
+      "typescript": {}
+    }
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.test.ts",
+        "*.stories.ts",
+        // shadcn 컴포넌트
+        "components/ui/**/*.tsx"
+      ],
+      "rules": {
+        // import/no-extraneous-dependencies 규칙 비활성화
+        "import/no-extraneous-dependencies": "off"
+      }
+    },
+    {
+      "files": ["components/ui/**/*.tsx"],
+      "rules": {
+        // shadcn 컴포넌트 파일 jsx-props-no-spreading 규칙 비활성화
+        "react/jsx-props-no-spreading": "off"
+      }
+    }
+  ]
+}
