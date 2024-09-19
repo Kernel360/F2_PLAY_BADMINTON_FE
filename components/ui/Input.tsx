@@ -8,20 +8,20 @@ const inputVariants = cva(
   {
     variants: {
       size: {
-        small: 'h-10 w-full px-2 py-2',
-        medium: 'h-14 w-full px-3 py-2',
-        large: 'h-20 w-full px-4 py-2',
+        sm: 'h-14 w-full px-2 py-2',
+        md: 'h-16 w-full px-3 py-2',
+        lg: 'h-20 w-full px-4 py-2',
       },
       radius: {
-        small: 'rounded',
-        medium: 'rounded-md',
-        large: 'rounded-lg',
+        sm: 'rounded-sm',
+        md: 'rounded-md',
+        lg: 'rounded-lg',
         round: 'rounded-full',
       },
     },
     defaultVariants: {
-      size: 'medium',
-      radius: 'medium',
+      size: 'md',
+      radius: 'md',
     },
   },
 );

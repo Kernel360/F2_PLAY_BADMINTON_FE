@@ -15,12 +15,12 @@ const meta: Meta<typeof Input> = {
     size: {
       control: 'select',
       dscription: 'Input sizes',
-      options: ['small', 'medium', 'large'],
+      options: ['sm', 'md', 'lg'],
     },
     radius: {
       control: 'select',
       description: 'Input radius',
-      options: ['small', 'medium', 'large', 'round'],
+      options: ['sm', 'md', 'lg', 'round'],
     },
   },
 };
@@ -31,7 +31,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    size: 'medium',
-    radius: 'medium',
+    size: 'md',
+    radius: 'md',
   },
 };
