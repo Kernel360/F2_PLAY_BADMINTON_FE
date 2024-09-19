@@ -8,9 +8,9 @@ const inputVariants = cva(
   {
     variants: {
       size: {
-        sm: 'h-14 w-full px-2 py-2',
-        md: 'h-16 w-full px-3 py-2',
-        lg: 'h-20 w-full px-4 py-2',
+        sm: 'h-3.5 w-full px-2 py-2',
+        md: 'h-4 w-full px-2 py-3',
+        lg: 'h-5 w-full px-2 py-4',
       },
       radius: {
         sm: 'rounded-sm',
@@ -27,21 +27,42 @@ const inputVariants = cva(
 );
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
-    VariantProps<typeof inputVariants> {}
+    VariantProps<typeof inputVariants> {
+  icon?: React.ReactNode;
+}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { className, size, radius, type, placeholder = 'placeholder', ...props },
+    {
+      className,
+      size,
+      radius,
+      type,
+      placeholder = 'placeholder',
+      icon,
+      ...props
+    },
     ref,
   ) => {
     return (
-      <input
-        placeholder={placeholder}
-        type={type}
-        className={cn(inputVariants({ size, radius, className }))}
-        ref={ref}
-        {...props}
-      />
+      <div className="relative w-full">
+        {icon && (
+          <span
+            className={cn('absolute inset-y-0 left-0 flex items-center pl-2')}
+          >
+            {icon}
+          </span>
+        )}{' '}
+        <input
+          placeholder={placeholder}
+          type={type}
+          className={cn(inputVariants({ size, radius, className }), {
+            'pl-8': icon,
+          })}
+          ref={ref}
+          {...props}
+        />
+      </div>
     );
   },
 );
