@@ -2,7 +2,7 @@ import React from 'react';
 
 interface TextProps {
   children: React.ReactNode;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl';
   weight?: 'light' | 'regular' | 'bold';
   underline?: boolean;
   block?: boolean;
@@ -41,6 +41,24 @@ function Text({
       white: 'text-white',
     }[color] || 'text-black'; // 기본값
 
+  const sizeClass =
+    {
+      xs: 'text-xs',
+      sm: 'text-sm',
+      md: 'text-md',
+      lg: 'text-xl',
+      xl: 'text-3xl',
+      xxl: 'text-5xl',
+      xxxl: 'text-6xl',
+    }[size] || 'text-md';
+
+  const weightClass =
+    {
+      light: 'font-extralight',
+      regular: 'font-medium',
+      bold: 'font-extrabold',
+    }[weight] || 'text-md';
+
   const baseStyles: React.CSSProperties = {
     display: displayStyle,
     textDecoration: underline ? 'underline' : 'none',
@@ -52,47 +70,10 @@ function Text({
     WebkitBoxOrient: lineClamp ? 'vertical' : undefined,
   };
 
-  // Font size based on `size` prop
-  const sizeStyles: React.CSSProperties = (() => {
-    switch (size) {
-      case 'xs':
-        return { fontSize: '12px' };
-      case 'sm':
-        return { fontSize: '14px' };
-      case 'md':
-        return { fontSize: '16px' };
-      case 'lg':
-        return { fontSize: '20px' };
-      case 'xl':
-        return { fontSize: '24px' };
-      case '2xl':
-        return { fontSize: '32px' };
-      case '3xl':
-        return { fontSize: '40px' };
-      case '4xl':
-        return { fontSize: '64px' };
-      default:
-        return { fontSize: '16px' };
-    }
-  })();
-
-  const weightStyles: React.CSSProperties = (() => {
-    switch (weight) {
-      case 'light':
-        return { fontWeight: '200' };
-      case 'regular':
-        return { fontWeight: '500' };
-      case 'bold':
-        return { fontWeight: '800' };
-      default:
-        return { fontWeight: '500' };
-    }
-  })();
-
   return (
     <span
-      style={{ ...baseStyles, ...sizeStyles, ...weightStyles }}
-      className={colorClass}
+      style={{ ...baseStyles }}
+      className={[colorClass, sizeClass, weightClass].join(' ')}
     >
       {children}
     </span>
