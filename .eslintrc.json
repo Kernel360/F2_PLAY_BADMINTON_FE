@@ -34,8 +34,7 @@
       "error",
       { "allowParens": true, "onlyOneSimpleParam": true }
     ],
-    "react/require-default-props": "off",
-    "react/jsx-props-no-spreading": "off" // ...props 허용
+    "react/require-default-props": "off"
   },
   "settings": {
     "react": {
