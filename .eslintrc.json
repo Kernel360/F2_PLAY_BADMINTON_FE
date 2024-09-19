@@ -47,9 +47,23 @@
   },
   "overrides": [
     {
-      // Slice로 끝나는 파일(리덕스 슬라이스)에 대해서만 no-param-reassign 룰을 끔 => 리덕스 슬라이스에서 state를 직접 변경하는 것을 허용
-      "files": ["src/**/*Slice.ts"],
-      "rules": { "no-param-reassign": ["error", { "props": false }] }
+      "files": [
+        "*.test.ts",
+        "*.stories.ts",
+        // shadcn 컴포넌트
+        "components/ui/**/*.tsx"
+      ],
+      "rules": {
+        // import/no-extraneous-dependencies 규칙 비활성화
+        "import/no-extraneous-dependencies": "off"
+      }
+    },
+    {
+      "files": ["components/ui/**/*.tsx"],
+      "rules": {
+        // shadcn 컴포넌트 파일 jsx-props-no-spreading 규칙 비활성화
+        "react/jsx-props-no-spreading": "off"
+      }
     }
   ]
 }
