@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Image from 'next/image';
 
 interface ImageProps {
@@ -18,8 +18,6 @@ function SImage({
   alt = '',
   fit = 'cover',
 }: ImageProps): JSX.Element {
-  const imgRef = useRef<HTMLDivElement | null>(null);
-
   const radiusClass = (() => {
     switch (radius) {
       case 'sm':
@@ -37,11 +35,7 @@ function SImage({
   })();
 
   return (
-    <div
-      ref={imgRef}
-      className={`${radiusClass} overflow-hidden`}
-      style={{ width, height }}
-    >
+    <div className={`${radiusClass} overflow-hidden`} style={{ width, height }}>
       <Image
         src={src}
         alt={alt}
