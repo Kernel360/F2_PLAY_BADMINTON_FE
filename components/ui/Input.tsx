@@ -6,9 +6,9 @@ import { cva, VariantProps } from 'class-variance-authority';
 const inputVariants = cva('', {
   variants: {
     size: {
-      sm: 'h-8 w-full px-1',
+      sm: 'h-8 w-full px-2',
       md: 'h-10 w-full px-2',
-      lg: 'h-12 w-full px-3',
+      lg: 'h-12 w-full px-2',
     },
     radius: {
       sm: 'rounded-sm',

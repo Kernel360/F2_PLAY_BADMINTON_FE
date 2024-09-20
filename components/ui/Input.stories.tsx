@@ -37,7 +37,7 @@ function UserIcon() {
       height="20"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="currentColor"
+      stroke="gray"
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
