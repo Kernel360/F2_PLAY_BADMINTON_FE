@@ -2,7 +2,7 @@ import React from 'react';
 
 interface TextProps {
   children: React.ReactNode;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   weight?: 'light' | 'regular' | 'bold';
   underline?: boolean;
   block?: boolean;
@@ -45,19 +45,17 @@ function Text({
     {
       xs: 'text-xs',
       sm: 'text-sm',
-      md: 'text-md',
+      md: 'text-base',
       lg: 'text-xl',
-      xl: 'text-3xl',
-      xxl: 'text-5xl',
-      xxxl: 'text-6xl',
-    }[size] || 'text-md';
+      xl: 'text-2xl',
+    }[size] || 'text-base';
 
   const weightClass =
     {
       light: 'font-extralight',
       regular: 'font-medium',
       bold: 'font-extrabold',
-    }[weight] || 'text-md';
+    }[weight] || 'regular';
 
   const baseStyles: React.CSSProperties = {
     display: displayStyle,

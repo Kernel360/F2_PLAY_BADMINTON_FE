@@ -15,7 +15,7 @@ const meta: Meta<typeof Text> = {
     },
     size: {
       defaultValue: 'md',
-      options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl'],
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
       control: { type: 'select' },
     },
     weight: {
