@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';
-import { TabTriggerProps } from './Tabs';
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  TabTriggerProps,
+} from './Tabs';
 
 const meta: Meta<typeof Tabs> = {
   title: 'Components/ui/Tabs',
@@ -16,7 +21,7 @@ const meta: Meta<typeof Tabs> = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof Tabs>;
 
 export const Default: Story = {
   args: {
