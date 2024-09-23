@@ -1,9 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { Card, CardDescription } from './ImageCard';
+import { ImageCard, ImageCardDescription } from './ImageCard';
 
-const meta: Meta<typeof Card> = {
+const meta: Meta<typeof ImageCard> = {
   title: 'Components/ui/ImageCard',
-  component: Card,
+  component: ImageCard,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
@@ -19,17 +19,17 @@ const meta: Meta<typeof Card> = {
 
 export default meta;
 
-type Story = StoryObj<typeof Card>;
+type Story = StoryObj<typeof ImageCard>;
 
 export const Default: Story = {
   args: {
     size: 'md',
   },
   render: (args) => (
-    <Card size={args.size} src="https://picsum.photos/200/300">
-      <CardDescription>
+    <ImageCard size={args.size} src="https://picsum.photos/200/300">
+      <ImageCardDescription>
         Card Footer Card Footer Card FooterCard Footer Card Footer
-      </CardDescription>
-    </Card>
+      </ImageCardDescription>
+    </ImageCard>
   ),
 };

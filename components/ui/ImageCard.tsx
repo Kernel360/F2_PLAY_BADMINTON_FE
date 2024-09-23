@@ -18,7 +18,7 @@ interface CardImageContentProps extends React.HTMLAttributes<HTMLDivElement> {
 interface CardDescriptionContentProps
   extends React.HTMLAttributes<HTMLSpanElement> {}
 
-const CardImage = React.forwardRef<HTMLDivElement, CardImageContentProps>(
+const ImageCardImage = React.forwardRef<HTMLDivElement, CardImageContentProps>(
   ({ className, src, size = { width: 240, height: 240 }, ...props }, ref) => {
     return (
       <div
@@ -36,18 +36,18 @@ const CardImage = React.forwardRef<HTMLDivElement, CardImageContentProps>(
     );
   },
 );
-CardImage.displayName = 'CardImage';
+ImageCardImage.displayName = 'ImageCardImage';
 
-function CardDescription({ children }: CardDescriptionContentProps) {
+function ImageCardDescription({ children }: CardDescriptionContentProps) {
   return (
     <div className="w-full">
       <Text lineClamp={1}>{children}</Text>
     </div>
   );
 }
-CardDescription.displayName = 'CardDescription';
+ImageCardDescription.displayName = 'ImageCardDescription';
 
-const Card = React.forwardRef<HTMLDivElement, CardContentProps>(
+const ImageCard = React.forwardRef<HTMLDivElement, CardContentProps>(
   ({ className, src, size = 'md', children, ...props }, ref) => {
     const sizeClasses = {
       sm: 'w-44 ', // small size
@@ -85,7 +85,7 @@ const Card = React.forwardRef<HTMLDivElement, CardContentProps>(
         {...props}
       >
         <div className={cn('flex-col', paddingClasses[size])}>
-          <CardImage
+          <ImageCardImage
             src={src}
             size={cardSizes[size]}
             className={paddingBClasses[size]}
@@ -97,6 +97,6 @@ const Card = React.forwardRef<HTMLDivElement, CardContentProps>(
   },
 );
 
-Card.displayName = 'Card';
+ImageCard.displayName = 'ImageCard';
 
-export { Card, CardImage, CardDescription };
+export { ImageCard, ImageCardImage, ImageCardDescription };
