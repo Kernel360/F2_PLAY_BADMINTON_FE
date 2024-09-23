@@ -43,6 +43,9 @@ export const Default: Story = {
       <div className="w-20 h-20 bg-red-500">hihi</div>
       <div className="w-20 h-20 bg-red-500">hihi</div>
       <div className="w-20 h-20 bg-red-500">hihi</div>
+      <div className="w-20 h-20 bg-red-500">hihi</div>
+      <div className="w-20 h-20 bg-red-500">hihi</div>
+      <div className="w-20 h-20 bg-red-500">hihi</div>
     </Grid>
   ),
 };
