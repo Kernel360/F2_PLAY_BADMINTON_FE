@@ -51,7 +51,7 @@ const personalSection = (isLogin: boolean, isJoined: boolean) => {
 function Header(props: UserStateProps) {
   const { isLogin, isJoined } = props;
   return (
-    <div className="flex items-center justify-between space-x-4 w-full max-w-5xl h-16 px-8 border-solid border-b border-gray-200">
+    <div className="flex items-center justify-between space-x-4 w-full max-w-5xl h-16 px-8 sticky top-0 z-50 border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="text-xl font-semibold cursor-pointer">LOGO</div>
 
       <div className="flex items-center justify-end space-x-2 w-1/2">
