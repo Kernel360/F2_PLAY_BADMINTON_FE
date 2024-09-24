@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import IconButton from './IconButton';
 import { Users } from 'lucide-react';
+import IconButton from './IconButton';
 
 const meta: Meta<typeof IconButton> = {
   title: 'Components/ui/IconButton',
@@ -40,7 +40,7 @@ export const Default: Story = {
   render: (args) => {
     return (
       <IconButton {...args}>
-        <Users width={'80%'} height={'80%'} />
+        <Users width="80%" height="80%" />
       </IconButton>
     );
   },

@@ -38,6 +38,7 @@ function IconButton(props: IconButtonProps) {
 
   return (
     <button
+      type="button"
       className={`flex justify-center items-center ${sizeClass} ${radiusClass} ${colorClass}`}
     >
       <div className="w-full h-full flex justify-center items-center">
