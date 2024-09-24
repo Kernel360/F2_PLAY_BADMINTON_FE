@@ -18,7 +18,7 @@ interface CardImageContentProps extends React.HTMLAttributes<HTMLDivElement> {
 interface CardDescriptionContentProps
   extends React.HTMLAttributes<HTMLSpanElement> {}
 
-const ImageCardImage = React.forwardRef<HTMLDivElement, CardImageContentProps>(
+const ImageCardCover = React.forwardRef<HTMLDivElement, CardImageContentProps>(
   ({ className, src, size = { width: 240, height: 240 }, ...props }, ref) => {
     return (
       <div
@@ -36,7 +36,7 @@ const ImageCardImage = React.forwardRef<HTMLDivElement, CardImageContentProps>(
     );
   },
 );
-ImageCardImage.displayName = 'ImageCardImage';
+ImageCardCover.displayName = 'ImageCardCover';
 
 function ImageCardDescription({ children }: CardDescriptionContentProps) {
   return (
@@ -85,7 +85,7 @@ const ImageCard = React.forwardRef<HTMLDivElement, CardContentProps>(
         {...props}
       >
         <div className={cn('flex-col', paddingClasses[size])}>
-          <ImageCardImage
+          <ImageCardCover
             src={src}
             size={cardSizes[size]}
             className={paddingBClasses[size]}
@@ -99,4 +99,4 @@ const ImageCard = React.forwardRef<HTMLDivElement, CardContentProps>(
 
 ImageCard.displayName = 'ImageCard';
 
-export { ImageCard, ImageCardImage, ImageCardDescription };
+export { ImageCard, ImageCardCover, ImageCardDescription };
