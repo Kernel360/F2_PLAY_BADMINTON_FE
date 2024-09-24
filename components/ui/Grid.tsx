@@ -2,19 +2,28 @@ import React from 'react';
 
 interface GridProps {
   children: React.ReactNode;
+  columns?: 3 | 4 | 5 | 6;
   spacing?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  justify?: 'start' | 'center' | 'end';
-  align?: 'start' | 'center' | 'end';
+  placeContent?: 'start' | 'center' | 'end';
+  placeItems?: 'start' | 'center' | 'end';
 }
 
 function Grid(props: GridProps) {
   const {
     children,
+    columns = 3,
     spacing = 'md',
-    justify = 'start',
-    align = 'start',
+    placeContent = 'start',
+    placeItems = 'start',
   } = props;
 
+  const columnsClass =
+    {
+      3: 'grid-cols-3',
+      4: 'grid-cols-4',
+      5: 'grid-cols-5',
+      6: 'grid-cols-6',
+    }[columns] || 3;
   const spacingClass =
     {
       xs: 'gap-2',
@@ -24,23 +33,23 @@ function Grid(props: GridProps) {
       xl: 'gap-20',
     }[spacing] || 'gap-8';
 
-  const justifyClass =
+  const placeContentClass =
     {
-      start: 'justify-start',
-      center: 'justify-center',
-      end: 'justify-end',
-    }[justify] || 'justify-start';
+      start: 'place-content-start',
+      center: 'place-content-center',
+      end: 'place-content-end',
+    }[placeContent] || 'place-content-start';
 
-  const alignClass =
+  const placeItemsClass =
     {
-      start: 'items-start',
-      center: 'items-center',
-      end: 'items-end',
-    }[align] || 'items-start';
+      start: 'place-items-start',
+      center: 'place-items-center',
+      end: 'place-items-end',
+    }[placeItems] || 'items-start';
 
   return (
     <div
-      className={`flex flex-wrap w-full h-dvh ${spacingClass} ${justifyClass} ${alignClass}`}
+      className={`h-screen w-full grid ${columnsClass} ${spacingClass} ${placeContentClass} ${placeItemsClass}`}
     >
       {children}
     </div>
