@@ -10,14 +10,17 @@ const personalSection = (isLogin: boolean, isJoined: boolean) => {
       <div className="flex w-44 justify-evenly">
         <LinkText
           color="gray"
-          className="text-sm cursor-pointer text-center leading-6 font-normal"
+          size="sm"
+          align="center"
+          className="cursor-pointer leading-6"
           link="/"
         >
           동호회 새로 만들기
         </LinkText>
         <LinkText
           color="primary"
-          className="text-sm cursor-pointer leading-6"
+          size="sm"
+          className="cursor-pointer leading-6"
           link="/"
         >
           Login
@@ -30,7 +33,9 @@ const personalSection = (isLogin: boolean, isJoined: boolean) => {
       <div className="flex w-40 justify-evenly">
         <LinkText
           color="gray"
-          className="text-sm cursor-pointer text-center leading-6 font-normal"
+          size="sm"
+          align="center"
+          className=" cursor-pointer leading-6"
           link="/"
         >
           동호회 새로 만들기
@@ -42,18 +47,14 @@ const personalSection = (isLogin: boolean, isJoined: boolean) => {
       </div>
     );
   }
-  return (
-    // return <LucideIcon color={color} size={size} />;
-    <UserRound size={24} cursor-pointer color="#000000" />
-  );
+  return <UserRound size={24} cursor-pointer color="#000000" />;
 };
 
 function Header(props: UserStateProps) {
   const { isLogin, isJoined } = props;
   return (
-    <div className="flex items-center justify-between space-x-4 w-full max-w-5xl h-16 px-8 border-solid border-b border-gray-200">
+    <div className="flex items-center justify-between space-x-4 w-full max-w-5xl h-16 sticky top-0 z-50 border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="text-xl font-semibold cursor-pointer">LOGO</div>
-
       <div className="flex items-center justify-end space-x-2 w-1/2">
         <div className="w-1/2">
           <Input search radius="round" placeholder="" size="sm" />
