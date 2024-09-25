@@ -30,8 +30,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased w-full flex flex-col justify-start items-center min-h-screen`}
       >
-        <Header isLogin={isLogin} isJoined={isJoined} />
-        {children}
+        <div className="w-full max-w-5xl">
+          <Header isLogin={isLogin} isJoined={isJoined} />
+          {children}
+        </div>
       </body>
     </html>
   );
