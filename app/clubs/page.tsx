@@ -1,6 +1,5 @@
 import Grid from '@/components/ui/Grid';
-import ClubCard from '@/components/clubs/ClubCard';
-import { Input } from '@/components/ui/Input';
+import { ClubCard } from '@/components/clubs/ClubCard';
 
 export default function pages() {
   return (
