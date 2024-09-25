@@ -10,14 +10,17 @@ const personalSection = (isLogin: boolean, isJoined: boolean) => {
       <div className="flex w-44 justify-evenly">
         <LinkText
           color="gray"
-          className="text-sm cursor-pointer text-center leading-6 font-normal"
+          size="sm"
+          align="center"
+          className="cursor-pointer leading-6"
           link="/"
         >
           동호회 새로 만들기
         </LinkText>
         <LinkText
           color="primary"
-          className="text-sm cursor-pointer leading-6"
+          size="sm"
+          className="cursor-pointer leading-6"
           link="/"
         >
           Login
@@ -30,7 +33,9 @@ const personalSection = (isLogin: boolean, isJoined: boolean) => {
       <div className="flex w-40 justify-evenly">
         <LinkText
           color="gray"
-          className="text-sm cursor-pointer text-center leading-6 font-normal"
+          size="sm"
+          align="center"
+          className=" cursor-pointer leading-6"
           link="/"
         >
           동호회 새로 만들기
@@ -42,10 +47,7 @@ const personalSection = (isLogin: boolean, isJoined: boolean) => {
       </div>
     );
   }
-  return (
-    // return <LucideIcon color={color} size={size} />;
-    <UserRound size={24} cursor-pointer color="#000000" />
-  );
+  return <UserRound size={24} cursor-pointer color="#000000" />;
 };
 
 function Header(props: UserStateProps) {
