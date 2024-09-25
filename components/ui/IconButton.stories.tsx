@@ -21,7 +21,10 @@ const meta: Meta<typeof IconButton> = {
     },
     color: {
       control: 'inline-radio',
-      options: ['gray', 'purple', 'blue', 'red', 'transparent'],
+      options: ['gray', 'primary', 'transparent'],
+    },
+    outline: {
+      control: 'boolean',
     },
   },
 };
@@ -35,12 +38,13 @@ export const Default: Story = {
     size: 'md',
     radius: 'md',
     color: 'gray',
+    outline: false,
   },
 
   render: (args) => {
     return (
       <IconButton {...args}>
-        <Users width="80%" height="80%" />
+        <Users width="80%" height="80%" color="black" />
       </IconButton>
     );
   },

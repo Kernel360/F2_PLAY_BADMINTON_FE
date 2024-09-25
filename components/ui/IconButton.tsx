@@ -4,11 +4,18 @@ interface IconButtonProps {
   children: React.ReactNode;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   radius?: 'sm' | 'md' | 'lg' | 'round';
-  color?: 'gray' | 'purple' | 'blue' | 'red' | 'transparent';
+  color?: 'gray' | 'primary' | 'transparent';
+  outline?: boolean;
 }
 
 function IconButton(props: IconButtonProps) {
-  const { children, size = 'md', radius = 'md', color = 'gray' } = props;
+  const {
+    children,
+    size = 'md',
+    radius = 'md',
+    color = 'gray',
+    outline = false,
+  } = props;
 
   const sizeClass =
     {
@@ -29,17 +36,17 @@ function IconButton(props: IconButtonProps) {
 
   const colorClass =
     {
-      gray: 'bg-gray-500',
-      purple: 'bg-purple-500',
-      blue: 'bg-blue-500',
-      red: 'bg-red-500',
+      gray: 'bg-gray-200',
+      primary: 'bg-primary',
       transparent: 'bg-transparent',
-    }[color] || 'gray';
+    }[color] || 'bg-gray-200';
+
+  const outlineClass = outline ? 'outline outline-2' : '';
 
   return (
     <button
       type="button"
-      className={`flex justify-center items-center ${sizeClass} ${radiusClass} ${colorClass}`}
+      className={`flex justify-center items-center ${outlineClass} ${sizeClass} ${radiusClass} ${colorClass} hover:filter hover:brightness-90`}
     >
       <div className="w-full h-full flex justify-center items-center">
         {children}
