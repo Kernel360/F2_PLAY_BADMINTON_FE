@@ -31,7 +31,7 @@ export function ClubCard({ className }: CardProps) {
           className="w-full h-48 object-cover"
         />
       </CardHeader>
-      <CardContent className="py-4 px-6">
+      <CardContent className="py-4 px-6 h-[80px]">
         <Text className=" font-semibold" lineClamp={2}>
           Kernel 360 프론트엔드 배드민턴 동호회 Kernel 360 프론트엔드 배드민턴
           동호회 Kernel 360 프론트엔드 배드민턴 동호회 Kernel 360 프론트엔드
