@@ -31,7 +31,7 @@ function LoginButton(props: LoginButtonProps) {
   }
   return (
     <div
-      className={`h-16 w-56 rounded-full flex justify-center items-center ${color}`}
+      className={`h-16 w-72 rounded-full flex justify-center items-center ${color}`}
     >
       {imgSrc && <Image src={imgSrc} alt={method} width={50} height={50} />}
       <span className="text-md font-bold">Login width {method}</span>
