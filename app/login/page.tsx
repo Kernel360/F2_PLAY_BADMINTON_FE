@@ -2,12 +2,12 @@ import React from 'react';
 import Link from 'next/link';
 import Image from '@/components/ui/Image';
 import brand from '@/app/images/main-logo.png';
-import LoginButton from './LoginButton';
 import {
   GOOGLE_OAUTH_URL,
   KAKAO_OAUTH_URL,
   NAVER_OAUTH_URL,
 } from '@/constants/loginOauthUrl';
+import LoginButton from './LoginButton';
 
 function LoginPage() {
   return (
