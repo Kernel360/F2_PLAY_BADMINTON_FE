@@ -49,7 +49,7 @@ function Grid(props: GridProps) {
 
   return (
     <div
-      className={`h-screen w-full grid ${columnsClass} ${spacingClass} ${placeContentClass} ${placeItemsClass}`}
+      className={`min-h-screen w-full grid ${columnsClass} ${spacingClass} ${placeContentClass} ${placeItemsClass}`}
     >
       {children}
     </div>
