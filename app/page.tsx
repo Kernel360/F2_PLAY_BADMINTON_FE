@@ -1,5 +1,5 @@
-import ClubPage from './club/pages';
+import LoginPage from './login/pages';
 
 export default function Home() {
-  return <ClubPage />;
+  return <LoginPage />;
 }
