@@ -3,19 +3,24 @@ import Link from 'next/link';
 import Image from '@/components/ui/Image';
 import brand from '@/app/images/main-logo.png';
 import LoginButton from './LoginButton';
+import {
+  GOOGLE_OAUTH_URL,
+  KAKAO_OAUTH_URL,
+  NAVER_OAUTH_URL,
+} from '@/constants/loginOauthUrl';
 
 function LoginPage() {
   return (
     <div className="flex flex-col justify-center items-center p-16">
       <Image src={brand.src} alt="brandLogo" width={288} height={288} />
       <div className="flex flex-col mt-16 gap-8">
-        <Link href="http://3.38.247.217:8080/oauth2/authorization/naver`">
+        <Link href={NAVER_OAUTH_URL}>
           <LoginButton method="naver" />
         </Link>
-        <Link href="http://3.38.247.217:8080/oauth2/authorization/google">
+        <Link href={GOOGLE_OAUTH_URL}>
           <LoginButton method="google" />
         </Link>
-        <Link href="http://3.38.247.217:8080/oauth2/authorization/kakao">
+        <Link href={KAKAO_OAUTH_URL}>
           <LoginButton method="kakao" />
         </Link>
       </div>
