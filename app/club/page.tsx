@@ -1,6 +1,6 @@
 import { TabsContent } from '@/components/ui/Tabs';
 import React from 'react';
-import ClubHomePages from './intro/pages';
+import ClubHomePages from './intro/page';
 import ClubLayout from './layout';
 
 function ClubPages() {
