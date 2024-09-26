@@ -34,7 +34,7 @@ function LoginButton(props: LoginButtonProps) {
       className={`h-16 w-72 rounded-full flex justify-center items-center ${color}`}
     >
       {imgSrc && <Image src={imgSrc} alt={method} width={50} height={50} />}
-      <span className="text-md font-bold">Login width {method}</span>
+      <span className="text-md font-bold">로그인 하기</span>
     </div>
   );
 }
