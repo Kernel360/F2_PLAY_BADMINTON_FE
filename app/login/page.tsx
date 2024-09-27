@@ -1,7 +1,32 @@
 import React from 'react';
+import Link from 'next/link';
+import Image from '@/components/ui/Image';
+import brand from '@/app/images/main-logo.png';
+import {
+  GOOGLE_OAUTH_URL,
+  KAKAO_OAUTH_URL,
+  NAVER_OAUTH_URL,
+} from '@/constants/loginOauthUrl';
+import LoginButton from './LoginButton';
 
-function page() {
-  return <div>test</div>;
+function LoginPage() {
+  return (
+    <div className="flex flex-col justify-center items-center p-16">
+      <Image src={brand.src} alt="brandLogo" width={288} height={288} />
+      <div className="flex flex-col mt-16 gap-8">
+        <Link href={NAVER_OAUTH_URL}>
+          <LoginButton method="naver" />
+        </Link>
+        <Link href={GOOGLE_OAUTH_URL}>
+          <LoginButton method="google" />
+        </Link>
+        <Link href={KAKAO_OAUTH_URL}>
+          <LoginButton method="kakao" />
+        </Link>
+      </div>
+    </div>
+  );
 }
 
-export default page;
+export default LoginPage;
+
