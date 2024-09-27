@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from '@/components/ui/Image';
-import brand from '@/app/images/main-logo.png';
+import brand from '@/public/images/main-logo.png';
 import {
   GOOGLE_OAUTH_URL,
   KAKAO_OAUTH_URL,
