@@ -1,5 +1,5 @@
-import ClubPage from './club/page';
+import Link from 'next/link';
 
 export default function Home() {
-  return <ClubPage />;
+  return <Link href="/club">home</Link>;
 }
