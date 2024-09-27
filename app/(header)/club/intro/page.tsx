@@ -1,5 +1,5 @@
 import React from 'react';
-import dummy from '@/app/images/dummy-image.jpg';
+import dummy from '@/public/images/dummy-image.jpg';
 import Image from 'next/image';
 
 function ClubIntroPage() {
