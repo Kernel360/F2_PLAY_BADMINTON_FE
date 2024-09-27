@@ -32,7 +32,7 @@ function ClubManagePage() {
               <img
                 src={imagePreview}
                 alt="preview"
-                className="object-cover w-96 h-96 rounded-md"
+                className="object-cover w-96 h-80 rounded-md"
               />
             </button>
             <input
