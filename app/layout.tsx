@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
-import { UserStateProps } from '@/types/layoutTypes';
 import localFont from 'next/font/local';
 import './globals.css';
-import Header from '@/components/ui/Header';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -22,18 +20,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  isLogin,
-  isJoined,
-}: UserStateProps & { children: React.ReactNode }) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="kr">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased w-full flex flex-col justify-start items-center min-h-screen`}
       >
-        <div className="w-full max-w-5xl">
-          <Header isLogin={isLogin} isJoined={isJoined} />
-          {children}
-        </div>
+        <div className="w-full max-w-5xl">{children}</div>
       </body>
     </html>
   );
