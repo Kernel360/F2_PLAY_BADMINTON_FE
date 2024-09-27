@@ -1,9 +1,5 @@
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import DummyImage from '@/app/images/dummy-image.jpg';
-import Gold from '@/app/images/tier-gold.png';
-import Silver from '@/app/images/tier-silver.png';
-import Bronze from '@/app/images/tier-bronze.png';
 import {
   Card,
   CardContent,
@@ -24,7 +20,7 @@ export function ClubCard({ className }: CardProps) {
     >
       <CardHeader className="grid gap-4 p-0">
         <Image
-          src={DummyImage.src}
+          src="/images/dummy-image.jpg"
           alt="card image"
           width={256}
           height={256}
@@ -43,7 +39,7 @@ export function ClubCard({ className }: CardProps) {
         <div className="w-full flex justify-around border-t border-solid border-gray-200 py-2">
           <div className="flex items-center">
             <Image
-              src={Gold.src}
+              src="/images/tier-gold.png"
               alt="tier-gold"
               width={20}
               height={20}
@@ -53,7 +49,7 @@ export function ClubCard({ className }: CardProps) {
           </div>
           <div className="flex items-center">
             <Image
-              src={Silver.src}
+              src="/images/tier-silver.png"
               alt="tier-silver"
               width={20}
               height={20}
@@ -63,7 +59,7 @@ export function ClubCard({ className }: CardProps) {
           </div>
           <div className="flex items-center">
             <Image
-              src={Bronze.src}
+              src="/images/tier-bronze.png"
               alt="tier-bronze"
               width={20}
               height={20}
