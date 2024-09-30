@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/Button';
 import React, { useRef, useState } from 'react';
 
 function CreateClubPage() {
@@ -31,21 +32,18 @@ function CreateClubPage() {
       </div>
       <div className=" w-full pt-8 flex flex-col gap-4 text-gray-400">
         <p>동호회 사진</p>
-        <div className="flex flex-row justify-center space-x-8">
-          <div className="h-[300px] w-[450px]">
-            <img
-              alt="previewImg"
-              src={imagePreview}
-              className="object-contain border-2 border-gray-400 rounded-md w-full h-full"
-            />
-          </div>
-          <form className="flex flex-1 justify-center items-center border-2 border-gray-400 rounded-md">
+        <div>
+          <form className="border-gray-400 rounded-md h-[400px] w-[400px]">
             <button
               type="button"
+              className="h-full w-full"
               onClick={handleImageClick}
-              className="focus:outline-none w-full h-full"
             >
-              <p>이미지 선택</p>
+              <img
+                alt="previewImg"
+                src={imagePreview}
+                className="object-contain border-2 border-gray-400 rounded-md w-full h-full"
+              />
             </button>
             <input
               type="file"
@@ -64,18 +62,10 @@ function CreateClubPage() {
         />
       </div>
       <div className="flex justify-center items-center pt-8 gap-4">
-        <button
-          type="button"
-          className="px-12 py-3 bg-primary text-white rounded-md"
-        >
+        <Button variant="outline" size="lg">
           취소
-        </button>
-        <button
-          type="button"
-          className="px-12 py-3 bg-primary text-white rounded-md"
-        >
-          완료
-        </button>
+        </Button>
+        <Button size="lg">완료</Button>
       </div>
       <div className="m-12" />
     </div>
