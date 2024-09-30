@@ -26,6 +26,7 @@ function CreateClubPage() {
         <input
           type="text"
           className="w-full text-gray-400 text-2xl bg-transparent outline-none border-gray-300 border-b-[1px] focus:border-gray-800"
+          placeholder="동호회 이름을 작성해주세요"
         />
       </div>
       <div className=" w-full pt-8 flex flex-col gap-4 text-gray-400">
@@ -35,14 +36,14 @@ function CreateClubPage() {
             <img
               alt="previewImg"
               src={imagePreview}
-              className="object-cover border-2 border-gray-400 rounded-md w-full h-full"
+              className="object-contain border-2 border-gray-400 rounded-md w-full h-full"
             />
           </div>
           <form className="flex flex-1 justify-center items-center border-2 border-gray-400 rounded-md">
             <button
               type="button"
               onClick={handleImageClick}
-              className="focus:outline-none"
+              className="focus:outline-none w-full h-full"
             >
               <p>이미지 선택</p>
             </button>
@@ -59,7 +60,7 @@ function CreateClubPage() {
         <p className="text-gray-400">동호회 소개</p>
         <textarea
           placeholder="동호회 소개"
-          className="w-full rounded-md border-2 border-gray-400"
+          className="w-full rounded-md border-2 border-gray-400 resize-none"
         />
       </div>
       <div className="flex justify-center items-center pt-8 gap-4">
