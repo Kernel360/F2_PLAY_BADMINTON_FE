@@ -2,7 +2,7 @@
 
 import IconButton from '@/components/ui/IconButton';
 import { AlignJustify } from 'lucide-react';
-import React, { useState } from 'react';
+import React from 'react';
 import MemberDropDown from './MemberDropdown';
 
 interface OneMemberInfoProps {
