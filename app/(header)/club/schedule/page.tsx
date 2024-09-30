@@ -1,7 +1,8 @@
 import React from 'react';
+import LeagueModal from './LeagueModal';
 
 function ClubSchedulePage() {
-  return <div>schedule</div>;
+  return <LeagueModal />;
 }
 
 export default ClubSchedulePage;
