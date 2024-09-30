@@ -14,6 +14,7 @@ const scheduleList = [
   { id: 10, date: '2024-10-01T05:49:00+09:00', name: 'Event 10' },
 ];
 
+// TODO(Yejin0O0): 서버로 이미지 업로드 로직 추가
 // interface Schedule {
 //   id: number;
 //   date: string;
@@ -30,14 +31,7 @@ function DayCell(props: DayProps) {
   const dayScheduleList = scheduleList.filter((schedule) => {
     // schedule.date === date;
     const scheduleDate = new Date(schedule.date);
-    console.log(
-      scheduleDate,
-      scheduleDate.getMonth() + 1,
-      scheduleDate.getDate(),
-      date,
-      date.getMonth(),
-      date.getDate(),
-    );
+
     return (
       scheduleDate.getMonth() === date.getMonth() &&
       scheduleDate.getDate() === date.getDate()
