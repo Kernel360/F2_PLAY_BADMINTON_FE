@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -9,6 +11,8 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/textarea';
+import OneGameInfo from './OneGameInfo';
+import OneGameResult from './OneGameResult';
 
 interface League {
   leagueName: string;
@@ -41,47 +45,67 @@ const sampleLeague: League = {
 function LeagueModal() {
   // TODO(iamgyu): 서버에서 데이터 받아오기
   const league = sampleLeague;
+  const [makeLeagueBtn, setMakeLeagueBtn] = useState(true);
 
   return (
     <Dialog>
       <DialogTrigger>Open</DialogTrigger>
-      <DialogContent className="w-[100vw]">
-        <div className="flex justify-center">
+      <DialogContent className="w-[100vw] text-black">
+        <div className="relative flex justify-center items-center w-full py-5">
           <h2>{league.leagueName}</h2>
-          <div className="flex gap-4">
-            <Button>b1</Button>
-            <Button>b2</Button>
-            <Button>b3</Button>
+          <div className="absolute right-0 flex gap-2 ml-auto">
+            <Button size="sm">수정</Button>
+            <Button size="sm">삭제</Button>
+            <Button size="sm">참가</Button>
           </div>
         </div>
-        <Textarea>{league.description}</Textarea>
+        <Textarea className="border-black border-2 resize-none">
+          {league.description}
+        </Textarea>
         <div className="flex gap-4 w-full">
-          <span className="flex justify-center w-1/2 px-4 border-2 border-gray-400 rounded-md">
+          <span className="flex justify-center w-1/2 px-4 border-2 border-black rounded-md">
             {league.leagueAt}
           </span>
-          <span className="flex justify-center w-1/2 px-4 border-2 border-gray-400 rounded-md">
+          <span className="flex justify-center w-1/2 px-4 border-2 border-black rounded-md">
             장소
           </span>
         </div>
-        <div className="flex justify-center w-full px-4 border-2 border-gray-400 rounded-md">
+        <div className="flex justify-center w-full px-4 border-2 border-black rounded-md">
           {league.tierLimit}
         </div>
-        <div className="flex justify-center w-full px-4 border-2 border-gray-400 rounded-md">
+        <div className="flex justify-center w-full px-4 border-2 border-black rounded-md">
           {league.closedAt}
         </div>
-        <div className="flex justify-center w-full px-4 border-2 border-gray-400 rounded-md">
+        <div className="flex justify-center w-full px-4 border-2 border-black rounded-md">
           {league.playerCount}
         </div>
-        <div className="flex justify-center w-full px-4 border-2 border-gray-400 rounded-md">
+        <div className="flex justify-center w-full px-4 border-2 border-black rounded-md">
           {league.matchType}
         </div>
-        <div className="flex justify-center w-full px-4 border-2 border-gray-400 rounded-md">
-          대진표 생성
+        <div className="flex w-full overflow-x-scroll border-2 border-black rounded-md">
+          {makeLeagueBtn ? (
+            <Button
+              className="w-full h-full rounded-none"
+              onClick={() => {
+                setMakeLeagueBtn(false);
+              }}
+            >
+              경기 생성
+            </Button>
+          ) : (
+            <div className="flex px-4 py-2 gap-2">
+              {Array.from({ length: 10 }, (_, index) => (
+                <OneGameInfo key={index} />
+              ))}
+            </div>
+          )}
         </div>
         <div>
           <p>경기결과</p>
-          <div className="flex justify-center w-full px-4 border-2 border-gray-400 rounded-md">
-            경기결과
+          <div className="flex flex-col overflow-y-scroll items-center w-full h-16 px-4 py-2 border-2 border-black rounded-md gap-2">
+            {Array.from({ length: 10 }, (_, index) => (
+              <OneGameResult key={index} />
+            ))}
           </div>
         </div>
       </DialogContent>
