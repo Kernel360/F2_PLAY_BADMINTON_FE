@@ -1,30 +1,30 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Users } from 'lucide-react';
-import IconButton from './IconButton';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Users } from "lucide-react";
+import IconButton from "./IconButton";
 
 const meta: Meta<typeof IconButton> = {
-  title: 'Components/ui/IconButton',
+  title: "Components/ui/IconButton",
   component: IconButton,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
 
   argTypes: {
     size: {
-      control: 'inline-radio',
-      options: ['xs', 'sm', 'md', 'lg', 'xl'],
+      control: "inline-radio",
+      options: ["xs", "sm", "md", "lg", "xl"],
     },
     radius: {
-      control: 'inline-radio',
-      options: ['sm', 'md', 'lg', 'round'],
+      control: "inline-radio",
+      options: ["sm", "md", "lg", "round"],
     },
     color: {
-      control: 'inline-radio',
-      options: ['gray', 'primary', 'transparent'],
+      control: "inline-radio",
+      options: ["gray", "primary", "transparent"],
     },
     outline: {
-      control: 'boolean',
+      control: "boolean",
     },
   },
 };
@@ -35,9 +35,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    size: 'md',
-    radius: 'md',
-    color: 'gray',
+    size: "md",
+    radius: "md",
+    color: "gray",
     outline: false,
   },
 

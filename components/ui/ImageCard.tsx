@@ -1,12 +1,12 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-import Image from './Image';
-import { Text } from './Text';
+import Image from "./Image";
+import { Text } from "./Text";
 
 interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   src: string;
 }
 
@@ -23,7 +23,7 @@ const ImageCardCover = React.forwardRef<HTMLDivElement, CardImageContentProps>(
     return (
       <div
         ref={ref}
-        className={cn('pb-2 flex justify-center', className)}
+        className={cn("pb-2 flex justify-center", className)}
         {...props}
       >
         <Image
@@ -36,7 +36,7 @@ const ImageCardCover = React.forwardRef<HTMLDivElement, CardImageContentProps>(
     );
   },
 );
-ImageCardCover.displayName = 'ImageCardCover';
+ImageCardCover.displayName = "ImageCardCover";
 
 function ImageCardDescription({ children }: CardDescriptionContentProps) {
   return (
@@ -45,14 +45,14 @@ function ImageCardDescription({ children }: CardDescriptionContentProps) {
     </div>
   );
 }
-ImageCardDescription.displayName = 'ImageCardDescription';
+ImageCardDescription.displayName = "ImageCardDescription";
 
 const ImageCard = React.forwardRef<HTMLDivElement, CardContentProps>(
-  ({ className, src, size = 'md', children, ...props }, ref) => {
+  ({ className, src, size = "md", children, ...props }, ref) => {
     const sizeClasses = {
-      sm: 'w-44 ', // small size
-      md: 'w-64 ', // medium size (default)
-      lg: 'w-80 ', // large size
+      sm: "w-44 ", // small size
+      md: "w-64 ", // medium size (default)
+      lg: "w-80 ", // large size
     };
 
     // Card 크기에 맞게 이미지의 크기 조정
@@ -63,28 +63,28 @@ const ImageCard = React.forwardRef<HTMLDivElement, CardContentProps>(
     };
 
     const paddingClasses = {
-      sm: 'p-3',
-      md: 'p-4',
-      lg: 'p-6',
+      sm: "p-3",
+      md: "p-4",
+      lg: "p-6",
     };
 
     const paddingBClasses = {
-      sm: 'pb-1',
-      md: 'pb-3',
-      lg: 'pb-5',
+      sm: "pb-1",
+      md: "pb-3",
+      lg: "pb-5",
     };
 
     return (
       <div
         ref={ref}
         className={cn(
-          'rounded-lg border bg-card text-card-foreground shadow-sm cursor-pointer', // 패딩 추가
+          "rounded-lg border bg-card text-card-foreground shadow-sm cursor-pointer", // 패딩 추가
           sizeClasses[size],
           className,
         )}
         {...props}
       >
-        <div className={cn('flex-col', paddingClasses[size])}>
+        <div className={cn("flex-col", paddingClasses[size])}>
           <ImageCardCover
             src={src}
             size={cardSizes[size]}
@@ -97,6 +97,6 @@ const ImageCard = React.forwardRef<HTMLDivElement, CardContentProps>(
   },
 );
 
-ImageCard.displayName = 'ImageCard';
+ImageCard.displayName = "ImageCard";
 
 export { ImageCard, ImageCardCover, ImageCardDescription };

@@ -1,13 +1,13 @@
-import React from 'react';
-import Link from 'next/link';
-import Image from '@/components/ui/Image';
-import brand from '@/public/images/main-logo.png';
+import Image from "@/components/ui/Image";
 import {
   GOOGLE_OAUTH_URL,
   KAKAO_OAUTH_URL,
   NAVER_OAUTH_URL,
-} from '@/constants/loginOauthUrl';
-import LoginButton from './LoginButton';
+} from "@/constants/loginOauthUrl";
+import brand from "@/public/images/main-logo.png";
+import Link from "next/link";
+import React from "react";
+import LoginButton from "./LoginButton";
 
 function LoginPage() {
   return (

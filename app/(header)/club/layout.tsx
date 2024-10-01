@@ -1,6 +1,6 @@
-import React from 'react';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import Link from 'next/link';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import Link from "next/link";
+import type React from "react";
 
 function ClubLayout({ children }: { children: React.ReactNode }) {
   return (

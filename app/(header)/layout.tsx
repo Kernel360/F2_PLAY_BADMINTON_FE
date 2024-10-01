@@ -1,5 +1,5 @@
-import React from 'react';
-import Header from '@/components/ui/Header';
+import Header from "@/components/ui/Header";
+import type React from "react";
 
 function HeaderLayout({ children }: { children: React.ReactNode }) {
   return (

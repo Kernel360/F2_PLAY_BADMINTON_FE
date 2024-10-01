@@ -1,30 +1,30 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { cn } from '@/lib/utils';
-import { cva, VariantProps } from 'class-variance-authority';
+import { cn } from "@/lib/utils";
+import { type VariantProps, cva } from "class-variance-authority";
 
-const inputVariants = cva('', {
+const inputVariants = cva("", {
   variants: {
     size: {
-      sm: 'h-8 w-full px-2',
-      md: 'h-10 w-full px-2',
-      lg: 'h-12 w-full px-2',
+      sm: "h-8 w-full px-2",
+      md: "h-10 w-full px-2",
+      lg: "h-12 w-full px-2",
     },
     radius: {
-      sm: 'rounded-sm',
-      md: 'rounded-md',
-      lg: 'rounded-lg',
-      round: 'rounded-full',
+      sm: "rounded-sm",
+      md: "rounded-md",
+      lg: "rounded-lg",
+      round: "rounded-full",
     },
   },
   defaultVariants: {
-    size: 'md',
-    radius: 'md',
+    size: "md",
+    radius: "md",
   },
 });
 
 export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">,
     VariantProps<typeof inputVariants> {
   icon?: React.ReactNode;
   search?: boolean;
@@ -37,7 +37,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       size,
       radius,
       type,
-      placeholder = 'placeholder',
+      placeholder = "placeholder",
       icon,
       search,
       ...props
@@ -47,17 +47,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div
         className={cn(
-          'flex flex-row border border-solid items-center',
+          "flex flex-row border border-solid items-center",
           inputVariants({ size, radius }),
         )}
       >
         {icon && (
-          <span className={cn('inset-y-0 left-0 flex items-center')}>
+          <span className={cn("inset-y-0 left-0 flex items-center")}>
             {icon}
           </span>
         )}
         {search && (
-          <span className={cn('inset-y-0 left-0 flex items-center')}>
+          <span className={cn("inset-y-0 left-0 flex items-center")}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -70,6 +70,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               strokeLinejoin="round"
               className="lucide lucide-search"
             >
+              <title>Search Icon</title>
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
             </svg>
@@ -78,7 +79,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           placeholder={placeholder}
           type={type}
-          className={cn('outline-none bg-background', inputVariants({ size }))}
+          className={cn("outline-none bg-background", inputVariants({ size }))}
           ref={ref}
           {...props}
         />
@@ -86,6 +87,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     );
   },
 );
-Input.displayName = 'Input';
+Input.displayName = "Input";
 
 export { Input };
