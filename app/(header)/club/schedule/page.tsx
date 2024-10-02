@@ -1,5 +1,5 @@
-import React from 'react';
-import LeagueModal from './LeagueModal';
+import React from "react";
+import LeagueModal from "./LeagueModal";
 
 function ClubSchedulePage() {
   return <LeagueModal />;

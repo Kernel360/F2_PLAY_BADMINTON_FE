@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/Button';
-import { Textarea } from '@/components/ui/textarea';
-import OneGameInfo from './OneGameInfo';
-import OneGameResult from './OneGameResult';
+import { Button } from "@/components/ui/Button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import React, { useState } from "react";
+import OneGameInfo from "./OneGameInfo";
+import OneGameResult from "./OneGameResult";
 
 interface League {
   leagueName: string;
   description: string;
-  tierLimit: 'GOLD' | 'SILVER' | 'BRONZE';
-  status: 'OPEN' | 'CLOSED';
-  matchType: 'SINGLE' | 'DOUBLES';
+  tierLimit: "GOLD" | "SILVER" | "BRONZE";
+  status: "OPEN" | "CLOSED";
+  matchType: "SINGLE" | "DOUBLES";
   leagueAt: string;
   closedAt: string;
   playerCount: number;
@@ -22,17 +22,17 @@ interface League {
 }
 
 const sampleLeague: League = {
-  leagueName: 'example',
-  description: 'description',
-  tierLimit: 'GOLD',
-  status: 'OPEN',
-  matchType: 'SINGLE',
-  leagueAt: '2024-09-30T05:53:45.509Z',
-  closedAt: '2024-09-30T05:53:45.509Z',
+  leagueName: "example",
+  description: "description",
+  tierLimit: "GOLD",
+  status: "OPEN",
+  matchType: "SINGLE",
+  leagueAt: "2024-09-30T05:53:45.509Z",
+  closedAt: "2024-09-30T05:53:45.509Z",
   playerCount: 10,
-  createdAt: '2024-09-30T05:53:45.509Z',
-  modifiedAt: '2024-09-30T05:53:45.509Z',
-  matchingRequirement: 'TIER',
+  createdAt: "2024-09-30T05:53:45.509Z",
+  modifiedAt: "2024-09-30T05:53:45.509Z",
+  matchingRequirement: "TIER",
 };
 
 function LeagueModal() {
@@ -91,18 +91,20 @@ function LeagueModal() {
             </Button>
           ) : (
             <div className="flex px-4 py-2 gap-2">
+              {/* TODO(iamgyu): API 연동시 index 대신 id로 수정
               {Array.from({ length: 10 }, (_, index) => (
                 <OneGameInfo key={index} />
-              ))}
+              ))} */}
             </div>
           )}
         </div>
         <div>
           <p>경기결과</p>
           <div className="flex flex-col overflow-y-scroll items-center w-full h-16 px-4 py-2 border-2 border-black rounded-md gap-2">
+            {/* TODO(iamgyu): API 연동시 index 대신 id로 수정
             {Array.from({ length: 10 }, (_, index) => (
               <OneGameResult key={index} />
-            ))}
+            ))} */}
           </div>
         </div>
       </DialogContent>
