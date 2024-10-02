@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/Button';
-import React from 'react';
-import MyOneGameResult from './MyOneGameResult';
+import { Button } from "@/components/ui/Button";
+import React from "react";
+import MyOneGameResult from "./MyOneGameResult";
 
 function My() {
   return (
@@ -37,9 +37,9 @@ function My() {
       <div className="w-full mt-8">
         <p className="font-bold text-xl">경기 결과</p>
         <div className="flex flex-col mt-2 w-full h-64 overflow-scroll px-8 py-4 border-2 border-gray-400 rounded-md gap-4">
-          {Array.from({ length: 30 }, (_, index) => (
+          {/* {Array.from({ length: 30 }, (_, index) => (
             <MyOneGameResult key={index} />
-          ))}
+          ))} */}
         </div>
       </div>
     </div>
