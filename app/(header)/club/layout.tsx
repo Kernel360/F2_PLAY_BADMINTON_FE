@@ -3,7 +3,6 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import type React from "react";
 
-
 function ClubLayout({ children }: { children: React.ReactNode }) {
   const headerList = headers();
   const pathname = headerList.get("x-current-path")?.split("/")[2];
