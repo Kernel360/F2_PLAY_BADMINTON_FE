@@ -6,7 +6,7 @@ import type React from "react";
 
 function ClubLayout({ children }: { children: React.ReactNode }) {
   const headerList = headers();
-  const pathname = headerList.get('x-current-path')?.split('/')[2];
+  const pathname = headerList.get("x-current-path")?.split("/")[2];
 
   return (
     <Tabs defaultValue={pathname} className="w-full max-w-5xl mt-10 ">
