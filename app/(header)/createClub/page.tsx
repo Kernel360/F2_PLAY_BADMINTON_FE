@@ -57,7 +57,7 @@ function CreateClubPage() {
       <div className="flex flex-col pt-8 gap-4">
         <p className="text-gray-400">동호회 소개</p>
         <textarea
-          placeholder="동호회 소개"
+          placeholder="동호회 소개를 작성해주세요!"
           className="w-full rounded-md border-2 border-gray-400 resize-none"
         />
       </div>
