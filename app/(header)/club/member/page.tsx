@@ -15,13 +15,14 @@ function ClubMemberPage() {
   return (
     <div className="h-[466px]">
       <div className="flex flex-col gap-4 h-full overflow-scroll">
-        {Array.from({ length: 30 }, (_, index) => (
+        {/* TODO(iamgyu): key 값으로 mock data id 값 주기 */}
+        {/* {Array.from({ length: 30 }, (_, index) => (
           <OneMemberInfo
             key={index}
             isOpen={openDropdownIndex === index}
             onToggle={() => toggleDropdown(index)}
           />
-        ))}
+        ))} */}
       </div>
     </div>
   );
