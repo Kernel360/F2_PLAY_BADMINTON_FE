@@ -1,29 +1,29 @@
-import React from 'react';
-import Image from '@/components/ui/Image';
-import google from '@/public/images/google-logo.png';
-import naver from '@/public/images/naver-logo.png';
-import kakao from '@/public/images/kakao-logo.png';
+import Image from "@/components/ui/Image";
+import google from "@/public/images/google-logo.png";
+import kakao from "@/public/images/kakao-logo.png";
+import naver from "@/public/images/naver-logo.png";
+import React from "react";
 
 interface LoginButtonProps {
-  method?: 'naver' | 'kakao' | 'google';
+  method?: "naver" | "kakao" | "google";
 }
 function LoginButton(props: LoginButtonProps) {
   const { method } = props;
 
-  let color;
-  let imgSrc;
+  let color: string | null = null;
+  let imgSrc: string | null = null;
 
   switch (method) {
-    case 'naver':
-      color = 'bg-[#03C75A] text-white';
+    case "naver":
+      color = "bg-[#03C75A] text-white";
       imgSrc = naver.src;
       break;
-    case 'kakao':
-      color = 'bg-[#FEE500] text-black';
+    case "kakao":
+      color = "bg-[#FEE500] text-black";
       imgSrc = kakao.src;
       break;
-    case 'google':
-      color = 'bg-[#f2f2f2] text-gray-500';
+    case "google":
+      color = "bg-[#f2f2f2] text-gray-500";
       imgSrc = google.src;
       break;
     default:

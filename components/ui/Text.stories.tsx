@@ -1,51 +1,51 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { Text } from './Text';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Text } from "./Text";
 
 const meta: Meta<typeof Text> = {
-  title: 'Components/ui/Text',
+  title: "Components/ui/Text",
   component: Text,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   argTypes: {
     children: {
-      defaultValue: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      control: { type: 'text' },
+      defaultValue: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      control: { type: "text" },
     },
     size: {
-      defaultValue: 'md',
-      options: ['xs', 'sm', 'md', 'lg', 'xl'],
-      control: { type: 'select' },
+      defaultValue: "md",
+      options: ["xs", "sm", "md", "lg", "xl"],
+      control: { type: "select" },
     },
     weight: {
-      defaultValue: 'regular',
-      options: ['light', 'regular', 'bold'],
-      control: { type: 'inline-radio' },
+      defaultValue: "regular",
+      options: ["light", "regular", "bold"],
+      control: { type: "inline-radio" },
     },
     underline: {
       defaultValue: false,
-      control: { type: 'boolean' },
+      control: { type: "boolean" },
     },
     block: {
       defaultValue: false,
-      control: { type: 'boolean' },
+      control: { type: "boolean" },
     },
     transform: {
-      options: [undefined, 'capitalize', 'uppercase', 'lowercase'],
-      control: { type: 'inline-radio' },
+      options: [undefined, "capitalize", "uppercase", "lowercase"],
+      control: { type: "inline-radio" },
     },
     align: {
-      options: [undefined, 'left', 'center', 'right'],
-      control: { type: 'inline-radio' },
+      options: [undefined, "left", "center", "right"],
+      control: { type: "inline-radio" },
     },
     lineClamp: {
       defaultValue: undefined,
-      control: { type: 'number' },
+      control: { type: "number" },
     },
     color: {
-      options: [undefined, 'primary', 'black', 'gray', 'white'],
-      control: { type: 'inline-radio' },
+      options: [undefined, "primary", "black", "gray", "white"],
+      control: { type: "inline-radio" },
     },
   },
 };
@@ -56,9 +56,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    size: 'md',
-    weight: 'regular',
+    children: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    size: "md",
+    weight: "regular",
     underline: false,
     block: false,
     transform: undefined,
@@ -70,13 +70,13 @@ export const Default: Story = {
 
 export const Center: Story = {
   args: {
-    children: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    size: 'md',
-    weight: 'regular',
+    children: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    size: "md",
+    weight: "regular",
     underline: false,
     block: false,
     transform: undefined,
-    align: 'center',
+    align: "center",
     lineClamp: undefined,
     color: undefined,
   },

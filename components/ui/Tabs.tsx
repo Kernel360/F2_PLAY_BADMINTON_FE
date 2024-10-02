@@ -1,8 +1,8 @@
-import * as React from 'react';
-import * as TabsPrimitive from '@radix-ui/react-tabs';
+import * as TabsPrimitive from "@radix-ui/react-tabs";
+import * as React from "react";
 
-import { cn } from '@/lib/utils';
-import { cva, VariantProps } from 'class-variance-authority';
+import { cn } from "@/lib/utils";
+import { type VariantProps, cva } from "class-variance-authority";
 
 const Tabs = TabsPrimitive.Root;
 
@@ -13,7 +13,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      'inline-flex h-10 mb-4 items-center justify-center rounded-full bg-white p-1 text-gray-500',
+      "inline-flex h-10 mb-4 items-center justify-center rounded-full bg-white p-1 text-gray-500",
       className,
     )}
     {...props}
@@ -21,35 +21,35 @@ const TabsList = React.forwardRef<
 ));
 TabsList.displayName = TabsPrimitive.List.displayName;
 
-const tabTriggerVariants = cva('', {
+const tabTriggerVariants = cva("", {
   variants: {
     color: {
-      gray: 'data-[state=active]:bg-muted data-[state=active]:text-black',
+      gray: "data-[state=active]:bg-muted data-[state=active]:text-black",
       purple:
-        'data-[state=active]:bg-purple-200 data-[state=active]:text-purple-500',
-      blue: 'data-[state=active]:bg-blue-200 data-[state=active]:text-blue-500',
-      red: 'data-[state=active]:bg-red-200 data-[state=active]:text-red-500',
+        "data-[state=active]:bg-purple-200 data-[state=active]:text-purple-500",
+      blue: "data-[state=active]:bg-blue-200 data-[state=active]:text-blue-500",
+      red: "data-[state=active]:bg-red-200 data-[state=active]:text-red-500",
     },
   },
   defaultVariants: {
-    color: 'gray',
+    color: "gray",
   },
 });
 
 export interface TabTriggerProps
   extends VariantProps<typeof tabTriggerVariants> {
-  color?: 'gray' | 'purple' | 'blue' | 'red';
+  color?: "gray" | "purple" | "blue" | "red";
 }
 
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> & TabTriggerProps
->(({ className, color = 'gray', ...props }, ref) => (
+>(({ className, color = "gray", ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
       // 'inline-flex items-center justify-center whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-md',
-      'flex h-7 items-center justify-center rounded-full px-4 text-center text-sm transition-colors hover:text-black font-medium text-gray-500',
+      "flex h-7 items-center justify-center rounded-full px-4 text-center text-sm transition-colors hover:text-black font-medium text-gray-500",
       className,
       tabTriggerVariants({ color }),
     )}
