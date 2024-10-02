@@ -55,6 +55,8 @@ function DayCell(props: DayContentProps) {
   const selectedColorIndex =
     dayScheduleList.length > 0 ? dayScheduleList[0].id % colors.length : 0;
 
+  // TODO(Yejin0O0): 백엔드 데이터 로직 필요함
+  // TODO(Yejin0O0): 티어, 모집 마감 여부도 알 수 있었으면 좋겠다는 백엔드 의견 있었음
   return (
     <div className="w-full h-full flex flex-col justify-between p-1">
       <div className="text-center text-sm font-medium mb-1">
