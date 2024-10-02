@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import IconButton from '@/components/ui/IconButton';
-import { AlignJustify } from 'lucide-react';
-import React from 'react';
-import MemberDropDown from './MemberDropdown';
+import IconButton from "@/components/ui/IconButton";
+import { AlignJustify } from "lucide-react";
+import React from "react";
+import MemberDropDown from "./MemberDropdown";
 
 interface OneMemberInfoProps {
   isOpen: boolean; // 드롭다운 상태

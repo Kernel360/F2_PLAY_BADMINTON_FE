@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/Button';
-import React, { useRef, useState } from 'react';
+import { Button } from "@/components/ui/Button";
+import type React from "react";
+import { useRef, useState } from "react";
 
 function CreateClubPage() {
-  const [imagePreview, setImagePreview] = useState('/images/dummy-image.jpg');
+  const [imagePreview, setImagePreview] = useState("/images/dummy-image.jpg");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
