@@ -6,6 +6,7 @@ interface IconButtonProps {
   radius?: 'sm' | 'md' | 'lg' | 'round';
   color?: 'gray' | 'primary' | 'transparent';
   outline?: boolean;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 function IconButton(props: IconButtonProps) {
@@ -15,6 +16,7 @@ function IconButton(props: IconButtonProps) {
     radius = 'md',
     color = 'gray',
     outline = false,
+    onClick,
   } = props;
 
   const sizeClass =
@@ -47,6 +49,7 @@ function IconButton(props: IconButtonProps) {
     <button
       type="button"
       className={`flex justify-center items-center ${outlineClass} ${sizeClass} ${radiusClass} ${colorClass} hover:filter hover:brightness-90`}
+      onClick={onClick}
     >
       <div className="w-full h-full flex justify-center items-center">
         {children}
