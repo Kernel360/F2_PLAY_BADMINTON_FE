@@ -1,6 +1,6 @@
-import React from 'react';
-import dummy from '@/public/images/dummy-image.jpg';
-import Image from 'next/image';
+import dummy from "@/public/images/dummy-image.jpg";
+import Image from "next/image";
+import React from "react";
 
 function ClubIntroPage() {
   return (

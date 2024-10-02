@@ -1,16 +1,16 @@
-import { Meta, StoryObj } from '@storybook/react';
-import Header from './Header';
+import type { Meta, StoryObj } from "@storybook/react";
+import Header from "./Header";
 
 const meta: Meta<typeof Header> = {
-  title: 'Components/ui/Header',
+  title: "Components/ui/Header",
   component: Header,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
   argTypes: {
-    isLogin: { control: 'boolean' },
-    isJoined: { control: 'boolean' },
+    isLogin: { control: "boolean" },
+    isJoined: { control: "boolean" },
   },
 };
 

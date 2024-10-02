@@ -1,9 +1,9 @@
-import { TabsContent } from '@/components/ui/Tabs';
-import React from 'react';
-import ClubHomePages from './intro/page';
-import ClubSchedulePages from './schedule/page';
-import ClubMemberPages from './member/page';
-import ClubManagePages from './manage/page';
+import { TabsContent } from "@/components/ui/Tabs";
+import React from "react";
+import ClubHomePages from "./intro/page";
+import ClubManagePages from "./manage/page";
+import ClubMemberPages from "./member/page";
+import ClubSchedulePages from "./schedule/page";
 
 function ClubPage() {
   return (

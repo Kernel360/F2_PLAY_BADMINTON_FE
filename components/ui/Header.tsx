@@ -1,8 +1,8 @@
-import React from 'react';
-import { UserRound } from 'lucide-react';
-import { UserStateProps } from '@/types/layoutTypes';
-import { Input } from './Input';
-import { LinkText } from './Text';
+import type { UserStateProps } from "@/types/layoutTypes";
+import { UserRound } from "lucide-react";
+import React from "react";
+import { Input } from "./Input";
+import { LinkText } from "./Text";
 
 const personalSection = (isLogin: boolean, isJoined: boolean) => {
   if (!isLogin) {

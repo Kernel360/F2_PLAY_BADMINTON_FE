@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import * as React from 'react';
+import * as React from "react";
 
-import { Calendar } from '@/components/ui/calendar';
-import DayCell from '@/components/DayCell';
+import DayCell from "@/components/DayCell";
+import { Calendar } from "@/components/ui/calendar";
 
 export default function CalendarDemo() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
