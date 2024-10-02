@@ -1,8 +1,8 @@
-import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
-import { UserStateProps } from '@/types/layoutTypes';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './Tabs';
-import Header from './Header';
+import type { UserStateProps } from "@/types/layoutTypes";
+import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
+import Header from "./Header";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs";
 
 function TabLayout({ isLogin, isJoined }: UserStateProps) {
   return (
@@ -35,20 +35,20 @@ function TabLayout({ isLogin, isJoined }: UserStateProps) {
 }
 
 const meta: Meta<typeof TabLayout> = {
-  title: 'Components/ui/TabLayout',
+  title: "Components/ui/TabLayout",
   component: TabLayout,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
   argTypes: {
     isLogin: {
-      control: 'boolean',
-      description: 'User login state',
+      control: "boolean",
+      description: "User login state",
     },
     isJoined: {
-      control: 'boolean',
-      description: 'User joined state',
+      control: "boolean",
+      description: "User joined state",
     },
   },
 };

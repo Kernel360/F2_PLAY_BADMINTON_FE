@@ -1,18 +1,18 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { ImageCard, ImageCardDescription } from './ImageCard';
+import type { Meta, StoryObj } from "@storybook/react";
+import { ImageCard, ImageCardDescription } from "./ImageCard";
 
 const meta: Meta<typeof ImageCard> = {
-  title: 'Components/ui/ImageCard',
+  title: "Components/ui/ImageCard",
   component: ImageCard,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   argTypes: {
     size: {
-      defaultValue: 'md',
-      options: ['sm', 'md', 'lg'],
-      control: { type: 'inline-radio' },
+      defaultValue: "md",
+      options: ["sm", "md", "lg"],
+      control: { type: "inline-radio" },
     },
   },
 };
@@ -23,7 +23,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    size: 'md',
+    size: "md",
   },
   render: (args) => (
     <ImageCard size={args.size} src="https://picsum.photos/200/300">

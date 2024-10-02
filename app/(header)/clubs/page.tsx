@@ -1,5 +1,5 @@
-import Grid from '@/components/ui/Grid';
-import { ClubCard } from '@/components/clubs/ClubCard';
+import { ClubCard } from "@/components/clubs/ClubCard";
+import Grid from "@/components/ui/Grid";
 
 export default function page() {
   return (

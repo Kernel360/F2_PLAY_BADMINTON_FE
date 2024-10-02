@@ -1,31 +1,31 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { Button } from './Button';
+import { action } from "@storybook/addon-actions";
+import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "./Button";
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/ui/Button',
+  title: "Components/ui/Button",
   component: Button,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   argTypes: {
     variant: {
-      control: 'select',
-      description: 'Button variants',
+      control: "select",
+      description: "Button variants",
       options: [
-        'default',
-        'destructive',
-        'outline',
-        'secondary',
-        'ghost',
-        'link',
+        "default",
+        "destructive",
+        "outline",
+        "secondary",
+        "ghost",
+        "link",
       ],
     },
     size: {
-      control: 'select',
-      description: 'Button sizes',
-      options: ['default', 'sm', 'lg', 'icon'],
+      control: "select",
+      description: "Button sizes",
+      options: ["default", "sm", "lg", "icon"],
     },
   },
 };
@@ -36,66 +36,66 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    variant: 'default',
-    size: 'default',
+    variant: "default",
+    size: "default",
     disabled: false,
-    onClick: action('default click'),
-    children: 'Default button',
-    className: 'shadow-lg',
+    onClick: action("default click"),
+    children: "Default button",
+    className: "shadow-lg",
   },
 };
 
 export const Destructive: Story = {
   args: {
-    variant: 'destructive',
-    size: 'default',
+    variant: "destructive",
+    size: "default",
     disabled: false,
-    onClick: action('destructive click'),
-    children: 'Destructive button',
-    className: 'shadow-lg',
+    onClick: action("destructive click"),
+    children: "Destructive button",
+    className: "shadow-lg",
   },
 };
 
 export const Outline: Story = {
   args: {
-    variant: 'outline',
-    size: 'default',
+    variant: "outline",
+    size: "default",
     disabled: false,
-    onClick: action('outline click'),
-    children: 'Outline button',
-    className: 'shadow-lg',
+    onClick: action("outline click"),
+    children: "Outline button",
+    className: "shadow-lg",
   },
 };
 
 export const Secondary: Story = {
   args: {
-    variant: 'secondary',
-    size: 'default',
+    variant: "secondary",
+    size: "default",
     disabled: false,
-    onClick: action('secondary click'),
-    children: 'Secondary button',
-    className: 'shadow-lg',
+    onClick: action("secondary click"),
+    children: "Secondary button",
+    className: "shadow-lg",
   },
 };
 
 export const Ghost: Story = {
   args: {
-    variant: 'ghost',
-    size: 'default',
+    variant: "ghost",
+    size: "default",
     disabled: false,
-    onClick: action('ghost click'),
-    children: 'Ghost button',
-    className: 'shadow-lg',
+    onClick: action("ghost click"),
+    children: "Ghost button",
+    className: "shadow-lg",
   },
 };
 
 export const Link: Story = {
   args: {
-    variant: 'link',
-    size: 'default',
+    variant: "link",
+    size: "default",
     disabled: false,
-    onClick: action('link click'),
-    children: 'Link button',
-    className: 'shadow-lg',
+    onClick: action("link click"),
+    children: "Link button",
+    className: "shadow-lg",
   },
 };

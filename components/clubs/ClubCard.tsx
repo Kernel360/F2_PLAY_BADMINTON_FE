@@ -1,12 +1,12 @@
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from '@/components/ui/card';
-import { Text } from '../ui/Text';
+} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { Text } from "../ui/Text";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -14,7 +14,7 @@ export function ClubCard({ className }: CardProps) {
   return (
     <Card
       className={cn(
-        'w-64 rounded-lg shadow-lg overflow-hidden cursor-pointer transition-transform transform hover:scale-105',
+        "w-64 rounded-lg shadow-lg overflow-hidden cursor-pointer transition-transform transform hover:scale-105",
         className,
       )}
     >
