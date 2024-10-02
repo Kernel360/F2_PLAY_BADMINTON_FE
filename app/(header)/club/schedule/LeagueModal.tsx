@@ -47,8 +47,12 @@ function LeagueModal() {
         <div className="relative flex justify-center items-center w-full py-5">
           <h2>{league.leagueName}</h2>
           <div className="absolute right-0 flex gap-2 ml-auto">
-            <Button size="sm">수정</Button>
-            <Button size="sm">삭제</Button>
+            <Button size="sm" className="bg-red-500 hover:bg-red-500/80">
+              삭제
+            </Button>
+            <Button size="sm" variant="outline" className="border-primary">
+              수정
+            </Button>
             <Button size="sm">참가</Button>
           </div>
         </div>
