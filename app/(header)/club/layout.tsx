@@ -1,10 +1,15 @@
-import React from 'react';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import Link from 'next/link';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { headers } from "next/headers";
+import Link from "next/link";
+import type React from "react";
+
 
 function ClubLayout({ children }: { children: React.ReactNode }) {
+  const headerList = headers();
+  const pathname = headerList.get("x-current-path")?.split("/")[2];
+
   return (
-    <Tabs defaultValue="intro" className="w-full max-w-5xl mt-10 ">
+    <Tabs defaultValue={pathname} className="w-full max-w-5xl mt-10 ">
       <TabsList>
         <Link href="/club/intro">
           <TabsTrigger value="intro" color="gray">

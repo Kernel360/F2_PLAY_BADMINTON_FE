@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState, useRef } from 'react';
+import type React from "react";
+import { useRef, useState } from "react";
 
 function ClubManagePage() {
-  const [imagePreview, setImagePreview] = useState('/images/dummy-image.jpg');
+  const [imagePreview, setImagePreview] = useState("/images/dummy-image.jpg");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
