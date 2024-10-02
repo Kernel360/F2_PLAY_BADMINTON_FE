@@ -1,7 +1,7 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { headers } from "next/headers";
 import Link from "next/link";
 import type React from "react";
-import { headers } from "next/headers";
 
 
 function ClubLayout({ children }: { children: React.ReactNode }) {
