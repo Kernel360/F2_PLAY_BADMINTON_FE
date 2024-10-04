@@ -69,7 +69,7 @@ function My() {
               {infoUpdate ? (
                 <input
                   type="text"
-                  className="text-black text-lg rounded-md"
+                  className="text-black text-lg rounded-md border-2 border-gray-400"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   maxLength={16}
