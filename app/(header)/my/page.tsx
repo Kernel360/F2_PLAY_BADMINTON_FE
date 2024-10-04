@@ -38,7 +38,10 @@ function My() {
       <div className="flex justify-between">
         <div className="flex items-center gap-8">
           {infoUpdate ? (
-            <form className="relative w-64 h-64 rounded-full">
+            <form
+              className="relative w-64 h-64 rounded-full"
+              onSubmit={(e) => e.preventDefault()}
+            >
               <button
                 type="button"
                 className="h-full w-full"
