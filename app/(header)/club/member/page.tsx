@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import OneMemberInfo from "./OneMemberInfo";
+import OneMemberInfo from "./MemberInfo";
 
 function ClubMemberPage() {
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
