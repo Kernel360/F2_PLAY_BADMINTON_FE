@@ -1,100 +1,100 @@
-import { Text } from '@/components/ui/Text';
-import React from 'react';
+import { Text } from "@/components/ui/Text";
+import React from "react";
 
 function ScheduleList() {
   const schedules = [
     {
       id: 1,
-      title: '일정 제목 1',
-      deadline: '8/12',
-      participants: '8/24 명',
-      tier: 'gold',
-      type: '단식',
+      title: "일정 제목 1",
+      deadline: "8/12",
+      participants: "8/24 명",
+      tier: "gold",
+      type: "단식",
     },
     {
       id: 2,
-      title: '일정 제목 2',
-      deadline: '8/12',
-      participants: '8/24 명',
-      tier: 'silver',
-      type: '단식',
+      title: "일정 제목 2",
+      deadline: "8/12",
+      participants: "8/24 명",
+      tier: "silver",
+      type: "단식",
     },
     {
       id: 3,
-      title: '일정 제목 3',
-      deadline: '8/12',
-      participants: '8/24 명',
-      tier: 'bronze',
-      type: '단식',
+      title: "일정 제목 3",
+      deadline: "8/12",
+      participants: "8/24 명",
+      tier: "bronze",
+      type: "단식",
     },
     {
       id: 4,
-      title: '일정 제목 4',
-      deadline: '8/12',
-      participants: '8/24 명',
-      tier: 'gold',
-      type: '단식',
+      title: "일정 제목 4",
+      deadline: "8/12",
+      participants: "8/24 명",
+      tier: "gold",
+      type: "단식",
     },
     {
       id: 5,
-      title: '일정 제목 5',
-      deadline: '8/12',
-      participants: '8/24 명',
-      tier: 'silver',
-      type: '단식',
+      title: "일정 제목 5",
+      deadline: "8/12",
+      participants: "8/24 명",
+      tier: "silver",
+      type: "단식",
     },
     {
       id: 6,
-      title: '일정 제목 6',
-      deadline: '8/12',
-      participants: '8/24 명',
-      tier: 'bronze',
-      type: '단식',
+      title: "일정 제목 6",
+      deadline: "8/12",
+      participants: "8/24 명",
+      tier: "bronze",
+      type: "단식",
     },
     {
       id: 7,
-      title: '일정 제목 7',
-      deadline: '8/12',
-      participants: '8/24 명',
-      tier: 'gold',
-      type: '단식',
+      title: "일정 제목 7",
+      deadline: "8/12",
+      participants: "8/24 명",
+      tier: "gold",
+      type: "단식",
     },
     {
       id: 8,
-      title: '일정 제목 8',
-      deadline: '8/12',
-      participants: '8/24 명',
-      tier: 'silver',
-      type: '단식',
+      title: "일정 제목 8",
+      deadline: "8/12",
+      participants: "8/24 명",
+      tier: "silver",
+      type: "단식",
     },
     {
       id: 9,
-      title: '일정 제목 9',
-      deadline: '8/12',
-      participants: '8/24 명',
-      tier: 'bronze',
-      type: '단식',
+      title: "일정 제목 9",
+      deadline: "8/12",
+      participants: "8/24 명",
+      tier: "bronze",
+      type: "단식",
     },
     {
       id: 10,
-      title: '일정 제목 10',
-      deadline: '8/12',
-      participants: '8/24 명',
-      tier: 'gold',
-      type: '단식',
+      title: "일정 제목 10",
+      deadline: "8/12",
+      participants: "8/24 명",
+      tier: "gold",
+      type: "단식",
     },
   ];
 
   const getTierWithEmoji = (tier: string) => {
     switch (tier) {
-      case 'gold':
-        return '🥇 골드';
-      case 'silver':
-        return '🥈 실버';
-      case 'bronze':
-        return '🥉 브론즈';
+      case "gold":
+        return "🥇 골드";
+      case "silver":
+        return "🥈 실버";
+      case "bronze":
+        return "🥉 브론즈";
       default:
-        return '';
+        return "";
     }
   };
 
