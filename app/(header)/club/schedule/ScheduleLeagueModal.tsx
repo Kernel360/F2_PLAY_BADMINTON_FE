@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/Button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import React, { useState } from "react";
-import OneGameInfo from "./OneGameInfo";
-import OneGameResult from "./OneGameResult";
+import OneGameInfo from "./ScheduleOneGameInfo";
+import OneGameResult from "./ScheduleOneGameResult";
 
 interface League {
   leagueName: string;
