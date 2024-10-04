@@ -1,6 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
+import IconButton from "@/components/ui/IconButton";
+import { ImagePlus, ImageUp, ScanSearch } from "lucide-react";
 import type React from "react";
 import { useRef, useState } from "react";
 import MyOneGameResult from "./MyOneGameResult";
@@ -34,14 +36,11 @@ function My() {
   };
 
   return (
-    <div className="mt-8 px-16 py-8 border-2 border-gray-400 rounded-md">
+    <div className="mt-8 px-16 py-8 border border-gray-400 rounded-md">
       <div className="flex justify-between">
         <div className="flex items-center gap-8">
           {infoUpdate ? (
-            <form
-              className="relative w-64 h-64 rounded-full"
-              onSubmit={(e) => e.preventDefault()}
-            >
+            <div className="relative w-64 h-64 rounded-full">
               <button
                 type="button"
                 className="h-full w-full"
@@ -50,7 +49,7 @@ function My() {
                 <img
                   alt="previewImg"
                   src={userImg}
-                  className="object-cover border-2 border-gray-400 w-full h-full rounded-full"
+                  className="object-cover w-full h-full rounded-full"
                 />
               </button>
               <input
@@ -59,7 +58,12 @@ function My() {
                 ref={fileInputRef}
                 onChange={handleImageChange}
               />
-            </form>
+              <div className="absolute bottom-2 right-2">
+                <IconButton color="transparent" size="lg">
+                  <ImagePlus width={"80%"} height={"80%"} />
+                </IconButton>
+              </div>
+            </div>
           ) : (
             <img
               src={userImg}
@@ -72,7 +76,7 @@ function My() {
               {infoUpdate ? (
                 <input
                   type="text"
-                  className="text-black text-lg rounded-md border-2 border-gray-400"
+                  className="text-black text-lg rounded-md border border-gray-400"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   maxLength={16}
@@ -99,7 +103,11 @@ function My() {
           </div>
         </div>
         <div className="flex gap-4">
-          <Button onClick={handleInfoUpdate}>정보 수정</Button>
+          {infoUpdate ? (
+            <Button onClick={handleInfoUpdate}>수정 완료</Button>
+          ) : (
+            <Button onClick={handleInfoUpdate}>정보 수정</Button>
+          )}
           <Button
             variant="outline"
             className="border-red-500 hover:bg-red-500/80"
@@ -110,7 +118,7 @@ function My() {
       </div>
       <div className="w-full mt-8">
         <p className="font-bold text-xl">경기 결과</p>
-        <div className="flex flex-col mt-2 w-full h-64 overflow-scroll px-8 py-4 border-2 border-gray-400 rounded-md gap-4">
+        <div className="flex flex-col mt-2 w-full h-64 overflow-scroll px-8 py-4 border border-gray-400 rounded-md gap-4">
           {/* {Array.from({ length: 30 }, (_, index) => (
             <MyOneGameResult key={index} />
           ))} */}
