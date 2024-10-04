@@ -1,12 +1,30 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import React, { useState } from "react";
+import type React from "react";
+import { useRef, useState } from "react";
 import MyOneGameResult from "./MyOneGameResult";
 
 function My() {
   const [infoUpdate, setInfoUpdate] = useState(false);
+  const [userImg, setUserImg] = useState("/images/dummy-image.jpg");
   const [userName, setUserName] = useState("유저이름");
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // TODO(iamgyu): 서버로 이미지 업로드 로직 추가
+      const imageUrl = URL.createObjectURL(file);
+      setUserImg(imageUrl);
+    }
+  };
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
   const handleInfoUpdate = () => {
     setInfoUpdate(!infoUpdate);
     if (infoUpdate === true) {
@@ -19,11 +37,33 @@ function My() {
     <div className="mt-8 px-16 py-8 border-2 border-gray-400 rounded-md">
       <div className="flex justify-between">
         <div className="flex items-center gap-8">
-          <img
-            src="/images/dummy-image.jpg"
-            alt="userImg"
-            className="w-64 h64 rounded-full"
-          />
+          {infoUpdate ? (
+            <form className="relative w-64 h-64 rounded-full">
+              <button
+                type="button"
+                className="h-full w-full"
+                onClick={handleImageClick}
+              >
+                <img
+                  alt="previewImg"
+                  src={userImg}
+                  className="object-cover border-2 border-gray-400 w-full h-full rounded-full"
+                />
+              </button>
+              <input
+                type="file"
+                className="hidden"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+              />
+            </form>
+          ) : (
+            <img
+              src={userImg}
+              alt="userImg"
+              className="object-cover w-64 h-64 rounded-full"
+            />
+          )}
           <div className="flex flex-col gap-8">
             <div className="flex justify-between items-center gap-4">
               {infoUpdate ? (
