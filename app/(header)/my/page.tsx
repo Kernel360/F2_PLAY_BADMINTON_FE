@@ -35,44 +35,53 @@ function My() {
     }
   };
 
+  const ImageUpdate = () => {
+    if (infoUpdate) {
+      return (
+        <div className="relative w-64 h-64 rounded-full">
+          <button
+            type="button"
+            className="h-full w-full"
+            onClick={handleImageClick}
+          >
+            <img
+              alt="previewImg"
+              src={userImg}
+              className="object-cover w-full h-full rounded-full"
+            />
+          </button>
+          <input
+            type="file"
+            className="hidden"
+            ref={fileInputRef}
+            onChange={handleImageChange}
+          />
+          <div className="absolute bottom-2 right-2">
+            <IconButton color="transparent" size="lg">
+              <ImagePlus width={"80%"} height={"80%"} />
+            </IconButton>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <img
+        src={userImg}
+        alt="userImg"
+        className="object-cover w-64 h-64 rounded-full"
+      />
+    );
+  };
+
   return (
     <div className="mt-8 px-16 py-8 border border-gray-400 rounded-md">
       <div className="flex justify-between">
         <div className="flex items-center gap-8">
-          {infoUpdate ? (
-            <div className="relative w-64 h-64 rounded-full">
-              <button
-                type="button"
-                className="h-full w-full"
-                onClick={handleImageClick}
-              >
-                <img
-                  alt="previewImg"
-                  src={userImg}
-                  className="object-cover w-full h-full rounded-full"
-                />
-              </button>
-              <input
-                type="file"
-                className="hidden"
-                ref={fileInputRef}
-                onChange={handleImageChange}
-              />
-              <div className="absolute bottom-2 right-2">
-                <IconButton color="transparent" size="lg">
-                  <ImagePlus width={"80%"} height={"80%"} />
-                </IconButton>
-              </div>
-            </div>
-          ) : (
-            <img
-              src={userImg}
-              alt="userImg"
-              className="object-cover w-64 h-64 rounded-full"
-            />
-          )}
+          <ImageUpdate />
           <div className="flex flex-col gap-8">
             <div className="flex justify-between items-center gap-4">
+              {/* if문 사용 시 useEffect를 사용해야되고 그럴 시 biome 에러로 인해 로직이 복잡해지는 상황 */}
               {infoUpdate ? (
                 <input
                   type="text"
