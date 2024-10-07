@@ -178,11 +178,14 @@ function My() {
             </div>
             <div className="flex items-center gap-4">
               <p className="text-black font-bold text-lg">티어</p>
-              <img
-                src="/images/tier-gold.png"
-                alt="userTier"
-                className="w-8 h-8"
-              />
+              <div className="flex items-center gap-1">
+                <img
+                  src="/images/tier-gold.png"
+                  alt="userTier"
+                  className="w-8 h-8"
+                />
+                <p className="text-black">골드</p>
+              </div>
             </div>
             <div className="flex justify-between items-center gap-4">
               <p className="text-black font-bold text-lg">전적</p>
@@ -219,15 +222,15 @@ function My() {
             ))}
           </div>
         </div>
-        <div className="flex flex-col mt-2">
+        <div className="flex flex-col mt-2 items-center">
           {visibleCount < matches.length && (
-            <button
-              type="button"
+            <Button
               onClick={handleShowMore}
-              className="p-2 align-center font-bold"
+              className="align-center font-bold w-1/5 hover:bg-white hover:text-primary"
+              variant="ghost"
             >
               더보기
-            </button>
+            </Button>
           )}
         </div>
       </div>
