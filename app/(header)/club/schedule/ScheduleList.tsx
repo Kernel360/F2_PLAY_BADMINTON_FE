@@ -1,90 +1,97 @@
 import { Text } from "@/components/ui/Text";
 import Link from "next/link";
+import { format } from "date-fns";
 import React from "react";
 
-function ScheduleList() {
-  const schedules = [
-    {
-      id: 1,
-      title: "일정 제목 1",
-      deadline: "8/12",
-      participants: "8/24 명",
-      tier: "gold",
-      type: "단식",
-    },
-    {
-      id: 2,
-      title: "일정 제목 2",
-      deadline: "8/12",
-      participants: "8/24 명",
-      tier: "silver",
-      type: "단식",
-    },
-    {
-      id: 3,
-      title: "일정 제목 3",
-      deadline: "8/12",
-      participants: "8/24 명",
-      tier: "bronze",
-      type: "단식",
-    },
-    {
-      id: 4,
-      title: "일정 제목 4",
-      deadline: "8/12",
-      participants: "8/24 명",
-      tier: "gold",
-      type: "단식",
-    },
-    {
-      id: 5,
-      title: "일정 제목 5",
-      deadline: "8/12",
-      participants: "8/24 명",
-      tier: "silver",
-      type: "단식",
-    },
-    {
-      id: 6,
-      title: "일정 제목 6",
-      deadline: "8/12",
-      participants: "8/24 명",
-      tier: "bronze",
-      type: "단식",
-    },
-    {
-      id: 7,
-      title: "일정 제목 7",
-      deadline: "8/12",
-      participants: "8/24 명",
-      tier: "gold",
-      type: "단식",
-    },
-    {
-      id: 8,
-      title: "일정 제목 8",
-      deadline: "8/12",
-      participants: "8/24 명",
-      tier: "silver",
-      type: "단식",
-    },
-    {
-      id: 9,
-      title: "일정 제목 9",
-      deadline: "8/12",
-      participants: "8/24 명",
-      tier: "bronze",
-      type: "단식",
-    },
-    {
-      id: 10,
-      title: "일정 제목 10",
-      deadline: "8/12",
-      participants: "8/24 명",
-      tier: "gold",
-      type: "단식",
-    },
-  ];
+const schedules = [
+  {
+    id: 1,
+    title: "일정 제목 1",
+    deadline: "8/12",
+    participants: "8/24 명",
+    tier: "gold",
+    type: "단식",
+  },
+  {
+    id: 2,
+    title: "일정 제목 2",
+    deadline: "8/12",
+    participants: "8/24 명",
+    tier: "silver",
+    type: "단식",
+  },
+  {
+    id: 3,
+    title: "일정 제목 3",
+    deadline: "8/12",
+    participants: "8/24 명",
+    tier: "bronze",
+    type: "단식",
+  },
+  {
+    id: 4,
+    title: "일정 제목 4",
+    deadline: "8/12",
+    participants: "8/24 명",
+    tier: "gold",
+    type: "단식",
+  },
+  {
+    id: 5,
+    title: "일정 제목 5",
+    deadline: "8/12",
+    participants: "8/24 명",
+    tier: "silver",
+    type: "단식",
+  },
+  {
+    id: 6,
+    title: "일정 제목 6",
+    deadline: "8/12",
+    participants: "8/24 명",
+    tier: "bronze",
+    type: "단식",
+  },
+  {
+    id: 7,
+    title: "일정 제목 7",
+    deadline: "8/12",
+    participants: "8/24 명",
+    tier: "gold",
+    type: "단식",
+  },
+  {
+    id: 8,
+    title: "일정 제목 8",
+    deadline: "8/12",
+    participants: "8/24 명",
+    tier: "silver",
+    type: "단식",
+  },
+  {
+    id: 9,
+    title: "일정 제목 9",
+    deadline: "8/12",
+    participants: "8/24 명",
+    tier: "bronze",
+    type: "단식",
+  },
+  {
+    id: 10,
+    title: "일정 제목 10",
+    deadline: "8/12",
+    participants: "8/24 명",
+    tier: "gold",
+    type: "단식",
+  },
+];
+
+interface ScheduleListProps {
+  selectedDate: Date;
+}
+
+function ScheduleList(props: ScheduleListProps) {
+  const { selectedDate } = props;
 
   const getTierWithEmoji = (tier: string) => {
     switch (tier) {
@@ -103,7 +110,7 @@ function ScheduleList() {
     <div className="w-full  p-6 bg-white">
       <div className="mb-5 text-center">
         <h1 className="text-2xl font-extrabold text-gray-800">
-          2024년 8월 31일
+          {format(selectedDate, "yyyy년 MM월 dd일")}
         </h1>
       </div>
 
