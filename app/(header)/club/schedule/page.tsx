@@ -7,14 +7,18 @@ import * as React from "react";
 import ScheduleList from "./ScheduleList";
 
 export default function ClubSchedulePage() {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const [date, setDate] = React.useState<Date>(new Date());
 
   return (
     <div className="w-full flex">
       <Calendar
         mode="single"
         selected={date}
-        onSelect={setDate}
+        onSelect={(date) => {
+          if (date) {
+            setDate(date);
+          }
+        }}
         locale={ko}
         className="rounded-md text-gray-800"
         classNames={{
@@ -29,7 +33,7 @@ export default function ClubSchedulePage() {
           DayContent: DayCell,
         }}
       />
-      <ScheduleList />
+      <ScheduleList selectedDate={date} />
     </div>
   );
 }
