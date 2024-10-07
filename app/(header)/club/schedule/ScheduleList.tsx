@@ -1,5 +1,6 @@
 import { Text } from "@/components/ui/Text";
 import { format } from "date-fns";
+import Link from "next/link";
 import React from "react";
 
 const schedules = [
@@ -115,32 +116,34 @@ function ScheduleList(props: ScheduleListProps) {
 
       <div className="grid gap-4 h-[27rem] overflow-y-auto">
         {schedules.map((schedule) => (
-          <div
-            key={schedule.id}
-            className="bg-white py-4 px-6 rounded-xl border border-solid hover:shadow-lg transform  transition-transform duration-300 cursor-pointer"
-          >
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h2 className="text-lg font-bold text-gray-900">
-                  {schedule.title}
-                </h2>
-                <Text color="gray" className="text-sm mt-1">
-                  {schedule.type}
+          // TODO(Yejin0O0): mock data or data 변수 이름 다시 생각해보기
+          <Link key={schedule.id} href={`/club/schedule/league/${schedule.id}`}>
+            <div className="bg-white py-4 px-6 rounded-xl border border-solid hover:shadow-lg transform  transition-transform duration-300 cursor-pointer">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900">
+                    {schedule.title}
+                  </h2>
+                  <Text color="gray" className="text-sm mt-1">
+                    {schedule.type}
+                  </Text>
+                </div>
+                <Text className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                  {getTierWithEmoji(schedule.tier)}
                 </Text>
               </div>
-              <Text className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                {getTierWithEmoji(schedule.tier)}
-              </Text>
-            </div>
-            <div className="flex justify-between items-center text-gray-600">
-              <div>
-                <Text className="text-sm">모집 기한: {schedule.deadline}</Text>
+              <div className="flex justify-between items-center text-gray-600">
+                <div>
+                  <Text className="text-sm">
+                    모집 기한: {schedule.deadline}
+                  </Text>
+                </div>
+                <div>
+                  <Text className="text-sm">{schedule.participants}</Text>
+                </div>
               </div>
-              <div>
-                <Text className="text-sm">{schedule.participants}</Text>
-              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
