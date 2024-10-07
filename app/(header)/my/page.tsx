@@ -57,6 +57,34 @@ const matches = [
     matchType: "SINGLE",
     matchDate: "2024-09-15",
   },
+  {
+    id: 8,
+    opponentName: "a",
+    result: "WIN",
+    matchType: "SINGLE",
+    matchDate: "2024-09-15",
+  },
+  {
+    id: 9,
+    opponentName: "a",
+    result: "WIN",
+    matchType: "SINGLE",
+    matchDate: "2024-09-15",
+  },
+  {
+    id: 10,
+    opponentName: "a",
+    result: "WIN",
+    matchType: "SINGLE",
+    matchDate: "2024-09-15",
+  },
+  {
+    id: 11,
+    opponentName: "a",
+    result: "WIN",
+    matchType: "SINGLE",
+    matchDate: "2024-09-15",
+  },
 ];
 
 function My() {
@@ -176,7 +204,7 @@ function My() {
           </Button>
         </div>
       </div>
-      <div className="w-full mt-8">
+      <div className="flex flex-col w-full mt-8">
         <p className="text-black font-bold text-xl">경기 결과</p>
         <div className="flex flex-col mt-4">
           <div className="flex font-bold text-gray-600 bg-gray-100 p-2 rounded-md">
@@ -190,6 +218,17 @@ function My() {
               <MyOneGameResult key={match.id} match={match} />
             ))}
           </div>
+        </div>
+        <div className="flex flex-col mt-2">
+          {visibleCount < matches.length && (
+            <button
+              type="button"
+              onClick={handleShowMore}
+              className="p-2 align-center font-bold"
+            >
+              더보기
+            </button>
+          )}
         </div>
       </div>
     </div>
