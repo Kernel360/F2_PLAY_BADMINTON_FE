@@ -1,6 +1,6 @@
 import { Text } from "@/components/ui/Text";
-import Link from "next/link";
 import { format } from "date-fns";
+import Link from "next/link";
 import React from "react";
 
 const schedules = [
