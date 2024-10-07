@@ -8,7 +8,8 @@
     "start": "next start",
     "format": "biome check . --fix",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "dev:https": "next dev -H www.badminton.run -p 3000 --experimental-https"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.1",
