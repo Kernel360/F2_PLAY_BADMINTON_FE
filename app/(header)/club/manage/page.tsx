@@ -1,6 +1,9 @@
 "use client";
 
-import ClubInput from "@/components/clubInfoInput/ClubInput";
+import ClubDescription from "@/components/clubInfoInput/ClubDescription";
+import ClubNameInput from "@/components/clubInfoInput/ClubNameInput";
+import ImageUploader from "@/components/clubInfoInput/ImageUploader";
+import { Button } from "@/components/ui/Button";
 import type React from "react";
 import { useState } from "react";
 
@@ -21,14 +24,25 @@ function ClubManagePage() {
   };
 
   return (
-    <ClubInput
-      imagePreview={imagePreview}
-      onImageChange={handleImageChange}
-      clubName={clubName}
-      onChangeName={(e) => setClubName(e.target.value)}
-      description={text}
-      onChangeDescription={(e) => setText(e.target.value)}
-    />
+    <div className="flex space-x-8 w-full h-[464px] items-center">
+      <ImageUploader
+        imagePreview={imagePreview}
+        onImageChange={handleImageChange}
+      />
+      <div className="flex flex-col flex-1 h-[400px] gap-4">
+        <ClubNameInput
+          clubName={clubName}
+          onChange={(e) => setClubName(e.target.value)}
+        />
+        <ClubDescription
+          description={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <div className="w-full flex justify-end">
+          <Button className="place-items-end">변경 저장</Button>
+        </div>
+      </div>
+    </div>
   );
 }
 
