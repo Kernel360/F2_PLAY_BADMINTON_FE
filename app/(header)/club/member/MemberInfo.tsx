@@ -1,33 +1,48 @@
 "use client";
 
 import IconButton from "@/components/ui/IconButton";
+import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { AlignJustify } from "lucide-react";
 import React from "react";
 import MemberDropDown from "./MemberDropdown";
 
-interface OneMemberInfoProps {
+interface LeagueRecordInfoResponse {
+  winCount: number;
+  loseCount: number;
+  drawCount: number;
+  matchCount: number;
+  tier: string;
+}
+
+interface MemberInfoProps {
+  image: string;
+  name: string;
+  leagueRecordInfoResponse: LeagueRecordInfoResponse;
   isOpen: boolean; // 드롭다운 상태
   onToggle: () => void; // 드롭다운 토글 함수
 }
 
-function OneMemberInfo({ isOpen, onToggle }: OneMemberInfoProps) {
+function MemberInfo({
+  image,
+  name,
+  leagueRecordInfoResponse,
+  isOpen,
+  onToggle,
+}: MemberInfoProps) {
   return (
     <div className="flex justify-center space-x-40">
       <div className="flex items-center gap-8">
-        <div className="w-20 h-20">
-          <img
-            src="/images/dummy-image.jpg"
-            alt="member_image"
-            className=" object-cover w-full h-full rounded-full"
-          />
-        </div>
-        <div className="w-8 h-8">
-          <img src="/images/tier-gold.png" alt="member_tier" />
-        </div>
-        <p className="text-gray-400">멤버 이름</p>
+        <img src={image} alt="userImg" className="w-16 h-16 rounded-full" />
+        <p className="text-gray-400">{name}</p>
+        <p>{getTierWithEmoji(leagueRecordInfoResponse.tier)}</p>
       </div>
       <div className="flex items-center gap-8 relative">
-        <p className="text-gray-400">00전 | 00승 | 00무 | 00패</p>
+        <p className="text-gray-400">
+          {leagueRecordInfoResponse.matchCount}전 |{" "}
+          {leagueRecordInfoResponse.winCount}승 |{" "}
+          {leagueRecordInfoResponse.drawCount}무 |{" "}
+          {leagueRecordInfoResponse.loseCount}패
+        </p>
         <IconButton size="sm" color="transparent" onClick={onToggle}>
           <AlignJustify width="80%" height="80%" className="text-gray-400" />
         </IconButton>
@@ -37,4 +52,4 @@ function OneMemberInfo({ isOpen, onToggle }: OneMemberInfoProps) {
   );
 }
 
-export default OneMemberInfo;
+export default MemberInfo;
