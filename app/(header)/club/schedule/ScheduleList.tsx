@@ -1,4 +1,5 @@
 import { Text } from "@/components/ui/Text";
+import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { format } from "date-fns";
 import Link from "next/link";
 import React from "react";
@@ -9,7 +10,7 @@ const schedules = [
     title: "일정 제목 1",
     deadline: "8/12",
     participants: "8/24 명",
-    tier: "gold",
+    tier: "GOLD",
     type: "단식",
   },
   {
@@ -17,7 +18,7 @@ const schedules = [
     title: "일정 제목 2",
     deadline: "8/12",
     participants: "8/24 명",
-    tier: "silver",
+    tier: "SILVER",
     type: "단식",
   },
   {
@@ -25,7 +26,7 @@ const schedules = [
     title: "일정 제목 3",
     deadline: "8/12",
     participants: "8/24 명",
-    tier: "bronze",
+    tier: "BRONZE",
     type: "단식",
   },
   {
@@ -33,7 +34,7 @@ const schedules = [
     title: "일정 제목 4",
     deadline: "8/12",
     participants: "8/24 명",
-    tier: "gold",
+    tier: "GOLD",
     type: "단식",
   },
   {
@@ -41,7 +42,7 @@ const schedules = [
     title: "일정 제목 5",
     deadline: "8/12",
     participants: "8/24 명",
-    tier: "silver",
+    tier: "SILVER",
     type: "단식",
   },
   {
@@ -49,7 +50,7 @@ const schedules = [
     title: "일정 제목 6",
     deadline: "8/12",
     participants: "8/24 명",
-    tier: "bronze",
+    tier: "BRONZE",
     type: "단식",
   },
   {
@@ -57,7 +58,7 @@ const schedules = [
     title: "일정 제목 7",
     deadline: "8/12",
     participants: "8/24 명",
-    tier: "gold",
+    tier: "GOLD",
     type: "단식",
   },
   {
@@ -65,7 +66,7 @@ const schedules = [
     title: "일정 제목 8",
     deadline: "8/12",
     participants: "8/24 명",
-    tier: "silver",
+    tier: "SILVER",
     type: "단식",
   },
   {
@@ -73,7 +74,7 @@ const schedules = [
     title: "일정 제목 9",
     deadline: "8/12",
     participants: "8/24 명",
-    tier: "bronze",
+    tier: "BRONZE",
     type: "단식",
   },
   {
@@ -81,7 +82,7 @@ const schedules = [
     title: "일정 제목 10",
     deadline: "8/12",
     participants: "8/24 명",
-    tier: "gold",
+    tier: "GOLD",
     type: "단식",
   },
 ];
@@ -92,19 +93,6 @@ interface ScheduleListProps {
 
 function ScheduleList(props: ScheduleListProps) {
   const { selectedDate } = props;
-
-  const getTierWithEmoji = (tier: string) => {
-    switch (tier) {
-      case "gold":
-        return "🥇 골드";
-      case "silver":
-        return "🥈 실버";
-      case "bronze":
-        return "🥉 브론즈";
-      default:
-        return "";
-    }
-  };
 
   return (
     <div className="w-full  p-6 bg-white">
