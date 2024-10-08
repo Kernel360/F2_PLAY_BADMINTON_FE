@@ -1,6 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
+import IconButton from "@/components/ui/IconButton";
+import { ImagePlus } from "lucide-react";
+import Image from "next/image";
 import type React from "react";
 import { useRef, useState } from "react";
 
@@ -21,63 +24,49 @@ function ClubManagePage() {
     }
   };
 
-  const handleImageDelete = () => {
-    setImagePreview("/images/dummy-image.jpg");
-  };
-
   const handleImageClick = () => {
     fileInputRef.current?.click();
   };
 
   return (
-    <div className="relative flex flex-col justify-center items-center gap-4">
-      <Button className="absolute right-0 top-0">변경 저장</Button>
-      <div className="flex space-x-8 w-full">
-        <div className="flex flex-col w-full">
-          <div className="flex items-center">
-            <div className="flex flex-col items-center gap-2">
-              <p className="text-gray-400">동호회 사진</p>
-              <img
-                src={imagePreview}
-                alt="preview"
-                className="object-cover w-80 h-56 rounded-md"
-              />
-            </div>
-            <div className="flex ml-8 gap-4">
-              <div>
-                <Button onClick={handleImageClick}>사진 교체</Button>
-                <input
-                  type="file"
-                  className="hidden"
-                  ref={fileInputRef}
-                  onChange={handleImageChange}
-                />
-              </div>
-              <Button
-                onClick={handleImageDelete}
-                className="border border-red-500 text-red-500 bg-white hover:bg-white"
-              >
-                사진 삭제
-              </Button>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 mt-4">
-            <p className="text-gray-400">동호회 이름</p>
-            <input
-              type="text"
-              className="border border-gray-400 rounded-md text-full px-1 py-2 text-black outline-none"
-              value={clubName}
-              onChange={(e) => setClubName(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-2 mt-4">
-            <p className="text-gray-400">동호회 소개</p>
-            <textarea
-              className="border border-gray-400 rounded-md w-full p-1 outline-none text-black overflow:scroll resize-none"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-            />
-          </div>
+    <div className="flex space-x-8 w-full h-[464px] items-center">
+      <div className="relative w-[400px] h-[400px] flex flex-col items-center box-content rounded-md">
+        <Image
+          src={imagePreview}
+          width={400}
+          height={400}
+          alt="club image"
+          className="rounded-md object-cover w-[400px] h-[400px] "
+        />
+        <input
+          type="file"
+          className="hidden"
+          ref={fileInputRef}
+          onChange={handleImageChange}
+        />
+        <div className="absolute bottom-0 right-0">
+          <IconButton radius="sm" size="lg" onClick={handleImageClick}>
+            <ImagePlus width={"80%"} height={"80%"} />
+          </IconButton>
+        </div>
+      </div>
+      <div className="flex flex-col flex-1 h-[400px] gap-4">
+        <input
+          type="text"
+          className="text-3xl font-bold text-black border border-gray-300 rounded-md p-1"
+          value={clubName}
+          onChange={(e) => setClubName(e.target.value)}
+        />
+        <div className="flex flex-col w-full h-full">
+          <p className="font-bold text-black text-lg">동호회 소개</p>
+          <textarea
+            className="rounded-md mt-2 w-full h-full outline-none border border-gray-300 text-gray-600 p-1 overflow:scroll resize-none"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+        </div>
+        <div className="w-full flex justify-end">
+          <Button className="place-items-end">변경 저장</Button>
         </div>
       </div>
     </div>
