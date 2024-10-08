@@ -1,12 +1,8 @@
 "use client";
 
 import ClubInput from "@/components/clubInfoInput/ClubInput";
-import { Button } from "@/components/ui/Button";
-import IconButton from "@/components/ui/IconButton";
-import { ImagePlus } from "lucide-react";
-import Image from "next/image";
 import type React from "react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 function ClubManagePage() {
   const [imagePreview, setImagePreview] = useState("/images/dummy-image.jpg");
