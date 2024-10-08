@@ -110,7 +110,7 @@ function LeaguePage() {
           <div>
             <p className="text-xs text-gray-500">경기 일자</p>
             <p className="text-sm font-semibold text-gray-800">
-              {format(new Date(league.leagueAt), "yyyy-MM-dd")}
+              {format(new Date(league.leagueAt), "yyyy-MM-dd HH시 mm분")}
             </p>
           </div>
         </div>
@@ -146,7 +146,7 @@ function LeaguePage() {
           <div>
             <p className="text-xs text-gray-500">모집 마감 일자</p>
             <p className="text-sm font-semibold text-gray-800">
-              {format(new Date(league.closedAt), "yyyy-MM-dd")}
+              {format(new Date(league.closedAt), "yyyy-MM-dd HH시 mm분")}
             </p>
           </div>
         </div>
