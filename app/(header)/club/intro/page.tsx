@@ -24,15 +24,14 @@ function ClubIntroPage() {
           <textarea
             readOnly
             className="rounded-md mt-2 w-full outline-none text-gray-600 overflow:scroll resize-none"
-          >
-            안녕하세요 동호회 입니다. 안녕하세요 동호회 입니다.안녕하세요 동호회
+            value="안녕하세요 동호회 입니다. 안녕하세요 동호회 입니다.안녕하세요 동호회
             입니다. 안녕하세요 동호회 입니다.안녕하세요 동호회 입니다.
             안녕하세요 동호회 입니다.안녕하세요 동호회 입니다. 안녕하세요 동호회
             입니다.안녕하세요 동호회 입니다. 안녕하세요 동호회 입니다.안녕하세요
             동호회 입니다. 안녕하세요 동호회 입니다.안녕하세요 동호회 입니다.
             안녕하세요 동호회 입니다.안녕하세요 동호회 입니다. 안녕하세요 동호회
-            입니다.안녕하세요 동호회 입니다. 안녕하세요 동호회 입니다.
-          </textarea>
+            입니다.안녕하세요 동호회 입니다. 안녕하세요 동호회 입니다."
+          />
         </div>
         <div className="flex flex-col">
           <p className="border-b-[1px] border-gray-200 text-black text-lg font-bold">
