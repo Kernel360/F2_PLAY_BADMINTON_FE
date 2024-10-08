@@ -30,14 +30,16 @@ function MemberInfo({
   onToggle,
 }: MemberInfoProps) {
   return (
-    <div className="flex justify-center space-x-40">
-      <div className="flex items-center gap-8">
+    <div className="flex justify-center">
+      <div className="flex flex-[1] items-center gap-8">
         <img src={image} alt="userImg" className="w-16 h-16 rounded-full" />
-        <p className="text-gray-400">{name}</p>
+        <p className="text-black">{name}</p>
+      </div>
+      <div className="flex flex-[1] items-center">
         <p>{getTierWithEmoji(leagueRecordInfoResponse.tier)}</p>
       </div>
-      <div className="flex items-center gap-8 relative">
-        <p className="text-gray-400">
+      <div className="flex flex-[1] items-center justify-between relative">
+        <p className="text-black">
           {leagueRecordInfoResponse.matchCount}전 |{" "}
           {leagueRecordInfoResponse.winCount}승 |{" "}
           {leagueRecordInfoResponse.drawCount}무 |{" "}
