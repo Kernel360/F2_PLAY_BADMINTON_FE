@@ -36,7 +36,9 @@ function MemberInfo({
         <p className="text-black">{name}</p>
       </div>
       <div className="flex flex-[1] items-center">
-        <p>{getTierWithEmoji(leagueRecordInfoResponse.tier)}</p>
+        <p className="text-black">
+          {getTierWithEmoji(leagueRecordInfoResponse.tier)}
+        </p>
       </div>
       <div className="flex flex-[1] items-center justify-between relative">
         <p className="text-black">
