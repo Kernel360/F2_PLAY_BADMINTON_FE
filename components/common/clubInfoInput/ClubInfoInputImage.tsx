@@ -1,7 +1,6 @@
 import IconButton from "@/components/ui/IconButton";
 import { ImagePlusIcon } from "lucide-react";
 import Image from "next/image";
-import type React from "react";
 import { useRef } from "react";
 
 interface ClubInfoInputImageProps {

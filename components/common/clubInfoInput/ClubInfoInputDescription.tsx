@@ -1,5 +1,3 @@
-import type React from "react";
-
 interface ClubInfoInputDescriptionProps {
   description: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;

@@ -4,7 +4,6 @@ import ClubInfoInputDescription from "@/components/common/clubInfoInput/ClubInfo
 import ClubInfoInputImage from "@/components/common/clubInfoInput/ClubInfoInputImage";
 import ClubInfoInputName from "@/components/common/clubInfoInput/ClubInfoInputName";
 import { Button } from "@/components/ui/Button";
-import type React from "react";
 import { useState } from "react";
 
 function ClubManagePage() {
