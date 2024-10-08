@@ -1,11 +1,14 @@
 import type React from "react";
 
-interface ClubDescriptionProps {
+interface ClubInfoInputDescriptionProps {
   description: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const ClubDescription = ({ description, onChange }: ClubDescriptionProps) => {
+const ClubInfoInputDescription = ({
+  description,
+  onChange,
+}: ClubInfoInputDescriptionProps) => {
   return (
     <div className="flex flex-col w-full h-full">
       <p className="font-bold text-black text-lg">동호회 소개</p>
@@ -18,4 +21,4 @@ const ClubDescription = ({ description, onChange }: ClubDescriptionProps) => {
   );
 };
 
-export default ClubDescription;
+export default ClubInfoInputDescription;

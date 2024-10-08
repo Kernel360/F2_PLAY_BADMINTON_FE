@@ -1,11 +1,11 @@
 import type React from "react";
 
-interface ClubNameInputProps {
+interface ClubInfoInputNameProps {
   clubName: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ClubNameInput = ({ clubName, onChange }: ClubNameInputProps) => {
+const ClubInfoInputName = ({ clubName, onChange }: ClubInfoInputNameProps) => {
   return (
     <input
       type="text"
@@ -16,4 +16,4 @@ const ClubNameInput = ({ clubName, onChange }: ClubNameInputProps) => {
   );
 };
 
-export default ClubNameInput;
+export default ClubInfoInputName;

@@ -1,14 +1,17 @@
+import IconButton from "@/components/ui/IconButton";
 import { ImagePlusIcon } from "lucide-react";
 import Image from "next/image";
 import type React from "react";
 import { useRef } from "react";
-import IconButton from "../ui/IconButton";
 
-interface ImageUploaderProps {
+interface ClubInfoInputImageProps {
   imagePreview: string;
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
-const ImageUploader = ({ imagePreview, onImageChange }: ImageUploaderProps) => {
+const ClubInfoInputImage = ({
+  imagePreview,
+  onImageChange,
+}: ClubInfoInputImageProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleImageClick = () => {
@@ -39,4 +42,4 @@ const ImageUploader = ({ imagePreview, onImageChange }: ImageUploaderProps) => {
   );
 };
 
-export default ImageUploader;
+export default ClubInfoInputImage;

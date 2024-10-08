@@ -1,8 +1,8 @@
 "use client";
 
-import ClubDescription from "@/components/clubInfoInput/ClubDescription";
-import ClubNameInput from "@/components/clubInfoInput/ClubNameInput";
-import ImageUploader from "@/components/clubInfoInput/ImageUploader";
+import ClubInfoInputDescription from "@/components/common/clubInfoInput/ClubInfoInputDescription";
+import ClubInfoInputImage from "@/components/common/clubInfoInput/ClubInfoInputImage";
+import ClubInfoInputName from "@/components/common/clubInfoInput/ClubInfoInputName";
 import { Button } from "@/components/ui/Button";
 import type React from "react";
 import { useState } from "react";
@@ -25,16 +25,16 @@ function ClubManagePage() {
 
   return (
     <div className="flex space-x-8 w-full h-[464px] items-center">
-      <ImageUploader
+      <ClubInfoInputImage
         imagePreview={imagePreview}
         onImageChange={handleImageChange}
       />
       <div className="flex flex-col flex-1 h-[400px] gap-4">
-        <ClubNameInput
+        <ClubInfoInputName
           clubName={clubName}
           onChange={(e) => setClubName(e.target.value)}
         />
-        <ClubDescription
+        <ClubInfoInputDescription
           description={text}
           onChange={(e) => setText(e.target.value)}
         />
