@@ -87,6 +87,12 @@ function CreateLeaguePage({ onSubmit }: LeagueFormProps) {
     setDate(newDate);
   };
 
+  const selectedTier = () => {
+    if (tierLimit === "GOLD") return "🥇 골드";
+    if (tierLimit === "SILVER") return "🥈 실버";
+    return "🥉 브론즈";
+  };
+
   return (
     <div className="container mx-auto bg-white rounded-lg space-y-6 ">
       <div className="border-b pb-4">
@@ -166,20 +172,14 @@ function CreateLeaguePage({ onSubmit }: LeagueFormProps) {
               지원 가능 티어
             </Text>
           </div>
-          <div>
+          <div className="w-full">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
                   className="w-full hover:bg-white hover:text-black text-black text-left p-2 flex items-center justify-between border-gray-200 rounded-md"
                 >
-                  <span className="flex items-center">
-                    {tierLimit === "GOLD"
-                      ? "🥇 골드"
-                      : tierLimit === "SILVER"
-                        ? "🥈 실버"
-                        : "🥉 브론즈"}
-                  </span>
+                  <span className="flex items-center">{selectedTier()}</span>
                   <svg
                     className="w-4 h-4 ml-2"
                     xmlns="http://www.w3.org/2000/svg"
@@ -206,19 +206,19 @@ function CreateLeaguePage({ onSubmit }: LeagueFormProps) {
                 >
                   <DropdownMenuRadioItem
                     value="GOLD"
-                    className="flex items-center p-2 w-full cursor-pointer hover:bg-gray-100 hover:border-none"
+                    className="flex items-center p-2 cursor-pointer text-black"
                   >
                     🥇 골드
                   </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem
                     value="SILVER"
-                    className="flex items-center p-2 w-full cursor-pointer hover:bg-gray-100 hover:border-none"
+                    className="flex items-center p-2 w-full cursor-pointer text-black"
                   >
                     🥈 실버
                   </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem
                     value="BRONZE"
-                    className="flex items-center p-2 w-full cursor-pointer hover:bg-gray-100 hover:border-none"
+                    className="flex items-center p-2 w-full cursor-pointer text-black"
                   >
                     🥉 브론즈
                   </DropdownMenuRadioItem>
