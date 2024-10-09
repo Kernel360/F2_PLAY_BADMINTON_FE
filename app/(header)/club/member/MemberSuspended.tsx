@@ -10,61 +10,70 @@ import type React from "react";
 import { useState } from "react";
 
 interface MemberRollChangeProps {
-  openRollChange: boolean;
-  handleRollDialog: () => void;
+  openSuspended: boolean;
+  handleSuspendedDialog: () => void;
 }
 
-function MemberRollChange({
-  openRollChange,
-  handleRollDialog,
+function MemberSuspended({
+  openSuspended,
+  handleSuspendedDialog,
 }: MemberRollChangeProps) {
-  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedSuspendedDay, setSelectedSuspendedDay] = useState(0);
 
   const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedRole(e.target.value);
+    setSelectedSuspendedDay(Number(e.target.value));
   };
 
-  const roles = [
+  const days = [
     {
       id: 1,
-      name: "회장",
+      day: 7,
     },
     {
       id: 2,
-      name: "매니저",
+      day: 15,
     },
     {
       id: 3,
-      name: "멤버",
+      day: 30,
     },
   ];
 
   return (
-    <Dialog open={openRollChange}>
+    <Dialog open={openSuspended}>
       <DialogContent className="text-black">
         <DialogHeader>
-          <DialogTitle>멤버 역할 교체</DialogTitle>
+          <DialogTitle>정지 기간</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col w-full items-center">
           <div className="flex pb-4 gap-8">
-            {roles.map((role) => (
-              <div key={role.id} className="mb-2">
+            {days.map((day) => (
+              <div key={day.id} className="mb-2">
                 <label className="flex items-center">
                   <input
                     type="radio"
-                    value={role.name}
-                    checked={selectedRole === role.name}
+                    value={day.day}
+                    checked={selectedSuspendedDay === day.day}
                     onChange={handleRoleChange}
                     className="mr-2"
                   />
-                  {role.name}
+                  {day.day}일
                 </label>
               </div>
             ))}
           </div>
+          <input
+            type="text"
+            className="w-full px-2 py-2 mb-4 border border-gray-400 rounded-md"
+            placeholder="정지 사유"
+          />
           <DialogClose asChild>
-            <Button type="button" className="w-1/3" onClick={handleRollDialog}>
-              교체
+            <Button
+              type="button"
+              className="w-1/3"
+              onClick={handleSuspendedDialog}
+            >
+              정지
             </Button>
           </DialogClose>
         </div>
@@ -73,4 +82,4 @@ function MemberRollChange({
   );
 }
 
-export default MemberRollChange;
+export default MemberSuspended;
