@@ -1,6 +1,8 @@
+import IconButton from "@/components/ui/IconButton";
 import { Text } from "@/components/ui/Text";
 import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { format } from "date-fns";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -87,6 +89,24 @@ const schedules = [
   },
 ];
 
+const plusIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    className="lucide lucide-plus text-black hover:text-white"
+  >
+    <path d="M5 12h14" />
+    <path d="M12 5v14" />
+    <title>plus</title>
+  </svg>
+);
 interface ScheduleListProps {
   selectedDate: Date;
 }
@@ -95,7 +115,17 @@ function ScheduleList(props: ScheduleListProps) {
   const { selectedDate } = props;
 
   return (
-    <div className="w-full  p-6 bg-white">
+    <div className="w-full px-6 py-3 bg-white relative">
+      <Link href="/club/schedule/create">
+        <IconButton
+          size="sm"
+          color="transparent"
+          radius="round"
+          className="group hover:bg-primary hover:text-white absolute right-0 -top-1"
+        >
+          <Plus className="text-primary group-hover:text-white" />
+        </IconButton>
+      </Link>
       <div className="mb-5 text-center">
         <h1 className="text-2xl font-extrabold text-gray-800">
           {format(selectedDate, "yyyy년 MM월 dd일")}
