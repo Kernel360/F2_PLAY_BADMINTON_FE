@@ -141,7 +141,7 @@ function CreateLeaguePage({ onSubmit }: LeagueFormProps) {
               variant="outline"
               className="w-full text-left p-3 text-black hover:bg-white hover:text-black"
             >
-              {date ? format(date, "yyyy-MM-dd a hh시 mm분") : "날짜 선택"}
+              {date ? format(date, "yyyy-MM-dd a hh시 mm분") : "경기 시간 선택"}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-4 bg-white border rounded-md shadow-md">
@@ -154,8 +154,8 @@ function CreateLeaguePage({ onSubmit }: LeagueFormProps) {
             <Calendar
               mode="single"
               selected={date}
-              onSelect={() => {
-                handleDaySelect;
+              onSelect={(selectedDate) => {
+                if (selectedDate) handleDaySelect(selectedDate);
               }}
               locale={ko}
               className="text-black"
@@ -273,7 +273,7 @@ function CreateLeaguePage({ onSubmit }: LeagueFormProps) {
               >
                 {closedAt
                   ? format(new Date(closedAt), "yyyy-MM-dd")
-                  : "날짜 선택"}
+                  : "모집 마감 날짜 선택"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-4 bg-white border rounded-md shadow-md">
