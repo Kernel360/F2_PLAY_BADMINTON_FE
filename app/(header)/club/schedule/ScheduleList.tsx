@@ -2,7 +2,7 @@ import IconButton from "@/components/ui/IconButton";
 import { Text } from "@/components/ui/Text";
 import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { format } from "date-fns";
-import { Plus } from "lucide-react";
+import { CalendarPlus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -103,9 +103,9 @@ function ScheduleList(props: ScheduleListProps) {
           size="sm"
           color="transparent"
           radius="round"
-          className="group hover:bg-primary hover:text-white absolute right-0 -top-1"
+          className="group hover:bg-primary hover:text-white absolute -right-4 -top-4"
         >
-          <Plus className="text-primary group-hover:text-white" />
+          <CalendarPlus className="text-primary group-hover:text-white" />
         </IconButton>
       </Link>
       <div className="mb-5 text-center">
