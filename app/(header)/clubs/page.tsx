@@ -2,7 +2,7 @@
 
 import { ClubCard } from "@/components/clubs/ClubCard";
 import Grid from "@/components/ui/Grid";
-import { useQuery } from "@tanstack/react-query";
+import useClubs from "@/lib/api/hooks/clubHook";
 
 interface ClubList {
   club_id: number;
@@ -19,40 +19,27 @@ interface ClubList {
 }
 
 export default function page() {
-  // WARN: 해당 작업은 임시 코드입니다.
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["clubsData"],
-    queryFn: async () => {
-      const response = await fetch("https://api.badminton.run/v1/clubs", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // 쿠키를 포함한 요청이 필요하면 설정
-      });
+  const { data, error, isLoading } = useClubs();
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-      return response.json();
-    },
-  });
+  if (!data) {
+    // TODO: 에러 메시지
+    return <div>No data available</div>;
+  }
 
-  const ClubList: ClubList[] = data || [];
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div className="my-10">
       <Grid columns={3} placeItems="center" spacing="lg">
-        {error ? (
-          <div>Error: {error.message}</div>
-        ) : isLoading ? (
-          <div>Loading...</div>
-        ) : ClubList.length > 0 ? (
-          ClubList.map((club) => <ClubCard key={club.club_id} {...club} />)
-        ) : (
-          <div>No data available</div>
-        )}
+        {data.map((club) => (
+          <ClubCard key={club.club_id} {...club} />
+        ))}
       </Grid>
     </div>
   );
