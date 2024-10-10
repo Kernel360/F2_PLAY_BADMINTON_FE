@@ -17,6 +17,7 @@ import {
   User,
   Users,
 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 interface League {
@@ -170,14 +171,16 @@ function LeaguePage() {
         </div>
       </div>
       <div className="flex justify-center items-center pt-8 gap-4">
-        <Button
-          size="lg"
-          variant="outline"
-          className="items-center justify-center gap-2 border-primary w-1/4"
-        >
-          <BookUser size={20} />
-          대진표 보기
-        </Button>
+        <Link className="w-1/4" href={"/club/schedule/league/1/match"}>
+          <Button
+            size="lg"
+            variant="outline"
+            className="items-center justify-center gap-2 border-primary w-full"
+          >
+            <BookUser size={20} />
+            대진표 보기
+          </Button>
+        </Link>
         <Button
           size="lg"
           variant={isParticipant ? "destructive" : "default"}
