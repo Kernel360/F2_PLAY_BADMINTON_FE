@@ -29,6 +29,9 @@ function MemberInfo({
   isOpen,
   onToggle,
 }: MemberInfoProps) {
+  const { winCount, loseCount, drawCount, matchCount, tier } =
+    leagueRecordInfoResponse;
+
   return (
     <div className="flex justify-center">
       <div className="flex flex-[1] items-center gap-8">
@@ -36,16 +39,11 @@ function MemberInfo({
         <p className="text-black">{name}</p>
       </div>
       <div className="flex flex-[1] items-center">
-        <p className="text-black">
-          {getTierWithEmoji(leagueRecordInfoResponse.tier)}
-        </p>
+        <p className="text-black">{getTierWithEmoji(tier)}</p>
       </div>
       <div className="flex flex-[1] items-center justify-between relative">
         <p className="text-black">
-          {leagueRecordInfoResponse.matchCount}전 |{" "}
-          {leagueRecordInfoResponse.winCount}승 |{" "}
-          {leagueRecordInfoResponse.drawCount}무 |{" "}
-          {leagueRecordInfoResponse.loseCount}패
+          {matchCount}전 | {winCount}승 | {drawCount}무 | {loseCount}패
         </p>
         <IconButton size="sm" color="transparent" onClick={onToggle}>
           <AlignJustify width="80%" height="80%" className="text-gray-400" />
