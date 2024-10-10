@@ -53,7 +53,9 @@ function DayCell(props: DayContentProps) {
 
   // 전체 스케줄 수에 따라 색상 패턴을 고정하기 위해 랜덤이 아닌 일정한 방식으로 색상을 선택
   const selectedColorIndex =
-    dayScheduleList.length > 0 ? dayScheduleList[0].id % colors.length : 0;
+    dayScheduleList.length > 0 && typeof dayScheduleList[0]?.id === "number"
+      ? dayScheduleList[0]?.id % colors.length
+      : 0;
 
   // TODO(Yejin0O0): 백엔드 데이터 로직 필요함
   // TODO(Yejin0O0): 티어, 모집 마감 여부도 알 수 있었으면 좋겠다는 백엔드 의견 있었음
