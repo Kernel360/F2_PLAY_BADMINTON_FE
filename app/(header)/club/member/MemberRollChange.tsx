@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/Button";
 import {
   Dialog,
   DialogClose,
@@ -40,7 +39,7 @@ function MemberRollChange({
   ];
 
   return (
-    <Dialog open={openRollChange}>
+    <Dialog open={openRollChange} onOpenChange={handleRollDialog}>
       <DialogContent className="text-black">
         <DialogHeader>
           <DialogTitle>멤버 역할 교체</DialogTitle>
@@ -62,10 +61,8 @@ function MemberRollChange({
               </div>
             ))}
           </div>
-          <DialogClose asChild>
-            <Button type="button" className="w-1/3" onClick={handleRollDialog}>
-              교체
-            </Button>
+          <DialogClose className="bg-primary text-white rounded-md px-6 py-2">
+            교체
           </DialogClose>
         </div>
       </DialogContent>

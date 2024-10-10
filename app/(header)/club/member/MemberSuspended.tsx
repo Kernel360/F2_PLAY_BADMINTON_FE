@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/Button";
 import {
   Dialog,
   DialogClose,
@@ -40,7 +39,7 @@ function MemberSuspended({
   ];
 
   return (
-    <Dialog open={openSuspended}>
+    <Dialog open={openSuspended} onOpenChange={handleSuspendedDialog}>
       <DialogContent className="text-black">
         <DialogHeader>
           <DialogTitle>정지 기간</DialogTitle>
@@ -67,14 +66,8 @@ function MemberSuspended({
             className="w-full px-2 py-2 mb-4 border border-gray-400 rounded-md"
             placeholder="정지 사유"
           />
-          <DialogClose asChild>
-            <Button
-              type="button"
-              className="w-1/3"
-              onClick={handleSuspendedDialog}
-            >
-              정지
-            </Button>
+          <DialogClose className="bg-primary text-white rounded-md px-6 py-2">
+            정지
           </DialogClose>
         </div>
       </DialogContent>
