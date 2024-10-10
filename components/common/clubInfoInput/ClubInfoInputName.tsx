@@ -10,7 +10,7 @@ const ClubInfoInputName = ({ clubName, onChange }: ClubInfoInputNameProps) => {
       className="text-2xl font-bold text-black border border-gray-300 rounded-md p-1"
       value={clubName}
       onChange={onChange}
-      placeholder={clubName ? "" : "이름을 입력하세요."}
+      placeholder={"이름을 입력하세요."}
     />
   );
 };

@@ -11,7 +11,6 @@ function CreateClubPage() {
   const [imagePreview, setImagePreview] = useState("/images/dummy-image.jpg");
   const [clubName, setClubName] = useState("");
   const [text, setText] = useState("");
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
