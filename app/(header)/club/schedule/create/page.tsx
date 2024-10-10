@@ -66,8 +66,15 @@ function CreateLeaguePage({ onSubmit }: LeagueFormProps) {
       return;
     }
     const [hours, minutes] = time.split(":").map(Number);
-    const newDate = setHours(setMinutes(date, minutes), hours);
-    setDate(newDate);
+    if (
+      typeof hours === "number" &&
+      !Number.isNaN(hours) &&
+      typeof minutes === "number" &&
+      !Number.isNaN(minutes)
+    ) {
+      const newDate = setHours(setMinutes(date, minutes), hours);
+      setDate(newDate);
+    }
     setTimeValue(time);
   };
 
