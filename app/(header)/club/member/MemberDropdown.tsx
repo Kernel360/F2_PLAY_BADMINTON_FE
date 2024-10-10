@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import MemberRollChange from "./MemberRollChange";
-import MemberSuspended from "./MemberSuspended";
+import MemberRollChange from "./MemberRollModal";
+import MemberSuspended from "./MemberSuspendedModal";
 
 function MemberDropDown() {
   const [openRollChange, setOpenRollChange] = useState(false);
