@@ -79,7 +79,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           placeholder={placeholder}
           type={type}
-          className={cn("outline-none bg-background", inputVariants({ size }))}
+          className={cn(
+            "outline-none bg-background text-black",
+            inputVariants({ size }),
+          )}
           ref={ref}
           {...props}
         />
