@@ -1,6 +1,8 @@
+import IconButton from "@/components/ui/IconButton";
 import { Text } from "@/components/ui/Text";
 import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { format } from "date-fns";
+import { CalendarPlus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -95,7 +97,17 @@ function ScheduleList(props: ScheduleListProps) {
   const { selectedDate } = props;
 
   return (
-    <div className="w-full  p-6 bg-white">
+    <div className="w-full px-6 py-3 bg-white relative">
+      <Link href="/club/schedule/create">
+        <IconButton
+          size="sm"
+          color="transparent"
+          radius="round"
+          className="group hover:bg-primary hover:text-white absolute -right-4 -top-4"
+        >
+          <CalendarPlus className="text-primary group-hover:text-white" />
+        </IconButton>
+      </Link>
       <div className="mb-5 text-center">
         <h1 className="text-2xl font-extrabold text-gray-800">
           {format(selectedDate, "yyyy년 MM월 dd일")}
