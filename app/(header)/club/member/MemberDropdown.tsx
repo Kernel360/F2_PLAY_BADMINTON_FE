@@ -35,7 +35,7 @@ function MemberDropDown() {
           </button>
           <button type="button" className="w-full">
             <li className="px-4 py-2 text-red-400 hover:bg-gray-100 cursor-pointer">
-              탈퇴
+              내보내기
             </li>
           </button>
         </ul>
