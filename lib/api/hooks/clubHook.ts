@@ -1,5 +1,8 @@
 import { getClubs, postClubs } from "@/lib/api/functions/clubFn";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import type { components } from "@/schemas/schema";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+type ClubCreate = components["schemas"]["ClubCreateRequest"];
 
 export const useGetClubs = () => {
   return useQuery({
@@ -9,10 +12,14 @@ export const useGetClubs = () => {
 };
 
 export const usePostClubs = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: postClubs,
-    onError: (error: Error) => {
-      console.error("클럽 생성 중 오류:", error.message);
+    mutationFn: (clubData: ClubCreate) => postClubs(clubData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clubsData"] });
+      console.log("성공");
     },
+    onError: () => alert("동호회 생성에 실패했습니다"),
   });
 };
