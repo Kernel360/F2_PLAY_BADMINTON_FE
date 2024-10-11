@@ -7,25 +7,31 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
   const headerList = headers();
   const pathname = headerList.get("x-current-path")?.split("/")[2];
 
+  const activeTab = () => {
+    if (pathname === undefined) return "intro";
+    if (pathname === "club") return "intro";
+    return pathname;
+  };
+
   return (
-    <Tabs defaultValue={pathname} className="w-full max-w-5xl mt-10 ">
+    <Tabs defaultValue={activeTab()} className="w-full max-w-5xl mt-10 ">
       <TabsList>
-        <Link href="/club/intro">
+        <Link href="/my-club">
           <TabsTrigger value="intro" color="gray">
             소개
           </TabsTrigger>
         </Link>
-        <Link href="/club/schedule">
+        <Link href="/my-club/schedule">
           <TabsTrigger value="schedule" color="gray">
             일정
           </TabsTrigger>
         </Link>
-        <Link href="/club/member">
+        <Link href="/my-club/member">
           <TabsTrigger value="member" color="gray">
             회원
           </TabsTrigger>
         </Link>
-        <Link href="/club/manage">
+        <Link href="/my-club/manage">
           <TabsTrigger value="manage" color="gray">
             관리
           </TabsTrigger>

@@ -1,15 +1,16 @@
+import ClubIntroPages from "@/app/(header)/my-club/ClubIntroPage";
+import ClubManagePages from "@/app/(header)/my-club/manage/page";
+import ClubMemberPages from "@/app/(header)/my-club/member/page";
+import ClubSchedulePages from "@/app/(header)/my-club/schedule/page";
 import { TabsContent } from "@/components/ui/Tabs";
+import ClubLayout from "@/layouts/ClubLayout";
 import React from "react";
-import ClubHomePages from "./intro/page";
-import ClubManagePages from "./manage/page";
-import ClubMemberPages from "./member/page";
-import ClubSchedulePages from "./schedule/page";
 
-function ClubPage() {
+function MyClubPage() {
   return (
     <>
       <TabsContent value="intro">
-        <ClubHomePages />
+        <ClubIntroPages />
       </TabsContent>
       <TabsContent value="schedule">
         <ClubSchedulePages />
@@ -24,4 +25,4 @@ function ClubPage() {
   );
 }
 
-export default ClubPage;
+export default MyClubPage;
