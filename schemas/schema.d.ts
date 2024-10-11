@@ -4,6 +4,30 @@
  */
 
 export interface paths {
+  "/v1/members/profileImage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /**
+     * 프로필 사진을 수정합니다
+     * @description 프로필 사진을 수정합니다
+     */
+    put: operations["updateProfileImage"];
+    /**
+     * 프로필 사진을 S3에 업로드 합니다
+     * @description 프로필 사진을 S3에 업로드합니다
+     */
+    post: operations["uploadProfileImage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/v1/members/win": {
     parameters: {
       query?: never;
@@ -116,8 +140,8 @@ export interface paths {
       cookie?: never;
     };
     /**
-     * 년, 월별로 검색합니다.
-     * @description 검색조건에 따라 경기를 검색합니다.
+     * 해당 일자 기준으로 데이터를 조회합니다.
+     * @description 특정 클럽 ID에 대한 리그 데이터를 조회합니다. 검색 조건으로 날짜를 사용하며, 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.
      */
     get: operations["leagueReadByCondition"];
     put?: never;
@@ -163,7 +187,11 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /**
+     * 대진표 조회
+     * @description 대진표를 조회합니다.
+     */
+    get: operations["getMatches"];
     put?: never;
     /**
      * 대진표 생성
@@ -235,30 +263,6 @@ export interface paths {
     options?: never;
     head?: never;
     patch?: never;
-    trace?: never;
-  };
-  "/v1/members": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    /**
-     * 회원 탈퇴를 합니다
-     * @description 멤버 필드의 isDeleted 를 true 로 변경합니다
-     */
-    delete: operations["deleteMember"];
-    options?: never;
-    head?: never;
-    /**
-     * 프로필 사진을 수정합니다
-     * @description 프로필 사진을 수정합니다
-     */
-    patch: operations["updateProfileImage"];
     trace?: never;
   };
   "/v1/clubs/{clubId}": {
@@ -337,6 +341,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/v1/members/is-club-member": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 회원이 동호회에 가입되어있는지 확인합니다
+     * @description 회원이 동호회에 가입되어있는지 확인합니다
+     */
+    get: operations["getMemberIsClubMember"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/v1/clubs/search": {
     parameters: {
       query?: never;
@@ -377,10 +401,68 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/v1/members": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * 회원 탈퇴를 합니다
+     * @description 멤버 필드의 isDeleted 를 true 로 변경합니다
+     */
+    delete: operations["deleteMember"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /** @description 회원 요청 DTO */
+    MemberResponse: {
+      /**
+       * Format: int64
+       * @description 회원 id
+       * @example 1
+       */
+      member_id?: number;
+      /**
+       * @description 회원 역할
+       * @example AUTHORIZATION_USER
+       */
+      authorization?: string;
+      /**
+       * @description 회원 이름
+       * @example 이선우
+       */
+      name?: string;
+      /**
+       * @description oAuth 로그인 이메일
+       * @example qosle@naver.com
+       */
+      email?: string;
+      /**
+       * @description oAuth 제공 ID
+       * @example 1070449979547641023123
+       */
+      provider_id?: string;
+      /**
+       * @description oAuth 제공 이미지
+       * @example 1070449979547641023123
+       */
+      profile_imag?: string;
+    };
+    ImageUploadRequest: {
+      /** Format: binary */
+      multipartFile?: string;
+    };
     ClubCreateRequest: {
       club_name: string;
       club_description: string;
@@ -413,7 +495,7 @@ export interface components {
       league_location?: string;
       /**
        * @description 최소 티어
-       * @example GOLD || SILVER || BRONZE
+       * @example GOLD
        * @enum {string}
        */
       tier_limit?: "GOLD" | "SILVER" | "BRONZE";
@@ -448,8 +530,9 @@ export interface components {
       /**
        * @description 매칭 조건
        * @example TIER
+       * @enum {string}
        */
-      matching_requirement?: string;
+      match_generation_type?: "RANDOM" | "TIER";
     };
     LeagueCreateResponse: {
       /**
@@ -509,8 +592,9 @@ export interface components {
       /**
        * @description 매칭 조건
        * @example TIER
+       * @enum {string}
        */
-      matching_requirement?: string;
+      match_generation_type?: "RANDOM" | "TIER";
     };
     LeagueParticipantResponse: {
       /** Format: int64 */
@@ -581,10 +665,6 @@ export interface components {
       club_member_id?: number;
       role?: string;
     };
-    ImageUploadRequest: {
-      /** Format: binary */
-      multipartFile?: string;
-    };
     ClubUpdateRequest: {
       club_name: string;
       club_description: string;
@@ -652,8 +732,9 @@ export interface components {
       /**
        * @description 매칭 조건
        * @example TIER
+       * @enum {string}
        */
-      matching_requirement?: string;
+      match_generation_type?: "RANDOM" | "TIER";
     };
     LeagueStatusUpdateResponse: {
       /**
@@ -713,8 +794,9 @@ export interface components {
       /**
        * @description 매칭 조건
        * @example TIER
+       * @enum {string}
        */
-      matching_requirement?: string;
+      match_generation_type?: "RANDOM" | "TIER";
     };
     /** @description League record information */
     LeagueRecordInfoResponse: {
@@ -777,7 +859,14 @@ export interface components {
       role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
       league_record_info?: components["schemas"]["LeagueRecordInfoResponse"];
     };
-    ClubsReadResponse: {
+    MemberIsClubMemberResponse: {
+      is_club_member?: boolean;
+      /** @enum {string} */
+      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
+      /** Format: int64 */
+      club_id?: number;
+    };
+    ClubCardResponse: {
       /** Format: int64 */
       club_id?: number;
       club_name?: string;
@@ -787,20 +876,92 @@ export interface components {
       created_at?: string;
       /** Format: date-time */
       modified_at?: string;
-      tier_counts?: {
-        [key: string]: number;
-      };
+      club_member_count_by_tier?: components["schemas"]["ClubMemberCountByTier"];
     };
-    ClubReadResponse: {
+    ClubMemberCountByTier: {
+      /** Format: int64 */
+      gold_club_member_count?: number;
+      /** Format: int64 */
+      silver_club_member_count?: number;
+      /** Format: int64 */
+      bronze_club_member_count?: number;
+    };
+    PageClubCardResponse: {
+      /** Format: int32 */
+      total_pages?: number;
+      /** Format: int64 */
+      total_elements?: number;
+      first?: boolean;
+      last?: boolean;
+      /** Format: int32 */
+      size?: number;
+      content?: components["schemas"]["ClubCardResponse"][];
+      /** Format: int32 */
+      number?: number;
+      sort?: components["schemas"]["SortObject"][];
+      /** Format: int32 */
+      number_of_elements?: number;
+      pageable?: components["schemas"]["PageableObject"];
+      empty?: boolean;
+    };
+    PageableObject: {
+      /** Format: int64 */
+      offset?: number;
+      sort?: components["schemas"]["SortObject"][];
+      paged?: boolean;
+      /** Format: int32 */
+      page_number?: number;
+      /** Format: int32 */
+      page_size?: number;
+      unpaged?: boolean;
+    };
+    SortObject: {
+      direction?: string;
+      null_handling?: string;
+      ascending?: boolean;
+      property?: string;
+      ignore_case?: boolean;
+    };
+    ClubDetailsResponse: {
       club_name?: string;
       club_description?: string;
       club_image?: string;
+      club_member_count_by_tier?: components["schemas"]["ClubMemberCountByTier"];
+      /** Format: int32 */
+      club_member_count?: number;
       /** Format: date-time */
       created_at?: string;
-      /** Format: date-time */
-      modified_at?: string;
     };
     LeagueReadResponse: {
+      /**
+       * Format: int64
+       * @description 경기 아이디
+       */
+      league_id?: number;
+      /**
+       * @description 경기 이름
+       * @example 배드민턴 경기
+       */
+      league_name?: string;
+      /**
+       * @description 현재 경기 상태
+       * @example OPEN
+       * @enum {string}
+       */
+      status?: "OPEN" | "CLOSED";
+      /**
+       * Format: date-time
+       * @description 경기 시작 날짜
+       */
+      league_at?: string;
+      /**
+       * Format: int32
+       * @description 참가 인원
+       * @example 16
+       */
+      player_count?: number;
+    };
+    LeagueAndParticipantResponse: {
       /**
        * Format: int64
        * @description 경기 아이디
@@ -846,10 +1007,10 @@ export interface components {
       closed_at?: string;
       /**
        * Format: int32
-       * @description 참가 인원
+       * @description 참가 제한 인원
        * @example 16
        */
-      player_count?: number;
+      player_limit_count?: number;
       /**
        * Format: date-time
        * @description 생성 일자
@@ -863,12 +1024,23 @@ export interface components {
       /**
        * @description 매칭 조건
        * @example RANDOM
+       * @enum {string}
        */
-      matching_requirement?: string;
+      match_generation_type?: "RANDOM" | "TIER";
+      /**
+       * Format: int32
+       * @description 현재 참여 인원
+       * @example 0
+       */
+      player_count?: number;
     };
     ClubMemberResponse: {
+      /** Format: int64 */
+      club_member_id?: number;
       image?: string;
       name?: string;
+      /** @enum {string} */
+      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
       league_record_info_response?: components["schemas"]["LeagueRecordInfoResponse"];
     };
     /** @description 회원 삭제 responseDto */
@@ -909,6 +1081,52 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+  updateProfileImage: {
+    parameters: {
+      query: {
+        imageUrl: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MemberResponse"];
+        };
+      };
+    };
+  };
+  uploadProfileImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["ImageUploadRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
   addWin: {
     parameters: {
       query?: never;
@@ -991,7 +1209,11 @@ export interface operations {
   };
   readAllClub: {
     parameters: {
-      query?: never;
+      query?: {
+        page?: number;
+        size?: number;
+        sort?: string;
+      };
       header?: never;
       path?: never;
       cookie?: never;
@@ -1004,7 +1226,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["ClubsReadResponse"][];
+          "*/*": components["schemas"]["PageClubCardResponse"];
         };
       };
     };
@@ -1036,11 +1258,12 @@ export interface operations {
   leagueReadByCondition: {
     parameters: {
       query: {
-        year: number;
-        month: number;
+        /** @description 조회할 날짜, 'yyyy-MM' 형식으로 입력 */
+        date: string;
       };
       header?: never;
       path: {
+        /** @description 조회할 클럽의 ID */
         clubId: number;
       };
       cookie?: never;
@@ -1130,6 +1353,29 @@ export interface operations {
       };
     };
   };
+  getMatches: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+        leagueId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MatchResponse"][];
+        };
+      };
+    };
+  };
   makeMatches: {
     parameters: {
       query?: never;
@@ -1193,7 +1439,9 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["ClubMemberResponse"][];
+          "*/*": {
+            [key: string]: components["schemas"]["ClubMemberResponse"][];
+          };
         };
       };
     };
@@ -1248,50 +1496,6 @@ export interface operations {
       };
     };
   };
-  deleteMember: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "*/*": components["schemas"]["MemberDeleteResponse"];
-        };
-      };
-    };
-  };
-  updateProfileImage: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "multipart/form-data": components["schemas"]["ImageUploadRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-  };
   readClub: {
     parameters: {
       query?: never;
@@ -1309,7 +1513,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["ClubReadResponse"];
+          "*/*": components["schemas"]["ClubDetailsResponse"];
         };
       };
     };
@@ -1380,7 +1584,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["LeagueReadResponse"];
+          "*/*": components["schemas"]["LeagueAndParticipantResponse"];
         };
       };
     };
@@ -1524,9 +1728,32 @@ export interface operations {
       };
     };
   };
+  getMemberIsClubMember: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MemberIsClubMemberResponse"];
+        };
+      };
+    };
+  };
   clubSearch: {
     parameters: {
       query?: {
+        page?: number;
+        size?: number;
+        sort?: string;
         keyword?: string;
       };
       header?: never;
@@ -1541,7 +1768,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["ClubsReadResponse"][];
+          "*/*": components["schemas"]["PageClubCardResponse"];
         };
       };
     };
@@ -1561,7 +1788,27 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["ClubReadResponse"];
+          "*/*": components["schemas"]["ClubDetailsResponse"];
+        };
+      };
+    };
+  };
+  deleteMember: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MemberDeleteResponse"];
         };
       };
     };
