@@ -171,7 +171,7 @@ function LeaguePage() {
         </div>
       </div>
       <div className="flex justify-center items-center pt-8 gap-4">
-        <Link className="w-1/4" href={"/club/schedule/league/1/match"}>
+        <Link className="w-1/4" href={"/my-club/schedule/1/match"}>
           <Button
             size="lg"
             variant="outline"
