@@ -13,7 +13,7 @@ type CardProps = React.ComponentProps<typeof Card>;
 
 export function ClubCard({ className }: CardProps) {
   return (
-    <Link href="/club">
+    <Link href="/my-club">
       <Card
         className={cn(
           "w-64 rounded-lg shadow-lg overflow-hidden cursor-pointer transition-transform transform hover:scale-105",
