@@ -57,15 +57,13 @@ function Header(props: UserStateProps) {
   const headersList = headers();
   const path = headersList.get("x-current-path");
 
-  console.log(path);
-
   return (
     <div className="flex items-center justify-between space-x-4 w-full max-w-5xl h-16 sticky top-0 z-50 border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Link href="/">
         <div className="text-xl font-semibold cursor-pointer">LOGO</div>
       </Link>
       <div className="flex items-center justify-end space-x-2 w-1/2">
-        {path === "/clubs" && (
+        {path === "/" && (
           <div className="w-1/2">
             <Input search radius="round" placeholder="" size="sm" />
           </div>

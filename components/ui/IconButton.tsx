@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import type React from "react";
 
 interface IconButtonProps {
@@ -7,6 +8,7 @@ interface IconButtonProps {
   color?: "gray" | "primary" | "transparent";
   outline?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  className?: string;
 }
 
 function IconButton(props: IconButtonProps) {
@@ -16,6 +18,7 @@ function IconButton(props: IconButtonProps) {
     radius = "md",
     color = "gray",
     outline = false,
+    className,
     onClick,
   } = props;
 
@@ -48,7 +51,7 @@ function IconButton(props: IconButtonProps) {
   return (
     <button
       type="button"
-      className={`flex justify-center items-center ${outlineClass} ${sizeClass} ${radiusClass} ${colorClass} hover:filter hover:brightness-90`}
+      className={`flex justify-center items-center ${outlineClass} ${sizeClass} ${radiusClass} ${colorClass} hover:filter hover:brightness-90, ${cn(className)}`}
       onClick={onClick}
     >
       <div className="w-full h-full flex justify-center items-center">
