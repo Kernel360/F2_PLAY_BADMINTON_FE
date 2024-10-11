@@ -2,7 +2,7 @@
 
 import { ClubCard } from "@/components/clubs/ClubCard";
 import Grid from "@/components/ui/Grid";
-import useClubs from "@/lib/api/hooks/clubHook";
+import { useClubs } from "@/lib/api/hooks/clubHook";
 
 interface ClubList {
   club_id: number;

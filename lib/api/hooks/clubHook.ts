@@ -1,9 +1,9 @@
 import { getClubs } from "@/lib/api/functions/clubFn";
 import { useQuery } from "@tanstack/react-query";
 
-export default function useClubs() {
+export const useClubs = () => {
   return useQuery({
     queryKey: ["clubsData"],
     queryFn: getClubs,
   });
-}
+};
