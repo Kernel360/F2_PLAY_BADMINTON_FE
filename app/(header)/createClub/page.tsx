@@ -4,8 +4,12 @@ import ClubInfoInputDescription from "@/components/common/clubInfoInput/ClubInfo
 import ClubInfoInputImage from "@/components/common/clubInfoInput/ClubInfoInputImage";
 import ClubInfoInputName from "@/components/common/clubInfoInput/ClubInfoInputName";
 import { Button } from "@/components/ui/Button";
+import { usePostClubs } from "@/lib/api/hooks/clubHook";
+import type { components } from "@/schemas/schema";
 import type React from "react";
-import { useRef, useState } from "react";
+import { useState } from "react";
+
+type ClubCreate = components["schemas"]["ClubCreateRequest"];
 
 function CreateClubPage() {
   const [imagePreview, setImagePreview] = useState("/images/dummy-image.jpg");
@@ -18,6 +22,24 @@ function CreateClubPage() {
       // TODO(iamgyu): 서버로 이미지 업로드 로직 추가
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
+    }
+  };
+
+  const { mutate: createClub, data, error } = usePostClubs();
+
+  const handleCreateClub = async () => {
+    const newClubData: ClubCreate = {
+      club_name: clubName,
+      club_description: text,
+      club_image: imagePreview,
+    };
+
+    // 클럽 생성 요청
+    try {
+      createClub(newClubData);
+    } catch (error) {
+      // 오류 처리
+      console.error("Error creating club", error);
     }
   };
 
@@ -50,7 +72,9 @@ function CreateClubPage() {
         <Button variant="outline" size="lg">
           취소
         </Button>
-        <Button size="lg">완료</Button>
+        <Button size="lg" onClick={handleCreateClub}>
+          완료
+        </Button>
       </div>
     </div>
   );
