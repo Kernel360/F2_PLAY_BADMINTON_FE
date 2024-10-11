@@ -117,10 +117,7 @@ function ScheduleList(props: ScheduleListProps) {
       <div className="grid gap-4 h-[27rem] overflow-y-auto">
         {schedules.map((schedule) => (
           // TODO(Yejin0O0): mock data or data 변수 이름 다시 생각해보기
-          <Link
-            key={schedule.id}
-            href={`/my-club/schedule/league/${schedule.id}`}
-          >
+          <Link key={schedule.id} href={`/my-club/schedule/${schedule.id}`}>
             <div className="bg-white py-4 px-6 rounded-xl border border-solid hover:shadow-lg transform  transition-transform duration-300 cursor-pointer">
               <div className="flex justify-between items-start mb-4">
                 <div>
