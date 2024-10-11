@@ -63,7 +63,7 @@ function Header(props: UserStateProps) {
         <div className="text-xl font-semibold cursor-pointer">LOGO</div>
       </Link>
       <div className="flex items-center justify-end space-x-2 w-1/2">
-        {path === "/clubs" && (
+        {path === "/" && (
           <div className="w-1/2">
             <Input search radius="round" placeholder="" size="sm" />
           </div>
