@@ -27,23 +27,20 @@ export async function getClubs() {
 }
 
 export async function postClubs(clubsData: ClubCreate) {
-  try {
-    const response = await fetch("https://api.badminton.run/v1/clubs", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(clubsData),
-    });
+  const response = await fetch("https://api.badminton.run/v1/clubs", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(clubsData),
+  });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log(error);
+  if (!response.ok) {
+    // 오류 발생 시 throw
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
+
+  const data = await response.json();
+  return data;
 }

@@ -15,7 +15,7 @@ const personalSection = (isLogin: boolean, isJoined: boolean) => {
           size="sm"
           align="center"
           className="cursor-pointer leading-6"
-          link="/createClub"
+          link="/club/create"
         >
           동호회 새로 만들기
         </LinkText>
@@ -38,7 +38,7 @@ const personalSection = (isLogin: boolean, isJoined: boolean) => {
           size="sm"
           align="center"
           className=" cursor-pointer leading-6"
-          link="/createClub"
+          link="/club/create"
         >
           동호회 새로 만들기
         </LinkText>

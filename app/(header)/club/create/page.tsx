@@ -6,6 +6,7 @@ import ClubInfoInputName from "@/components/common/clubInfoInput/ClubInfoInputNa
 import { Button } from "@/components/ui/Button";
 import { usePostClubs } from "@/lib/api/hooks/clubHook";
 import type { components } from "@/schemas/schema";
+import Link from "next/link";
 import type React from "react";
 import { useState } from "react";
 
@@ -19,13 +20,12 @@ function CreateClubPage() {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // TODO(iamgyu): 서버로 이미지 업로드 로직 추가
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
     }
   };
 
-  const { mutate: createClub, data, error } = usePostClubs();
+  const { mutate: createClub, isError, error } = usePostClubs();
 
   const handleCreateClub = async () => {
     const newClubData: ClubCreate = {
@@ -34,13 +34,8 @@ function CreateClubPage() {
       club_image: imagePreview,
     };
 
-    // 클럽 생성 요청
-    try {
-      createClub(newClubData);
-    } catch (error) {
-      // 오류 처리
-      console.error("Error creating club", error);
-    }
+    createClub(newClubData);
+    console.log(isError);
   };
 
   return (
@@ -58,7 +53,6 @@ function CreateClubPage() {
               onChange={(e) => setClubName(e.target.value)}
             />
           </div>
-
           <div className="flex flex-col gap-1 h-full">
             <p className="text-black font-bold text-lg">동호회 소개</p>
             <ClubInfoInputDescription
@@ -69,9 +63,11 @@ function CreateClubPage() {
         </div>
       </div>
       <div className="flex justify-center items-center gap-4">
-        <Button variant="outline" size="lg">
-          취소
-        </Button>
+        <Link href={"/club/1"}>
+          <Button variant="outline" size="lg">
+            취소
+          </Button>
+        </Link>
         <Button size="lg" onClick={handleCreateClub}>
           완료
         </Button>

@@ -11,9 +11,8 @@ export const useGetClubs = () => {
 export const usePostClubs = () => {
   return useMutation({
     mutationFn: postClubs,
-    onError: (error) => {
-      console.error("Error during club posting:", error);
-      // 추가적인 오류 처리 로직을 여기에 추가할 수 있습니다.
+    onError: (error: Error) => {
+      console.error("클럽 생성 중 오류:", error.message);
     },
   });
 };
