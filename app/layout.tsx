@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Header from "@/components/ui/Header";
 import { TanstackClientProvider } from "@/lib/TanstackClientProvider";
+import { headers } from "next/headers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,12 +26,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = headers();
+  const path = headersList.get("x-current-path");
+
+  console.log(path);
+
   return (
     <html lang="ko">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased w-full flex flex-col justify-start items-center min-h-screen`}
       >
         <div className="w-full max-w-5xl">
+          {path !== "/login" && <Header isLogin={false} isJoined={false} />}
           <TanstackClientProvider>{children}</TanstackClientProvider>
         </div>
       </body>
