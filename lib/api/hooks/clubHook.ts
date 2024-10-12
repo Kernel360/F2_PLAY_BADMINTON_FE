@@ -1,4 +1,4 @@
-import { getClubs, postClubs } from "@/lib/api/functions/clubFn";
+import { getClubs, postClubs, postClubsImg } from "@/lib/api/functions/clubFn";
 import type { components } from "@/schemas/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -18,8 +18,14 @@ export const usePostClubs = () => {
     mutationFn: (clubData: ClubCreate) => postClubs(clubData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clubsData"] });
-      console.log("성공");
     },
-    onError: () => alert("동호회 생성에 실패했습니다"),
+    onError: (error: Error) => alert(error),
+  });
+};
+
+export const usePostClubsImg = () => {
+  return useMutation<string, Error, FormData>({
+    mutationFn: (clubImg: FormData) => postClubsImg(clubImg),
+    onError: (error: Error) => alert(error),
   });
 };

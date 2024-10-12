@@ -7,23 +7,25 @@ type ClubCreateResponse = components["schemas"]["ClubCreateResponse"];
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
-export async function getClubs() {
+export async function getClubs(): Promise<Club[]> {
   try {
-    const response = await fetch(`${BASE_URL}/clubs`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${BASE_URL}/clubs?page=0&size=100&sort=clubId`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    });
-
+    );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
     const data = await response.json();
     return data.content as Club[];
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return [];
   }
 }
 
@@ -37,7 +39,21 @@ export const postClubs = async (
     body: JSON.stringify(clubData),
   });
   if (!response.ok) {
-    throw new Error("Failed to create club");
+    throw new Error("동호회 생성에 실패했습니다.");
   }
   return response.json();
+};
+
+export const postClubsImg = async (clubImg: FormData): Promise<string> => {
+  console.log("fetch", clubImg);
+
+  const response = await fetch(`${BASE_URL}/clubs/images`, {
+    method: "POST",
+    credentials: "include",
+    body: clubImg,
+  });
+  if (!response.ok) {
+    throw new Error("이미지 업로드에 실패했습니다. ");
+  }
+  return response.text();
 };

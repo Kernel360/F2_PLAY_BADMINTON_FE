@@ -4,7 +4,7 @@ import ClubInfoInputDescription from "@/components/common/clubInfoInput/ClubInfo
 import ClubInfoInputImage from "@/components/common/clubInfoInput/ClubInfoInputImage";
 import ClubInfoInputName from "@/components/common/clubInfoInput/ClubInfoInputName";
 import { Button } from "@/components/ui/Button";
-import { usePostClubs } from "@/lib/api/hooks/clubHook";
+import { usePostClubs, usePostClubsImg } from "@/lib/api/hooks/clubHook";
 import type { components } from "@/schemas/schema";
 import Link from "next/link";
 import type React from "react";
@@ -16,26 +16,37 @@ function CreateClubPage() {
   const [imagePreview, setImagePreview] = useState("/images/dummy-image.jpg");
   const [clubName, setClubName] = useState("");
   const [text, setText] = useState("");
+  const [imgUrl, setImgUrl] = useState<string>("");
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { mutate: createClubImg } = usePostClubsImg();
+
+  const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
+
+      const formData = new FormData();
+      formData.append("multipartFile", file);
+
+      createClubImg(formData, {
+        onSuccess: (data) => {
+          setImgUrl(data);
+        },
+      });
     }
   };
 
-  const { mutate: createClub, isError, error } = usePostClubs();
+  const { mutate: createClub } = usePostClubs();
 
   const handleCreateClub = async () => {
     const newClubData: ClubCreate = {
       club_name: clubName,
       club_description: text,
-      club_image: imagePreview,
+      club_image: imgUrl,
     };
 
     createClub(newClubData);
-    console.log(isError);
   };
 
   return (
@@ -43,7 +54,7 @@ function CreateClubPage() {
       <div className="flex space-x-8 w-full h-[464px] items-center">
         <ClubInfoInputImage
           imagePreview={imagePreview}
-          onImageChange={handleImageChange}
+          onImageChange={handleImgChange}
         />
         <div className="flex flex-col flex-1 h-[400px] gap-4">
           <div className="flex flex-col gap-1">
