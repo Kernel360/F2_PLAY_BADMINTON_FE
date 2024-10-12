@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/Button";
 import { usePostClubs, usePostClubsImg } from "@/lib/api/hooks/clubHook";
 import type { components } from "@/schemas/schema";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { Router } from "next/router";
 import type React from "react";
 import { useState } from "react";
 
@@ -19,25 +21,33 @@ function CreateClubPage() {
   const [imgUrl, setImgUrl] = useState<string>("");
 
   const { mutate: createClubImg } = usePostClubsImg();
+  const { mutate: createClub } = usePostClubs();
 
-  const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
-
-      const formData = new FormData();
-      formData.append("multipartFile", file);
-
-      createClubImg(formData, {
-        onSuccess: (data) => {
-          setImgUrl(data);
-        },
-      });
-    }
+  // 이미지 미리보기 설정 함수
+  const handleImagePreview = (file: File) => {
+    const imageUrl = URL.createObjectURL(file);
+    setImagePreview(imageUrl);
   };
 
-  const { mutate: createClub } = usePostClubs();
+  // 이미지 업로드 기능
+  const uploadImage = (file: File) => {
+    const formData = new FormData();
+    formData.append("multipartFile", file);
+
+    createClubImg(formData, {
+      onSuccess: (data) => {
+        setImgUrl(data);
+      },
+    });
+  };
+
+  const onImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleImagePreview(file);
+      uploadImage(file);
+    }
+  };
 
   const handleCreateClub = async () => {
     const newClubData: ClubCreate = {
@@ -46,7 +56,12 @@ function CreateClubPage() {
       club_image: imgUrl,
     };
 
-    createClub(newClubData);
+    createClub(newClubData, {
+      onSuccess: () => {
+        // TODO(Yejin0O0): 진짜로 수행 되는지 확인해야 함
+        redirect("/my-club");
+      },
+    });
   };
 
   return (
@@ -54,7 +69,7 @@ function CreateClubPage() {
       <div className="flex space-x-8 w-full h-[464px] items-center">
         <ClubInfoInputImage
           imagePreview={imagePreview}
-          onImageChange={handleImgChange}
+          onImageChange={onImageSelect}
         />
         <div className="flex flex-col flex-1 h-[400px] gap-4">
           <div className="flex flex-col gap-1">
