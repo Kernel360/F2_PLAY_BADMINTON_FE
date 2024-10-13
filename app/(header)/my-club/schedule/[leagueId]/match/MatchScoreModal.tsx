@@ -32,8 +32,8 @@ function MatchScoreModal({
     participant2_image,
   } = singlesMatch;
 
-  const [p1Score, setP1Score] = useState<number[]>([0, 1, 2]);
-  const [p2Score, setP2Score] = useState<number[]>([0, 1, 2]);
+  const [p1Score, setP1Score] = useState<number[]>([0, 0, 0]);
+  const [p2Score, setP2Score] = useState<number[]>([0, 0, 0]);
   const [p1SetScore, setP1SetScore] = useState<number>(0);
   const [p2SetScore, setP2SetScore] = useState<number>(0);
   const [currentSet, setCurrentSet] = useState(0);
