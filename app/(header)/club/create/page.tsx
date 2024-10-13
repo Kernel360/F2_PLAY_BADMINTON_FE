@@ -6,22 +6,28 @@ import ClubInfoInputName from "@/components/common/clubInfoInput/ClubInfoInputNa
 import { Button } from "@/components/ui/Button";
 import { usePostClubs, usePostClubsImg } from "@/lib/api/hooks/clubHook";
 import type { components } from "@/schemas/schema";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import type React from "react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 type ClubCreate = components["schemas"]["ClubCreateRequest"];
 
 function CreateClubPage() {
-  const [clubName, setClubName] = useState("");
-  const [text, setText] = useState("");
   const [imgUrl, setImgUrl] = useState<string>("/images/dummy-image.jpg");
-
   const { mutate: createClubImg } = usePostClubsImg();
   const { mutate: createClub } = usePostClubs();
 
-  // 이미지 업로드 기능
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    formState: { errors },
+  } = useForm<ClubCreate>({
+    defaultValues: { club_name: "", club_description: "", club_image: "" },
+    mode: "onBlur",
+  });
+
   const uploadImage = (file: File) => {
     const formData = new FormData();
     formData.append("multipartFile", file);
@@ -29,6 +35,13 @@ function CreateClubPage() {
     createClubImg(formData, {
       onSuccess: (data) => {
         setImgUrl(data);
+        setValue("club_image", data);
+      },
+      onError: () => {
+        setError("club_image", {
+          type: "manual",
+          message: "이미지 업로드에 실패했습니다. 다시 시도해주세요.",
+        });
       },
     });
   };
@@ -37,59 +50,83 @@ function CreateClubPage() {
     const file = event.target.files?.[0];
     if (file) {
       uploadImage(file);
+    } else {
+      setImgUrl("/images/dummy-image.jpg");
     }
   };
 
-  const handleCreateClub = async () => {
+  const handleCreateClub = (data: ClubCreate) => {
     const newClubData: ClubCreate = {
-      club_name: clubName,
-      club_description: text,
+      club_name: data.club_name,
+      club_description: data.club_description,
       club_image: imgUrl,
     };
 
     createClub(newClubData, {
       onSuccess: () => {
-        // TODO(Yejin0O0): 진짜로 수행 되는지 확인해야 함
         redirect("/my-club");
       },
     });
   };
 
   return (
-    <div className="px-14 pt-8 w-full">
+    <form
+      onSubmit={handleSubmit(handleCreateClub)}
+      method="post"
+      className="px-14 pt-8 w-full"
+    >
       <div className="flex space-x-8 w-full h-[464px] items-center">
-        <ClubInfoInputImage
-          imagePreview={imgUrl}
-          onImageChange={onImageSelect}
-        />
+        <div className="flex flex-col gap-1 justify-center">
+          {/* 파일 선택 필드를 register로 관리 */}
+          <input
+            type="file"
+            className="hidden"
+            {...register("club_image", {
+              required: "이미지를 선택해주세요.",
+              validate: () => imgUrl !== null || "이미지를 선택해주세요.",
+              onChange: (e) =>
+                onImageSelect(e as React.ChangeEvent<HTMLInputElement>),
+            })}
+          />
+          <ClubInfoInputImage
+            imagePreview={imgUrl || "/images/dummy-image.jpg"}
+            onImageChange={(e) => onImageSelect(e)}
+          />
+          {errors.club_image && (
+            <p className="text-red-500">{errors.club_image.message}</p>
+          )}
+        </div>
         <div className="flex flex-col flex-1 h-[400px] gap-4">
           <div className="flex flex-col gap-1">
             <p className="text-black font-bold text-lg">동호회 이름</p>
             <ClubInfoInputName
-              clubName={clubName}
-              onChange={(e) => setClubName(e.target.value)}
+              {...register("club_name", {
+                required: "동호회 이름을 입력하세요.",
+              })}
             />
+            {errors.club_name && (
+              <p className="text-red-500">{errors.club_name.message}</p>
+            )}
           </div>
           <div className="flex flex-col gap-1 h-full">
             <p className="text-black font-bold text-lg">동호회 소개</p>
             <ClubInfoInputDescription
-              description={text}
-              onChange={(e) => setText(e.target.value)}
+              {...register("club_description", {
+                required: "동호회 설명을 입력하세요.",
+              })}
             />
+            {errors.club_description && (
+              <p className="text-red-500">{errors.club_description.message}</p>
+            )}
           </div>
         </div>
       </div>
       <div className="flex justify-center items-center gap-4">
-        <Link href={"/club/1"}>
-          <Button variant="outline" size="lg">
-            취소
-          </Button>
-        </Link>
-        <Button size="lg" onClick={handleCreateClub}>
+        <Button size="lg" type="submit">
           완료
         </Button>
       </div>
-    </div>
+    </form>
   );
 }
 
