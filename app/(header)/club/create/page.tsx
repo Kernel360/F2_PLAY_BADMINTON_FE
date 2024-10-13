@@ -8,26 +8,18 @@ import { usePostClubs, usePostClubsImg } from "@/lib/api/hooks/clubHook";
 import type { components } from "@/schemas/schema";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Router } from "next/router";
 import type React from "react";
 import { useState } from "react";
 
 type ClubCreate = components["schemas"]["ClubCreateRequest"];
 
 function CreateClubPage() {
-  const [imagePreview, setImagePreview] = useState("/images/dummy-image.jpg");
   const [clubName, setClubName] = useState("");
   const [text, setText] = useState("");
-  const [imgUrl, setImgUrl] = useState<string>("");
+  const [imgUrl, setImgUrl] = useState<string>("/images/dummy-image.jpg");
 
   const { mutate: createClubImg } = usePostClubsImg();
   const { mutate: createClub } = usePostClubs();
-
-  // 이미지 미리보기 설정 함수
-  const handleImagePreview = (file: File) => {
-    const imageUrl = URL.createObjectURL(file);
-    setImagePreview(imageUrl);
-  };
 
   // 이미지 업로드 기능
   const uploadImage = (file: File) => {
@@ -44,7 +36,6 @@ function CreateClubPage() {
   const onImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      handleImagePreview(file);
       uploadImage(file);
     }
   };
@@ -68,7 +59,7 @@ function CreateClubPage() {
     <div className="px-14 pt-8 w-full">
       <div className="flex space-x-8 w-full h-[464px] items-center">
         <ClubInfoInputImage
-          imagePreview={imagePreview}
+          imagePreview={imgUrl}
           onImageChange={onImageSelect}
         />
         <div className="flex flex-col flex-1 h-[400px] gap-4">
