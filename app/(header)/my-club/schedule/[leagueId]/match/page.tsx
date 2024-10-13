@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { useState } from "react";
 import MatchProfileDoubles from "./MatchProfileDoubles";
 import MatchProfileSingles from "./MatchProfileSingles";
+import MatchScoreModal from "./MatchScoreModal";
 
 const matches = [
   {
@@ -181,20 +182,27 @@ function MatchPage() {
         </Button>
       </div>
       {matchTypes ? (
-        <div className="flex gap-10 w-full flex-wrap mt-4">
+        <div className="flex gap-10 w-full flex-wrap mt-5">
           {matches
             .filter((match) => match.matchType === "SINGLES")
             .map((match) =>
               match.singlesMatch ? (
-                <MatchProfileSingles
+                <button
                   key={match.id}
-                  singlesMatch={match.singlesMatch}
-                />
+                  type="button"
+                  onClick={() => toggleMatchDialog(match.id)}
+                >
+                  <MatchProfileSingles
+                    singlesMatch={match.singlesMatch}
+                    isOpen={matchDialog === match.id}
+                    onClose={() => toggleMatchDialog(match.id)}
+                  />
+                </button>
               ) : null,
             )}
         </div>
       ) : (
-        <div className="flex gap-10 w-full flex-wrap mt-4">
+        <div className="flex gap-10 w-full flex-wrap mt-5">
           {matches
             .filter((match) => match.matchType === "DOUBLES")
             .map((match) =>

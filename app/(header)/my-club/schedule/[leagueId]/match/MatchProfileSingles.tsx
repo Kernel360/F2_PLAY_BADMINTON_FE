@@ -1,3 +1,5 @@
+import MatchScoreModal from "./MatchScoreModal";
+
 interface SinglesProps {
   singlesMatch: {
     participant1_name: string;
@@ -5,9 +7,11 @@ interface SinglesProps {
     participant2_name: string;
     participant2_image: string;
   };
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-function MatchProfileSingles({ singlesMatch }: SinglesProps) {
+function MatchProfileSingles({ singlesMatch, isOpen, onClose }: SinglesProps) {
   const {
     participant1_name,
     participant1_image,
@@ -39,6 +43,13 @@ function MatchProfileSingles({ singlesMatch }: SinglesProps) {
           <p className="text-black">{participant2_name}</p>
         </div>
       </div>
+      {isOpen && (
+        <MatchScoreModal
+          isOpen={isOpen}
+          singlesMatch={singlesMatch}
+          onClose={onClose}
+        />
+      )}
     </div>
   );
 }
