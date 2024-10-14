@@ -2,7 +2,7 @@ import dummy from "@/public/images/dummy-image.jpg";
 import Image from "next/image";
 import React from "react";
 
-function ClubIntroPage() {
+function ClubIntroPage({ clubId }: { clubId: number }) {
   return (
     <div className="flex space-x-8 w-full h-[464px] items-center">
       <div className="w-[400px] flex flex-col items-center gap-2">
@@ -16,7 +16,7 @@ function ClubIntroPage() {
         />
       </div>
       <div className="flex flex-col flex-1 h-[400px] gap-4">
-        <p className="text-3xl font-bold text-black">동호회 이름</p>
+        <p className="text-3xl font-bold text-black">{clubId}</p>
         <div className="flex flex-col w-full">
           <p className="border-b-[1px] border-gray-200 font-bold text-black text-lg">
             동호회 소개
