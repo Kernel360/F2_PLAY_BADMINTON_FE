@@ -2,12 +2,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { forwardRef } from "react";
 
 interface ClubInfoInputDescriptionProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  description?: string;
+}
 
 const ClubInfoInputDescription = forwardRef<
   HTMLTextAreaElement,
   ClubInfoInputDescriptionProps
 >((props, ref) => {
+  const { description } = props;
   return (
     <div className="flex flex-col w-full h-full">
       <Textarea
@@ -15,6 +18,7 @@ const ClubInfoInputDescription = forwardRef<
         placeholder="동호회 소개를 입력하세요"
         ref={ref}
         {...props}
+        defaultValue={description}
       />
     </div>
   );
