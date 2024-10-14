@@ -45,11 +45,7 @@ interface League {
   matchingRequirement: string;
 }
 
-interface LeagueFormProps {
-  onSubmit: (league: League) => void;
-}
-
-function CreateLeaguePage({ onSubmit }: LeagueFormProps) {
+function CreateLeaguePage() {
   const [leagueName, setLeagueName] = useState("");
   const [description, setDescription] = useState("");
   const [tierLimit, setTierLimit] = useState<League["tierLimit"]>("GOLD");
