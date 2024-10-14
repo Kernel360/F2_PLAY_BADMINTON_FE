@@ -9,11 +9,11 @@ import { Input } from "./Input";
 import { LinkText } from "./Text";
 
 const PersonalSection = () => {
-  const { data } = useGetMyInfo();
-  const isJoined = data?.club_member_my_page_response?.club_id || null;
   const { data: isLogin } = useGetLoginState();
   const [showLogout, setShowLogout] = useState(false);
   const { mutate: logout } = useLogout();
+  const { data } = useGetMyInfo(!!isLogin?.loggedIn);
+  const isJoined = data?.club_member_my_page_response?.club_id || null;
 
   console.log(isJoined);
   const handleImageClick = () => {
