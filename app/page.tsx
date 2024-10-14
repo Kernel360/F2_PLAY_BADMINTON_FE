@@ -2,10 +2,10 @@
 
 import { ClubCard } from "@/components/clubs/ClubCard";
 import Grid from "@/components/ui/Grid";
-import useClubs from "@/lib/api/hooks/clubHook";
+import { useGetClubs } from "@/lib/api/hooks/clubHook";
 
 export default function page() {
-  const { data, error, isLoading } = useClubs();
+  const { data, error, isLoading } = useGetClubs();
 
   if (isLoading) {
     return <div>Loading...</div>;
