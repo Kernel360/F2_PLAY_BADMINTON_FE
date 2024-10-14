@@ -13,6 +13,7 @@ type LeagueRecordInfoResponse =
 interface MemberInfoProps {
   image: string;
   name: string;
+  role: string;
   leagueRecordInfoResponse: LeagueRecordInfoResponse;
   isOpen: boolean; // 드롭다운 상태
   onToggle: () => void; // 드롭다운 토글 함수
@@ -21,6 +22,7 @@ interface MemberInfoProps {
 function MemberInfo({
   image,
   name,
+  role,
   leagueRecordInfoResponse,
   isOpen,
   onToggle,
@@ -28,11 +30,27 @@ function MemberInfo({
   const { win_count, lose_count, draw_count, match_count, tier } =
     leagueRecordInfoResponse;
 
+  const changeRollWord = (roll: string) => {
+    switch (roll) {
+      case "ROLE_OWNER":
+        return "회장";
+      case "ROLE_MANAGER":
+        return "매니저";
+      case "ROLE_USER":
+        return "회원";
+      default:
+        return "";
+    }
+  };
+
   return (
     <div className="flex justify-center">
       <div className="flex flex-[1] items-center gap-8">
         <img src={image} alt="userImg" className="w-16 h-16 rounded-full" />
         <p className="text-black">{name}</p>
+      </div>
+      <div className="flex flex-[1] items-center">
+        <p className="text-black">{changeRollWord(role)}</p>
       </div>
       <div className="flex flex-[1] items-center">
         <p className="text-black">{getTierWithEmoji(tier as string)}</p>

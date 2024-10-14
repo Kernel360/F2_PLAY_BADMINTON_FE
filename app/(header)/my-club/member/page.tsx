@@ -34,6 +34,7 @@ function ClubMemberPage() {
       <div className="flex flex-col gap-5 h-full overflow-scroll">
         <div className="flex font-bold text-gray-600 bg-gray-100 p-2 rounded-md">
           <div className="flex-[1]">멤버</div>
+          <div className="flex-[1]">직책</div>
           <div className="flex-[1]">티어</div>
           <div className="flex-[1]">전적</div>
         </div>
@@ -43,6 +44,7 @@ function ClubMemberPage() {
             isOpen={openDropdownIndex === member.club_member_id}
             image={member.image as string}
             name={member.name as string}
+            role={member.role as string}
             leagueRecordInfoResponse={
               member.league_record_info_response as LeagueRecordInfoResponse
             }
