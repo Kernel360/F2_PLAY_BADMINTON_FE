@@ -6,13 +6,14 @@ import ClubInfoInputName from "@/components/common/clubInfoInput/ClubInfoInputNa
 import { Button } from "@/components/ui/Button";
 import { usePostClubs, usePostClubsImg } from "@/lib/api/hooks/clubHook";
 import type { components } from "@/schemas/schema";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 type ClubCreate = components["schemas"]["ClubCreateRequest"];
 
 function CreateClubPage() {
+  const router = useRouter();
   const [imgUrl, setImgUrl] = useState<string>("/images/dummy-image.jpg");
   const { mutate: createClubImg } = usePostClubsImg();
   const { mutate: createClub } = usePostClubs();
@@ -22,6 +23,7 @@ function CreateClubPage() {
     handleSubmit,
     setValue,
     setError,
+    clearErrors,
     formState: { errors },
   } = useForm<ClubCreate>({
     defaultValues: { club_name: "", club_description: "", club_image: "" },
@@ -36,6 +38,7 @@ function CreateClubPage() {
       onSuccess: (data) => {
         setImgUrl(data);
         setValue("club_image", data);
+        clearErrors("club_image"); // 업로드 성공 시 에러 메시지 제거
       },
       onError: () => {
         setError("club_image", {
@@ -64,7 +67,7 @@ function CreateClubPage() {
 
     createClub(newClubData, {
       onSuccess: () => {
-        redirect("/my-club");
+        router.push("/my-club");
       },
     });
   };
@@ -79,13 +82,10 @@ function CreateClubPage() {
         <div className="flex flex-col gap-1 justify-center">
           {/* 파일 선택 필드를 register로 관리 */}
           <input
-            type="file"
+            type="text"
             className="hidden"
             {...register("club_image", {
               required: "이미지를 선택해주세요",
-              validate: () => imgUrl !== null || "이미지를 선택해주세요",
-              onChange: (e) =>
-                onImageSelect(e as React.ChangeEvent<HTMLInputElement>),
             })}
           />
           <ClubInfoInputImage
