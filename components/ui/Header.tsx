@@ -72,7 +72,6 @@ const PersonalSection = () => {
           </button>
           {showLogout && (
             <div className="absolute top-full mt-2 px-10 right-0 bg-white border border-gray-200 shadow-lg p-2 rounded">
-              {/*TODO(Yejin0O0): 로그아웃 로직 추가 구현 */}
               <button onClick={() => logout()} type="button">
                 Logout
               </button>
@@ -100,8 +99,6 @@ const PersonalSection = () => {
       </button>
       {showLogout && (
         <div className="absolute top-full mt-2 px-10 right-0 bg-white border border-gray-200 shadow-lg p-2 rounded">
-          {/*TODO(Yejin0O0): 로그아웃 로직 추가 구현 */}
-
           <button onClick={() => logout()} type="button">
             Logout
           </button>
