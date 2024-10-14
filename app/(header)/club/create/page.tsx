@@ -40,7 +40,7 @@ function CreateClubPage() {
       onError: () => {
         setError("club_image", {
           type: "manual",
-          message: "이미지 업로드에 실패했습니다. 다시 시도해주세요.",
+          message: "이미지 업로드에 실패했습니다",
         });
       },
     });
@@ -82,8 +82,8 @@ function CreateClubPage() {
             type="file"
             className="hidden"
             {...register("club_image", {
-              required: "이미지를 선택해주세요.",
-              validate: () => imgUrl !== null || "이미지를 선택해주세요.",
+              required: "이미지를 선택해주세요",
+              validate: () => imgUrl !== null || "이미지를 선택해주세요",
               onChange: (e) =>
                 onImageSelect(e as React.ChangeEvent<HTMLInputElement>),
             })}
@@ -101,7 +101,7 @@ function CreateClubPage() {
             <p className="text-black font-bold text-lg">동호회 이름</p>
             <ClubInfoInputName
               {...register("club_name", {
-                required: "동호회 이름을 입력하세요.",
+                required: "동호회 이름을 입력하세요",
               })}
             />
             {errors.club_name && (
@@ -112,7 +112,7 @@ function CreateClubPage() {
             <p className="text-black font-bold text-lg">동호회 소개</p>
             <ClubInfoInputDescription
               {...register("club_description", {
-                required: "동호회 설명을 입력하세요.",
+                required: "동호회 설명을 입력하세요",
               })}
             />
             {errors.club_description && (
