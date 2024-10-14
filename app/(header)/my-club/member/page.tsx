@@ -1,139 +1,33 @@
 "use client";
 
+import { useGetClubMembers } from "@/lib/api/hooks/clubMemberHook";
+import type { components } from "@/schemas/schema";
 import React, { useState } from "react";
 import MemberInfo from "./MemberInfo";
 
-const members = [
-  {
-    id: 1,
-    name: "a",
-    image: "/images/dummy-image.jpg",
-    leagueRecordInfoResponse: {
-      winCount: 12,
-      loseCount: 11,
-      drawCount: 0,
-      matchCount: 23,
-      tier: "GOLD",
-    },
-  },
-  {
-    id: 2,
-    name: "bb",
-    image: "/images/dummy-image.jpg",
-    leagueRecordInfoResponse: {
-      winCount: 33,
-      loseCount: 2,
-      drawCount: 0,
-      matchCount: 35,
-      tier: "SILVER",
-    },
-  },
-  {
-    id: 3,
-    name: "ccc",
-    image: "/images/dummy-image.jpg",
-    leagueRecordInfoResponse: {
-      winCount: 100,
-      loseCount: 150,
-      drawCount: 0,
-      matchCount: 250,
-      tier: "BRONZE",
-    },
-  },
-  {
-    id: 4,
-    name: "dddd",
-    image: "/images/dummy-image.jpg",
-    leagueRecordInfoResponse: {
-      winCount: 0,
-      loseCount: 0,
-      drawCount: 0,
-      matchCount: 0,
-      tier: "SILVER",
-    },
-  },
-  {
-    id: 5,
-    name: "eeeee",
-    image: "/images/dummy-image.jpg",
-    leagueRecordInfoResponse: {
-      winCount: 0,
-      loseCount: 0,
-      drawCount: 0,
-      matchCount: 0,
-      tier: "GOLD",
-    },
-  },
-  {
-    id: 6,
-    name: "ffffff",
-    image: "/images/dummy-image.jpg",
-    leagueRecordInfoResponse: {
-      winCount: 0,
-      loseCount: 0,
-      drawCount: 0,
-      matchCount: 0,
-      tier: "GOLD",
-    },
-  },
-  {
-    id: 7,
-    name: "gggggggg",
-    image: "/images/dummy-image.jpg",
-    leagueRecordInfoResponse: {
-      winCount: 0,
-      loseCount: 0,
-      drawCount: 0,
-      matchCount: 0,
-      tier: "GOLD",
-    },
-  },
-  {
-    id: 8,
-    name: "hhhhhhhh",
-    image: "/images/dummy-image.jpg",
-    leagueRecordInfoResponse: {
-      winCount: 0,
-      loseCount: 0,
-      drawCount: 0,
-      matchCount: 0,
-      tier: "GOLD",
-    },
-  },
-  {
-    id: 9,
-    name: "iiiiiiiii",
-    image: "/images/dummy-image.jpg",
-    leagueRecordInfoResponse: {
-      winCount: 0,
-      loseCount: 0,
-      drawCount: 0,
-      matchCount: 0,
-      tier: "BRONZE",
-    },
-  },
-  {
-    id: 10,
-    name: "jjjjjjjjjj",
-    image: "/images/dummy-image.jpg",
-    leagueRecordInfoResponse: {
-      winCount: 0,
-      loseCount: 0,
-      drawCount: 0,
-      matchCount: 0,
-      tier: "SILVER",
-    },
-  },
-];
+type ClubMemberResponse = components["schemas"]["ClubMemberResponse"];
+type LeagueRecordInfoResponse =
+  components["schemas"]["LeagueRecordInfoResponse"];
 
 function ClubMemberPage() {
-  const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
-    null,
-  );
+  const { data, error, isLoading } = useGetClubMembers();
+  const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>();
 
   const toggleDropdown = (index: number) => {
     setOpenDropdownIndex((prevIndex) => (prevIndex === index ? null : index));
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (!data) {
+    return <div>No data available</div>;
+  }
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  const members = [...data.ROLE_OWNER, ...data.ROLE_MANAGER, ...data.ROLE_USER];
 
   return (
     <div className="h-[466px]">
@@ -145,12 +39,14 @@ function ClubMemberPage() {
         </div>
         {members.map((member) => (
           <MemberInfo
-            key={member.id}
-            isOpen={openDropdownIndex === member.id}
-            image={member.image}
-            name={member.name}
-            leagueRecordInfoResponse={member.leagueRecordInfoResponse}
-            onToggle={() => toggleDropdown(member.id)}
+            key={member.club_member_id}
+            isOpen={openDropdownIndex === member.club_member_id}
+            image={member.image as string}
+            name={member.name as string}
+            leagueRecordInfoResponse={
+              member.league_record_info_response as LeagueRecordInfoResponse
+            }
+            onToggle={() => toggleDropdown(member.club_member_id as number)}
           />
         ))}
       </div>
