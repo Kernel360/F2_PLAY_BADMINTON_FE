@@ -1,6 +1,6 @@
 import MatchScoreModalDoubles from "./MatchScoreModalDoubles";
 
-interface DoublesProps {
+interface MatchProfileDoublesProps {
   team1: {
     participant1_name: string;
     participant1_image: string;
@@ -17,7 +17,12 @@ interface DoublesProps {
   onClose: () => void;
 }
 
-function MatchProfileSingles({ team1, team2, isOpen, onClose }: DoublesProps) {
+function MatchProfileDoubles({
+  team1,
+  team2,
+  isOpen,
+  onClose,
+}: MatchProfileDoublesProps) {
   return (
     <div className="flex">
       <div className="flex rounded-md bg-gray-200 items-center w-[450px] p-2 justify-between">
@@ -70,4 +75,4 @@ function MatchProfileSingles({ team1, team2, isOpen, onClose }: DoublesProps) {
     </div>
   );
 }
-export default MatchProfileSingles;
+export default MatchProfileDoubles;

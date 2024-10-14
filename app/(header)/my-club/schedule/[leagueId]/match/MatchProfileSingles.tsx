@@ -1,6 +1,6 @@
 import MatchScoreModalSingles from "./MatchScoreModalSingles";
 
-interface SinglesProps {
+interface MatchProfileSinglesProps {
   singlesMatch: {
     participant1_name: string;
     participant1_image: string;
@@ -11,7 +11,11 @@ interface SinglesProps {
   onClose: () => void;
 }
 
-function MatchProfileSingles({ singlesMatch, isOpen, onClose }: SinglesProps) {
+function MatchProfileSingles({
+  singlesMatch,
+  isOpen,
+  onClose,
+}: MatchProfileSinglesProps) {
   const {
     participant1_name,
     participant1_image,
