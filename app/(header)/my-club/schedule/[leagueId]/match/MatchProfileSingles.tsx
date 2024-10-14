@@ -1,4 +1,4 @@
-import MatchScoreModal from "./MatchScoreModal";
+import MatchScoreModalSingles from "./MatchScoreModalSingles";
 
 interface SinglesProps {
   singlesMatch: {
@@ -44,7 +44,7 @@ function MatchProfileSingles({ singlesMatch, isOpen, onClose }: SinglesProps) {
         </div>
       </div>
       {isOpen && (
-        <MatchScoreModal
+        <MatchScoreModalSingles
           isOpen={isOpen}
           singlesMatch={singlesMatch}
           onClose={onClose}

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { useState } from "react";
 import MatchProfileDoubles from "./MatchProfileDoubles";
 import MatchProfileSingles from "./MatchProfileSingles";
-import MatchScoreModal from "./MatchScoreModal";
+import MatchScoreModal from "./MatchScoreModalSingles";
 
 const matches = [
   {
@@ -188,8 +188,8 @@ function MatchPage() {
             .map((match) =>
               match.singlesMatch ? (
                 <button
-                  key={match.id}
                   type="button"
+                  key={match.id}
                   onClick={() => toggleMatchDialog(match.id)}
                 >
                   <MatchProfileSingles
@@ -207,11 +207,19 @@ function MatchPage() {
             .filter((match) => match.matchType === "DOUBLES")
             .map((match) =>
               match.doublesMatch ? (
-                <MatchProfileDoubles
+                <button
+                  type="button"
                   key={match.id}
-                  team1={match.doublesMatch.team1}
-                  team2={match.doublesMatch.team2}
-                />
+                  onClick={() => toggleMatchDialog(match.id)}
+                >
+                  <MatchProfileDoubles
+                    key={match.id}
+                    team1={match.doublesMatch.team1}
+                    team2={match.doublesMatch.team2}
+                    isOpen={matchDialog === match.id}
+                    onClose={() => toggleMatchDialog(match.id)}
+                  />
+                </button>
               ) : null,
             )}
         </div>

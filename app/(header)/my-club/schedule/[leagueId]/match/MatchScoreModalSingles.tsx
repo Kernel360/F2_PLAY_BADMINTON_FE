@@ -9,7 +9,7 @@ import {
 import type React from "react";
 import { useState } from "react";
 
-interface MatchScoreModalProps {
+interface MatchScoreModalSinglesProps {
   singlesMatch: {
     participant1_name: string;
     participant1_image: string;
@@ -20,11 +20,11 @@ interface MatchScoreModalProps {
   onClose: () => void;
 }
 
-function MatchScoreModal({
+function MatchScoreModalSIngles({
   isOpen,
   singlesMatch,
   onClose,
-}: MatchScoreModalProps) {
+}: MatchScoreModalSinglesProps) {
   const {
     participant1_name,
     participant1_image,
@@ -212,4 +212,4 @@ function MatchScoreModal({
   );
 }
 
-export default MatchScoreModal;
+export default MatchScoreModalSIngles;
