@@ -1,23 +1,35 @@
-import type { UserStateProps } from "@/types/layoutTypes";
-import { UserRound } from "lucide-react";
-import { headers } from "next/headers";
+"use client";
+import { useGetLoginState, usePostLogout } from "@/lib/api/hooks/SessionHook";
+import { useGetMyInfo } from "@/lib/api/hooks/membersHook";
 import Link from "next/link";
-import React from "react";
+import { usePathname } from "next/navigation";
+import React, { useState } from "react";
+import SImage from "./Image";
 import { Input } from "./Input";
 import { LinkText } from "./Text";
 
-const personalSection = (isLogin: boolean, isJoined: boolean) => {
-  if (!isLogin) {
+const PersonalSection = () => {
+  const { data: isLogin } = useGetLoginState();
+  const [showLogout, setShowLogout] = useState(false);
+  const { mutate: logout } = usePostLogout();
+  const { data } = useGetMyInfo(!!isLogin?.loggedIn);
+  const isJoined = data?.club_member_my_page_response?.club_id || null;
+
+  const handleImageClick = () => {
+    setShowLogout(!showLogout);
+  };
+
+  if (!isLogin?.loggedIn) {
     return (
       <div className="flex w-44 justify-evenly">
         <LinkText
           color="gray"
           size="sm"
           align="center"
-          className="cursor-pointer leading-6"
+          className="cursor-pointer leading-6 items-center"
           link="/club/create"
         >
-          동호회 새로 만들기
+          동호회 만들기
         </LinkText>
         <LinkText
           color="primary"
@@ -30,33 +42,73 @@ const personalSection = (isLogin: boolean, isJoined: boolean) => {
       </div>
     );
   }
+
   if (!isJoined) {
     return (
-      <div className="flex w-40 justify-evenly">
+      <div className="flex w-40 justify-evenly items-center">
         <LinkText
           color="gray"
           size="sm"
           align="center"
-          className=" cursor-pointer leading-6"
+          className="cursor-pointer leading-6"
           link="/club/create"
         >
-          동호회 새로 만들기
+          동호회 만들기
         </LinkText>
-        <UserRound
-          size={24}
-          className="text-black cursor-pointer group-hover:text-white transition-colors"
-        />
+        <div className="relative">
+          <button
+            onClick={() => handleImageClick()}
+            className="cursor-pointer"
+            type="button"
+          >
+            <SImage
+              src={data?.profile_image || "/images/dummy-image.jpg"}
+              radius="circular"
+              width={45}
+              height={45}
+              alt="profile"
+            />
+          </button>
+          {showLogout && (
+            <div className="absolute top-full mt-2 px-10 right-0 bg-white border border-gray-200 shadow-lg p-2 rounded">
+              <button onClick={() => logout()} type="button">
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
-  return <UserRound size={24} cursor-pointer color="#000000" />;
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => handleImageClick()}
+        className="cursor-pointer"
+        type="button"
+      >
+        <SImage
+          src={data?.profile_image || "/images/dummy-image.jpg"}
+          radius="circular"
+          width={45}
+          height={45}
+          alt="profile"
+        />
+      </button>
+      {showLogout && (
+        <div className="absolute top-full mt-2 px-10 right-0 bg-white border border-gray-200 shadow-lg p-2 rounded">
+          <button onClick={() => logout()} type="button">
+            Logout
+          </button>
+        </div>
+      )}
+    </div>
+  );
 };
 
-function Header(props: UserStateProps) {
-  const { isLogin, isJoined } = props;
-  const headersList = headers();
-  const path = headersList.get("x-current-path");
-
+function Header() {
+  const path = usePathname();
   return (
     <div className="flex items-center justify-between space-x-4 w-full max-w-5xl h-16 sticky top-0 z-50 border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Link href="/">
@@ -68,7 +120,7 @@ function Header(props: UserStateProps) {
             <Input search radius="round" placeholder="" size="sm" />
           </div>
         )}
-        {personalSection(isLogin, isJoined)}
+        <PersonalSection />
       </div>
     </div>
   );

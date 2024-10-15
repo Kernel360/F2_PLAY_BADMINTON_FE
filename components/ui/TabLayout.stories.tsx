@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs";
 function TabLayout({ isLogin, isJoined }: UserStateProps) {
   return (
     <div className="w-full flex flex-col justify-center items-center">
-      <Header isLogin={isLogin} isJoined={isJoined} />
+      <Header />
       <Tabs defaultValue="tab1" className="w-full max-w-5xl mt-10 ">
         <TabsList>
           <TabsTrigger value="tab1" color="gray">

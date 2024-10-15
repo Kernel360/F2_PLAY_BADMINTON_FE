@@ -204,6 +204,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/v1/clubs/{clubId}/leagues/{leagueId}/matches/{matchId}/set/{setIndex}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 세트별 점수 저장 */
+    post: operations["updateSetsScore"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/v1/clubs/{clubId}/leagues/{leagueId}/matches/details": {
     parameters: {
       query?: never;
@@ -319,6 +336,66 @@ export interface paths {
      * @description 경기 제목, 경기 상태 등을 변경할 수 있습니다.
      */
     patch: operations["updateLeague"];
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/clubMembers/role": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * 동호회원 역할 변경
+     * @description 동호회원의 역할을 변경합니다.
+     */
+    patch: operations["updateClubMemberRole"];
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/clubMembers/expel": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * 동호회원 강제 탈퇴시키기
+     * @description 동호회원을 강제 탈퇴시킵니다.
+     */
+    patch: operations["expelClubMember"];
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/clubMembers/ban": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * 동호회원 정지
+     * @description 동호회원의 활동을 정지시킵니다.
+     */
+    patch: operations["banClubMember"];
     trace?: never;
   };
   "/v1/members/myPage": {
@@ -469,6 +546,8 @@ export interface components {
       club_image?: string;
     };
     ClubCreateResponse: {
+      /** Format: int64 */
+      club_id?: number;
       club_name?: string;
       club_description?: string;
       club_image?: string;
@@ -499,12 +578,6 @@ export interface components {
        * @enum {string}
        */
       tier_limit?: "GOLD" | "SILVER" | "BRONZE";
-      /**
-       * @description 현재 경기 상태
-       * @example OPEN
-       * @enum {string}
-       */
-      league_status?: "OPEN" | "CLOSED";
       /**
        * @description 경기 방식
        * @example SINGLES
@@ -556,7 +629,7 @@ export interface components {
        * @example OPEN
        * @enum {string}
        */
-      status?: "OPEN" | "CLOSED";
+      status?: "RECRUITING" | "COMPLETED" | "CANCELED";
       /**
        * @description 경기 방식
        * @example SINGLE
@@ -632,6 +705,24 @@ export interface components {
       participant2_name?: string;
       participant2_image?: string;
     };
+    SetScoreUpdateRequest: {
+      /** Format: int32 */
+      score1?: number;
+      /** Format: int32 */
+      score2?: number;
+    };
+    SetScoreUpdateResponse: {
+      /** Format: int64 */
+      match_id?: number;
+      /** Format: int32 */
+      set_index?: number;
+      /** Format: int32 */
+      score1?: number;
+      /** Format: int32 */
+      score2?: number;
+      /** @enum {string} */
+      match_type?: "SINGLES" | "DOUBLES";
+    };
     DoublesSetResponse: {
       /** Format: int32 */
       set_index?: number;
@@ -671,6 +762,8 @@ export interface components {
       club_image?: string;
     };
     ClubUpdateResponse: {
+      /** Format: int64 */
+      club_id?: number;
       club_name?: string;
       club_description?: string;
       club_image?: string;
@@ -702,14 +795,8 @@ export interface components {
        */
       tier_limit?: "GOLD" | "SILVER" | "BRONZE";
       /**
-       * @description 현재 경기 상태
-       * @example OPEN
-       * @enum {string}
-       */
-      league_status?: "OPEN" | "CLOSED";
-      /**
        * @description 경기 방식
-       * @example SINGLE
+       * @example SINGLES
        * @enum {string}
        */
       match_type?: "SINGLES" | "DOUBLES";
@@ -763,7 +850,7 @@ export interface components {
        * @example OPEN
        * @enum {string}
        */
-      league_status?: "OPEN" | "CLOSED";
+      league_status?: "RECRUITING" | "COMPLETED" | "CANCELED";
       /**
        * @description 경기 방식
        * @example SINGLE
@@ -798,7 +885,19 @@ export interface components {
        */
       match_generation_type?: "RANDOM" | "TIER";
     };
-    /** @description League record information */
+    ClubMemberRoleUpdateRequest: {
+      /** @enum {string} */
+      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
+    };
+    ClubMemberResponse: {
+      /** Format: int64 */
+      club_member_id?: number;
+      image?: string;
+      name?: string;
+      /** @enum {string} */
+      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
+      league_record_info_response?: components["schemas"]["LeagueRecordInfoResponse"];
+    };
     LeagueRecordInfoResponse: {
       /** Format: int32 */
       win_count?: number;
@@ -808,7 +907,55 @@ export interface components {
       draw_count?: number;
       /** Format: int32 */
       match_count?: number;
+    };
+    ClubMemberExpelRequest: {
+      expel_reason?: string;
+    };
+    clubMemberBanRecordResponse: {
       /** @enum {string} */
+      banned_type?: "THREE_DAYS" | "SEVEN_DAYS" | "TWO_WEEKS" | "PERMANENT";
+      banned_reason?: string;
+      /** Format: int64 */
+      club_member_id?: number;
+      is_active?: boolean;
+      /** Format: date-time */
+      end_date?: string;
+    };
+    ClubMemberBanRequest: {
+      /** @enum {string} */
+      type?: "THREE_DAYS" | "SEVEN_DAYS" | "TWO_WEEKS" | "PERMANENT";
+      banned_reason?: string;
+    };
+    /** @description ClubMember information */
+    ClubMemberMyPageResponse: {
+      /**
+       * Format: int64
+       * @description Club ID
+       * @example 1
+       */
+      club_id?: number;
+      /**
+       * Format: int64
+       * @description Club member ID
+       * @example 1
+       */
+      club_member_id?: number;
+      /**
+       * @description Club name
+       * @example 배드민턴 동호회
+       */
+      club_name?: string;
+      /**
+       * @description Member role
+       * @example ROLE_USER
+       * @enum {string}
+       */
+      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
+      /**
+       * @description ClubMember Tier
+       * @example GOLD
+       * @enum {string}
+       */
       tier?: "GOLD" | "SILVER" | "BRONZE";
     };
     /** @description Unified member response */
@@ -834,29 +981,7 @@ export interface components {
        * @example https://example.com/profile.jpg
        */
       profile_image?: string;
-      /**
-       * Format: int64
-       * @description Club ID
-       * @example 1
-       */
-      club_id?: number;
-      /**
-       * Format: int64
-       * @description Club member ID
-       * @example 1
-       */
-      club_member_id?: number;
-      /**
-       * @description Club name
-       * @example 배드민턴 동호회
-       */
-      club_name?: string;
-      /**
-       * @description Member role
-       * @example ROLE_USER
-       * @enum {string}
-       */
-      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
+      club_member_my_page_response?: components["schemas"]["ClubMemberMyPageResponse"];
       league_record_info?: components["schemas"]["LeagueRecordInfoResponse"];
     };
     MemberIsClubMemberResponse: {
@@ -923,6 +1048,8 @@ export interface components {
       ignore_case?: boolean;
     };
     ClubDetailsResponse: {
+      /** Format: int64 */
+      club_id?: number;
       club_name?: string;
       club_description?: string;
       club_image?: string;
@@ -948,7 +1075,7 @@ export interface components {
        * @example OPEN
        * @enum {string}
        */
-      status?: "OPEN" | "CLOSED";
+      status?: "RECRUITING" | "COMPLETED" | "CANCELED";
       /**
        * Format: date-time
        * @description 경기 시작 날짜
@@ -988,7 +1115,7 @@ export interface components {
        * @example OPEN
        * @enum {string}
        */
-      status?: "OPEN" | "CLOSED";
+      status?: "RECRUITING" | "COMPLETED" | "CANCELED";
       /**
        * @description 경기 방식
        * @example SINGLE
@@ -1033,15 +1160,6 @@ export interface components {
        * @example 0
        */
       player_count?: number;
-    };
-    ClubMemberResponse: {
-      /** Format: int64 */
-      club_member_id?: number;
-      image?: string;
-      name?: string;
-      /** @enum {string} */
-      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
-      league_record_info_response?: components["schemas"]["LeagueRecordInfoResponse"];
     };
     /** @description 회원 삭제 responseDto */
     MemberDeleteResponse: {
@@ -1399,6 +1517,35 @@ export interface operations {
       };
     };
   };
+  updateSetsScore: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+        leagueId: number;
+        matchId: number;
+        setIndex: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SetScoreUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["SetScoreUpdateResponse"];
+        };
+      };
+    };
+  };
   makeMatchesDetails: {
     parameters: {
       query?: never;
@@ -1704,6 +1851,90 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["LeagueStatusUpdateResponse"];
+        };
+      };
+    };
+  };
+  updateClubMemberRole: {
+    parameters: {
+      query: {
+        clubMemberId: number;
+      };
+      header?: never;
+      path: {
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ClubMemberRoleUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ClubMemberResponse"];
+        };
+      };
+    };
+  };
+  expelClubMember: {
+    parameters: {
+      query: {
+        clubMemberId: number;
+      };
+      header?: never;
+      path: {
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ClubMemberExpelRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["clubMemberBanRecordResponse"];
+        };
+      };
+    };
+  };
+  banClubMember: {
+    parameters: {
+      query: {
+        clubMemberId: number;
+      };
+      header?: never;
+      path: {
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ClubMemberBanRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["clubMemberBanRecordResponse"];
         };
       };
     };
