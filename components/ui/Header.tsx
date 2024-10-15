@@ -15,7 +15,7 @@ const PersonalSection = () => {
   const { data } = useGetMyInfo(!!isLogin?.loggedIn);
   const clubId = data?.club_member_my_page_response?.club_id || null;
 
-  const handleImageClick = () => {
+  const handleProfileClick = () => {
     setShowMenu(!showMenu);
   };
 
@@ -58,7 +58,7 @@ const PersonalSection = () => {
       ) : null}
 
       <button
-        onClick={handleImageClick}
+        onClick={handleProfileClick}
         className="cursor-pointer"
         type="button"
       >
