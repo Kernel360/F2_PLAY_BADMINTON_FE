@@ -30,7 +30,7 @@ function MemberInfo({
   const { win_count, lose_count, draw_count, match_count, tier } =
     leagueRecordInfoResponse;
 
-  const changeRollWord = (roll: string) => {
+  const changeRoleWord = (roll: string) => {
     switch (roll) {
       case "ROLE_OWNER":
         return "회장";
@@ -50,7 +50,7 @@ function MemberInfo({
         <p className="text-black">{name}</p>
       </div>
       <div className="flex flex-[1] items-center">
-        <p className="text-black">{changeRollWord(role)}</p>
+        <p className="text-black">{changeRoleWord(role)}</p>
       </div>
       <div className="flex flex-[1] items-center">
         <p className="text-black">{getTierWithEmoji(tier as string)}</p>

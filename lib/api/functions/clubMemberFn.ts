@@ -11,6 +11,7 @@ interface ClubMembersData {
 
 export async function getClubMembers(): Promise<ClubMembersData> {
   try {
+    /* TODO(iamgyu): 현재 ID가 지정해준 값으로 들어가 있기 때문에 추후에 변경 필요 */
     const response = await fetch(`${BASE_URL}/clubs/1/clubMembers`, {
       method: "GET",
       headers: {
