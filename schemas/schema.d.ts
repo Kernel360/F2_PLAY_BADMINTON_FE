@@ -458,26 +458,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/v1/clubs/me": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /**
-     * 현재 로그인된 사용자의 동호회 조회
-     * @description 현재 로그인되어 있는 사용자의 동호회를 조회합니다
-     */
-    get: operations["readCurrentClub"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   "/v1/members": {
     parameters: {
       query?: never;
@@ -534,14 +514,14 @@ export interface components {
        * @description oAuth 제공 이미지
        * @example 1070449979547641023123
        */
-      profile_imag?: string;
+      profile_image?: string;
     };
     ImageUploadRequest: {
       /** Format: binary */
       multipartFile?: string;
     };
     ClubCreateRequest: {
-      club_name: string;
+      club_name?: string;
       club_description: string;
       club_image?: string;
     };
@@ -896,6 +876,8 @@ export interface components {
       name?: string;
       /** @enum {string} */
       role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
+      /** @enum {string} */
+      tier?: "GOLD" | "SILVER" | "BRONZE";
       league_record_info_response?: components["schemas"]["LeagueRecordInfoResponse"];
     };
     LeagueRecordInfoResponse: {
@@ -1058,6 +1040,7 @@ export interface components {
       club_member_count?: number;
       /** Format: date-time */
       created_at?: string;
+      is_club_member?: boolean;
     };
     LeagueReadResponse: {
       /**
@@ -2000,26 +1983,6 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["PageClubCardResponse"];
-        };
-      };
-    };
-  };
-  readCurrentClub: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "*/*": components["schemas"]["ClubDetailsResponse"];
         };
       };
     };
