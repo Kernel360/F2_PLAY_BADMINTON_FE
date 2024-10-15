@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { Text } from "@/components/ui/Text";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
+import { usePostLeagues } from "@/lib/api/hooks/leagueHook";
 import type { components } from "@/schemas/schema";
 import {
   DropdownMenu,
@@ -30,12 +31,15 @@ import {
   User,
   Users,
 } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 type LeagueCreateRequest = components["schemas"]["LeagueCreateRequest"];
 
 function CreateLeaguePage() {
+  const router = useRouter();
+  const clubId = Number(usePathname().split("/")[2]);
   const [tierLimit, setTierLimit] =
     useState<LeagueCreateRequest["tier_limit"]>("GOLD");
   const [type, setType] =
@@ -43,11 +47,16 @@ function CreateLeaguePage() {
   const [date, setDate] = useState<Date>();
   const [timeValue, setTimeValue] = useState<string>("00:00");
   const [closedAt, setClosedAt] = useState<string>("");
-
+  const { mutate: createLeague } = usePostLeagues(clubId);
   const { register, handleSubmit, setValue, setError } =
     useForm<LeagueCreateRequest>({
       mode: "onBlur",
     });
+
+  const toLocalISOString = (date: Date): string => {
+    const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm:ss");
+    return `${formattedDate}.000`; // 밀리초 부분을 '000'으로 고정
+  };
 
   const handleLeagueTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const time = e.target.value;
@@ -59,12 +68,15 @@ function CreateLeaguePage() {
     if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
       const newDate = setHours(setMinutes(date, minutes ?? 0), hours ?? 0);
       setDate(newDate);
-      setValue("league_at", formatISO(newDate), { shouldValidate: true });
+      setValue("league_at", toLocalISOString(newDate), {
+        shouldValidate: true,
+      });
+      // setValue("league_at", newDate.toISOString(), { shouldValidate: true });
       setTimeValue(time);
     }
   };
 
-  const handleDaySelect = (selectedDate: Date) => {
+  const handleLeagueDaySelect = (selectedDate: Date) => {
     const [hours, minutes] = timeValue.split(":").map(Number);
     if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
       const newDate = setHours(
@@ -72,14 +84,20 @@ function CreateLeaguePage() {
         hours ?? 0,
       );
       setDate(newDate);
-      setValue("league_at", formatISO(newDate), { shouldValidate: true });
+      setValue("league_at", toLocalISOString(newDate), {
+        shouldValidate: true,
+      });
+      // setValue("league_at", newDate.toISOString(), { shouldValidate: true });
     }
   };
 
   const handleClosedAtSelect = (selectedDate: Date) => {
     const closingDate = endOfDay(selectedDate);
     setClosedAt(formatISO(closingDate));
-    setValue("closed_at", formatISO(closingDate), { shouldValidate: true });
+    setValue("closed_at", toLocalISOString(closingDate), {
+      shouldValidate: true,
+    });
+    // setValue("closed_at", closingDate.toISOString(), { shouldValidate: true });
   };
 
   const selectedTier = () => {
@@ -114,8 +132,11 @@ function CreateLeaguePage() {
       // 해당 data는 초기 기획 상 RANDOM임
       match_generation_type: "RANDOM",
     };
-
-    console.log(newScheduleData);
+    createLeague(newScheduleData, {
+      onSuccess: () => {
+        router.push(`/club/${clubId}/schedule`);
+      },
+    });
   };
 
   return (
@@ -137,8 +158,6 @@ function CreateLeaguePage() {
             </Text>
           </div>
           <Input
-            // value={leagueName}
-            // onChange={(e) => setLeagueName(e.target.value)}
             placeholder="경기 이름을 입력하세요"
             {...register("league_name", {
               required: "경기 이름을 입력해주세요",
@@ -154,8 +173,6 @@ function CreateLeaguePage() {
             </Text>
           </div>
           <Textarea
-            // value={description}
-            // onChange={(e) => setDescription(e.target.value)}
             placeholder="경기 설명을 입력하세요"
             className="resize-none text-black"
             {...register("description", {
@@ -194,7 +211,7 @@ function CreateLeaguePage() {
                   mode="single"
                   selected={date}
                   onSelect={(selectedDate) => {
-                    if (selectedDate) handleDaySelect(selectedDate);
+                    if (selectedDate) handleLeagueDaySelect(selectedDate);
                   }}
                   locale={ko}
                   className="text-black"
@@ -354,8 +371,6 @@ function CreateLeaguePage() {
             </div>
             <Input
               type="number"
-              // value={playerCount}
-              // onChange={(e) => setPlayerCount(Number(e.target.value))}
               placeholder="모집 인원 입력"
               {...register("player_count", {
                 required: "모집 인원을 입력해주세요",
@@ -371,8 +386,6 @@ function CreateLeaguePage() {
               </Text>
             </div>
             <Input
-              // value={location}
-              // onChange={(e) => setLocation(e.target.value)}
               placeholder="장소 입력"
               {...register("league_location", {
                 required: "경기 장소를 입력해주세요",
