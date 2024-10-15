@@ -12,9 +12,14 @@ import { Text } from "../ui/Text";
 type ClubsData = components["schemas"]["ClubCardResponse"];
 
 export function ClubCard(props: ClubsData) {
-  const { club_name, club_image, club_member_count_by_tier: tier } = props;
+  const {
+    club_id,
+    club_name,
+    club_image,
+    club_member_count_by_tier: tier,
+  } = props;
   return (
-    <Link href="/my-club">
+    <Link href={`/club/${club_id}`}>
       <Card
         className={
           "w-64 rounded-lg shadow-lg overflow-hidden cursor-pointer transition-transform transform hover:scale-105"

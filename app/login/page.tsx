@@ -17,12 +17,6 @@ function LoginPage() {
         <Link href={NAVER_OAUTH_URL}>
           <LoginButton method="naver" />
         </Link>
-        <Link href={GOOGLE_OAUTH_URL}>
-          <LoginButton method="google" />
-        </Link>
-        <Link href={KAKAO_OAUTH_URL}>
-          <LoginButton method="kakao" />
-        </Link>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
-import ClubIntroPage from "../../my-club/ClubIntroPage";
+import ClubLayout from "./layout";
 
-function ClubPage() {
-  return <ClubIntroPage />;
+function MyClubPage() {
+  return <ClubLayout />;
 }
 
-export default ClubPage;
+export default MyClubPage;

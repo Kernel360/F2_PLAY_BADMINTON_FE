@@ -1,4 +1,9 @@
-import { getClubs, postClubs, postClubsImg } from "@/lib/api/functions/clubFn";
+import {
+  getClubs,
+  getClubsById,
+  postClubs,
+  postClubsImg,
+} from "@/lib/api/functions/clubFn";
 import type { components } from "@/schemas/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -27,5 +32,12 @@ export const usePostClubsImg = () => {
   return useMutation<string, Error, FormData>({
     mutationFn: (clubImg: FormData) => postClubsImg(clubImg),
     onError: (error: Error) => alert(error),
+  });
+};
+
+export const useGetClubsById = (clubId: number) => {
+  return useQuery({
+    queryKey: ["clubsDataById", clubId],
+    queryFn: () => getClubsById(clubId),
   });
 };
