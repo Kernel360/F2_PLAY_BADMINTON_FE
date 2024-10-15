@@ -13,7 +13,7 @@ const PersonalSection = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { mutate: logout } = usePostLogout();
   const { data } = useGetMyInfo(!!isLogin?.loggedIn);
-  const isJoined = data?.club_member_my_page_response?.club_id || null;
+  const clubId = data?.club_member_my_page_response?.club_id || null;
 
   const handleImageClick = () => {
     setShowMenu(!showMenu);
@@ -45,7 +45,7 @@ const PersonalSection = () => {
 
   return (
     <div className="relative flex items-center">
-      {!isJoined ? (
+      {!clubId ? (
         <LinkText
           color="gray"
           size="sm"
@@ -73,13 +73,13 @@ const PersonalSection = () => {
 
       {showMenu && (
         <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 shadow-lg p-3 rounded w-40 space-y-2">
-          {isJoined && (
+          {clubId && (
             <div>
               <LinkText
                 color="primary"
                 size="sm"
                 className="block cursor-pointer hover:underline"
-                link={`/club/${isJoined}`}
+                link={`/club/${clubId}`}
               >
                 내 동호회
               </LinkText>
