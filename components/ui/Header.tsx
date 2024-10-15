@@ -10,13 +10,13 @@ import { LinkText } from "./Text";
 
 const PersonalSection = () => {
   const { data: isLogin } = useGetLoginState();
-  const [showLogout, setShowLogout] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const { mutate: logout } = usePostLogout();
   const { data } = useGetMyInfo(!!isLogin?.loggedIn);
   const isJoined = data?.club_member_my_page_response?.club_id || null;
 
   const handleImageClick = () => {
-    setShowLogout(!showLogout);
+    setShowMenu(!showMenu);
   };
 
   if (!isLogin?.loggedIn) {
@@ -43,48 +43,22 @@ const PersonalSection = () => {
     );
   }
 
-  if (!isJoined) {
-    return (
-      <div className="flex w-40 justify-evenly items-center">
+  return (
+    <div className="relative flex items-center">
+      {!isJoined ? (
         <LinkText
           color="gray"
           size="sm"
           align="center"
-          className="cursor-pointer leading-6"
+          className="cursor-pointer leading-6 mr-4"
           link="/club/create"
         >
           동호회 만들기
         </LinkText>
-        <div className="relative">
-          <button
-            onClick={() => handleImageClick()}
-            className="cursor-pointer"
-            type="button"
-          >
-            <SImage
-              src={data?.profile_image || "/images/dummy-image.jpg"}
-              radius="circular"
-              width={45}
-              height={45}
-              alt="profile"
-            />
-          </button>
-          {showLogout && (
-            <div className="absolute top-full mt-2 px-10 right-0 bg-white border border-gray-200 shadow-lg p-2 rounded">
-              <button onClick={() => logout()} type="button">
-                Logout
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
+      ) : null}
 
-  return (
-    <div className="relative">
       <button
-        onClick={() => handleImageClick()}
+        onClick={handleImageClick}
         className="cursor-pointer"
         type="button"
       >
@@ -96,11 +70,40 @@ const PersonalSection = () => {
           alt="profile"
         />
       </button>
-      {showLogout && (
-        <div className="absolute top-full mt-2 px-10 right-0 bg-white border border-gray-200 shadow-lg p-2 rounded">
-          <button onClick={() => logout()} type="button">
-            Logout
-          </button>
+
+      {showMenu && (
+        <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 shadow-lg p-3 rounded w-40 space-y-2">
+          {isJoined && (
+            <div>
+              <LinkText
+                color="primary"
+                size="sm"
+                className="block cursor-pointer hover:underline"
+                link={`/club/${isJoined}`}
+              >
+                내 동호회
+              </LinkText>
+            </div>
+          )}
+          <div>
+            <LinkText
+              color="primary"
+              size="sm"
+              className="block cursor-pointer hover:underline"
+              link="/my"
+            >
+              마이페이지
+            </LinkText>
+          </div>
+          <div>
+            <button
+              onClick={() => logout()}
+              type="button"
+              className="block w-full text-left text-primary text-sm cursor-pointer hover:underline"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -110,7 +113,7 @@ const PersonalSection = () => {
 function Header() {
   const path = usePathname();
   return (
-    <div className="flex items-center justify-between space-x-4 w-full max-w-5xl h-16 sticky top-0 z-50 border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="flex items-center justify-between space-x-4 w-full max-w-5xl h-16 sticky top-0 z-50 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Link href="/">
         <div className="text-xl font-semibold cursor-pointer">LOGO</div>
       </Link>
