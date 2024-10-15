@@ -75,7 +75,7 @@ function ClubLayout() {
               <ClubMemberPages />
             </TabsContent>
             <TabsContent value="manage">
-              <ClubManagePages />
+              <ClubManagePages clubData={data} />
             </TabsContent>
           </>
         )}

@@ -4,14 +4,18 @@ import ClubInfoInputDescription from "@/components/common/clubInfoInput/ClubInfo
 import ClubInfoInputImage from "@/components/common/clubInfoInput/ClubInfoInputImage";
 import ClubInfoInputName from "@/components/common/clubInfoInput/ClubInfoInputName";
 import { Button } from "@/components/ui/Button";
+import type { components } from "@/schemas/schema";
 import { useState } from "react";
 
-function ClubManagePage() {
-  const [imagePreview, setImagePreview] = useState("/images/dummy-image.jpg");
-  const [clubName, setClubName] = useState("기존 동호회 이름");
-  const [text, setText] = useState(
-    "안녕하세요 동호회 입니다. 안녕하세요 동호회 입니다.안녕하세요 동호회입니다. 안녕하세요 동호회 입니다.안녕하세요 동호회 입니다.안녕하세요 동호회 입니다.안녕하세요 동호회 입니다. 안녕하세요 동호회입니다.안녕하세요 동호회 입니다. 안녕하세요 동호회 입니다.안녕하세요동호회 입니다. 안녕하세요 동호회 입니다.안녕하세요 동호회 입니다.안녕하세요 동호회 입니다.안녕하세요 동호회 입니다. 안녕하세요 동호회입니다.안녕하세요 동호회 입니다. 안녕하세요 동호회 입니다.",
-  );
+type ClubDetailsResponse = components["schemas"]["ClubDetailsResponse"];
+
+interface ClubManagePageProps {
+  clubData: ClubDetailsResponse;
+}
+function ClubManagePage({ clubData }: ClubManagePageProps) {
+  const [imagePreview, setImagePreview] = useState(clubData.club_image);
+  const [clubName, setClubName] = useState(clubData.club_name);
+  const [text, setText] = useState(clubData.club_description);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -25,18 +29,24 @@ function ClubManagePage() {
   return (
     <div className="flex space-x-8 w-full h-[464px] items-center">
       <ClubInfoInputImage
-        imagePreview={imagePreview}
+        imagePreview={imagePreview as string}
         onImageChange={handleImageChange}
       />
       <div className="flex flex-col flex-1 h-[400px] gap-4">
-        <ClubInfoInputName
-          clubName={clubName}
-          onChange={(e) => setClubName(e.target.value)}
-        />
-        <ClubInfoInputDescription
-          description={text}
-          onChange={(e) => setText(e.target.value)}
-        />
+        <div className="flex flex-col gap-1">
+          <p className="text-black font-bold text-lg">동호회 이름</p>
+          <ClubInfoInputName
+            clubName={clubName}
+            onChange={(e) => setClubName(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col gap-1 h-full">
+          <p className="text-black font-bold text-lg">동호회 소개</p>
+          <ClubInfoInputDescription
+            description={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+        </div>
         <div className="w-full flex justify-end">
           <Button className="place-items-end">변경 저장</Button>
         </div>

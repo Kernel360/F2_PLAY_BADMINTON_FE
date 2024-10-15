@@ -5,7 +5,7 @@ type Club = components["schemas"]["ClubCardResponse"];
 type ClubCreateRequest = components["schemas"]["ClubCreateRequest"];
 type ClubCreateResponse = components["schemas"]["ClubCreateResponse"];
 type ClubDetailsResponse = components["schemas"]["ClubDetailsResponse"];
-
+type ClubUpdateRequest = components["schemas"]["ClubUpdateRequest"];
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 export async function getClubs(): Promise<Club[]> {
