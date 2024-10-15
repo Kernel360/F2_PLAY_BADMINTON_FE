@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 type ClubCreate = components["schemas"]["ClubCreateRequest"];
+type ClubCreateResponse = components["schemas"]["ClubCreateResponse"];
 
 function CreateClubPage() {
   const router = useRouter();
@@ -66,8 +67,9 @@ function CreateClubPage() {
     };
 
     createClub(newClubData, {
-      onSuccess: () => {
-        router.push("/my-club");
+      onSuccess: (data) => {
+        const clubId = data.club_id;
+        router.push(`/club/${clubId}`);
       },
     });
   };

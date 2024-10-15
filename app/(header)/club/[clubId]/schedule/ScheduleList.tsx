@@ -98,16 +98,17 @@ function ScheduleList(props: ScheduleListProps) {
 
   return (
     <div className="w-full px-6 py-3 bg-white relative">
-      <Link href="/my-club/schedule/create">
-        <IconButton
-          size="sm"
-          color="transparent"
-          radius="round"
-          className="group hover:bg-primary hover:text-white absolute -right-4 -top-4"
-        >
-          <CalendarPlus className="text-primary group-hover:text-white" />
-        </IconButton>
-      </Link>
+      {/* TODO(Yejin0O0): api 연동 시 링크 수정 작업 필요 */}
+      {/* <Link href="/club/clubId/schedule/create"> */}
+      <IconButton
+        size="sm"
+        color="transparent"
+        radius="round"
+        className="group hover:bg-primary hover:text-white absolute -right-4 -top-4"
+      >
+        <CalendarPlus className="text-primary group-hover:text-white" />
+      </IconButton>
+      {/* </Link> */}
       <div className="mb-5 text-center">
         <h1 className="text-2xl font-extrabold text-gray-800">
           {format(selectedDate, "yyyy년 MM월 dd일")}
@@ -117,6 +118,7 @@ function ScheduleList(props: ScheduleListProps) {
       <div className="grid gap-4 h-[27rem] overflow-y-auto">
         {schedules.map((schedule) => (
           // TODO(Yejin0O0): mock data or data 변수 이름 다시 생각해보기
+          // TODO(Yejin0O0): api 연동 시 링크 수정 작업 필요
           <Link key={schedule.id} href={`/my-club/schedule/${schedule.id}`}>
             <div className="bg-white py-4 px-6 rounded-xl border border-solid hover:shadow-lg transform  transition-transform duration-300 cursor-pointer">
               <div className="flex justify-between items-start mb-4">
