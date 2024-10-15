@@ -29,7 +29,7 @@ function ClubIntroPage({ clubData }: ClubIntroPageProps) {
           width={100}
           height={100}
           alt="club image"
-          className="w-full rounded-md object-cover"
+          className="rounded-md object-cover h-[400px] w-[400px]"
         />
       </div>
       <div className="flex flex-col flex-1 h-[400px] gap-4">
