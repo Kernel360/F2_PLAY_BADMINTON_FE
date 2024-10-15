@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getLoginState, getLogout } from "../functions/SessionFn";
+import { getLoginState, postLogout } from "../functions/SessionFn";
 
 export const useGetLoginState = () => {
   return useQuery({
@@ -8,11 +8,11 @@ export const useGetLoginState = () => {
   });
 };
 
-export const useLogout = () => {
+export const usePostLogout = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: getLogout,
+    mutationFn: postLogout,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["loginState"] });
     },

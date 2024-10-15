@@ -1,5 +1,5 @@
 "use client";
-import { useGetLoginState, useLogout } from "@/lib/api/hooks/SessionHook";
+import { useGetLoginState, usePostLogout } from "@/lib/api/hooks/SessionHook";
 import { useGetMyInfo } from "@/lib/api/hooks/membersHook";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,11 +11,10 @@ import { LinkText } from "./Text";
 const PersonalSection = () => {
   const { data: isLogin } = useGetLoginState();
   const [showLogout, setShowLogout] = useState(false);
-  const { mutate: logout } = useLogout();
+  const { mutate: logout } = usePostLogout();
   const { data } = useGetMyInfo(!!isLogin?.loggedIn);
   const isJoined = data?.club_member_my_page_response?.club_id || null;
 
-  console.log(isJoined);
   const handleImageClick = () => {
     setShowLogout(!showLogout);
   };

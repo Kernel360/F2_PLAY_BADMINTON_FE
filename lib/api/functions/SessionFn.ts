@@ -16,7 +16,7 @@ export async function getLoginState(): Promise<loggedInState> {
   return response.json();
 }
 
-export async function getLogout(): Promise<object> {
+export async function postLogout(): Promise<object> {
   const response = await fetch(`${BASE_URL}/members/logout`, {
     method: "POST",
     headers: {
