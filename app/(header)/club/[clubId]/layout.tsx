@@ -10,7 +10,6 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
 
   const activeTab = () => {
     if (pathname === undefined) return "intro";
-    if (pathname === "club") return "intro";
     return pathname;
   };
 
