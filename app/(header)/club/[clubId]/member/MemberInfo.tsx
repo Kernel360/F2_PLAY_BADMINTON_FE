@@ -27,25 +27,25 @@ function MemberInfo({
   isOpen,
   onToggle,
 }: MemberInfoProps) {
-  const { win_count, lose_count, draw_count, match_count, tier } =
-    leagueRecordInfoResponse;
+  // const { win_count, lose_count, draw_count, match_count, tier } =
+  //   leagueRecordInfoResponse;
 
-  const changeRoleWord = (roll: string) => {
-    switch (roll) {
-      case "ROLE_OWNER":
-        return "회장";
-      case "ROLE_MANAGER":
-        return "매니저";
-      case "ROLE_USER":
-        return "회원";
-      default:
-        return "";
-    }
-  };
+  // const changeRoleWord = (roll: string) => {
+  //   switch (roll) {
+  //     case "ROLE_OWNER":
+  //       return "회장";
+  //     case "ROLE_MANAGER":
+  //       return "매니저";
+  //     case "ROLE_USER":
+  //       return "회원";
+  //     default:
+  //       return "";
+  //   }
+  // };
 
   return (
     <div className="flex justify-center">
-      <div className="flex flex-[1] items-center gap-8">
+      {/* <div className="flex flex-[1] items-center gap-8">
         <img src={image} alt="userImg" className="w-16 h-16 rounded-full" />
         <p className="text-black">{name}</p>
       </div>
@@ -63,7 +63,7 @@ function MemberInfo({
           <AlignJustify width="80%" height="80%" className="text-gray-400" />
         </IconButton>
         {isOpen && <MemberDropDown />}
-      </div>
+      </div> */}
     </div>
   );
 }
