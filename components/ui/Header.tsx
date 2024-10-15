@@ -58,7 +58,7 @@ const PersonalSection = () => {
       ) : null}
 
       <button
-        onClick={handleProfileClick}
+        onClick={() => handleProfileClick()}
         className="cursor-pointer"
         type="button"
       >
