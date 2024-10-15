@@ -6,6 +6,7 @@ import ClubMemberPages from "@/app/(header)/club/[clubId]/member/page";
 import ClubSchedulePages from "@/app/(header)/club/[clubId]/schedule/page";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useGetClubsById } from "@/lib/api/hooks/clubHook";
+import type { components } from "@/schemas/schema";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type React from "react";
@@ -64,7 +65,7 @@ function ClubLayout() {
       </TabsList>
       <div className="overflow-hidden rounded-[0.5rem] border bg-background shadow flex-1 space-y-4 p-8 min-h-[530px]">
         <TabsContent value="intro">
-          <ClubIntroPages />
+          <ClubIntroPages clubData={data} />
         </TabsContent>
         {isMember && (
           <>
