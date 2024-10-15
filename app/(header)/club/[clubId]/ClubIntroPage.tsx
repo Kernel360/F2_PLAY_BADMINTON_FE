@@ -13,6 +13,13 @@ function ClubIntroPage({ clubData }: ClubIntroPageProps) {
     return <div>No data available</div>;
   }
 
+  const date = new Date(clubData.created_at as string);
+  const formattedDate = date.toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   return (
     <div className="flex space-x-8 w-full h-[464px] items-center">
       <div className="w-[400px] flex flex-col items-center gap-2">
@@ -76,7 +83,7 @@ function ClubIntroPage({ clubData }: ClubIntroPageProps) {
           </div>
           <div className="flex text-black mt-3 gap-4">
             <p className="font-bold">개설일</p>
-            <p>{clubData.created_at}</p>
+            <p>{formattedDate}</p>
           </div>
           <div className="flex text-black mt-3 gap-4">
             <p className="font-bold">멤버</p>
