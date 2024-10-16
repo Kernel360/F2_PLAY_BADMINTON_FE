@@ -55,6 +55,7 @@ function MemberDropDown({ clubMemberId }: { clubMemberId: number }) {
         )}
         {openSuspendedModal && (
           <MemberSuspendedModal
+            clubMemberId={clubMemberId}
             openSuspendedModal={openSuspendedModal}
             handleSuspendedModal={handleSuspendedModal}
           />

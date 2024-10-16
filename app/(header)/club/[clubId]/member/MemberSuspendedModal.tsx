@@ -5,20 +5,32 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { usePatchClubMembersBan } from "@/lib/api/hooks/clubMemberHook";
+import { usePathname } from "next/navigation";
 import type React from "react";
 import { useState } from "react";
 
 interface MemberSuspendedModalProps {
+  clubMemberId: number;
   openSuspendedModal: boolean;
   handleSuspendedModal: () => void;
 }
 
 function MemberSuspendedModal({
+  clubMemberId,
   openSuspendedModal,
   handleSuspendedModal,
 }: MemberSuspendedModalProps) {
+  const pathname = usePathname();
+  const clubId = Number(pathname.split("/")[2]);
   const [selectedSuspendedDay, setSelectedSuspendedDay] = useState(0);
+  const [text, setText] = useState("");
+  const { mutate: patchClubMembersBan } = usePatchClubMembersBan(
+    clubId,
+    clubMemberId,
+  );
 
+  console.log(text);
   const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSuspendedDay(Number(e.target.value));
   };
@@ -26,17 +38,49 @@ function MemberSuspendedModal({
   const days = [
     {
       id: 1,
-      day: 7,
+      day: 3,
     },
     {
       id: 2,
-      day: 15,
+      day: 7,
     },
     {
       id: 3,
-      day: 30,
+      day: 14,
     },
   ];
+
+  const changeBanDay = (days: number) => {
+    switch (days) {
+      case 3:
+        return "THREE_DAYS";
+      case 7:
+        return "SEVEN_DAYS";
+      case 14:
+        return "TWO_WEEKS";
+      default:
+        return "";
+    }
+  };
+
+  const handleMemberSuspended = (banDay: string, banReason: string) => {
+    patchClubMembersBan(
+      {
+        type: banDay as
+          | "THREE_DAYS"
+          | "SEVEN_DAYS"
+          | "TWO_WEEKS"
+          | "PERMANENT"
+          | undefined,
+        banned_reason: banReason,
+      },
+      {
+        onSuccess: () => {
+          alert("멤버 정지가 정상적으로 ");
+        },
+      },
+    );
+  };
 
   return (
     <Dialog open={openSuspendedModal} onOpenChange={handleSuspendedModal}>
@@ -65,8 +109,16 @@ function MemberSuspendedModal({
             type="text"
             className="w-full px-2 py-2 mb-4 border border-gray-400 rounded-md"
             placeholder="정지 사유"
+            onChange={(e) => {
+              setText(e.target.value);
+            }}
           />
-          <DialogClose className="bg-primary text-white rounded-md px-6 py-2">
+          <DialogClose
+            className="bg-primary text-white rounded-md px-6 py-2"
+            onClick={() =>
+              handleMemberSuspended(changeBanDay(selectedSuspendedDay), text)
+            }
+          >
             정지
           </DialogClose>
         </div>

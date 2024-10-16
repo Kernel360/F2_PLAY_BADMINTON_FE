@@ -66,19 +66,20 @@ function MemberRoleModal({
   };
 
   const handleMemberRole = (memberRoll: string) => {
-    const newMemberRoll: ClubMemberRoleUpdate = {
-      role: memberRoll as
-        | "ROLE_OWNER"
-        | "ROLE_MANAGER"
-        | "ROLE_USER"
-        | undefined,
-    };
-
-    patchClubMembersRole(newMemberRoll, {
-      onSuccess: () => {
-        alert(`멤버의 역할이 ${newMemberRoll.role}로 변경되었습니다.`);
+    patchClubMembersRole(
+      {
+        role: memberRoll as
+          | "ROLE_OWNER"
+          | "ROLE_MANAGER"
+          | "ROLE_USER"
+          | undefined,
       },
-    });
+      {
+        onSuccess: () => {
+          alert("멤버 역할 변경이 완료되었습니다.");
+        },
+      },
+    );
   };
 
   return (
