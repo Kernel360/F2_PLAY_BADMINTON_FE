@@ -2,21 +2,33 @@
 
 import DayCell from "@/components/DayCell";
 import { Calendar } from "@/components/ui/calendar";
+import { useGetMonthLeagues } from "@/lib/api/hooks/leagueHook";
+import type { components } from "@/schemas/schema";
+import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import * as React from "react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import ScheduleList from "./ScheduleList";
 
+type MonthLeagues = components["schemas"]["LeagueReadResponse"];
+
 export default function ClubSchedulePage() {
-  const [date, setDate] = React.useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(new Date());
+
+  const clubId = Number(usePathname().split("/")[2]);
+  const { data: scheduleList } = useGetMonthLeagues(
+    clubId,
+    format(date, "yyyy-MM"),
+  );
 
   return (
     <div className="w-full flex">
       <Calendar
         mode="single"
         selected={date}
-        onSelect={(date) => {
-          if (date) {
-            setDate(date);
+        onSelect={(selectedDate) => {
+          if (selectedDate) {
+            setDate(selectedDate);
           }
         }}
         locale={ko}
@@ -30,7 +42,13 @@ export default function ClubSchedulePage() {
           day_today: "hover: bg-inherit",
         }}
         components={{
-          DayContent: DayCell,
+          DayContent: (dayProps) => (
+            <DayCell
+              date={dayProps.date}
+              displayMonth={dayProps.displayMonth}
+              scheduleList={scheduleList as MonthLeagues[]}
+            />
+          ),
         }}
       />
       <ScheduleList selectedDate={date} />
