@@ -8,8 +8,8 @@ import MemberInfo from "./MemberInfo";
 type LeagueRecordInfoResponse =
   components["schemas"]["LeagueRecordInfoResponse"];
 
-function ClubMemberPage() {
-  const { data, error, isLoading } = useGetClubMembers(1);
+function ClubMemberPage({ clubId }: { clubId: number }) {
+  const { data, error, isLoading } = useGetClubMembers(clubId);
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>();
 
   const toggleDropdown = (index: number) => {
@@ -26,7 +26,11 @@ function ClubMemberPage() {
     return <div>Error: {error.message}</div>;
   }
 
-  const members = [...data.ROLE_OWNER, ...data.ROLE_MANAGER, ...data.ROLE_USER];
+  const members = [
+    ...data.ROLE_OWNER,
+    ...(data.ROLE_MANAGER ?? []),
+    ...(data.ROLE_USER ?? []),
+  ];
 
   return (
     <div className="h-[466px]">

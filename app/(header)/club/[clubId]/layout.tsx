@@ -72,7 +72,7 @@ function ClubLayout() {
               <ClubSchedulePages />
             </TabsContent>
             <TabsContent value="member">
-              <ClubMemberPages />
+              <ClubMemberPages clubId={data.club_id as number} />
             </TabsContent>
             <TabsContent value="manage">
               <ClubManagePages clubData={data} />
