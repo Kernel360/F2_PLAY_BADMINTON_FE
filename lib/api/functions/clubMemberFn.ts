@@ -1,6 +1,13 @@
 import type { components } from "@/schemas/schema";
 
 type ClubMemberResponse = components["schemas"]["ClubMemberResponse"];
+type ClubMemberRoleUpdateRequest =
+  components["schemas"]["ClubMemberRoleUpdateRequest"];
+type ClubMemberExpelRequest = components["schemas"]["ClubMemberExpelRequest"];
+type ClubMemberBanRequest = components["schemas"]["ClubMemberBanRequest"];
+type ClubMemberBanRecordResponse =
+  components["schemas"]["clubMemberBanRecordResponse"];
+
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 interface ClubMembersData {
@@ -14,14 +21,78 @@ export const getClubMembers = async (
 ): Promise<ClubMembersData> => {
   const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     credentials: "include",
   });
 
   if (!response.ok) {
     throw new Error("멤버 정보 조회에 실패했습니다.");
+  }
+
+  return response.json();
+};
+
+export const patchClubMembersRole = async (
+  role: ClubMemberRoleUpdateRequest,
+  clubId: number,
+  clubMemberId: number,
+): Promise<ClubMemberResponse> => {
+  const response = await fetch(
+    `${BASE_URL}/clubs/${clubId}/clubMembers/role?clubMemberId=${clubMemberId}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(role),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("멤버 역할 변경에 실패했습니다.");
+  }
+
+  return response.json();
+};
+
+export const patchClubMembersExpel = async (
+  expelReason: ClubMemberExpelRequest,
+  clubId: number,
+  clubMemberId: number,
+): Promise<ClubMemberBanRecordResponse> => {
+  const response = await fetch(
+    `${BASE_URL}/clubs/${clubId}/clubMembers/expel/expel?clubMemberId=${clubMemberId}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(expelReason),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("멤버 강제 탈퇴에 실패했습니다.");
+  }
+
+  return response.json();
+};
+
+export const patchClubMembersBan = async (
+  ban: ClubMemberBanRequest,
+  clubId: number,
+  clubMemberId: number,
+): Promise<ClubMemberBanRecordResponse> => {
+  const response = await fetch(
+    `${BASE_URL}/clubs/${clubId}/clubMembers/ban?clubMemberId=${clubMemberId}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(ban),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("멤버 정지에 실패했습니다.");
   }
 
   return response.json();
