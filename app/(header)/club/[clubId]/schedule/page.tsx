@@ -14,16 +14,14 @@ type MonthLeagues = components["schemas"]["LeagueReadResponse"];
 
 export default function ClubSchedulePage() {
   const [date, setDate] = useState<Date>(new Date());
+  const [month, setMonth] = useState<string>(format(new Date(), "yyyy-MM"));
   const clubId = Number(usePathname().split("/")[2]);
-  const { data: scheduleList, refetch } = useGetMonthLeagues(
-    clubId,
-    format(date, "yyyy-MM"),
-  );
+  const { data: scheduleList, refetch } = useGetMonthLeagues(clubId, month);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     refetch();
-  }, [date]);
+  }, [month]);
 
   return (
     <div className="w-full flex">
@@ -37,7 +35,10 @@ export default function ClubSchedulePage() {
           }
         }}
         onMonthChange={(newMonth) => {
-          setDate(newMonth);
+          const newMonthStr = format(newMonth, "yyyy-MM");
+          if (newMonthStr !== month) {
+            setMonth(newMonthStr);
+          }
         }}
         locale={ko}
         className="rounded-md text-gray-800"
