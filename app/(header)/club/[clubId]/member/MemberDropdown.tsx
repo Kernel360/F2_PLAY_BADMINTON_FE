@@ -62,6 +62,7 @@ function MemberDropDown({ clubMemberId }: { clubMemberId: number }) {
         )}
         {openExpelModal && (
           <MemberExpelModal
+            clubMemberId={clubMemberId}
             openExpelModal={openExpelModal}
             handleExpelModal={handleExpelModal}
           />

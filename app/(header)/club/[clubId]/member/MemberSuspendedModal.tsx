@@ -24,13 +24,13 @@ function MemberSuspendedModal({
   const pathname = usePathname();
   const clubId = Number(pathname.split("/")[2]);
   const [selectedSuspendedDay, setSelectedSuspendedDay] = useState(0);
-  const [text, setText] = useState("");
+  const [banReason, setBanReason] = useState("");
   const { mutate: patchClubMembersBan } = usePatchClubMembersBan(
     clubId,
     clubMemberId,
   );
 
-  console.log(text);
+  console.log(banReason);
   const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSuspendedDay(Number(e.target.value));
   };
@@ -110,13 +110,16 @@ function MemberSuspendedModal({
             className="w-full px-2 py-2 mb-4 border border-gray-400 rounded-md"
             placeholder="정지 사유"
             onChange={(e) => {
-              setText(e.target.value);
+              setBanReason(e.target.value);
             }}
           />
           <DialogClose
             className="bg-primary text-white rounded-md px-6 py-2"
             onClick={() =>
-              handleMemberSuspended(changeBanDay(selectedSuspendedDay), text)
+              handleMemberSuspended(
+                changeBanDay(selectedSuspendedDay),
+                banReason,
+              )
             }
           >
             정지
