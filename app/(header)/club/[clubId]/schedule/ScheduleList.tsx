@@ -31,7 +31,6 @@ function ScheduleList(props: ScheduleListProps) {
 
   return (
     <div className="w-full px-6 py-3 bg-white relative">
-      {/* TODO(Yejin0O0): api 연동 시 링크 수정 작업 필요 */}
       <Link href={`/club/${clubId}/schedule/create`}>
         <IconButton
           size="sm"
@@ -48,14 +47,13 @@ function ScheduleList(props: ScheduleListProps) {
         </h1>
       </div>
 
-      <div className="grid gap-4 h-[27rem] overflow-y-auto">
+      <div className="flex flex-col justify-start gap-4 h-[27rem] overflow-y-auto">
         {Array.isArray(schedules) &&
           schedules.map((schedule: DateLeagues) => (
-            // TODO(Yejin0O0): mock data or data 변수 이름 다시 생각해보기
             // TODO(Yejin0O0): api 연동 시 링크 수정 작업 필요
             <Link
               key={schedule.league_id}
-              href={`/my-club/schedule/${schedule.league_id}`}
+              href={`/club/${clubId}/schedule/${schedule.league_id}`}
             >
               <div className="bg-white py-4 px-6 rounded-xl border border-solid hover:shadow-lg transform  transition-transform duration-300 cursor-pointer">
                 <div className="flex justify-between items-start mb-4">
