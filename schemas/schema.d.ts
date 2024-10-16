@@ -139,11 +139,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /**
-     * 해당 일자 기준으로 데이터를 조회합니다.
-     * @description 특정 클럽 ID에 대한 리그 데이터를 조회합니다. 검색 조건으로 날짜를 사용하며, 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.
-     */
-    get: operations["leagueReadByCondition"];
+    get?: never;
     put?: never;
     /**
      * 경기를 생성합니다.
@@ -430,6 +426,46 @@ export interface paths {
      * @description 회원이 동호회에 가입되어있는지 확인합니다
      */
     get: operations["getMemberIsClubMember"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/leagues/month": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 월별로 경기 일정을 조회합니다.
+     * @description 월별로 경기 일정을 리스트로 조회할 수 있습니다. 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.
+     */
+    get: operations["getLeagueByMonth"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/leagues/date": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 일자별로 경기 일정을 조회합니다.
+     * @description 일별로 경기 일정을 리스트로 조회할 수 있습니다. 검색 조건으로 날짜를 사용하며, 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.
+     */
+    get: operations["getLeagueByDate"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1042,35 +1078,6 @@ export interface components {
       created_at?: string;
       is_club_member?: boolean;
     };
-    LeagueReadResponse: {
-      /**
-       * Format: int64
-       * @description 경기 아이디
-       */
-      league_id?: number;
-      /**
-       * @description 경기 이름
-       * @example 배드민턴 경기
-       */
-      league_name?: string;
-      /**
-       * @description 현재 경기 상태
-       * @example OPEN
-       * @enum {string}
-       */
-      status?: "RECRUITING" | "COMPLETED" | "CANCELED";
-      /**
-       * Format: date-time
-       * @description 경기 시작 날짜
-       */
-      league_at?: string;
-      /**
-       * Format: int32
-       * @description 참가 인원
-       * @example 16
-       */
-      player_count?: number;
-    };
     LeagueAndParticipantResponse: {
       /**
        * Format: int64
@@ -1143,6 +1150,52 @@ export interface components {
        * @example 0
        */
       player_count?: number;
+    };
+    LeagueReadResponse: {
+      /**
+       * Format: int64
+       * @description 경기 아이디
+       */
+      league_id?: number;
+      /**
+       * @description 경기 이름
+       * @example 배드민턴 경기
+       */
+      league_name?: string;
+      /**
+       * @description 현재 경기 상태
+       * @example OPEN
+       * @enum {string}
+       */
+      status?: "RECRUITING" | "COMPLETED" | "CANCELED";
+      /**
+       * Format: date-time
+       * @description 경기 시작 날짜
+       */
+      league_at?: string;
+      /**
+       * Format: int32
+       * @description 참가 인원
+       * @example 16
+       */
+      player_count?: number;
+    };
+    LeagueByDateResponse: {
+      /** Format: int64 */
+      league_id?: number;
+      /** Format: date-time */
+      league_at?: string;
+      league_name?: string;
+      /** @enum {string} */
+      match_type?: "SINGLES" | "DOUBLES";
+      /** @enum {string} */
+      required_tier?: "GOLD" | "SILVER" | "BRONZE";
+      /** Format: date-time */
+      closed_at?: string;
+      /** Format: int32 */
+      player_limit_count?: number;
+      /** Format: int32 */
+      recruited_member_count?: number;
     };
     /** @description 회원 삭제 responseDto */
     MemberDeleteResponse: {
@@ -1352,32 +1405,6 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["ClubCreateResponse"];
-        };
-      };
-    };
-  };
-  leagueReadByCondition: {
-    parameters: {
-      query: {
-        /** @description 조회할 날짜, 'yyyy-MM' 형식으로 입력 */
-        date: string;
-      };
-      header?: never;
-      path: {
-        /** @description 조회할 클럽의 ID */
-        clubId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "*/*": components["schemas"]["LeagueReadResponse"][];
         };
       };
     };
@@ -1958,6 +1985,58 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["MemberIsClubMemberResponse"];
+        };
+      };
+    };
+  };
+  getLeagueByMonth: {
+    parameters: {
+      query: {
+        /** @description 조회할 날짜, 'yyyy-MM' 형식으로 입력 */
+        date: string;
+      };
+      header?: never;
+      path: {
+        /** @description 조회할 클럽의 ID */
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["LeagueReadResponse"][];
+        };
+      };
+    };
+  };
+  getLeagueByDate: {
+    parameters: {
+      query: {
+        /** @description 조회할 날짜, 'yyyy-MM-dd' 형식으로 입력 */
+        date: string;
+      };
+      header?: never;
+      path: {
+        /** @description 조회할 클럽의 ID */
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["LeagueByDateResponse"][];
         };
       };
     };
