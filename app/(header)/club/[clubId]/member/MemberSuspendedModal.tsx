@@ -76,7 +76,7 @@ function MemberSuspendedModal({
       },
       {
         onSuccess: () => {
-          alert("멤버 정지가 정상적으로 ");
+          alert("멤버 정지가 정상적으로 완료되었습니다.");
         },
       },
     );

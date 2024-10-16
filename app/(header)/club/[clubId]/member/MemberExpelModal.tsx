@@ -31,9 +31,16 @@ function MemberExpelModal({
   );
 
   const handleMemberExpel = (expelReason: string) => {
-    patchClubMembersExpel({
-      expel_reason: expelReason,
-    });
+    patchClubMembersExpel(
+      {
+        expel_reason: expelReason,
+      },
+      {
+        onSuccess: () => {
+          alert("멤버 내보내기가 정상적으로 완료되었습니다.");
+        },
+      },
+    );
   };
 
   return (
