@@ -2,7 +2,7 @@
 import { useGetLoginState, usePostLogout } from "@/lib/api/hooks/SessionHook";
 import { useGetMyInfo } from "@/lib/api/hooks/membersHook";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import SImage from "./Image";
 import { Input } from "./Input";
@@ -14,9 +14,18 @@ const PersonalSection = () => {
   const { mutate: logout } = usePostLogout();
   const { data } = useGetMyInfo(!!isLogin?.loggedIn);
   const clubId = data?.club_member_my_page_response?.club_id || null;
+  const router = useRouter();
 
   const handleProfileClick = () => {
     setShowMenu(!showMenu);
+  };
+
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        router.push("/");
+      },
+    });
   };
 
   if (!isLogin?.loggedIn) {
@@ -97,7 +106,7 @@ const PersonalSection = () => {
           </div>
           <div>
             <button
-              onClick={() => logout()}
+              onClick={() => handleLogout()}
               type="button"
               className="block w-full text-left text-primary text-sm cursor-pointer hover:underline"
             >
