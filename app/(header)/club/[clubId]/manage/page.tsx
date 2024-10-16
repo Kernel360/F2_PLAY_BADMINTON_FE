@@ -4,22 +4,28 @@ import ClubInfoInputDescription from "@/components/common/clubInfoInput/ClubInfo
 import ClubInfoInputImage from "@/components/common/clubInfoInput/ClubInfoInputImage";
 import ClubInfoInputName from "@/components/common/clubInfoInput/ClubInfoInputName";
 import { Button } from "@/components/ui/Button";
-import { usePatchClubs, usePostClubsImg } from "@/lib/api/hooks/clubHook";
+import {
+  useGetClubsById,
+  usePatchClubs,
+  usePostClubsImg,
+} from "@/lib/api/hooks/clubHook";
 import type { components } from "@/schemas/schema";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-type ClubDetailsResponse = components["schemas"]["ClubDetailsResponse"];
 type ClubUpdate = components["schemas"]["ClubUpdateRequest"];
 
-interface ClubManagePageProps {
-  clubData: ClubDetailsResponse;
-}
+function ClubManagePage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const clubId = Number(pathname.split("/")[2]);
 
-function ClubManagePage({ clubData }: ClubManagePageProps) {
-  const [imgUrl, setImgUrl] = useState<string>(clubData.club_image as string);
-  const { mutate: patchClub } = usePatchClubs(clubData.club_id ?? 0);
+  const { data, isLoading, error } = useGetClubsById(clubId);
+  const { mutate: patchClub } = usePatchClubs(clubId);
   const { mutate: patchClubImg } = usePostClubsImg();
+
+  const [imgUrl, setImgUrl] = useState<string | undefined>();
 
   const {
     register,
@@ -29,13 +35,18 @@ function ClubManagePage({ clubData }: ClubManagePageProps) {
     clearErrors,
     formState: { errors },
   } = useForm<ClubUpdate>({
-    defaultValues: {
-      club_name: clubData.club_name,
-      club_description: clubData.club_description,
-      club_image: imgUrl,
-    },
+    defaultValues: { club_name: "", club_description: "", club_image: "" },
     mode: "onBlur",
   });
+
+  useEffect(() => {
+    if (data) {
+      setValue("club_name", data.club_name || "");
+      setValue("club_description", data.club_description || "");
+      setValue("club_image", data.club_image || "");
+      setImgUrl(data.club_image || "/images/dummy-image.jpg");
+    }
+  }, [data, setValue]);
 
   const uploadImage = (file: File) => {
     const formData = new FormData();
@@ -56,76 +67,88 @@ function ClubManagePage({ clubData }: ClubManagePageProps) {
     });
   };
 
-  const handleUpdateclub = (data: ClubUpdate) => {
-    const newData: ClubUpdate = {
-      club_name: data.club_name,
-      club_description: data.club_description,
-      club_image: data.club_image,
-    };
-
-    patchClub(newData, {
-      onSuccess: () => {
-        alert("변경이 완료되었습니다!");
-      },
-    });
-  };
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       uploadImage(file);
     }
   };
 
+  const handleUpdateClub = (data: ClubUpdate) => {
+    patchClub(
+      {
+        club_name: data.club_name,
+        club_description: data.club_description,
+        club_image: imgUrl,
+      },
+      {
+        onSuccess: () => {
+          alert("동호회 정보가 성공적으로 업데이트되었습니다!");
+        },
+      },
+    );
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <form
-      onSubmit={handleSubmit(handleUpdateclub)}
-      method="patch"
-      className="flex space-x-8 w-full h-[464px] items-center"
+      onSubmit={handleSubmit(handleUpdateClub)}
+      method="post"
+      className="px-14 pt-8 w-full"
     >
-      <div className="flex flex-col gap-1 justify-center">
-        {/* 파일 선택 필드를 register로 관리 */}
-        <input
-          type="text"
-          className="hidden"
-          {...register("club_image", {
-            required: "이미지를 선택해주세요",
-          })}
-        />
-        <ClubInfoInputImage
-          imagePreview={imgUrl}
-          onImageChange={(e) => handleImageChange(e)}
-        />
-        {errors.club_image && (
-          <p className="text-red-500">{errors.club_image.message}</p>
-        )}
+      <div className="flex space-x-8 w-full h-[464px] items-center">
+        <div className="flex flex-col gap-1 justify-center">
+          <input
+            type="text"
+            className="hidden"
+            {...register("club_image", {
+              required: "이미지를 선택해주세요",
+            })}
+          />
+          <ClubInfoInputImage
+            imagePreview={imgUrl || "/images/dummy-image.jpg"}
+            onImageChange={onImageSelect}
+          />
+          {errors.club_image && (
+            <p className="text-red-500">{errors.club_image.message}</p>
+          )}
+        </div>
+        <div className="flex flex-col flex-1 h-[400px] gap-4">
+          <div className="flex flex-col gap-1">
+            <p className="text-black font-bold text-lg">동호회 이름</p>
+            <ClubInfoInputName
+              {...register("club_name", {
+                required: "동호회 이름을 입력하세요",
+              })}
+            />
+            {errors.club_name && (
+              <p className="text-red-500">{errors.club_name.message}</p>
+            )}
+          </div>
+          <div className="flex flex-col gap-1 h-full">
+            <p className="text-black font-bold text-lg">동호회 소개</p>
+            <ClubInfoInputDescription
+              {...register("club_description", {
+                required: "동호회 설명을 입력하세요",
+              })}
+            />
+            {errors.club_description && (
+              <p className="text-red-500">{errors.club_description.message}</p>
+            )}
+          </div>
+        </div>
       </div>
-      <div className="flex flex-col flex-1 h-[400px] gap-4">
-        <div className="flex flex-col gap-1">
-          <p className="text-black font-bold text-lg">동호회 이름</p>
-          <ClubInfoInputName
-            {...register("club_name", {
-              required: "동호회 이름을 입력하세요",
-            })}
-          />
-          {errors.club_name && (
-            <p className="text-red-500">{errors.club_name.message}</p>
-          )}
-        </div>
-        <div className="flex flex-col gap-1 h-full">
-          <p className="text-black font-bold text-lg">동호회 소개</p>
-          <ClubInfoInputDescription
-            {...register("club_description", {
-              required: "동호회 설명을 입력하세요",
-            })}
-          />
-          {errors.club_description && (
-            <p className="text-red-500">{errors.club_description.message}</p>
-          )}
-        </div>
-        <div className="w-full flex justify-end">
-          <Button className="place-items-end">변경 저장</Button>
-        </div>
+      <div className="flex justify-center items-center gap-4">
+        <Button size="lg" type="submit">
+          변경 저장
+        </Button>
       </div>
     </form>
   );

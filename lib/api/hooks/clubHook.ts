@@ -52,6 +52,7 @@ export const usePatchClubs = (clubId: number) => {
       patchClubs(clubUpdateData, clubId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clubsData"] });
+      queryClient.invalidateQueries({ queryKey: ["clubsDataById"] });
     },
     onError: (error: Error) => alert(error),
   });
