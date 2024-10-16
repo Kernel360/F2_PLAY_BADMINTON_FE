@@ -17,6 +17,20 @@ function ClubIntroPage() {
   const clubId = Number(pathname.split("/")[2]);
   const { data: clubData, isLoading, error } = useGetClubsById(clubId);
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[464px] w-full">
+        Loading...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-red-500">데이터를 불러오는 데 실패했습니다.</div>
+    );
+  }
+
   return (
     <div className="flex space-x-8 w-full h-[464px] items-center">
       <div className="w-[400px] flex flex-col items-center gap-2">
@@ -88,10 +102,8 @@ function ClubIntroPage() {
           <div className="flex text-black mt-3 gap-4">
             <p className="font-bold">개설일</p>
             <p>
-              {format(
-                new Date(clubData?.created_at as string),
-                "yyyy년 MM월 dd일",
-              )}
+              {clubData?.created_at !== undefined &&
+                format(new Date(clubData?.created_at), "yyyy년 MM월 dd일")}
             </p>
           </div>
           <div className="flex text-black mt-3 gap-4">
