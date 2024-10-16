@@ -2,9 +2,11 @@
 
 import { Button } from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
+import { useGetMembersMyPage } from "@/lib/api/hooks/memberHook";
+import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { ImagePlus } from "lucide-react";
 import type React from "react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MyOneGameResult from "./MyOneGameResult";
 
 const matches = [
@@ -88,12 +90,24 @@ const matches = [
 ];
 
 function My() {
+  const { data, isLoading, error } = useGetMembersMyPage();
+
   const [infoUpdate, setInfoUpdate] = useState(false);
-  const [userImg, setUserImg] = useState("/images/dummy-image.jpg");
-  const [userName, setUserName] = useState("유저이름");
+  const [userImg, setUserImg] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(5);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (data?.name) {
+      setUserName(data?.name);
+    }
+
+    if (data?.profile_image) {
+      setUserImg(data?.profile_image);
+    }
+  }, [data]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -126,7 +140,7 @@ function My() {
         <div className="relative w-64 h-64 rounded-full">
           <img
             alt="previewImg"
-            src={userImg}
+            src={userImg || "/images/dummy-image.jpg"}
             className="object-cover w-full h-full rounded-full"
           />
           <input
@@ -146,7 +160,7 @@ function My() {
 
     return (
       <img
-        src={userImg}
+        src={userImg || "/images/dummy-image.jpg"}
         alt="userImg"
         className="object-cover w-64 h-64 rounded-full"
       />
@@ -165,7 +179,7 @@ function My() {
                 <input
                   type="text"
                   className="text-black text-lg rounded-md border border-gray-400 px-1"
-                  value={userName}
+                  value={userName || "none"}
                   onChange={(e) => setUserName(e.target.value)}
                   maxLength={16}
                 />
@@ -174,22 +188,29 @@ function My() {
               )}
             </div>
             <div className="flex justify-between items-center gap-4">
-              <p className="text-black font-bold text-lg">소속 동호회 이름</p>
+              <p className="text-black font-bold text-lg">소속</p>
+              <p className="text-black text-lg">
+                {data?.club_member_my_page_response?.club_name}
+              </p>
             </div>
             <div className="flex items-center gap-4">
               <p className="text-black font-bold text-lg">티어</p>
               <div className="flex items-center gap-1">
-                <img
-                  src="/images/tier-gold.png"
-                  alt="userTier"
-                  className="w-8 h-8"
-                />
-                <p className="text-black">골드</p>
+                <p className="text-black text-lg">
+                  {getTierWithEmoji(
+                    data?.club_member_my_page_response?.tier || "",
+                  )}
+                </p>
               </div>
             </div>
-            <div className="flex justify-between items-center gap-4">
+            <div className="flex items-center gap-4">
               <p className="text-black font-bold text-lg">전적</p>
-              <p className="text-black">00전 | 00승 | 00무 | 00패</p>
+              <p className="text-black">
+                {data?.league_record_info?.match_count}전 |{" "}
+                {data?.league_record_info?.win_count}승 |{" "}
+                {data?.league_record_info?.draw_count}무 |{" "}
+                {data?.league_record_info?.lose_count}패
+              </p>
             </div>
           </div>
         </div>
