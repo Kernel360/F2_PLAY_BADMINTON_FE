@@ -8,15 +8,15 @@ import {
 import type React from "react";
 import { useState } from "react";
 
-interface MemberRollChangeProps {
-  openSuspended: boolean;
-  handleSuspendedDialog: () => void;
+interface MemberSuspendedModalProps {
+  openSuspendedModal: boolean;
+  handleSuspendedModal: () => void;
 }
 
-function MemberSuspended({
-  openSuspended,
-  handleSuspendedDialog,
-}: MemberRollChangeProps) {
+function MemberSuspendedModal({
+  openSuspendedModal,
+  handleSuspendedModal,
+}: MemberSuspendedModalProps) {
   const [selectedSuspendedDay, setSelectedSuspendedDay] = useState(0);
 
   const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +39,7 @@ function MemberSuspended({
   ];
 
   return (
-    <Dialog open={openSuspended} onOpenChange={handleSuspendedDialog}>
+    <Dialog open={openSuspendedModal} onOpenChange={handleSuspendedModal}>
       <DialogContent className="text-black">
         <DialogHeader>
           <DialogTitle>정지 기간</DialogTitle>
@@ -75,4 +75,4 @@ function MemberSuspended({
   );
 }
 
-export default MemberSuspended;
+export default MemberSuspendedModal;

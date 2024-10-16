@@ -8,15 +8,15 @@ import {
 import type React from "react";
 import { useState } from "react";
 
-interface MemberRollChangeProps {
-  openRollChange: boolean;
-  handleRollDialog: () => void;
+interface MemberRollModalProps {
+  openRollModal: boolean;
+  handleRollModal: () => void;
 }
 
-function MemberRollChange({
-  openRollChange,
-  handleRollDialog,
-}: MemberRollChangeProps) {
+function MemberRollModal({
+  openRollModal,
+  handleRollModal,
+}: MemberRollModalProps) {
   const [selectedRole, setSelectedRole] = useState("");
 
   const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +39,7 @@ function MemberRollChange({
   ];
 
   return (
-    <Dialog open={openRollChange} onOpenChange={handleRollDialog}>
+    <Dialog open={openRollModal} onOpenChange={handleRollModal}>
       <DialogContent className="text-black">
         <DialogHeader>
           <DialogTitle>멤버 역할 교체</DialogTitle>
@@ -70,4 +70,4 @@ function MemberRollChange({
   );
 }
 
-export default MemberRollChange;
+export default MemberRollModal;
