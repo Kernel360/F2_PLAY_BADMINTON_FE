@@ -6,6 +6,8 @@ type ClubCreateRequest = components["schemas"]["ClubCreateRequest"];
 type ClubCreateResponse = components["schemas"]["ClubCreateResponse"];
 type ClubDetailsResponse = components["schemas"]["ClubDetailsResponse"];
 type ClubUpdateRequest = components["schemas"]["ClubUpdateRequest"];
+type ClubUpdateResponse = components["schemas"]["ClubUpdateResponse"];
+
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 export async function getClubs(): Promise<Club[]> {
@@ -68,6 +70,24 @@ export const getClubsById = async (
 
   if (!response.ok) {
     throw new Error("동호회 정보를 받아오는데 실패했습니다.");
+  }
+
+  return response.json();
+};
+
+export const patchClubs = async (
+  clubUpdateData: ClubUpdateRequest,
+  clubId: number,
+): Promise<ClubUpdateResponse> => {
+  const response = await fetch(`${BASE_URL}/clubs/${clubId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(clubUpdateData),
+  });
+
+  if (!response.ok) {
+    throw new Error("동호회 정보 수정에 실패했습니다.");
   }
 
   return response.json();
