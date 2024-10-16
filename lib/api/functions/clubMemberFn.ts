@@ -9,28 +9,20 @@ interface ClubMembersData {
   ROLE_USER: ClubMemberResponse[];
 }
 
-export async function getClubMembers(): Promise<ClubMembersData> {
-  try {
-    /* TODO(iamgyu): 현재 ID가 지정해준 값으로 들어가 있기 때문에 추후에 변경 필요 */
-    const response = await fetch(`${BASE_URL}/clubs/1/clubMembers`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+export const getClubMembers = async (
+  clubId: number,
+): Promise<ClubMembersData> => {
+  const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data as ClubMembersData;
-  } catch (error) {
-    console.error(error);
-    return {
-      ROLE_OWNER: [],
-      ROLE_MANAGER: [],
-      ROLE_USER: [],
-    };
+  if (!response.ok) {
+    throw new Error("멤버 정보 조회에 실패했습니다.");
   }
-}
+
+  return response.json();
+};

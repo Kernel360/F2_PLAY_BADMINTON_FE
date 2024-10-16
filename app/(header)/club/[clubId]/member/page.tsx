@@ -5,12 +5,11 @@ import type { components } from "@/schemas/schema";
 import React, { useState } from "react";
 import MemberInfo from "./MemberInfo";
 
-type ClubMemberResponse = components["schemas"]["ClubMemberResponse"];
 type LeagueRecordInfoResponse =
   components["schemas"]["LeagueRecordInfoResponse"];
 
 function ClubMemberPage() {
-  const { data, error, isLoading } = useGetClubMembers();
+  const { data, error, isLoading } = useGetClubMembers(1);
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>();
 
   const toggleDropdown = (index: number) => {
