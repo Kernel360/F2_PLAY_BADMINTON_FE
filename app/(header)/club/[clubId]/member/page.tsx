@@ -29,7 +29,7 @@ function ClubMemberPage() {
   }
 
   const members = [
-    ...data.ROLE_OWNER,
+    ...(data.ROLE_OWNER ?? []),
     ...(data.ROLE_MANAGER ?? []),
     ...(data.ROLE_USER ?? []),
   ];

@@ -5,6 +5,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { usePatchClubMembersRole } from "@/lib/api/hooks/clubMemberHook";
+import type { components } from "@/schemas/schema";
+import { usePathname } from "next/navigation";
 import type React from "react";
 import { useState } from "react";
 
@@ -14,13 +17,22 @@ interface MemberRoleModalProps {
   handleRoleModal: () => void;
 }
 
+type ClubMemberRoleUpdate =
+  components["schemas"]["ClubMemberRoleUpdateRequest"];
+
 function MemberRoleModal({
+  clubMemberId,
   openRoleModal,
   handleRoleModal,
 }: MemberRoleModalProps) {
+  const pathname = usePathname();
+  const clubId = Number(pathname.split("/")[2]);
   const [selectedRole, setSelectedRole] = useState("");
+  const { mutate: patchClubMembersRole } = usePatchClubMembersRole(
+    clubId,
+    clubMemberId,
+  );
 
-  console.log(selectedRole);
   const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedRole(e.target.value);
   };
@@ -53,6 +65,22 @@ function MemberRoleModal({
     }
   };
 
+  const handleMemberRole = (memberRoll: string) => {
+    const newMemberRoll: ClubMemberRoleUpdate = {
+      role: memberRoll as
+        | "ROLE_OWNER"
+        | "ROLE_MANAGER"
+        | "ROLE_USER"
+        | undefined,
+    };
+
+    patchClubMembersRole(newMemberRoll, {
+      onSuccess: () => {
+        alert(`멤버의 역할이 ${newMemberRoll.role}로 변경되었습니다.`);
+      },
+    });
+  };
+
   return (
     <Dialog open={openRoleModal} onOpenChange={handleRoleModal}>
       <DialogContent className="text-black">
@@ -76,7 +104,10 @@ function MemberRoleModal({
               </div>
             ))}
           </div>
-          <DialogClose className="bg-primary text-white rounded-md px-6 py-2">
+          <DialogClose
+            className="bg-primary text-white rounded-md px-6 py-2"
+            onClick={() => handleMemberRole(changeRoleWord(selectedRole))}
+          >
             교체
           </DialogClose>
         </div>
