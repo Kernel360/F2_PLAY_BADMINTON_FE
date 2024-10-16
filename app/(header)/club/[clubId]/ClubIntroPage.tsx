@@ -1,4 +1,6 @@
 import type { components } from "@/schemas/schema";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 import Image from "next/image";
 import React from "react";
 
@@ -13,12 +15,8 @@ function ClubIntroPage({ clubData }: ClubIntroPageProps) {
     return <div>No data available</div>;
   }
 
-  const date = new Date(clubData.created_at as string);
-  const formattedDate = date.toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const createdDate = new Date(clubData.created_at as string);
+  const formattedDate = format(createdDate, "yyyy년 MMMM d일", { locale: ko });
 
   return (
     <div className="flex space-x-8 w-full h-[464px] items-center">
