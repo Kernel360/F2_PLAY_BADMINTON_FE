@@ -7,14 +7,14 @@ type MonthLeaguesResponse = components["schemas"]["LeagueReadResponse"];
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 export const postLeagues = async (
-  clubData: LeagueCreateRequest,
+  leagueData: LeagueCreateRequest,
   clubId: number,
 ): Promise<LeagueCreateResponse> => {
   const response = await fetch(`${BASE_URL}/clubs/${clubId}/leagues`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify(clubData),
+    body: JSON.stringify(leagueData),
   });
   if (!response.ok) {
     throw new Error("경기 생성에 실패했습니다.");
