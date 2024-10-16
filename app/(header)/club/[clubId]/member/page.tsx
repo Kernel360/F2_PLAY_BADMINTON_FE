@@ -2,14 +2,16 @@
 
 import { useGetClubMembers } from "@/lib/api/hooks/clubMemberHook";
 import type { components } from "@/schemas/schema";
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import MemberInfo from "./MemberInfo";
 
-type LeagueRecordInfoResponse =
-  components["schemas"]["LeagueRecordInfoResponse"];
+type ClubMemberResponse = components["schemas"]["ClubMemberResponse"];
 
-function ClubMemberPage({ clubId }: { clubId: number }) {
-  const { data, error, isLoading } = useGetClubMembers(clubId);
+function ClubMemberPage() {
+  const pathname = usePathname();
+  const clubId = Number(pathname.split("/")[2]);
+  const { data, error, isLoading } = useGetClubMembers(clubId as number);
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>();
 
   const toggleDropdown = (index: number) => {
@@ -44,13 +46,8 @@ function ClubMemberPage({ clubId }: { clubId: number }) {
         {members.map((member) => (
           <MemberInfo
             key={member.club_member_id}
+            memberData={member as ClubMemberResponse}
             isOpen={openDropdownIndex === member.club_member_id}
-            image={member.image as string}
-            name={member.name as string}
-            role={member.role as string}
-            leagueRecordInfoResponse={
-              member.league_record_info_response as LeagueRecordInfoResponse
-            }
             onToggle={() => toggleDropdown(member.club_member_id as number)}
           />
         ))}
