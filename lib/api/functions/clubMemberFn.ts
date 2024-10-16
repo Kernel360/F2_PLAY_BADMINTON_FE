@@ -1,6 +1,8 @@
 import type { components } from "@/schemas/schema";
 
 type ClubMemberResponse = components["schemas"]["ClubMemberResponse"];
+type ClubMemberJoinResponse = components["schemas"]["ClubMemberJoinResponse"];
+
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 interface ClubMembersData {
@@ -34,3 +36,19 @@ export async function getClubMembers(): Promise<ClubMembersData> {
     };
   }
 }
+
+export const postClubMembers = async (
+  clubId: number,
+): Promise<ClubMemberJoinResponse> => {
+  const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("동호회 가입 신청에 실패했습니다.");
+  }
+
+  return response.json();
+};

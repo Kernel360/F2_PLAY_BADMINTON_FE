@@ -1,21 +1,16 @@
 "use client";
 
 import { useGetClubsById } from "@/lib/api/hooks/clubHook";
-import type { components } from "@/schemas/schema";
+import { usePostClubMembers } from "@/lib/api/hooks/clubMemberHook";
 import { format } from "date-fns";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-
-type ClubDetailsResponse = components["schemas"]["ClubDetailsResponse"];
-
-interface ClubIntroPageProps {
-  clubData: ClubDetailsResponse | null;
-}
 
 function ClubIntroPage() {
   const pathname = usePathname();
   const clubId = Number(pathname.split("/")[2]);
   const { data: clubData, isLoading, error } = useGetClubsById(clubId);
+  const { mutate: postClubMembers } = usePostClubMembers(clubId);
 
   if (isLoading) {
     return (
@@ -31,6 +26,12 @@ function ClubIntroPage() {
     );
   }
 
+  const handlePostClubMember = () => {
+    postClubMembers(undefined, {
+      onSuccess: () => alert("동호회 가입에 성공하였습니다!"),
+    });
+  };
+
   return (
     <div className="flex space-x-8 w-full h-[464px] items-center">
       <div className="w-[400px] flex flex-col items-center gap-2">
@@ -44,6 +45,7 @@ function ClubIntroPage() {
         <button
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
           type="button"
+          onClick={handlePostClubMember}
         >
           동호회 참여하기
         </button>
