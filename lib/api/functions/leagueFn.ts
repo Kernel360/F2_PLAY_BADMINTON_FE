@@ -45,7 +45,7 @@ export const getMonthLeagues = async (
 export const getDateLeagues = async (
   clubId: number,
   date: string,
-): Promise<MonthLeaguesResponse> => {
+): Promise<MonthLeaguesResponse[]> => {
   const response = await fetch(
     `${BASE_URL}/clubs/${clubId}/leagues/date?date=${date}`,
     {
