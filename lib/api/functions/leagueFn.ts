@@ -27,7 +27,7 @@ export const getMonthLeagues = async (
   date: string,
 ): Promise<MonthLeaguesResponse> => {
   const response = await fetch(
-    `${BASE_URL}/clubs/${clubId}/leagues?date=${date}`,
+    `${BASE_URL}/clubs/${clubId}/leagues/month?date=${date}`,
     {
       method: "GET",
       headers: {
@@ -38,6 +38,26 @@ export const getMonthLeagues = async (
   );
   if (!response.ok) {
     throw new Error("리그 정보를 확인할 수 없습니다.");
+  }
+  return response.json();
+};
+
+export const getDateLeagues = async (
+  clubId: number,
+  date: string,
+): Promise<MonthLeaguesResponse> => {
+  const response = await fetch(
+    `${BASE_URL}/clubs/${clubId}/leagues/date?date=${date}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    },
+  );
+  if (!response.ok) {
+    throw new Error("리그 일별 정보를 확인할 수 없습니다.");
   }
   return response.json();
 };
