@@ -21,8 +21,8 @@ function MemberInfo({ memberData, isOpen, onToggle }: MemberInfoProps) {
   const { win_count, lose_count, draw_count, match_count } =
     (memberData.league_record_info_response as LeagueRecordInfoResponse) || 0;
 
-  const changeRoleWord = (roll: string) => {
-    switch (roll) {
+  const changeRoleWord = (role: string) => {
+    switch (role) {
       case "ROLE_OWNER":
         return "회장";
       case "ROLE_MANAGER":
@@ -59,7 +59,9 @@ function MemberInfo({ memberData, isOpen, onToggle }: MemberInfoProps) {
         <IconButton size="sm" color="transparent" onClick={onToggle}>
           <AlignJustify width="80%" height="80%" className="text-gray-400" />
         </IconButton>
-        {isOpen && <MemberDropDown />}
+        {isOpen && (
+          <MemberDropDown clubMemberId={memberData.club_member_id as number} />
+        )}
       </div>
     </div>
   );

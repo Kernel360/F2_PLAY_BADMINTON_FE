@@ -2,16 +2,16 @@
 
 import React, { useState } from "react";
 import MemberExpelModal from "./MemberExpelModal";
-import MemberRollModal from "./MemberRollModal";
+import MemberRoleModal from "./MemberRoleModal";
 import MemberSuspendedModal from "./MemberSuspendedModal";
 
-function MemberDropDown() {
-  const [openRollModal, setOpenRollModal] = useState(false);
+function MemberDropDown({ clubMemberId }: { clubMemberId: number }) {
+  const [openRoleModal, setOpenRoleModal] = useState(false);
   const [openSuspendedModal, setOpenSuspendedModal] = useState(false);
   const [openExpelModal, setOpenExpelModal] = useState(false);
 
-  const handleRollModal = () => {
-    setOpenRollModal(!openRollModal);
+  const handleRoleModal = () => {
+    setOpenRoleModal(!openRoleModal);
   };
 
   const handleSuspendedModal = () => {
@@ -26,7 +26,7 @@ function MemberDropDown() {
     <>
       <div className="absolute top-12 right-0 w-24 bg-white border border-gray-400 rounded-md shadow-lg z-50">
         <ul className="py-2">
-          <button type="button" className="w-full" onClick={handleRollModal}>
+          <button type="button" className="w-full" onClick={handleRoleModal}>
             <li className="py-2 text-gray-400 hover:bg-gray-100 cursor-pointer">
               역할 변경
             </li>
@@ -46,10 +46,11 @@ function MemberDropDown() {
             </li>
           </button>
         </ul>
-        {openRollModal && (
-          <MemberRollModal
-            openRollModal={openRollModal}
-            handleRollModal={handleRollModal}
+        {openRoleModal && (
+          <MemberRoleModal
+            clubMemberId={clubMemberId}
+            openRoleModal={openRoleModal}
+            handleRoleModal={handleRoleModal}
           />
         )}
         {openSuspendedModal && (

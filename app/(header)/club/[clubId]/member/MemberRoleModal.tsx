@@ -8,17 +8,19 @@ import {
 import type React from "react";
 import { useState } from "react";
 
-interface MemberRollModalProps {
-  openRollModal: boolean;
-  handleRollModal: () => void;
+interface MemberRoleModalProps {
+  clubMemberId: number;
+  openRoleModal: boolean;
+  handleRoleModal: () => void;
 }
 
-function MemberRollModal({
-  openRollModal,
-  handleRollModal,
-}: MemberRollModalProps) {
+function MemberRoleModal({
+  openRoleModal,
+  handleRoleModal,
+}: MemberRoleModalProps) {
   const [selectedRole, setSelectedRole] = useState("");
 
+  console.log(selectedRole);
   const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedRole(e.target.value);
   };
@@ -38,8 +40,21 @@ function MemberRollModal({
     },
   ];
 
+  const changeRoleWord = (role: string) => {
+    switch (role) {
+      case "회장":
+        return "ROLE_OWNER";
+      case "매니저":
+        return "ROLE_MANAGER";
+      case "회원":
+        return "ROLE_MANAGER";
+      default:
+        return "";
+    }
+  };
+
   return (
-    <Dialog open={openRollModal} onOpenChange={handleRollModal}>
+    <Dialog open={openRoleModal} onOpenChange={handleRoleModal}>
       <DialogContent className="text-black">
         <DialogHeader>
           <DialogTitle>멤버 역할 교체</DialogTitle>
@@ -70,4 +85,4 @@ function MemberRollModal({
   );
 }
 
-export default MemberRollModal;
+export default MemberRoleModal;
