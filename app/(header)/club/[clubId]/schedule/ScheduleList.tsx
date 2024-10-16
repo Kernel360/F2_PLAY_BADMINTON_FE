@@ -4,7 +4,7 @@ import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { format } from "date-fns";
 import { CalendarPlus } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import { usePathname } from "next/navigation";
 
 const schedules = [
   {
@@ -95,20 +95,21 @@ interface ScheduleListProps {
 
 function ScheduleList(props: ScheduleListProps) {
   const { selectedDate } = props;
+  const clubId = usePathname().split("/")[2];
 
   return (
     <div className="w-full px-6 py-3 bg-white relative">
       {/* TODO(Yejin0O0): api 연동 시 링크 수정 작업 필요 */}
-      {/* <Link href="/club/clubId/schedule/create"> */}
-      <IconButton
-        size="sm"
-        color="transparent"
-        radius="round"
-        className="group hover:bg-primary hover:text-white absolute -right-4 -top-4"
-      >
-        <CalendarPlus className="text-primary group-hover:text-white" />
-      </IconButton>
-      {/* </Link> */}
+      <Link href={`/club/${clubId}/schedule/create`}>
+        <IconButton
+          size="sm"
+          color="transparent"
+          radius="round"
+          className="group hover:bg-primary hover:text-white absolute -right-4 -top-4"
+        >
+          <CalendarPlus className="text-primary group-hover:text-white" />
+        </IconButton>
+      </Link>
       <div className="mb-5 text-center">
         <h1 className="text-2xl font-extrabold text-gray-800">
           {format(selectedDate, "yyyy년 MM월 dd일")}
