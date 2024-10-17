@@ -57,7 +57,7 @@ function MatchPage() {
 
   return (
     <div>
-      <div className="flex gap-10 w-full flex-wrap mt-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         {singleGames.map((match) => {
           if (!match.singles_match) {
             return null;
@@ -78,7 +78,7 @@ function MatchPage() {
         })}
       </div>
 
-      <div className="flex gap-10 w-full flex-wrap mt-5">
+      <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-10 w-full flex-wrap mt-5">
         {doubleGames.map((match) => {
           if (!match.doubles_match) {
             return null;
