@@ -2,7 +2,11 @@
 
 import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
-import { useGetLeagueDetail } from "@/lib/api/hooks/leagueHook";
+import {
+  useDeleteParticipateLeague,
+  useGetLeagueDetail,
+  usePostParticipateLeague,
+} from "@/lib/api/hooks/leagueHook";
 import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { format } from "date-fns";
 import {
@@ -23,7 +27,6 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 function LeaguePage() {
-  const [isParticipant, setIsParticipant] = useState(false);
   const pathname = usePathname();
   const clubId = Number(pathname.split("/")[2]);
   const leagueId = Number(pathname.split("/")[4]);
@@ -32,9 +35,25 @@ function LeaguePage() {
     isLoading,
     error,
   } = useGetLeagueDetail(clubId, leagueId);
+  const { mutate: postParticipate } = usePostParticipateLeague(
+    clubId,
+    leagueId,
+  );
+  const { mutate: deleteParticipate } = useDeleteParticipateLeague(
+    clubId,
+    leagueId,
+  );
 
-  const handleParticipationToggle = () => {
-    setIsParticipant(!isParticipant);
+  const handleParticipate = (isParticipate: boolean) => {
+    if (!isParticipate) {
+      postParticipate(undefined, {
+        onSuccess: () => alert("경기 신청이 완료되었습니다"),
+      });
+    } else {
+      deleteParticipate(undefined, {
+        onSuccess: () => alert("경기 신청 취소가 완료되었습니다"),
+      });
+    }
   };
 
   const getRecruitmentStatusLabel = (status: string) => {
@@ -191,7 +210,7 @@ function LeaguePage() {
             league?.is_participated_in_league ? "destructive" : "default"
           }
           className="items-center justify-center gap-2 border-primary w-1/3"
-          onClick={handleParticipationToggle}
+          onClick={() => handleParticipate(!!league?.is_participated_in_league)}
         >
           <User size={20} />
           {league?.is_participated_in_league ? "참가 취소" : "참가하기"}

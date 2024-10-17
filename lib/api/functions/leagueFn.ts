@@ -4,6 +4,10 @@ type LeagueCreateRequest = components["schemas"]["LeagueCreateRequest"];
 type LeagueCreateResponse = components["schemas"]["LeagueCreateResponse"];
 type MonthLeaguesResponse = components["schemas"]["LeagueReadResponse"];
 type LeagueDetailResponse = components["schemas"]["LeagueDetailsResponse"];
+type LeagueParticipantResponse =
+  components["schemas"]["LeagueParticipantResponse"];
+type LeagueParticipationCancelResponse =
+  components["schemas"]["LeagueParticipationCancelResponse"];
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
@@ -80,5 +84,45 @@ export const getLeagueDetail = async (
   if (!response.ok) {
     throw new Error("리그 일별 정보를 확인할 수 없습니다.");
   }
+  return response.json();
+};
+
+export const postParticipateLeague = async (
+  clubId: number,
+  leagueId: number,
+): Promise<LeagueParticipantResponse> => {
+  const response = await fetch(
+    `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}/participation`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("경기 참여 신청에 실패했습니다. ");
+  }
+
+  return response.json();
+};
+
+export const deleteParticipateLeague = async (
+  clubId: number,
+  leagueId: number,
+): Promise<LeagueParticipationCancelResponse> => {
+  const response = await fetch(
+    `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}/participation`,
+    {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("경기 참여 취소에 실패했습니다. ");
+  }
+
   return response.json();
 };
