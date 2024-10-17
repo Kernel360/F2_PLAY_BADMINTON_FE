@@ -4,2254 +4,2323 @@
  */
 
 export interface paths {
-    "/v1/members/profileImage": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * 프로필 사진을 수정합니다
-         * @description 프로필 사진을 수정합니다. 다음 조건을 만족해야 합니다:
-         *
-         *     1. 프로필 이미지 URL:
-         *        - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
-         *        - 경로: /member-profile/로 시작
-         *        - 파일 확장자: png, jpg, jpeg, gif 중 하나
-         */
-        put: operations["updateProfileImage"];
-        /**
-         * 프로필 사진을 S3에 업로드 합니다
-         * @description 프로필 사진을 S3에 업로드합니다
-         */
-        post: operations["uploadProfileImage"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  "/v1/members/profileImage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/members/win": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 승리 기록 추가
-         * @description 회원의 리그 기록에 승리를 추가합니다
-         */
-        post: operations["addWin"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    /**
+     * 프로필 사진을 수정합니다
+     * @description 프로필 사진을 수정합니다. 다음 조건을 만족해야 합니다:
+     *
+     *     1. 프로필 이미지 URL:
+     *        - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
+     *        - 경로: /member-profile/로 시작
+     *        - 파일 확장자: png, jpg, jpeg, gif 중 하나
+     */
+    put: operations["updateProfileImage"];
+    /**
+     * 프로필 사진을 S3에 업로드 합니다
+     * @description 프로필 사진을 S3에 업로드합니다
+     */
+    post: operations["uploadProfileImage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/members/win": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/members/refresh": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 액세스 토큰을 재발급합니다
-         * @description 리프레시 토큰을 이용해서 액세스 토큰을 재발급합니다
-         */
-        post: operations["refreshToken"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * 승리 기록 추가
+     * @description 회원의 리그 기록에 승리를 추가합니다
+     */
+    post: operations["addWin"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/members/refresh": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/members/lose": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 패배 기록 추가
-         * @description 회원의 리그 기록에 패배를 추가합니다
-         */
-        post: operations["addLose"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * 액세스 토큰을 재발급합니다
+     * @description 리프레시 토큰을 이용해서 액세스 토큰을 재발급합니다
+     */
+    post: operations["refreshToken"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/members/lose": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/members/logout": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 로그아웃을 합니다
-         * @description 쿠키에서 JWT 토큰을 제거해 로그아웃을 합니다
-         */
-        post: operations["logout"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * 패배 기록 추가
+     * @description 회원의 리그 기록에 패배를 추가합니다
+     */
+    post: operations["addLose"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/members/logout": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 전체 동호회 조회
-         * @description 전체 동호회를 조회합니다.
-         */
-        get: operations["readAllClub"];
-        put?: never;
-        /**
-         * 동호회 추가
-         * @description 새로운 동호회를 생성합니다. 다음 조건을 만족해야 합니다:
-         *
-         *     1. 동호회 이름:
-         *        - 필수 입력
-         *        - 2자 이상 20자 이하
-         *
-         *     2. 동호회 소개:
-         *        - 2자 이상 1000자 이하
-         *
-         *     3. 동호회 이미지 URL:
-         *        - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
-         *        - 경로: /club-banner/로 시작
-         *        - 파일 확장자: png, jpg, jpeg, gif 중 하나
-         *        - https://badminton-team.s3.ap-northeast-2.amazonaws.com/club-banner/85e45bf0-2f68-4566-b17d-0f08c8b2c333/banner.png
-         *
-         */
-        post: operations["createClub"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * 로그아웃을 합니다
+     * @description 쿠키에서 JWT 토큰을 제거해 로그아웃을 합니다
+     */
+    post: operations["logout"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/leagues": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 경기를 생성합니다.
-         * @description 경기 생성하고를 데이터베이스에 저장합니다.
-         */
-        post: operations["createLeague"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * 전체 동호회 조회
+     * @description 전체 동호회를 조회합니다.
+     */
+    get: operations["readAllClub"];
+    put?: never;
+    /**
+     * 동호회 추가
+     * @description 새로운 동호회를 생성합니다. 다음 조건을 만족해야 합니다:
+     *
+     *     1. 동호회 이름:
+     *        - 필수 입력
+     *        - 2자 이상 20자 이하
+     *
+     *     2. 동호회 소개:
+     *        - 2자 이상 1000자 이하
+     *
+     *     3. 동호회 이미지 URL:
+     *        - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
+     *        - 경로: /club-banner/로 시작
+     *        - 파일 확장자: png, jpg, jpeg, gif 중 하나
+     *        - https://badminton-team.s3.ap-northeast-2.amazonaws.com/club-banner/85e45bf0-2f68-4566-b17d-0f08c8b2c333/banner.png
+     *
+     */
+    post: operations["createClub"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/leagues": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/leagues/{leagueId}/participation": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 경기 참여 신청
-         * @description 동호회 회원이 경기 일정에 참여 신청을 합니다.
-         */
-        post: operations["participateInLeague"];
-        /**
-         * 경기 참여 신청 취소
-         * @description 경기 참여 신청을 취소합니다.
-         */
-        delete: operations["cancelLeagueParticipation"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * 경기를 생성합니다.
+     * @description 경기 생성하고를 데이터베이스에 저장합니다.
+     */
+    post: operations["createLeague"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/leagues/{leagueId}/participation": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/leagues/{leagueId}/matches": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 대진표 조회
-         * @description 대진표를 조회합니다.
-         */
-        get: operations["getAllMatches"];
-        put?: never;
-        /**
-         * 대진표 생성
-         * @description 대진표를 생성합니다.
-         */
-        post: operations["makeMatches"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * 경기 참여 신청
+     * @description 동호회 회원이 경기 일정에 참여 신청을 합니다.
+     */
+    post: operations["participateInLeague"];
+    /**
+     * 경기 참여 신청 취소
+     * @description 경기 참여 신청을 취소합니다.
+     */
+    delete: operations["cancelLeagueParticipation"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/leagues/{leagueId}/matches": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/leagues/{leagueId}/matches/{matchId}/sets/{setIndex}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** 세트별 점수 저장 */
-        post: operations["updateSetsScore"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * 대진표 조회
+     * @description 대진표를 조회합니다.
+     */
+    get: operations["getAllMatches"];
+    put?: never;
+    /**
+     * 대진표 생성
+     * @description 대진표를 생성합니다.
+     */
+    post: operations["makeMatches"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/leagues/{leagueId}/matches/{matchId}/sets/{setIndex}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/clubMembers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 동호회 회원 전체 조회
-         * @description 동호회에 가입한 회원들의 리스트를 조회합니다.
-         */
-        get: operations["getClubMembersInClub"];
-        put?: never;
-        /**
-         * 동호회 가입 신청
-         * @description 동호회에 가입을 신청합니다.
-         */
-        post: operations["joinClub"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** 세트별 점수 저장 */
+    post: operations["updateSetsScore"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/clubMembers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/images": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 클럽 이미지 업로드
-         * @description 이미지를 S3에 업로드하는 API 입니다.
-         */
-        post: operations["saveImage"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * 동호회 회원 전체 조회
+     * @description 동호회에 가입한 회원들의 리스트를 조회합니다.
+     */
+    get: operations["getClubMembersInClub"];
+    put?: never;
+    /**
+     * 동호회 가입 신청
+     * @description 동호회에 가입을 신청합니다.
+     */
+    post: operations["joinClub"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/images": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 동호회 조회
-         * @description 동호회를 조회합니다.
-         */
-        get: operations["readClub"];
-        put?: never;
-        post?: never;
-        /**
-         * 동호회 삭제
-         * @description 동호회를 삭제합니다.
-         */
-        delete: operations["deleteClub"];
-        options?: never;
-        head?: never;
-        /**
-         * 동호회 수정
-         * @description 새로운 동호회를 수정합니다. 다음 조건을 만족해야 합니다:
-         *
-         *     1. 동호회 이름:
-         *        - 필수 입력
-         *        - 2자 이상 20자 이하
-         *
-         *     2. 동호회 소개:
-         *        - 2자 이상 1000자 이하
-         *
-         *     3. 동호회 이미지 URL:
-         *        - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
-         *        - 경로: /club-banner/로 시작
-         *        - 파일 확장자: png, jpg, jpeg, gif 중 하나
-         */
-        patch: operations["updateClub"];
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * 클럽 이미지 업로드
+     * @description 이미지를 S3에 업로드하는 API 입니다.
+     */
+    post: operations["saveImage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/leagues/{leagueId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 특정 경기를 조회합니다.
-         * @description 특정 경기를 경기 아이디를 통해 데이터베이스에서 조회합니다.
-         */
-        get: operations["leagueRead"];
-        put?: never;
-        post?: never;
-        /**
-         * 특정 경기를 삭제합니다.
-         * @description 특정 경기를 데이터베이스 테이블에서 제거합니다.
-         */
-        delete: operations["deleteLeague"];
-        options?: never;
-        head?: never;
-        /**
-         * 경기의 세부 정보를 변경합니다.
-         * @description 경기 제목, 경기 상태 등을 변경할 수 있습니다.
-         */
-        patch: operations["updateLeague"];
-        trace?: never;
+    /**
+     * 동호회 조회
+     * @description 동호회를 조회합니다.
+     */
+    get: operations["readClub"];
+    put?: never;
+    post?: never;
+    /**
+     * 동호회 삭제
+     * @description 동호회를 삭제합니다.
+     */
+    delete: operations["deleteClub"];
+    options?: never;
+    head?: never;
+    /**
+     * 동호회 수정
+     * @description 새로운 동호회를 수정합니다. 다음 조건을 만족해야 합니다:
+     *
+     *     1. 동호회 이름:
+     *        - 필수 입력
+     *        - 2자 이상 20자 이하
+     *
+     *     2. 동호회 소개:
+     *        - 2자 이상 1000자 이하
+     *
+     *     3. 동호회 이미지 URL:
+     *        - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
+     *        - 경로: /club-banner/로 시작
+     *        - 파일 확장자: png, jpg, jpeg, gif 중 하나
+     */
+    patch: operations["updateClub"];
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/leagues/{leagueId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/clubMembers/role": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * 동호회원 역할 변경시키기
-         * @description 동호회원의 역할을 변경시킵니다. 다음 제약 사항과 정보를 반드시 확인해야 합니다:
-         *
-         *     1. 회원 역할:
-         *        - 탈퇴 대상 회원의 현재 역할을 나타냅니다.
-         *        - 다음 중 하나여야 합니다:
-         *          * ROLE_MANAGER: 동호회 관리자
-         *          * ROLE_USER: 일반 회원
-         *     주의사항:
-         *     - ROLE_MANAGER(동호회 관리자)를 강제 탈퇴시키려면 ROLE_OWNER 권한이 필요합니다.
-         */
-        patch: operations["updateClubMemberRole"];
-        trace?: never;
+    /**
+     * 특정 경기를 조회합니다.
+     * @description 특정 경기를 경기 아이디를 통해 데이터베이스에서 조회합니다.
+     */
+    get: operations["leagueRead"];
+    put?: never;
+    post?: never;
+    /**
+     * 특정 경기를 삭제합니다.
+     * @description 특정 경기를 데이터베이스 테이블에서 제거합니다.
+     */
+    delete: operations["deleteLeague"];
+    options?: never;
+    head?: never;
+    /**
+     * 경기의 세부 정보를 변경합니다.
+     * @description 경기 제목, 경기 상태 등을 변경할 수 있습니다.
+     */
+    patch: operations["updateLeague"];
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/clubMembers/role": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/clubMembers/expel": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * 동호회원 강제 탈퇴시키기
-         * @description 동호회원을 강제로 탈퇴시킵니다. 다음 제약 사항을 반드시 준수해야 합니다:
-         *
-         *     1. 회원 제제 사유:
-         *        - 필수 입력 항목입니다.
-         *        - 최소 2자 이상이어야 합니다.
-         *        - 최대 100자 이하여야 합니다.
-         *
-         *
-         */
-        patch: operations["expelClubMember"];
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * 동호회원 역할 변경시키기
+     * @description 동호회원의 역할을 변경시킵니다. 다음 제약 사항과 정보를 반드시 확인해야 합니다:
+     *
+     *     1. 회원 역할:
+     *        - 탈퇴 대상 회원의 현재 역할을 나타냅니다.
+     *        - 다음 중 하나여야 합니다:
+     *          * ROLE_MANAGER: 동호회 관리자
+     *          * ROLE_USER: 일반 회원
+     *     주의사항:
+     *     - ROLE_MANAGER(동호회 관리자)를 강제 탈퇴시키려면 ROLE_OWNER 권한이 필요합니다.
+     */
+    patch: operations["updateClubMemberRole"];
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/clubMembers/expel": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/clubMembers/ban": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * 동호회원 정지시키기
-         * @description 동호회원을 정지시킵니다. 다음 제약 사항을 반드시 준수해야 합니다:
-         *
-         *     1. 회원 제제 사유:
-         *        - 필수 입력 항목입니다.
-         *        - 최소 2자 이상이어야 합니다.
-         *        - 최대 100자 이하여야 합니다.
-         *     2. 정지 유형:
-         *        - 필수 선택 항목입니다.\n" +
-         *        - 다음 중 하나를 입력해야 합니다:\n" +
-         *          THREE_DAYS: 3일 정지
-         *          SEVEN_DAYS: 7일 정지
-         *          TWO_WEEKS: 14일 정지
-         *
-         *
-         */
-        patch: operations["banClubMember"];
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * 동호회원 강제 탈퇴시키기
+     * @description 동호회원을 강제로 탈퇴시킵니다. 다음 제약 사항을 반드시 준수해야 합니다:
+     *
+     *     1. 회원 제제 사유:
+     *        - 필수 입력 항목입니다.
+     *        - 최소 2자 이상이어야 합니다.
+     *        - 최대 100자 이하여야 합니다.
+     *
+     *
+     */
+    patch: operations["expelClubMember"];
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/clubMembers/ban": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/members/myPage": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 회원 정보를 조회합니다
-         * @description 회원의 마이페이지 접근 시 정보 조회 (동호회 정보 포함)
-         */
-        get: operations["getMemberInfo"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * 동호회원 정지시키기
+     * @description 동호회원을 정지시킵니다. 다음 제약 사항을 반드시 준수해야 합니다:
+     *
+     *     1. 회원 제제 사유:
+     *        - 필수 입력 항목입니다.
+     *        - 최소 2자 이상이어야 합니다.
+     *        - 최대 100자 이하여야 합니다.
+     *     2. 정지 유형:
+     *        - 필수 선택 항목입니다.\n" +
+     *        - 다음 중 하나를 입력해야 합니다:\n" +
+     *          THREE_DAYS: 3일 정지
+     *          SEVEN_DAYS: 7일 정지
+     *          TWO_WEEKS: 14일 정지
+     *
+     *
+     */
+    patch: operations["banClubMember"];
+    trace?: never;
+  };
+  "/v1/members/myPage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/members/matchesRecord": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 동호회 회원 경기 조회
-         * @description 동호회 회원 경기 조회.
-         */
-        get: operations["readMemberLeagueRecord"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * 회원 정보를 조회합니다
+     * @description 회원의 마이페이지 접근 시 정보 조회 (동호회 정보 포함)
+     */
+    get: operations["getMemberInfo"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/members/matchesRecord": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/members/is-club-member": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 회원이 동호회에 가입되어있는지 확인합니다
-         * @description 회원이 동호회에 가입되어있는지 확인합니다
-         */
-        get: operations["getMemberIsClubMember"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * 동호회 회원 경기 조회
+     * @description 동호회 회원 경기 조회.
+     */
+    get: operations["readMemberLeagueRecord"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/members/is-club-member": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/leagues/{leagueId}/matches/{matchId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 특정 게임의 세트별 점수 상세 조회
-         * @description 특정 게임의 세트별 점수를 상세 조회합니다.
-         */
-        get: operations["getMatchDetails"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * 회원이 동호회에 가입되어있는지 확인합니다
+     * @description 회원이 동호회에 가입되어있는지 확인합니다
+     */
+    get: operations["getMemberIsClubMember"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/leagues/{leagueId}/matches/{matchId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/leagues/{leagueId}/matches/sets": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 모든 게임의 세트 점수 상세 조회
-         * @description 모든 게임의 세트 점수를 상세 조회합니다. 모든 게임의 세트별 점수를 조회할 수 있습니다.
-         */
-        get: operations["getAllMatchesDetails"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * 특정 게임의 세트별 점수 상세 조회
+     * @description 특정 게임의 세트별 점수를 상세 조회합니다.
+     */
+    get: operations["getMatchDetails"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/leagues/{leagueId}/matches/sets": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/leagues/month": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 월별로 경기 일정을 조회합니다.
-         * @description 월별로 경기 일정을 리스트로 조회할 수 있습니다. 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.
-         */
-        get: operations["getLeagueByMonth"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * 모든 게임의 세트 점수 상세 조회
+     * @description 모든 게임의 세트 점수를 상세 조회합니다. 모든 게임의 세트별 점수를 조회할 수 있습니다.
+     */
+    get: operations["getAllMatchesDetails"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/leagues/month": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/{clubId}/leagues/date": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 일자별로 경기 일정을 조회합니다.
-         * @description 일별로 경기 일정을 리스트로 조회할 수 있습니다. 검색 조건으로 날짜를 사용하며, 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.
-         */
-        get: operations["getLeagueByDate"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * 월별로 경기 일정을 조회합니다.
+     * @description 월별로 경기 일정을 리스트로 조회할 수 있습니다. 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.
+     */
+    get: operations["getLeagueByMonth"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/{clubId}/leagues/date": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/clubs/search": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 검색 조건에 맞는 동호회 조회
-         * @description 검색 조건에 맞는 동호회를 조회합니다.
-         */
-        get: operations["clubSearch"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * 일자별로 경기 일정을 조회합니다.
+     * @description 일별로 경기 일정을 리스트로 조회할 수 있습니다. 검색 조건으로 날짜를 사용하며, 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.
+     */
+    get: operations["getLeagueByDate"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/search": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/v1/members": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * 회원 탈퇴를 합니다
-         * @description 멤버 필드의 isDeleted 를 true 로 변경합니다
-         */
-        delete: operations["deleteMember"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * 검색 조건에 맞는 동호회 조회
+     * @description 검색 조건에 맞는 동호회를 조회합니다.
+     */
+    get: operations["clubSearch"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/members": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * 회원 탈퇴를 합니다
+     * @description 멤버 필드의 isDeleted 를 true 로 변경합니다
+     */
+    delete: operations["deleteMember"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        /** @description 회원 수정 DTO */
-        MemberUpdateRequest: {
-            profile_image_url?: string;
-        };
-        /** @description 회원 요청 DTO */
-        MemberResponse: {
-            /**
-             * Format: int64
-             * @description 회원 id
-             * @example 1
-             */
-            member_id?: number;
-            /**
-             * @description 회원 역할
-             * @example AUTHORIZATION_USER
-             */
-            authorization?: string;
-            /**
-             * @description 회원 이름
-             * @example 이선우
-             */
-            name?: string;
-            /**
-             * @description oAuth 로그인 이메일
-             * @example qosle@naver.com
-             */
-            email?: string;
-            /**
-             * @description oAuth 제공 ID
-             * @example 1070449979547641023123
-             */
-            provider_id?: string;
-            /**
-             * @description oAuth 제공 이미지
-             * @example 1070449979547641023123
-             */
-            profile_image?: string;
-        };
-        ImageUploadRequest: {
-            /** Format: binary */
-            multipartFile?: string;
-        };
-        ClubCreateRequest: {
-            club_name?: string;
-            club_description?: string;
-            club_image?: string;
-        };
-        ClubCreateResponse: {
-            /** Format: int64 */
-            club_id?: number;
-            club_name?: string;
-            club_description?: string;
-            club_image?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            modified_at?: string;
-        };
-        LeagueCreateRequest: {
-            /**
-             * @description 경기 이름
-             * @example 배드민턴 경기
-             */
-            league_name?: string;
-            /**
-             * @description 경기 설명
-             * @example 이 경기는 지역 예선 경기입니다.
-             */
-            description?: string;
-            /**
-             * @description 경기 장소
-             * @example 성동구 서울숲 체육센터
-             */
-            league_location?: string;
-            /**
-             * @description 최소 티어
-             * @example GOLD
-             * @enum {string}
-             */
-            tier_limit?: "GOLD" | "SILVER" | "BRONZE";
-            /**
-             * @description 경기 방식
-             * @example SINGLES
-             * @enum {string}
-             */
-            match_type?: "SINGLES" | "DOUBLES";
-            /**
-             * Format: date-time
-             * @description 경기 시작 날짜
-             */
-            league_at?: string;
-            /**
-             * Format: date-time
-             * @description 모집 마감 날짜
-             */
-            closed_at?: string;
-            /**
-             * Format: int32
-             * @description 참가 인원
-             * @example 16
-             */
-            player_count?: number;
-            /**
-             * @description 매칭 조건
-             * @example TIER
-             * @enum {string}
-             */
-            match_generation_type?: "RANDOM" | "TIER";
-        };
-        LeagueCreateResponse: {
-            /**
-             * @description 경기 이름
-             * @example 배드민턴 경기
-             */
-            league_name?: string;
-            /**
-             * @description 경기 설명
-             * @example 이 경기는 지역 예선 경기입니다.
-             */
-            description?: string;
-            /**
-             * @description 최소 티어
-             * @example GOLD
-             * @enum {string}
-             */
-            tier_limit?: "GOLD" | "SILVER" | "BRONZE";
-            /**
-             * @description 현재 경기 상태
-             * @example OPEN
-             * @enum {string}
-             */
-            status?: "RECRUITING" | "COMPLETED" | "CANCELED";
-            /**
-             * @description 경기 방식
-             * @example SINGLE
-             * @enum {string}
-             */
-            match_type?: "SINGLES" | "DOUBLES";
-            /**
-             * Format: date-time
-             * @description 경기 시작 날짜
-             */
-            league_at?: string;
-            /**
-             * Format: date-time
-             * @description 모집 마감 날짜
-             */
-            closed_at?: string;
-            /**
-             * Format: int32
-             * @description 참가 인원
-             * @example 16
-             */
-            player_count?: number;
-            /**
-             * Format: date-time
-             * @description 생성 일자
-             */
-            created_at?: string;
-            /**
-             * Format: date-time
-             * @description 수정 일자
-             */
-            modified_at?: string;
-            /**
-             * @description 매칭 조건
-             * @example TIER
-             * @enum {string}
-             */
-            match_generation_type?: "RANDOM" | "TIER";
-        };
-        LeagueParticipantResponse: {
-            /** Format: int64 */
-            league_id?: number;
-            /** Format: int64 */
-            club_member_id?: number;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            modified_at?: string;
-        };
-        DoublesMatchResponse: {
-            team1?: components["schemas"]["TeamResponse"];
-            /** Format: int32 */
-            team1_win_set_count?: number;
-            team2?: components["schemas"]["TeamResponse"];
-            /** Format: int32 */
-            team2_win_set_count?: number;
-        };
-        MatchResponse: {
-            /** Format: int64 */
-            match_id?: number;
-            /** Format: int64 */
-            league_id?: number;
-            /** @enum {string} */
-            match_type?: "SINGLES" | "DOUBLES";
-            singles_match?: components["schemas"]["SinglesMatchResponse"];
-            doubles_match?: components["schemas"]["DoublesMatchResponse"];
-            /** @enum {string} */
-            match_status?: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
-        };
-        SinglesMatchResponse: {
-            participant1_name?: string;
-            participant1_image?: string;
-            /** Format: int32 */
-            participant1_win_set_count?: number;
-            participant2_name?: string;
-            participant2_image?: string;
-            /** Format: int32 */
-            participant2_win_set_count?: number;
-        };
-        TeamResponse: {
-            participant1_name?: string;
-            participant1_image?: string;
-            participant2_name?: string;
-            participant2_image?: string;
-        };
-        SetScoreUpdateRequest: {
-            /** Format: int32 */
-            score1?: number;
-            /** Format: int32 */
-            score2?: number;
-        };
-        SetScoreUpdateResponse: {
-            /** Format: int64 */
-            match_id?: number;
-            /** Format: int32 */
-            set_index?: number;
-            /** Format: int32 */
-            score1?: number;
-            /** Format: int32 */
-            score2?: number;
-            /** @enum {string} */
-            match_type?: "SINGLES" | "DOUBLES";
-        };
-        ClubMemberJoinResponse: {
-            /** Format: int64 */
-            club_member_id?: number;
-            role?: string;
-        };
-        ClubUpdateRequest: {
-            club_name?: string;
-            club_description?: string;
-            club_image?: string;
-        };
-        ClubUpdateResponse: {
-            /** Format: int64 */
-            club_id?: number;
-            club_name?: string;
-            club_description?: string;
-            club_image?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            modified_at?: string;
-        };
-        LeagueUpdateRequest: {
-            /**
-             * @description 경기 이름
-             * @example 배드민턴 경기
-             */
-            league_name?: string;
-            /**
-             * @description 경기 설명
-             * @example 이 경기는 지역 예선 경기입니다.
-             */
-            description?: string;
-            /**
-             * @description 경기 장소
-             * @example 성동구 서울숲 체육센터
-             */
-            league_location?: string;
-            /**
-             * @description 최소 티어
-             * @example GOLD
-             * @enum {string}
-             */
-            tier_limit?: "GOLD" | "SILVER" | "BRONZE";
-            /**
-             * @description 경기 방식
-             * @example SINGLES
-             * @enum {string}
-             */
-            match_type?: "SINGLES" | "DOUBLES";
-            /**
-             * Format: date-time
-             * @description 경기 시작 날짜
-             */
-            league_at?: string;
-            /**
-             * Format: date-time
-             * @description 모집 마감 날짜
-             */
-            closed_at?: string;
-            /**
-             * Format: int32
-             * @description 참가 인원
-             * @example 16
-             */
-            player_count?: number;
-            /**
-             * @description 매칭 조건
-             * @example TIER
-             * @enum {string}
-             */
-            match_generation_type?: "RANDOM" | "TIER";
-        };
-        LeagueUpdateResponse: {
-            /**
-             * Format: int64
-             * @description 경기 아이디
-             */
-            league_id?: number;
-            /**
-             * @description 경기 이름
-             * @example 배드민턴 경기
-             */
-            league_name?: string;
-            /**
-             * @description 경기 설명
-             * @example 이 경기는 지역 예선 경기입니다.
-             */
-            league_description?: string;
-            /**
-             * @description 경기 장소
-             * @example 장충동 체육관
-             */
-            league_location?: string;
-            /**
-             * @description 최소 티어, 예시) GOLD | SILVER | BRONZE
-             * @example GOLD
-             * @enum {string}
-             */
-            required_tier?: "GOLD" | "SILVER" | "BRONZE";
-            /**
-             * @description 현재 경기 상태, 예시) RECRUITING | COMPLETED | CANCELED
-             * @example RECRUITING
-             * @enum {string}
-             */
-            league_status?: "RECRUITING" | "COMPLETED" | "CANCELED";
-            /**
-             * @description 경기 방식
-             * @example SINGLES
-             * @enum {string}
-             */
-            match_type?: "SINGLES" | "DOUBLES";
-            /**
-             * Format: date-time
-             * @description 경기 시작 날짜
-             */
-            league_at?: string;
-            /**
-             * Format: date-time
-             * @description 모집 마감 날짜
-             */
-            recruiting_closed_at?: string;
-            /**
-             * @description 매칭 조건
-             * @example RANDOM
-             * @enum {string}
-             */
-            match_generation_type?: "RANDOM" | "TIER";
-            /**
-             * Format: int32
-             * @description 참가 제한 인원
-             * @example 16
-             */
-            player_limit_count?: number;
-            /**
-             * Format: int32
-             * @description 현재까지 참여한 인원
-             * @example 12
-             */
-            recruited_member_count?: number;
-            /**
-             * Format: date-time
-             * @description 생성 일자
-             */
-            created_at?: string;
-            /**
-             * Format: date-time
-             * @description 수정 일자
-             */
-            modified_at?: string;
-        };
-        ClubMemberRoleUpdateRequest: {
-            /** @enum {string} */
-            role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
-        };
-        ClubMemberResponse: {
-            /** Format: int64 */
-            club_member_id?: number;
-            image?: string;
-            name?: string;
-            /** @enum {string} */
-            role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
-            /** @enum {string} */
-            tier?: "GOLD" | "SILVER" | "BRONZE";
-            league_record_info_response?: components["schemas"]["LeagueRecordInfoResponse"];
-        };
-        LeagueRecordInfoResponse: {
-            /** Format: int32 */
-            win_count?: number;
-            /** Format: int32 */
-            lose_count?: number;
-            /** Format: int32 */
-            draw_count?: number;
-            /** Format: int32 */
-            match_count?: number;
-        };
-        ClubMemberExpelRequest: {
-            expel_reason?: string;
-        };
-        ClubMemberBanRecordResponse: {
-            /** @enum {string} */
-            banned_type?: "THREE_DAYS" | "SEVEN_DAYS" | "TWO_WEEKS" | "PERMANENT";
-            banned_reason?: string;
-            /** Format: int64 */
-            club_member_id?: number;
-            is_active?: boolean;
-            /** Format: date-time */
-            end_date?: string;
-        };
-        ClubMemberBanRequest: {
-            /** @enum {string} */
-            type?: "THREE_DAYS" | "SEVEN_DAYS" | "TWO_WEEKS" | "PERMANENT";
-            banned_reason?: string;
-        };
-        /** @description ClubMember information */
-        ClubMemberMyPageResponse: {
-            /**
-             * Format: int64
-             * @description Club ID
-             * @example 1
-             */
-            club_id?: number;
-            /**
-             * Format: int64
-             * @description Club member ID
-             * @example 1
-             */
-            club_member_id?: number;
-            /**
-             * @description Club name
-             * @example 배드민턴 동호회
-             */
-            club_name?: string;
-            /**
-             * @description Member role
-             * @example ROLE_USER
-             * @enum {string}
-             */
-            role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
-            /**
-             * @description ClubMember Tier
-             * @example GOLD
-             * @enum {string}
-             */
-            tier?: "GOLD" | "SILVER" | "BRONZE";
-        };
-        /** @description Unified member response */
-        MemberMyPageResponse: {
-            /**
-             * Format: int64
-             * @description Member ID
-             * @example 1
-             */
-            member_id?: number;
-            /**
-             * @description Member name
-             * @example 김철수
-             */
-            name?: string;
-            /**
-             * @description Email
-             * @example example@email.com
-             */
-            email?: string;
-            /**
-             * @description Profile image URL
-             * @example https://example.com/profile.jpg
-             */
-            profile_image?: string;
-            club_member_my_page_response?: components["schemas"]["ClubMemberMyPageResponse"];
-            league_record_info?: components["schemas"]["LeagueRecordInfoResponse"];
-        };
-        DoublesMatchResultResponse: {
-            current_team?: components["schemas"]["TeamResultResponse"];
-            opponent_team?: components["schemas"]["TeamResultResponse"];
-            /** @enum {string} */
-            current_team_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
-            /** @enum {string} */
-            opponent_team_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
-        };
-        MatchResultResponse: {
-            /** Format: int64 */
-            match_id?: number;
-            /** Format: int64 */
-            league_id?: number;
-            /** @enum {string} */
-            match_type?: "SINGLES" | "DOUBLES";
-            singles_match?: components["schemas"]["SinglesMatchResultResponse"];
-            doubles_match?: components["schemas"]["DoublesMatchResultResponse"];
-            /** @enum {string} */
-            match_status?: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
-            /** Format: date-time */
-            league_at?: string;
-        };
-        SinglesMatchResultResponse: {
-            current_player_name?: string;
-            opponent_name?: string;
-            /** @enum {string} */
-            current_player_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
-            /** @enum {string} */
-            opponent_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
-        };
-        TeamResultResponse: {
-            participant1_name?: string;
-            participant2_name?: string;
-        };
-        MemberIsClubMemberResponse: {
-            is_club_member?: boolean;
-            /** @enum {string} */
-            role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
-            /** Format: int64 */
-            club_id?: number;
-        };
-        ClubCardResponse: {
-            /** Format: int64 */
-            club_id?: number;
-            club_name?: string;
-            club_description?: string;
-            club_image?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            modified_at?: string;
-            club_member_count_by_tier?: components["schemas"]["ClubMemberCountByTier"];
-        };
-        ClubMemberCountByTier: {
-            /** Format: int64 */
-            gold_club_member_count?: number;
-            /** Format: int64 */
-            silver_club_member_count?: number;
-            /** Format: int64 */
-            bronze_club_member_count?: number;
-        };
-        PageClubCardResponse: {
-            /** Format: int32 */
-            total_pages?: number;
-            /** Format: int64 */
-            total_elements?: number;
-            first?: boolean;
-            last?: boolean;
-            /** Format: int32 */
-            size?: number;
-            content?: components["schemas"]["ClubCardResponse"][];
-            /** Format: int32 */
-            number?: number;
-            sort?: components["schemas"]["SortObject"][];
-            /** Format: int32 */
-            number_of_elements?: number;
-            pageable?: components["schemas"]["PageableObject"];
-            empty?: boolean;
-        };
-        PageableObject: {
-            /** Format: int64 */
-            offset?: number;
-            sort?: components["schemas"]["SortObject"][];
-            paged?: boolean;
-            /** Format: int32 */
-            page_number?: number;
-            /** Format: int32 */
-            page_size?: number;
-            unpaged?: boolean;
-        };
-        SortObject: {
-            direction?: string;
-            null_handling?: string;
-            ascending?: boolean;
-            property?: string;
-            ignore_case?: boolean;
-        };
-        ClubDetailsResponse: {
-            /** Format: int64 */
-            club_id?: number;
-            club_name?: string;
-            club_description?: string;
-            club_image?: string;
-            club_member_count_by_tier?: components["schemas"]["ClubMemberCountByTier"];
-            /** Format: int32 */
-            club_member_count?: number;
-            /** Format: date-time */
-            created_at?: string;
-            is_club_member?: boolean;
-        };
-        LeagueDetailsResponse: {
-            /**
-             * Format: int64
-             * @description 경기 아이디
-             */
-            league_id?: number;
-            /**
-             * @description 경기 이름
-             * @example 배드민턴 경기
-             */
-            league_name?: string;
-            /**
-             * @description 경기 설명
-             * @example 이 경기는 지역 예선 경기입니다.
-             */
-            league_description?: string;
-            /**
-             * @description 경기 장소
-             * @example 장충동 체육관
-             */
-            league_location?: string;
-            /**
-             * @description 최소 티어, 예시) GOLD | SILVER | BRONZE
-             * @example GOLD
-             * @enum {string}
-             */
-            required_tier?: "GOLD" | "SILVER" | "BRONZE";
-            /**
-             * @description 현재 경기 상태, 예시) RECRUITING | COMPLETED | CANCELED
-             * @example RECRUITING
-             * @enum {string}
-             */
-            league_status?: "RECRUITING" | "COMPLETED" | "CANCELED";
-            /**
-             * @description 경기 방식
-             * @example SINGLES
-             * @enum {string}
-             */
-            match_type?: "SINGLES" | "DOUBLES";
-            /**
-             * Format: date-time
-             * @description 경기 시작 날짜
-             */
-            league_at?: string;
-            /**
-             * Format: date-time
-             * @description 모집 마감 날짜
-             */
-            recruiting_closed_at?: string;
-            /**
-             * @description 매칭 조건
-             * @example RANDOM
-             * @enum {string}
-             */
-            match_generation_type?: "RANDOM" | "TIER";
-            /**
-             * Format: int32
-             * @description 참가 제한 인원
-             * @example 16
-             */
-            player_limit_count?: number;
-            /**
-             * Format: int32
-             * @description 현재까지 참여한 인원
-             * @example 12
-             */
-            recruited_member_count?: number;
-            /**
-             * @description 해당하는 경기에 참여 신청을 했는지 여부
-             * @example true
-             */
-            is_participated_in_league?: boolean;
-            /**
-             * Format: date-time
-             * @description 생성 일자
-             */
-            created_at?: string;
-            /**
-             * Format: date-time
-             * @description 수정 일자
-             */
-            modified_at?: string;
-            /**
-             * @description 대진표 생성 여부
-             * @example true
-             */
-            is_match_created?: boolean;
-        };
-        DoublesSetResponse: {
-            /** Format: int32 */
-            set_index?: number;
-            /** Format: int32 */
-            score1?: number;
-            /** Format: int32 */
-            score2?: number;
-        };
-        MatchDetailsResponse: {
-            /** Format: int64 */
-            match_id?: number;
-            /** Format: int64 */
-            league_id?: number;
-            /** @enum {string} */
-            match_type?: "SINGLES" | "DOUBLES";
-            singles_match?: components["schemas"]["SinglesMatchResponse"];
-            doubles_match?: components["schemas"]["DoublesMatchResponse"];
-            singles_sets?: components["schemas"]["SinglesSetResponse"][];
-            doubles_sets?: components["schemas"]["DoublesSetResponse"][];
-        };
-        SinglesSetResponse: {
-            /** Format: int32 */
-            set_index?: number;
-            /** Format: int32 */
-            score1?: number;
-            /** Format: int32 */
-            score2?: number;
-        };
-        SetScoreResponse: {
-            /** Format: int64 */
-            match_id?: number;
-            /** Format: int32 */
-            set_index?: number;
-            /** Format: int32 */
-            score1?: number;
-            /** Format: int32 */
-            score2?: number;
-        };
-        LeagueReadResponse: {
-            /**
-             * Format: int64
-             * @description 경기 아이디
-             */
-            league_id?: number;
-            /**
-             * @description 경기 이름
-             * @example 배드민턴 경기
-             */
-            league_name?: string;
-            /**
-             * @description 현재 경기 상태
-             * @example OPEN
-             * @enum {string}
-             */
-            status?: "RECRUITING" | "COMPLETED" | "CANCELED";
-            /**
-             * Format: date-time
-             * @description 경기 시작 날짜
-             */
-            league_at?: string;
-            /**
-             * Format: int32
-             * @description 참가 인원
-             * @example 16
-             */
-            player_count?: number;
-        };
-        LeagueByDateResponse: {
-            /** Format: int64 */
-            league_id?: number;
-            /** Format: date-time */
-            league_at?: string;
-            league_name?: string;
-            /** @enum {string} */
-            match_type?: "SINGLES" | "DOUBLES";
-            /** @enum {string} */
-            required_tier?: "GOLD" | "SILVER" | "BRONZE";
-            /** Format: date-time */
-            closed_at?: string;
-            /** Format: int32 */
-            player_limit_count?: number;
-            /** Format: int32 */
-            recruited_member_count?: number;
-        };
-        /** @description 회원 삭제 responseDto */
-        MemberDeleteResponse: {
-            /**
-             * Format: int64
-             * @description 멤버 id
-             * @example 1
-             */
-            member_id?: number;
-            /**
-             * @description 삭제 여부
-             * @example true
-             */
-            is_deleted?: boolean;
-        };
-        ClubDeleteResponse: {
-            /** Format: int64 */
-            club_id?: number;
-            is_club_deleted?: boolean;
-        };
-        LeagueParticipationCancelResponse: {
-            /** Format: int64 */
-            league_id?: number;
-            /** Format: int64 */
-            club_member_id?: number;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            deleted_at?: string;
-        };
+  schemas: {
+    /** @description 회원 수정 DTO */
+    MemberUpdateRequest: {
+      profile_image_url?: string;
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    /** @description 회원 요청 DTO */
+    MemberResponse: {
+      /**
+       * Format: int64
+       * @description 회원 id
+       * @example 1
+       */
+      member_id?: number;
+      /**
+       * @description 회원 역할
+       * @example AUTHORIZATION_USER
+       */
+      authorization?: string;
+      /**
+       * @description 회원 이름
+       * @example 이선우
+       */
+      name?: string;
+      /**
+       * @description oAuth 로그인 이메일
+       * @example qosle@naver.com
+       */
+      email?: string;
+      /**
+       * @description oAuth 제공 ID
+       * @example 1070449979547641023123
+       */
+      provider_id?: string;
+      /**
+       * @description oAuth 제공 이미지
+       * @example 1070449979547641023123
+       */
+      profile_image?: string;
+    };
+    ImageUploadRequest: {
+      /** Format: binary */
+      multipartFile?: string;
+    };
+    ClubCreateRequest: {
+      club_name?: string;
+      club_description?: string;
+      club_image?: string;
+    };
+    ClubCreateResponse: {
+      /** Format: int64 */
+      club_id?: number;
+      club_name?: string;
+      club_description?: string;
+      club_image?: string;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      modified_at?: string;
+    };
+    LeagueCreateRequest: {
+      /**
+       * @description 경기 이름
+       * @example 배드민턴 경기
+       */
+      league_name?: string;
+      /**
+       * @description 경기 설명
+       * @example 이 경기는 지역 예선 경기입니다.
+       */
+      description?: string;
+      /**
+       * @description 경기 장소
+       * @example 성동구 서울숲 체육센터
+       */
+      league_location?: string;
+      /**
+       * @description 최소 티어
+       * @example GOLD
+       * @enum {string}
+       */
+      tier_limit?: "GOLD" | "SILVER" | "BRONZE";
+      /**
+       * @description 경기 방식
+       * @example SINGLES
+       * @enum {string}
+       */
+      match_type?: "SINGLES" | "DOUBLES";
+      /**
+       * Format: date-time
+       * @description 경기 시작 날짜
+       */
+      league_at?: string;
+      /**
+       * Format: date-time
+       * @description 모집 마감 날짜
+       */
+      closed_at?: string;
+      /**
+       * Format: int32
+       * @description 참가 인원
+       * @example 16
+       */
+      player_count?: number;
+      /**
+       * @description 매칭 조건
+       * @example TIER
+       * @enum {string}
+       */
+      match_generation_type?: "RANDOM" | "TIER";
+    };
+    LeagueCreateResponse: {
+      /**
+       * @description 경기 이름
+       * @example 배드민턴 경기
+       */
+      league_name?: string;
+      /**
+       * @description 경기 설명
+       * @example 이 경기는 지역 예선 경기입니다.
+       */
+      description?: string;
+      /**
+       * @description 최소 티어
+       * @example GOLD
+       * @enum {string}
+       */
+      tier_limit?: "GOLD" | "SILVER" | "BRONZE";
+      /**
+       * @description 현재 경기 상태
+       * @example OPEN
+       * @enum {string}
+       */
+      status?: "RECRUITING" | "COMPLETED" | "CANCELED";
+      /**
+       * @description 경기 방식
+       * @example SINGLE
+       * @enum {string}
+       */
+      match_type?: "SINGLES" | "DOUBLES";
+      /**
+       * Format: date-time
+       * @description 경기 시작 날짜
+       */
+      league_at?: string;
+      /**
+       * Format: date-time
+       * @description 모집 마감 날짜
+       */
+      closed_at?: string;
+      /**
+       * Format: int32
+       * @description 참가 인원
+       * @example 16
+       */
+      player_count?: number;
+      /**
+       * Format: date-time
+       * @description 생성 일자
+       */
+      created_at?: string;
+      /**
+       * Format: date-time
+       * @description 수정 일자
+       */
+      modified_at?: string;
+      /**
+       * @description 매칭 조건
+       * @example TIER
+       * @enum {string}
+       */
+      match_generation_type?: "RANDOM" | "TIER";
+    };
+    LeagueParticipantResponse: {
+      /** Format: int64 */
+      league_id?: number;
+      /** Format: int64 */
+      club_member_id?: number;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      modified_at?: string;
+    };
+    DoublesMatchResponse: {
+      team1?: components["schemas"]["TeamResponse"];
+      /** Format: int32 */
+      team1_win_set_count?: number;
+      team2?: components["schemas"]["TeamResponse"];
+      /** Format: int32 */
+      team2_win_set_count?: number;
+    };
+    MatchResponse: {
+      /** Format: int64 */
+      match_id?: number;
+      /** Format: int64 */
+      league_id?: number;
+      /** @enum {string} */
+      match_type?: "SINGLES" | "DOUBLES";
+      singles_match?: components["schemas"]["SinglesMatchResponse"];
+      doubles_match?: components["schemas"]["DoublesMatchResponse"];
+      /** @enum {string} */
+      match_status?: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
+    };
+    SinglesMatchResponse: {
+      participant1_name?: string;
+      participant1_image?: string;
+      /** Format: int32 */
+      participant1_win_set_count?: number;
+      participant2_name?: string;
+      participant2_image?: string;
+      /** Format: int32 */
+      participant2_win_set_count?: number;
+    };
+    TeamResponse: {
+      participant1_name?: string;
+      participant1_image?: string;
+      participant2_name?: string;
+      participant2_image?: string;
+    };
+    SetScoreUpdateRequest: {
+      /** Format: int32 */
+      score1?: number;
+      /** Format: int32 */
+      score2?: number;
+    };
+    SetScoreUpdateResponse: {
+      /** Format: int64 */
+      match_id?: number;
+      /** Format: int32 */
+      set_index?: number;
+      /** Format: int32 */
+      score1?: number;
+      /** Format: int32 */
+      score2?: number;
+      /** @enum {string} */
+      match_type?: "SINGLES" | "DOUBLES";
+    };
+    ClubMemberJoinResponse: {
+      /** Format: int64 */
+      club_member_id?: number;
+      role?: string;
+    };
+    ClubUpdateRequest: {
+      club_name?: string;
+      club_description?: string;
+      club_image?: string;
+    };
+    ClubUpdateResponse: {
+      /** Format: int64 */
+      club_id?: number;
+      club_name?: string;
+      club_description?: string;
+      club_image?: string;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      modified_at?: string;
+    };
+    LeagueUpdateRequest: {
+      /**
+       * @description 경기 이름
+       * @example 배드민턴 경기
+       */
+      league_name?: string;
+      /**
+       * @description 경기 설명
+       * @example 이 경기는 지역 예선 경기입니다.
+       */
+      description?: string;
+      /**
+       * @description 경기 장소
+       * @example 성동구 서울숲 체육센터
+       */
+      league_location?: string;
+      /**
+       * @description 최소 티어
+       * @example GOLD
+       * @enum {string}
+       */
+      tier_limit?: "GOLD" | "SILVER" | "BRONZE";
+      /**
+       * @description 경기 방식
+       * @example SINGLES
+       * @enum {string}
+       */
+      match_type?: "SINGLES" | "DOUBLES";
+      /**
+       * Format: date-time
+       * @description 경기 시작 날짜
+       */
+      league_at?: string;
+      /**
+       * Format: date-time
+       * @description 모집 마감 날짜
+       */
+      closed_at?: string;
+      /**
+       * Format: int32
+       * @description 참가 인원
+       * @example 16
+       */
+      player_count?: number;
+      /**
+       * @description 매칭 조건
+       * @example TIER
+       * @enum {string}
+       */
+      match_generation_type?: "RANDOM" | "TIER";
+    };
+    LeagueUpdateResponse: {
+      /**
+       * Format: int64
+       * @description 경기 아이디
+       */
+      league_id?: number;
+      /**
+       * @description 경기 이름
+       * @example 배드민턴 경기
+       */
+      league_name?: string;
+      /**
+       * @description 경기 설명
+       * @example 이 경기는 지역 예선 경기입니다.
+       */
+      league_description?: string;
+      /**
+       * @description 경기 장소
+       * @example 장충동 체육관
+       */
+      league_location?: string;
+      /**
+       * @description 최소 티어, 예시) GOLD | SILVER | BRONZE
+       * @example GOLD
+       * @enum {string}
+       */
+      required_tier?: "GOLD" | "SILVER" | "BRONZE";
+      /**
+       * @description 현재 경기 상태, 예시) RECRUITING | COMPLETED | CANCELED
+       * @example RECRUITING
+       * @enum {string}
+       */
+      league_status?: "RECRUITING" | "COMPLETED" | "CANCELED";
+      /**
+       * @description 경기 방식
+       * @example SINGLES
+       * @enum {string}
+       */
+      match_type?: "SINGLES" | "DOUBLES";
+      /**
+       * Format: date-time
+       * @description 경기 시작 날짜
+       */
+      league_at?: string;
+      /**
+       * Format: date-time
+       * @description 모집 마감 날짜
+       */
+      recruiting_closed_at?: string;
+      /**
+       * @description 매칭 조건
+       * @example RANDOM
+       * @enum {string}
+       */
+      match_generation_type?: "RANDOM" | "TIER";
+      /**
+       * Format: int32
+       * @description 참가 제한 인원
+       * @example 16
+       */
+      player_limit_count?: number;
+      /**
+       * Format: int32
+       * @description 현재까지 참여한 인원
+       * @example 12
+       */
+      recruited_member_count?: number;
+      /**
+       * Format: date-time
+       * @description 생성 일자
+       */
+      created_at?: string;
+      /**
+       * Format: date-time
+       * @description 수정 일자
+       */
+      modified_at?: string;
+    };
+    ClubMemberRoleUpdateRequest: {
+      /** @enum {string} */
+      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
+    };
+    ClubMemberResponse: {
+      /** Format: int64 */
+      club_member_id?: number;
+      image?: string;
+      name?: string;
+      /** @enum {string} */
+      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
+      /** @enum {string} */
+      tier?: "GOLD" | "SILVER" | "BRONZE";
+      league_record_info_response?: components["schemas"]["LeagueRecordInfoResponse"];
+    };
+    LeagueRecordInfoResponse: {
+      /** Format: int32 */
+      win_count?: number;
+      /** Format: int32 */
+      lose_count?: number;
+      /** Format: int32 */
+      draw_count?: number;
+      /** Format: int32 */
+      match_count?: number;
+    };
+    ClubMemberExpelRequest: {
+      expel_reason?: string;
+    };
+    ClubMemberBanRecordResponse: {
+      /** @enum {string} */
+      banned_type?: "THREE_DAYS" | "SEVEN_DAYS" | "TWO_WEEKS" | "PERMANENT";
+      banned_reason?: string;
+      /** Format: int64 */
+      club_member_id?: number;
+      is_active?: boolean;
+      /** Format: date-time */
+      end_date?: string;
+    };
+    ClubMemberBanRequest: {
+      /** @enum {string} */
+      type?: "THREE_DAYS" | "SEVEN_DAYS" | "TWO_WEEKS" | "PERMANENT";
+      banned_reason?: string;
+    };
+    /** @description ClubMember information */
+    ClubMemberMyPageResponse: {
+      /**
+       * Format: int64
+       * @description Club ID
+       * @example 1
+       */
+      club_id?: number;
+      /**
+       * Format: int64
+       * @description Club member ID
+       * @example 1
+       */
+      club_member_id?: number;
+      /**
+       * @description Club name
+       * @example 배드민턴 동호회
+       */
+      club_name?: string;
+      /**
+       * @description Member role
+       * @example ROLE_USER
+       * @enum {string}
+       */
+      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
+      /**
+       * @description ClubMember Tier
+       * @example GOLD
+       * @enum {string}
+       */
+      tier?: "GOLD" | "SILVER" | "BRONZE";
+    };
+    /** @description Unified member response */
+    MemberMyPageResponse: {
+      /**
+       * Format: int64
+       * @description Member ID
+       * @example 1
+       */
+      member_id?: number;
+      /**
+       * @description Member name
+       * @example 김철수
+       */
+      name?: string;
+      /**
+       * @description Email
+       * @example example@email.com
+       */
+      email?: string;
+      /**
+       * @description Profile image URL
+       * @example https://example.com/profile.jpg
+       */
+      profile_image?: string;
+      club_member_my_page_response?: components["schemas"]["ClubMemberMyPageResponse"];
+      league_record_info?: components["schemas"]["LeagueRecordInfoResponse"];
+    };
+    DoublesMatchResultResponse: {
+      current_team?: components["schemas"]["TeamResultResponse"];
+      opponent_team?: components["schemas"]["TeamResultResponse"];
+      /** @enum {string} */
+      current_team_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
+      /** @enum {string} */
+      opponent_team_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
+    };
+    MatchResultResponse: {
+      /** Format: int64 */
+      match_id?: number;
+      /** Format: int64 */
+      league_id?: number;
+      /** @enum {string} */
+      match_type?: "SINGLES" | "DOUBLES";
+      singles_match?: components["schemas"]["SinglesMatchResultResponse"];
+      doubles_match?: components["schemas"]["DoublesMatchResultResponse"];
+      /** @enum {string} */
+      match_status?: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
+      /** Format: date-time */
+      league_at?: string;
+    };
+    SinglesMatchResultResponse: {
+      current_player_name?: string;
+      opponent_name?: string;
+      /** @enum {string} */
+      current_player_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
+      /** @enum {string} */
+      opponent_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
+    };
+    TeamResultResponse: {
+      participant1_name?: string;
+      participant2_name?: string;
+    };
+    MemberIsClubMemberResponse: {
+      is_club_member?: boolean;
+      /** @enum {string} */
+      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
+      /** Format: int64 */
+      club_id?: number;
+    };
+    ClubCardResponse: {
+      /** Format: int64 */
+      club_id?: number;
+      club_name?: string;
+      club_description?: string;
+      club_image?: string;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      modified_at?: string;
+      club_member_count_by_tier?: components["schemas"]["ClubMemberCountByTier"];
+    };
+    ClubMemberCountByTier: {
+      /** Format: int64 */
+      gold_club_member_count?: number;
+      /** Format: int64 */
+      silver_club_member_count?: number;
+      /** Format: int64 */
+      bronze_club_member_count?: number;
+    };
+    PageClubCardResponse: {
+      /** Format: int32 */
+      total_pages?: number;
+      /** Format: int64 */
+      total_elements?: number;
+      first?: boolean;
+      last?: boolean;
+      /** Format: int32 */
+      size?: number;
+      content?: components["schemas"]["ClubCardResponse"][];
+      /** Format: int32 */
+      number?: number;
+      sort?: components["schemas"]["SortObject"][];
+      /** Format: int32 */
+      number_of_elements?: number;
+      pageable?: components["schemas"]["PageableObject"];
+      empty?: boolean;
+    };
+    PageableObject: {
+      /** Format: int64 */
+      offset?: number;
+      sort?: components["schemas"]["SortObject"][];
+      paged?: boolean;
+      /** Format: int32 */
+      page_number?: number;
+      /** Format: int32 */
+      page_size?: number;
+      unpaged?: boolean;
+    };
+    SortObject: {
+      direction?: string;
+      null_handling?: string;
+      ascending?: boolean;
+      property?: string;
+      ignore_case?: boolean;
+    };
+    ClubDetailsResponse: {
+      /** Format: int64 */
+      club_id?: number;
+      club_name?: string;
+      club_description?: string;
+      club_image?: string;
+      club_member_count_by_tier?: components["schemas"]["ClubMemberCountByTier"];
+      /** Format: int32 */
+      club_member_count?: number;
+      /** Format: date-time */
+      created_at?: string;
+      is_club_member?: boolean;
+    };
+    LeagueDetailsResponse: {
+      /**
+       * Format: int64
+       * @description 경기 아이디
+       */
+      league_id?: number;
+      /**
+       * @description 경기 이름
+       * @example 배드민턴 경기
+       */
+      league_name?: string;
+      /**
+       * @description 경기 설명
+       * @example 이 경기는 지역 예선 경기입니다.
+       */
+      league_description?: string;
+      /**
+       * @description 경기 장소
+       * @example 장충동 체육관
+       */
+      league_location?: string;
+      /**
+       * @description 최소 티어, 예시) GOLD | SILVER | BRONZE
+       * @example GOLD
+       * @enum {string}
+       */
+      required_tier?: "GOLD" | "SILVER" | "BRONZE";
+      /**
+       * @description 현재 경기 상태, 예시) RECRUITING | COMPLETED | CANCELED
+       * @example RECRUITING
+       * @enum {string}
+       */
+      league_status?: "RECRUITING" | "COMPLETED" | "CANCELED";
+      /**
+       * @description 경기 방식
+       * @example SINGLES
+       * @enum {string}
+       */
+      match_type?: "SINGLES" | "DOUBLES";
+      /**
+       * Format: date-time
+       * @description 경기 시작 날짜
+       */
+      league_at?: string;
+      /**
+       * Format: date-time
+       * @description 모집 마감 날짜
+       */
+      recruiting_closed_at?: string;
+      /**
+       * @description 매칭 조건
+       * @example RANDOM
+       * @enum {string}
+       */
+      match_generation_type?: "RANDOM" | "TIER";
+      /**
+       * Format: int32
+       * @description 참가 제한 인원
+       * @example 16
+       */
+      player_limit_count?: number;
+      /**
+       * Format: int32
+       * @description 현재까지 참여한 인원
+       * @example 12
+       */
+      recruited_member_count?: number;
+      /**
+       * @description 해당하는 경기에 참여 신청을 했는지 여부
+       * @example true
+       */
+      is_participated_in_league?: boolean;
+      /**
+       * Format: date-time
+       * @description 생성 일자
+       */
+      created_at?: string;
+      /**
+       * Format: date-time
+       * @description 수정 일자
+       */
+      modified_at?: string;
+      /**
+       * @description 대진표 생성 여부
+       * @example true
+       */
+      is_match_created?: boolean;
+    };
+    DoublesSetResponse: {
+      /** Format: int32 */
+      set_index?: number;
+      /** Format: int32 */
+      score1?: number;
+      /** Format: int32 */
+      score2?: number;
+    };
+    MatchDetailsResponse: {
+      /** Format: int64 */
+      match_id?: number;
+      /** Format: int64 */
+      league_id?: number;
+      /** @enum {string} */
+      match_type?: "SINGLES" | "DOUBLES";
+      singles_match?: components["schemas"]["SinglesMatchResponse"];
+      doubles_match?: components["schemas"]["DoublesMatchResponse"];
+      singles_sets?: components["schemas"]["SinglesSetResponse"][];
+      doubles_sets?: components["schemas"]["DoublesSetResponse"][];
+    };
+    SinglesSetResponse: {
+      /** Format: int32 */
+      set_index?: number;
+      /** Format: int32 */
+      score1?: number;
+      /** Format: int32 */
+      score2?: number;
+    };
+    SetScoreResponse: {
+      /** Format: int64 */
+      match_id?: number;
+      /** Format: int32 */
+      set_index?: number;
+      /** Format: int32 */
+      score1?: number;
+      /** Format: int32 */
+      score2?: number;
+    };
+    LeagueReadResponse: {
+      /**
+       * Format: int64
+       * @description 경기 아이디
+       */
+      league_id?: number;
+      /**
+       * @description 경기 이름
+       * @example 배드민턴 경기
+       */
+      league_name?: string;
+      /**
+       * @description 현재 경기 상태
+       * @example OPEN
+       * @enum {string}
+       */
+      status?: "RECRUITING" | "COMPLETED" | "CANCELED";
+      /**
+       * Format: date-time
+       * @description 경기 시작 날짜
+       */
+      league_at?: string;
+      /**
+       * Format: int32
+       * @description 참가 인원
+       * @example 16
+       */
+      player_count?: number;
+    };
+    LeagueByDateResponse: {
+      /** Format: int64 */
+      league_id?: number;
+      /** Format: date-time */
+      league_at?: string;
+      league_name?: string;
+      /** @enum {string} */
+      match_type?: "SINGLES" | "DOUBLES";
+      /** @enum {string} */
+      required_tier?: "GOLD" | "SILVER" | "BRONZE";
+      /** Format: date-time */
+      closed_at?: string;
+      /** Format: int32 */
+      player_limit_count?: number;
+      /** Format: int32 */
+      recruited_member_count?: number;
+    };
+    /** @description 회원 삭제 responseDto */
+    MemberDeleteResponse: {
+      /**
+       * Format: int64
+       * @description 멤버 id
+       * @example 1
+       */
+      member_id?: number;
+      /**
+       * @description 삭제 여부
+       * @example true
+       */
+      is_deleted?: boolean;
+    };
+    ClubDeleteResponse: {
+      /** Format: int64 */
+      club_id?: number;
+      is_club_deleted?: boolean;
+    };
+    LeagueParticipationCancelResponse: {
+      /** Format: int64 */
+      league_id?: number;
+      /** Format: int64 */
+      club_member_id?: number;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      deleted_at?: string;
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    updateProfileImage: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["MemberUpdateRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MemberResponse"];
-                };
-            };
-        };
+  updateProfileImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    uploadProfileImage: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["ImageUploadRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MemberUpdateRequest"];
+      };
     };
-    addWin: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
+        content: {
+          "*/*": components["schemas"]["MemberResponse"];
         };
+      };
     };
-    refreshToken: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": Record<string, never>;
-                };
-            };
-        };
+  };
+  uploadProfileImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    addLose: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["ImageUploadRequest"];
+      };
     };
-    logout: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
+        content: {
+          "*/*": string;
         };
+      };
     };
-    readAllClub: {
-        parameters: {
-            query?: {
-                page?: number;
-                size?: number;
-                sort?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PageClubCardResponse"];
-                };
-            };
-        };
+  };
+  addWin: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    createClub: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ClubCreateRequest"];
-            };
+        content: {
+          "*/*": string;
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ClubCreateResponse"];
-                };
-            };
-        };
+      };
     };
-    createLeague: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LeagueCreateRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LeagueCreateResponse"];
-                };
-            };
-        };
+  };
+  refreshToken: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    participateInLeague: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-                leagueId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LeagueParticipantResponse"];
-                };
-            };
+        content: {
+          "*/*": Record<string, never>;
         };
+      };
     };
-    cancelLeagueParticipation: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-                leagueId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LeagueParticipationCancelResponse"];
-                };
-            };
-        };
+  };
+  addLose: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    getAllMatches: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-                leagueId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MatchResponse"][];
-                };
-            };
+        content: {
+          "*/*": string;
         };
+      };
     };
-    makeMatches: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-                leagueId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MatchResponse"][];
-                };
-            };
-        };
+  };
+  logout: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    updateSetsScore: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-                leagueId: number;
-                matchId: number;
-                setIndex: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SetScoreUpdateRequest"];
-            };
+        content: {
+          "*/*": string;
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SetScoreUpdateResponse"];
-                };
-            };
-        };
+      };
     };
-    getClubMembersInClub: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": {
-                        [key: string]: components["schemas"]["ClubMemberResponse"][];
-                    };
-                };
-            };
-        };
+  };
+  readAllClub: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+        sort?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    joinClub: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 동호회 ID
-                 * @example 1
-                 */
-                clubId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ClubMemberJoinResponse"];
-                };
-            };
+        content: {
+          "*/*": components["schemas"]["PageClubCardResponse"];
         };
+      };
     };
-    saveImage: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["ImageUploadRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
+  };
+  createClub: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    readClub: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ClubDetailsResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ClubCreateRequest"];
+      };
     };
-    deleteClub: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-            };
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ClubDeleteResponse"];
-                };
-            };
+        content: {
+          "*/*": components["schemas"]["ClubCreateResponse"];
         };
+      };
     };
-    updateClub: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ClubUpdateRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ClubUpdateResponse"];
-                };
-            };
-        };
+  };
+  createLeague: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+      };
+      cookie?: never;
     };
-    leagueRead: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-                leagueId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LeagueDetailsResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LeagueCreateRequest"];
+      };
     };
-    deleteLeague: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-                leagueId: number;
-            };
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": "CONTINUE" | "SWITCHING_PROTOCOLS" | "PROCESSING" | "EARLY_HINTS" | "CHECKPOINT" | "OK" | "CREATED" | "ACCEPTED" | "NON_AUTHORITATIVE_INFORMATION" | "NO_CONTENT" | "RESET_CONTENT" | "PARTIAL_CONTENT" | "MULTI_STATUS" | "ALREADY_REPORTED" | "IM_USED" | "MULTIPLE_CHOICES" | "MOVED_PERMANENTLY" | "FOUND" | "MOVED_TEMPORARILY" | "SEE_OTHER" | "NOT_MODIFIED" | "USE_PROXY" | "TEMPORARY_REDIRECT" | "PERMANENT_REDIRECT" | "BAD_REQUEST" | "UNAUTHORIZED" | "PAYMENT_REQUIRED" | "FORBIDDEN" | "NOT_FOUND" | "METHOD_NOT_ALLOWED" | "NOT_ACCEPTABLE" | "PROXY_AUTHENTICATION_REQUIRED" | "REQUEST_TIMEOUT" | "CONFLICT" | "GONE" | "LENGTH_REQUIRED" | "PRECONDITION_FAILED" | "PAYLOAD_TOO_LARGE" | "REQUEST_ENTITY_TOO_LARGE" | "URI_TOO_LONG" | "REQUEST_URI_TOO_LONG" | "UNSUPPORTED_MEDIA_TYPE" | "REQUESTED_RANGE_NOT_SATISFIABLE" | "EXPECTATION_FAILED" | "I_AM_A_TEAPOT" | "INSUFFICIENT_SPACE_ON_RESOURCE" | "METHOD_FAILURE" | "DESTINATION_LOCKED" | "UNPROCESSABLE_ENTITY" | "LOCKED" | "FAILED_DEPENDENCY" | "TOO_EARLY" | "UPGRADE_REQUIRED" | "PRECONDITION_REQUIRED" | "TOO_MANY_REQUESTS" | "REQUEST_HEADER_FIELDS_TOO_LARGE" | "UNAVAILABLE_FOR_LEGAL_REASONS" | "INTERNAL_SERVER_ERROR" | "NOT_IMPLEMENTED" | "BAD_GATEWAY" | "SERVICE_UNAVAILABLE" | "GATEWAY_TIMEOUT" | "HTTP_VERSION_NOT_SUPPORTED" | "VARIANT_ALSO_NEGOTIATES" | "INSUFFICIENT_STORAGE" | "LOOP_DETECTED" | "BANDWIDTH_LIMIT_EXCEEDED" | "NOT_EXTENDED" | "NETWORK_AUTHENTICATION_REQUIRED";
-                };
-            };
+        content: {
+          "*/*": components["schemas"]["LeagueCreateResponse"];
         };
+      };
     };
-    updateLeague: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-                leagueId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LeagueUpdateRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LeagueUpdateResponse"];
-                };
-            };
-        };
+  };
+  participateInLeague: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+        leagueId: number;
+      };
+      cookie?: never;
     };
-    updateClubMemberRole: {
-        parameters: {
-            query: {
-                clubMemberId: number;
-            };
-            header?: never;
-            path: {
-                clubId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ClubMemberRoleUpdateRequest"];
-            };
+        content: {
+          "*/*": components["schemas"]["LeagueParticipantResponse"];
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ClubMemberResponse"];
-                };
-            };
-        };
+      };
     };
-    expelClubMember: {
-        parameters: {
-            query: {
-                clubMemberId: number;
-            };
-            header?: never;
-            path: {
-                clubId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ClubMemberExpelRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ClubMemberBanRecordResponse"];
-                };
-            };
-        };
+  };
+  cancelLeagueParticipation: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+        leagueId: number;
+      };
+      cookie?: never;
     };
-    banClubMember: {
-        parameters: {
-            query: {
-                clubMemberId: number;
-            };
-            header?: never;
-            path: {
-                clubId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ClubMemberBanRequest"];
-            };
+        content: {
+          "*/*": components["schemas"]["LeagueParticipationCancelResponse"];
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ClubMemberBanRecordResponse"];
-                };
-            };
-        };
+      };
     };
-    getMemberInfo: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MemberMyPageResponse"];
-                };
-            };
-        };
+  };
+  getAllMatches: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+        leagueId: number;
+      };
+      cookie?: never;
     };
-    readMemberLeagueRecord: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MatchResultResponse"][];
-                };
-            };
+        content: {
+          "*/*": components["schemas"]["MatchResponse"][];
         };
+      };
     };
-    getMemberIsClubMember: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MemberIsClubMemberResponse"];
-                };
-            };
-        };
+  };
+  makeMatches: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+        leagueId: number;
+      };
+      cookie?: never;
     };
-    getMatchDetails: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-                leagueId: number;
-                matchId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MatchDetailsResponse"];
-                };
-            };
+        content: {
+          "*/*": components["schemas"]["MatchResponse"][];
         };
+      };
     };
-    getAllMatchesDetails: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                clubId: number;
-                leagueId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SetScoreResponse"][];
-                };
-            };
-        };
+  };
+  updateSetsScore: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+        leagueId: number;
+        matchId: number;
+        setIndex: number;
+      };
+      cookie?: never;
     };
-    getLeagueByMonth: {
-        parameters: {
-            query: {
-                /** @description 조회할 날짜, 'yyyy-MM' 형식으로 입력 */
-                date: string;
-            };
-            header?: never;
-            path: {
-                /** @description 조회할 클럽의 ID */
-                clubId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LeagueReadResponse"][];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SetScoreUpdateRequest"];
+      };
     };
-    getLeagueByDate: {
-        parameters: {
-            query: {
-                /** @description 조회할 날짜, 'yyyy-MM-dd' 형식으로 입력 */
-                date: string;
-            };
-            header?: never;
-            path: {
-                /** @description 조회할 클럽의 ID */
-                clubId: number;
-            };
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LeagueByDateResponse"][];
-                };
-            };
+        content: {
+          "*/*": components["schemas"]["SetScoreUpdateResponse"];
         };
+      };
     };
-    clubSearch: {
-        parameters: {
-            query?: {
-                page?: number;
-                size?: number;
-                sort?: string;
-                keyword?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PageClubCardResponse"];
-                };
-            };
-        };
+  };
+  getClubMembersInClub: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+      };
+      cookie?: never;
     };
-    deleteMember: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MemberDeleteResponse"];
-                };
-            };
+        content: {
+          "*/*": {
+            [key: string]: components["schemas"]["ClubMemberResponse"][];
+          };
         };
+      };
     };
+  };
+  joinClub: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 동호회 ID
+         * @example 1
+         */
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ClubMemberJoinResponse"];
+        };
+      };
+    };
+  };
+  saveImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["ImageUploadRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  readClub: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ClubDetailsResponse"];
+        };
+      };
+    };
+  };
+  deleteClub: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ClubDeleteResponse"];
+        };
+      };
+    };
+  };
+  updateClub: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ClubUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ClubUpdateResponse"];
+        };
+      };
+    };
+  };
+  leagueRead: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+        leagueId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["LeagueDetailsResponse"];
+        };
+      };
+    };
+  };
+  deleteLeague: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+        leagueId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*":
+            | "CONTINUE"
+            | "SWITCHING_PROTOCOLS"
+            | "PROCESSING"
+            | "EARLY_HINTS"
+            | "CHECKPOINT"
+            | "OK"
+            | "CREATED"
+            | "ACCEPTED"
+            | "NON_AUTHORITATIVE_INFORMATION"
+            | "NO_CONTENT"
+            | "RESET_CONTENT"
+            | "PARTIAL_CONTENT"
+            | "MULTI_STATUS"
+            | "ALREADY_REPORTED"
+            | "IM_USED"
+            | "MULTIPLE_CHOICES"
+            | "MOVED_PERMANENTLY"
+            | "FOUND"
+            | "MOVED_TEMPORARILY"
+            | "SEE_OTHER"
+            | "NOT_MODIFIED"
+            | "USE_PROXY"
+            | "TEMPORARY_REDIRECT"
+            | "PERMANENT_REDIRECT"
+            | "BAD_REQUEST"
+            | "UNAUTHORIZED"
+            | "PAYMENT_REQUIRED"
+            | "FORBIDDEN"
+            | "NOT_FOUND"
+            | "METHOD_NOT_ALLOWED"
+            | "NOT_ACCEPTABLE"
+            | "PROXY_AUTHENTICATION_REQUIRED"
+            | "REQUEST_TIMEOUT"
+            | "CONFLICT"
+            | "GONE"
+            | "LENGTH_REQUIRED"
+            | "PRECONDITION_FAILED"
+            | "PAYLOAD_TOO_LARGE"
+            | "REQUEST_ENTITY_TOO_LARGE"
+            | "URI_TOO_LONG"
+            | "REQUEST_URI_TOO_LONG"
+            | "UNSUPPORTED_MEDIA_TYPE"
+            | "REQUESTED_RANGE_NOT_SATISFIABLE"
+            | "EXPECTATION_FAILED"
+            | "I_AM_A_TEAPOT"
+            | "INSUFFICIENT_SPACE_ON_RESOURCE"
+            | "METHOD_FAILURE"
+            | "DESTINATION_LOCKED"
+            | "UNPROCESSABLE_ENTITY"
+            | "LOCKED"
+            | "FAILED_DEPENDENCY"
+            | "TOO_EARLY"
+            | "UPGRADE_REQUIRED"
+            | "PRECONDITION_REQUIRED"
+            | "TOO_MANY_REQUESTS"
+            | "REQUEST_HEADER_FIELDS_TOO_LARGE"
+            | "UNAVAILABLE_FOR_LEGAL_REASONS"
+            | "INTERNAL_SERVER_ERROR"
+            | "NOT_IMPLEMENTED"
+            | "BAD_GATEWAY"
+            | "SERVICE_UNAVAILABLE"
+            | "GATEWAY_TIMEOUT"
+            | "HTTP_VERSION_NOT_SUPPORTED"
+            | "VARIANT_ALSO_NEGOTIATES"
+            | "INSUFFICIENT_STORAGE"
+            | "LOOP_DETECTED"
+            | "BANDWIDTH_LIMIT_EXCEEDED"
+            | "NOT_EXTENDED"
+            | "NETWORK_AUTHENTICATION_REQUIRED";
+        };
+      };
+    };
+  };
+  updateLeague: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+        leagueId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LeagueUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["LeagueUpdateResponse"];
+        };
+      };
+    };
+  };
+  updateClubMemberRole: {
+    parameters: {
+      query: {
+        clubMemberId: number;
+      };
+      header?: never;
+      path: {
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ClubMemberRoleUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ClubMemberResponse"];
+        };
+      };
+    };
+  };
+  expelClubMember: {
+    parameters: {
+      query: {
+        clubMemberId: number;
+      };
+      header?: never;
+      path: {
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ClubMemberExpelRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ClubMemberBanRecordResponse"];
+        };
+      };
+    };
+  };
+  banClubMember: {
+    parameters: {
+      query: {
+        clubMemberId: number;
+      };
+      header?: never;
+      path: {
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ClubMemberBanRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ClubMemberBanRecordResponse"];
+        };
+      };
+    };
+  };
+  getMemberInfo: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MemberMyPageResponse"];
+        };
+      };
+    };
+  };
+  readMemberLeagueRecord: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MatchResultResponse"][];
+        };
+      };
+    };
+  };
+  getMemberIsClubMember: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MemberIsClubMemberResponse"];
+        };
+      };
+    };
+  };
+  getMatchDetails: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+        leagueId: number;
+        matchId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MatchDetailsResponse"];
+        };
+      };
+    };
+  };
+  getAllMatchesDetails: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubId: number;
+        leagueId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["SetScoreResponse"][];
+        };
+      };
+    };
+  };
+  getLeagueByMonth: {
+    parameters: {
+      query: {
+        /** @description 조회할 날짜, 'yyyy-MM' 형식으로 입력 */
+        date: string;
+      };
+      header?: never;
+      path: {
+        /** @description 조회할 클럽의 ID */
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["LeagueReadResponse"][];
+        };
+      };
+    };
+  };
+  getLeagueByDate: {
+    parameters: {
+      query: {
+        /** @description 조회할 날짜, 'yyyy-MM-dd' 형식으로 입력 */
+        date: string;
+      };
+      header?: never;
+      path: {
+        /** @description 조회할 클럽의 ID */
+        clubId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["LeagueByDateResponse"][];
+        };
+      };
+    };
+  };
+  clubSearch: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+        sort?: string;
+        keyword?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["PageClubCardResponse"];
+        };
+      };
+    };
+  };
+  deleteMember: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MemberDeleteResponse"];
+        };
+      };
+    };
+  };
 }
