@@ -6,7 +6,6 @@ import {
   postMembersProfileImage,
   putMembersProfileImage,
 } from "../functions/memberFn";
-import { getMyInfo } from "../functions/membersFn";
 
 type MemberImageUpdate = components["schemas"]["MemberUpdateRequest"];
 
@@ -27,7 +26,7 @@ export const useGetMembersMyPage = () => {
 export const useGetMyInfo = (isEnabled: boolean) => {
   return useQuery({
     queryKey: ["myInfo"],
-    queryFn: getMyInfo,
+    queryFn: getMembersMyPage,
     enabled: isEnabled,
   });
 };

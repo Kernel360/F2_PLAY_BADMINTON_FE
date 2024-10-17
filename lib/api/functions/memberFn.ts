@@ -19,7 +19,7 @@ export const getIsClubMember =
     });
 
     if (!response.ok) {
-      throw new Error("멤버가 클럽에 속해있는지 조회에 실패하였습니다.");
+      throw new Error("멤버가 클럽에 속해있는지 조회할 수 없습니다.");
     }
 
     return response.json();
