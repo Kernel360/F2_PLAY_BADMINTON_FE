@@ -2,6 +2,7 @@
 
 import { useGetClubsById } from "@/lib/api/hooks/clubHook";
 import { usePostClubMembers } from "@/lib/api/hooks/clubMemberHook";
+import { useGetIsClubMember } from "@/lib/api/hooks/memberHook";
 import { format } from "date-fns";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -11,6 +12,7 @@ function ClubIntroPage() {
   const clubId = Number(pathname.split("/")[2]);
   const { data: clubData, isLoading, error } = useGetClubsById(clubId);
   const { mutate: postClubMembers } = usePostClubMembers(clubId);
+  const { data: isJoined } = useGetIsClubMember();
 
   if (isLoading) {
     return (
@@ -42,13 +44,15 @@ function ClubIntroPage() {
           alt="club image"
           className="rounded-md object-cover h-[400px] w-[400px]"
         />
-        <button
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
-          type="button"
-          onClick={handlePostClubMember}
-        >
-          동호회 참여하기
-        </button>
+        {!isJoined?.is_club_member && (
+          <button
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+            type="button"
+            onClick={handlePostClubMember}
+          >
+            동호회 참여하기
+          </button>
+        )}
       </div>
       <div className="flex flex-col flex-1 h-[400px] gap-4">
         <p className="text-3xl font-bold text-black">{clubData?.club_name}</p>

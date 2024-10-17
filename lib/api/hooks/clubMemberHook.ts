@@ -15,6 +15,9 @@ export const usePostClubMembers = (clubId: number) => {
     mutationFn: () => postClubMembers(clubId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clubMembersData"] });
+      queryClient.invalidateQueries({ queryKey: ["clubsDataById"] });
+      queryClient.invalidateQueries({ queryKey: ["isClubMemberData"] });
+      queryClient.invalidateQueries({ queryKey: ["myInfo"] });
     },
     onError: (error: Error) => alert(error),
   });
