@@ -2,6 +2,7 @@ import type { components } from "@/schemas/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getDateLeagues,
+  getLeagueDetail,
   getMonthLeagues,
   postLeagues,
 } from "../functions/leagueFn";
@@ -33,5 +34,12 @@ export const useGetDateLeagues = (clubId: number, date: string) => {
   return useQuery({
     queryKey: ["leaguesDateData"],
     queryFn: () => getDateLeagues(clubId, date),
+  });
+};
+
+export const useGetLeagueDetail = (clubId: number, leagueId: number) => {
+  return useQuery({
+    queryKey: ["leagueDetailData"],
+    queryFn: () => getLeagueDetail(clubId, leagueId),
   });
 };
