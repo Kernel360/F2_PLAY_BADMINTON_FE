@@ -1,10 +1,8 @@
-"use client";
-
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/ui/Header";
 import { TanstackClientProvider } from "@/lib/TanstackClientProvider";
-import { usePathname } from "next/navigation";
+import { headers } from "next/headers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -22,7 +20,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const path = usePathname();
+  const headerList = headers();
+  const path = headerList.get("x-current-path");
 
   return (
     <html lang="ko">
