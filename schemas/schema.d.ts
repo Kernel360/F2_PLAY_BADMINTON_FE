@@ -1115,6 +1115,10 @@ export interface components {
       opponent_team_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
     };
     MatchResultResponse: {
+      /** Format: int64 */
+      match_id?: number;
+      /** Format: int64 */
+      league_id?: number;
       /** @enum {string} */
       match_type?: "SINGLES" | "DOUBLES";
       singles_match?: components["schemas"]["SinglesMatchResultResponse"];
@@ -1294,6 +1298,11 @@ export interface components {
        * @description 수정 일자
        */
       modified_at?: string;
+      /**
+       * @description 대진표 생성 여부
+       * @example true
+       */
+      is_match_created?: boolean;
     };
     DoublesSetResponse: {
       /** Format: int32 */
