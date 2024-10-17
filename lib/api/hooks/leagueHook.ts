@@ -1,10 +1,12 @@
 import type { components } from "@/schemas/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  deleteParticipateLeague,
   getDateLeagues,
   getLeagueDetail,
   getMonthLeagues,
   postLeagues,
+  postParticipateLeague,
 } from "../functions/leagueFn";
 
 type LeagueCreateRequest = components["schemas"]["LeagueCreateRequest"];
@@ -41,5 +43,32 @@ export const useGetLeagueDetail = (clubId: number, leagueId: number) => {
   return useQuery({
     queryKey: ["leagueDetailData"],
     queryFn: () => getLeagueDetail(clubId, leagueId),
+  });
+};
+
+export const usePostParticipateLeague = (clubId: number, leagueId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => postParticipateLeague(clubId, leagueId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+    },
+    onError: (error: Error) => alert(error),
+  });
+};
+
+export const useDeleteParticipateLeague = (
+  clubId: number,
+  leagueId: number,
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => deleteParticipateLeague(clubId, leagueId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+    },
+    onError: (error: Error) => alert(error),
   });
 };

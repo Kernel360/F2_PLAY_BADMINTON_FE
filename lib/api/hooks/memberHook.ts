@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getIsClubMember } from "../functions/memberFn";
-import { getMyInfo } from "../functions/membersFn";
+import { getMyInfo } from "../functions/memberFn";
 
 export const useGetIsClubMember = () => {
   return useQuery({
