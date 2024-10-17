@@ -5,12 +5,13 @@ import {
   getDateLeagues,
   getLeagueDetail,
   getMonthLeagues,
+  patchLeagues,
   postLeagues,
   postParticipateLeague,
 } from "../functions/leagueFn";
 
 type LeagueCreateRequest = components["schemas"]["LeagueCreateRequest"];
-
+type LeagueUpdateRequest = components["schemas"]["LeagueUpdateRequest"];
 export const usePostLeagues = (clubId: number) => {
   const queryClient = useQueryClient();
 
@@ -66,6 +67,19 @@ export const useDeleteParticipateLeague = (
 
   return useMutation({
     mutationFn: () => deleteParticipateLeague(clubId, leagueId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+    },
+    onError: (error: Error) => alert(error),
+  });
+};
+
+export const usePatchLeague = (clubId: number, leagueId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (leagueData: LeagueUpdateRequest) =>
+      patchLeagues(leagueData, clubId, leagueId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
     },
