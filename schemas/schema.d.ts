@@ -1124,9 +1124,9 @@ export interface components {
       /** Format: int32 */
       number?: number;
       sort?: components["schemas"]["SortObject"][];
+      pageable?: components["schemas"]["PageableObject"];
       /** Format: int32 */
       number_of_elements?: number;
-      pageable?: components["schemas"]["PageableObject"];
       empty?: boolean;
     };
     PageableObject: {
