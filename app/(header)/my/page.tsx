@@ -2,11 +2,15 @@
 
 import { Button } from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
-import { useGetMembersMyPage } from "@/lib/api/hooks/memberHook";
+import {
+  useGetMembersMyPage,
+  usePostMembersProfileImage,
+} from "@/lib/api/hooks/memberHook";
 import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { ImagePlus } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import MyOneGameResult from "./MyOneGameResult";
 
 const matches = [
@@ -91,43 +95,60 @@ const matches = [
 
 function My() {
   const { data, isLoading, error } = useGetMembersMyPage();
-
   const [infoUpdate, setInfoUpdate] = useState(false);
   const [userImg, setUserImg] = useState<string | null>(null);
-  const [userName, setUserName] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(5);
-
+  const { mutate: postImageToS3 } = usePostMembersProfileImage();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    if (data?.name) {
-      setUserName(data?.name);
-    }
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm({
+    defaultValues: { profileImg: "" },
+    mode: "onBlur",
+  });
 
-    if (data?.profile_image) {
-      setUserImg(data?.profile_image);
+  useEffect(() => {
+    if (data) {
+      setValue("profileImg", data?.profile_image || "");
+      setUserImg(data.profile_image || "");
     }
-  }, [data]);
+  }, [data, setValue]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // TODO(iamgyu): 서버로 이미지 업로드 로직 추가
-      const imageUrl = URL.createObjectURL(file);
-      setUserImg(imageUrl);
+      uploadImage(file);
     }
+  };
+
+  const uploadImage = (file: File) => {
+    const formData = new FormData();
+    formData.append("multipartFile", file);
+
+    postImageToS3(formData, {
+      onSuccess: (data) => {
+        alert("이미지가 S3에 저장되었습니다");
+        setValue("profileImg", file.name); // 성공 시 값 업데이트
+        clearErrors("profileImg"); // 에러 클리어
+      },
+      onError: () => {
+        setError("profileImg", { message: "이미지 업로드에 실패했습니다." });
+      },
+    });
   };
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleInfoUpdate = () => {
+  const handleImageUpdate = () => {
     setInfoUpdate(!infoUpdate);
-    if (infoUpdate === true) {
-      alert("내용 수정을 완료하였습니다.");
-      /* TODO(iamgyu): UPDATE API 호출*/
-    }
   };
 
   const handleShowMore = () => {
@@ -138,6 +159,13 @@ function My() {
     if (infoUpdate) {
       return (
         <div className="relative w-64 h-64 rounded-full">
+          <input
+            type="text"
+            className="hidden"
+            {...register("profileImg", {
+              required: "이미지를 선택해주세요",
+            })}
+          />
           <img
             alt="previewImg"
             src={userImg || "/images/dummy-image.jpg"}
@@ -174,23 +202,12 @@ function My() {
           <ImageUpdate />
           <div className="flex flex-col gap-8">
             <div className="flex justify-between items-center gap-4">
-              {/* if문 사용 시 useEffect를 사용해야되고 그럴 시 biome 에러로 인해 로직이 복잡해지는 상황 */}
-              {infoUpdate ? (
-                <input
-                  type="text"
-                  className="text-black text-lg rounded-md border border-gray-400 px-1"
-                  value={userName || "none"}
-                  onChange={(e) => setUserName(e.target.value)}
-                  maxLength={16}
-                />
-              ) : (
-                <p className="text-black font-bold text-lg">{userName}</p>
-              )}
+              <p className="text-black font-bold text-lg">{data?.name}</p>
             </div>
-            <div className="flex justify-between items-center gap-4">
+            <div className="flex items-center gap-4">
               <p className="text-black font-bold text-lg">소속</p>
               <p className="text-black text-lg">
-                {data?.club_member_my_page_response?.club_name}
+                {data?.club_member_my_page_response?.club_name || "없음"}
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -216,9 +233,11 @@ function My() {
         </div>
         <div className="flex gap-4">
           {infoUpdate ? (
-            <Button onClick={handleInfoUpdate}>수정 완료</Button>
+            <Button onClick={handleImageUpdate}>수정 완료</Button>
           ) : (
-            <Button onClick={handleInfoUpdate}>정보 수정</Button>
+            <Button onClick={() => setInfoUpdate(!infoUpdate)}>
+              정보 수정
+            </Button>
           )}
           <Button
             variant="outline"
