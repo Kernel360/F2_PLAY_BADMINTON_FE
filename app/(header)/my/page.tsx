@@ -5,12 +5,12 @@ import IconButton from "@/components/ui/IconButton";
 import {
   useGetMembersMyPage,
   usePostMembersProfileImage,
+  usePutMembersProfileImage,
 } from "@/lib/api/hooks/memberHook";
 import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { ImagePlus } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
 import MyOneGameResult from "./MyOneGameResult";
 
 const matches = [
@@ -96,29 +96,17 @@ const matches = [
 function My() {
   const { data, isLoading, error } = useGetMembersMyPage();
   const [infoUpdate, setInfoUpdate] = useState(false);
-  const [userImg, setUserImg] = useState<string | null>(null);
+  const [userImg, setUserImg] = useState<string | undefined>();
   const [visibleCount, setVisibleCount] = useState(5);
   const { mutate: postImageToS3 } = usePostMembersProfileImage();
+  const { mutate: putMembersImage } = usePutMembersProfileImage();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useForm({
-    defaultValues: { profileImg: "" },
-    mode: "onBlur",
-  });
 
   useEffect(() => {
     if (data) {
-      setValue("profileImg", data?.profile_image || "");
       setUserImg(data.profile_image || "");
     }
-  }, [data, setValue]);
+  }, [data]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -133,12 +121,8 @@ function My() {
 
     postImageToS3(formData, {
       onSuccess: (data) => {
-        alert("이미지가 S3에 저장되었습니다");
-        setValue("profileImg", file.name); // 성공 시 값 업데이트
-        clearErrors("profileImg"); // 에러 클리어
-      },
-      onError: () => {
-        setError("profileImg", { message: "이미지 업로드에 실패했습니다." });
+        setUserImg(data);
+        console.log("Uploaded image data:", data);
       },
     });
   };
@@ -148,6 +132,16 @@ function My() {
   };
 
   const handleImageUpdate = () => {
+    putMembersImage(
+      {
+        profile_image_url: userImg,
+      },
+      {
+        onSuccess: () => {
+          alert("이미지 변경이 완료되었습니다!");
+        },
+      },
+    );
     setInfoUpdate(!infoUpdate);
   };
 
@@ -155,17 +149,18 @@ function My() {
     setVisibleCount((prevCount) => prevCount + 5);
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   const ImageUpdate = () => {
     if (infoUpdate) {
       return (
         <div className="relative w-64 h-64 rounded-full">
-          <input
-            type="text"
-            className="hidden"
-            {...register("profileImg", {
-              required: "이미지를 선택해주세요",
-            })}
-          />
           <img
             alt="previewImg"
             src={userImg || "/images/dummy-image.jpg"}
@@ -239,12 +234,14 @@ function My() {
               정보 수정
             </Button>
           )}
+          {/*
           <Button
             variant="outline"
             className="border-red-500 hover:bg-red-500 text-red-500"
           >
             동호회 탈퇴
           </Button>
+          */}
         </div>
       </div>
       <div className="flex flex-col w-full mt-8">

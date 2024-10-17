@@ -50,7 +50,7 @@ export const postMembersProfileImage = async (
     credentials: "include",
     body: profileImage,
   });
-  console.log(response);
+
   if (!response.ok) {
     throw new Error("프로필 사진을 S3에 업로드를 실패했습니다.");
   }
@@ -63,7 +63,7 @@ export const putMembersProfileImage = async (
 ): Promise<MemberResponse> => {
   const response = await fetch(`${BASE_URL}/members/profileImage`, {
     method: "PUT",
-    headers: { "Content-Type": "application.json" },
+    headers: { "Content-Type": "application/json" },
     credentials: "include",
     body: JSON.stringify(profileImage),
   });
