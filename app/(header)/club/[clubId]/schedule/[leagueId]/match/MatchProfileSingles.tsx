@@ -1,12 +1,10 @@
+import type { components } from "@/schemas/schema";
 import MatchScoreModalSingles from "./MatchScoreModalSingles";
 
+type MatchResponse = components["schemas"]["MatchResponse"];
+
 interface MatchProfileSinglesProps {
-  singlesMatch: {
-    participant1_name: string;
-    participant1_image: string;
-    participant2_name: string;
-    participant2_image: string;
-  };
+  singlesMatch: Exclude<MatchResponse["singles_match"], undefined>;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -21,30 +19,33 @@ function MatchProfileSingles({
     participant1_image,
     participant2_name,
     participant2_image,
+    participant1_win_set_count,
+    participant2_win_set_count,
   } = singlesMatch;
 
   return (
-    <div className="flex">
-      <div className="flex rounded-md bg-gray-200 items-center w-72 p-2 justify-between">
-        <div className="flex flex-col items-center gap-4">
+    <div className="flex items-center justify-center">
+      <div className="flex rounded-lg bg-gradient-to-r from-blue-100 to-purple-100 items-center w-80 p-4 justify-between shadow-lg">
+        <div className="flex flex-col items-center gap-2">
           <img
             src={participant1_image}
-            alt="user"
-            className="h-20 w-20 rounded-full"
+            alt={participant1_name}
+            className="h-24 w-24 rounded-full object-cover border-4 border-blue-400 shadow-md"
           />
-          <p className="text-black">{participant1_name}</p>
+          <p className="text-gray-700 font-semibold">{participant1_name}</p>
         </div>
-        <div className="flex flex-col items-center">
-          <p className="text-sm text-black">진행 완료</p>
-          <p className="text-black text-2xl font-bold">2 vs 0</p>
+        <div className="flex flex-col items-center justify-center">
+          <p className="text-indigo-600 text-2xl font-bold">
+            {participant1_win_set_count} : {participant2_win_set_count}
+          </p>
         </div>
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-2">
           <img
             src={participant2_image}
-            alt="user"
-            className="h-20 w-20 rounded-full"
+            alt={participant2_name}
+            className="h-24 w-24 rounded-full object-cover border-4 border-purple-400 shadow-md"
           />
-          <p className="text-black">{participant2_name}</p>
+          <p className="text-gray-700 font-semibold">{participant2_name}</p>
         </div>
       </div>
       {isOpen && (
