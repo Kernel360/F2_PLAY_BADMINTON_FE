@@ -148,3 +148,21 @@ export const patchLeagues = async (
   }
   return response.json();
 };
+
+export const deleteLeagues = async (
+  clubId: number,
+  leagueId: number,
+): Promise<string> => {
+  const response = await fetch(
+    `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}`,
+    {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    },
+  );
+  if (!response.ok) {
+    throw new Error("경기 삭제에 실패했습니다.");
+  }
+  return response.json();
+};
