@@ -122,7 +122,6 @@ function My() {
     postImageToS3(formData, {
       onSuccess: (data) => {
         setUserImg(data);
-        console.log("Uploaded image data:", data);
       },
     });
   };
@@ -138,7 +137,7 @@ function My() {
       },
       {
         onSuccess: () => {
-          alert("이미지 변경이 완료되었습니다!");
+          alert("이미지 변경이 완료되었습니다");
         },
       },
     );
