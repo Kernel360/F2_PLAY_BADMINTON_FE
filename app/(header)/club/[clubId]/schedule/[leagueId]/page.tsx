@@ -92,14 +92,16 @@ function LeaguePage() {
           </div>
         </div>
         <div className="flex justify-center gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            className="flex items-center gap-1 border-primary"
-          >
-            <Pencil size={16} />
-            수정
-          </Button>
+          <Link href={`/club/${clubId}/schedule/${leagueId}/update`}>
+            <Button
+              size="sm"
+              variant="outline"
+              className="flex items-center gap-1 border-primary"
+            >
+              <Pencil size={16} />
+              수정
+            </Button>
+          </Link>
           <Button
             size="sm"
             variant="destructive"
