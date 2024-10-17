@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
 import {
+  useDeleteLeague,
   useDeleteParticipateLeague,
   useGetLeagueDetail,
   usePostParticipateLeague,
@@ -19,16 +20,18 @@ import {
   MapPin,
   Pencil,
   Pyramid,
+  Router,
   Trash2,
   User,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 function LeaguePage() {
   const pathname = usePathname();
   const clubId = Number(pathname.split("/")[2]);
   const leagueId = Number(pathname.split("/")[4]);
+  const router = useRouter();
   const {
     data: league,
     isLoading,
@@ -42,6 +45,7 @@ function LeaguePage() {
     clubId,
     leagueId,
   );
+  const { mutate: deleteLeague } = useDeleteLeague(clubId, leagueId);
 
   const handleParticipate = (isParticipate: boolean) => {
     if (!isParticipate) {
@@ -76,6 +80,14 @@ function LeaguePage() {
     return <div>Error: {error.message}</div>;
   }
 
+  const handleDelete = () => {
+    if (confirm("정말로 삭제하시겠습니까?")) {
+      deleteLeague(undefined, {
+        onSuccess: () => router.push(`/club/${clubId}/schedule`),
+      });
+    }
+  };
+
   return (
     <div className="container mx-auto bg-white rounded-lg space-y-6">
       <div className="flex items-center justify-between border-b pb-4">
@@ -106,6 +118,7 @@ function LeaguePage() {
             size="sm"
             variant="destructive"
             className="flex items-center gap-1"
+            onClick={() => handleDelete()}
           >
             <Trash2 size={16} />
             삭제
