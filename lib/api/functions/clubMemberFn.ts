@@ -46,7 +46,7 @@ export const patchClubMembersRole = async (
       body: JSON.stringify(role),
     },
   );
-
+  console.log(role, clubId, clubMemberId);
   if (!response.ok) {
     throw new Error("멤버 역할 변경에 실패했습니다.");
   }
@@ -60,7 +60,7 @@ export const patchClubMembersExpel = async (
   clubMemberId: number,
 ): Promise<ClubMemberBanRecordResponse> => {
   const response = await fetch(
-    `${BASE_URL}/clubs/${clubId}/clubMembers/expel/expel?clubMemberId=${clubMemberId}`,
+    `${BASE_URL}/clubs/${clubId}/clubMembers/expel?clubMemberId=${clubMemberId}`,
     {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },

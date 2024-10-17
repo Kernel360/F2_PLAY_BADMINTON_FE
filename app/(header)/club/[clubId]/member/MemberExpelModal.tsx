@@ -38,6 +38,7 @@ function MemberExpelModal({
       {
         onSuccess: () => {
           alert("멤버 내보내기가 정상적으로 완료되었습니다.");
+          handleExpelModal();
         },
       },
     );
@@ -56,12 +57,13 @@ function MemberExpelModal({
             placeholder="내보내는 이유"
             onChange={(e) => setExpelReason(e.target.value)}
           />
-          <DialogClose
+          <button
+            type="button"
             className="bg-primary text-white rounded-md px-6 py-2"
             onClick={() => handleMemberExpel(expelReason)}
           >
             내보내기
-          </DialogClose>
+          </button>
         </div>
       </DialogContent>
     </Dialog>

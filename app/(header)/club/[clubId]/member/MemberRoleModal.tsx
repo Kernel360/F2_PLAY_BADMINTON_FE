@@ -39,27 +39,21 @@ function MemberRoleModal({
 
   const roles = [
     {
-      id: 1,
-      name: "회장",
-    },
-    {
       id: 2,
       name: "매니저",
     },
     {
       id: 3,
-      name: "멤버",
+      name: "회원",
     },
   ];
 
   const changeRoleWord = (role: string) => {
     switch (role) {
-      case "회장":
-        return "ROLE_OWNER";
       case "매니저":
         return "ROLE_MANAGER";
       case "회원":
-        return "ROLE_MANAGER";
+        return "ROLE_USER";
       default:
         return "";
     }
@@ -77,6 +71,7 @@ function MemberRoleModal({
       {
         onSuccess: () => {
           alert("멤버 역할 변경이 완료되었습니다.");
+          handleRoleModal();
         },
       },
     );
@@ -105,12 +100,13 @@ function MemberRoleModal({
               </div>
             ))}
           </div>
-          <DialogClose
+          <button
+            type="button"
             className="bg-primary text-white rounded-md px-6 py-2"
             onClick={() => handleMemberRole(changeRoleWord(selectedRole))}
           >
             교체
-          </DialogClose>
+          </button>
         </div>
       </DialogContent>
     </Dialog>

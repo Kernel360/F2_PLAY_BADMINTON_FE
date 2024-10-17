@@ -30,7 +30,6 @@ function MemberSuspendedModal({
     clubMemberId,
   );
 
-  console.log(banReason);
   const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSuspendedDay(Number(e.target.value));
   };
@@ -77,6 +76,7 @@ function MemberSuspendedModal({
       {
         onSuccess: () => {
           alert("멤버 정지가 정상적으로 완료되었습니다.");
+          handleSuspendedModal();
         },
       },
     );
@@ -113,7 +113,8 @@ function MemberSuspendedModal({
               setBanReason(e.target.value);
             }}
           />
-          <DialogClose
+          <button
+            type="button"
             className="bg-primary text-white rounded-md px-6 py-2"
             onClick={() =>
               handleMemberSuspended(
@@ -123,7 +124,7 @@ function MemberSuspendedModal({
             }
           >
             정지
-          </DialogClose>
+          </button>
         </div>
       </DialogContent>
     </Dialog>
