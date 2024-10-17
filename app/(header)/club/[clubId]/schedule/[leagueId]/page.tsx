@@ -24,7 +24,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 
 function LeaguePage() {
   const pathname = usePathname();
@@ -204,17 +203,21 @@ function LeaguePage() {
             대진표 보기
           </Button>
         </Link>
-        <Button
-          size="lg"
-          variant={
-            league?.is_participated_in_league ? "destructive" : "default"
-          }
-          className="items-center justify-center gap-2 border-primary w-1/3"
-          onClick={() => handleParticipate(!!league?.is_participated_in_league)}
-        >
-          <User size={20} />
-          {league?.is_participated_in_league ? "참가 취소" : "참가하기"}
-        </Button>
+        {league?.league_status === "RECRUITING" && (
+          <Button
+            size="lg"
+            variant={
+              league?.is_participated_in_league ? "destructive" : "default"
+            }
+            className="items-center justify-center gap-2 border-primary w-1/3"
+            onClick={() =>
+              handleParticipate(!!league?.is_participated_in_league)
+            }
+          >
+            <User size={20} />
+            {league?.is_participated_in_league ? "참가 취소" : "참가하기"}
+          </Button>
+        )}
       </div>
     </div>
   );
