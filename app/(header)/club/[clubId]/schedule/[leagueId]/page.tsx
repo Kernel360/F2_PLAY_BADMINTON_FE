@@ -203,6 +203,7 @@ function LeaguePage() {
             대진표 보기
           </Button>
         </Link>
+        {/* TODO(Yejin0O0): 지원 가능한 티어 경기에만 버튼 보이도록 수정 */}
         {league?.league_status === "RECRUITING" && (
           <Button
             size="lg"
