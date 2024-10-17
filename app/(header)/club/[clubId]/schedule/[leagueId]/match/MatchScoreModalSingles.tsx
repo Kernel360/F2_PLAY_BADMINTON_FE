@@ -6,16 +6,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import type { components } from "@/schemas/schema";
 import type React from "react";
 import { useState } from "react";
 
+type MatchResponse = components["schemas"]["MatchResponse"];
+
 interface MatchScoreModalSinglesProps {
-  singlesMatch: {
-    participant1_name: string;
-    participant1_image: string;
-    participant2_name: string;
-    participant2_image: string;
-  };
+  singlesMatch: Exclude<MatchResponse["singles_match"], undefined>;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -30,6 +28,8 @@ function MatchScoreModalSIngles({
     participant1_image,
     participant2_name,
     participant2_image,
+    participant1_win_set_count,
+    participant2_win_set_count,
   } = singlesMatch;
 
   const [p1Score, setP1Score] = useState<number[]>([0, 0, 0]);

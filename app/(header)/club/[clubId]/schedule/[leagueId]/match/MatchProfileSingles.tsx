@@ -1,12 +1,10 @@
+import type { components } from "@/schemas/schema";
 import MatchScoreModalSingles from "./MatchScoreModalSingles";
 
+type MatchResponse = components["schemas"]["MatchResponse"];
+
 interface MatchProfileSinglesProps {
-  singlesMatch: {
-    participant1_name: string;
-    participant1_image: string;
-    participant2_name: string;
-    participant2_image: string;
-  };
+  singlesMatch: Exclude<MatchResponse["singles_match"], undefined>;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -21,6 +19,8 @@ function MatchProfileSingles({
     participant1_image,
     participant2_name,
     participant2_image,
+    participant1_win_set_count,
+    participant2_win_set_count,
   } = singlesMatch;
 
   return (
@@ -35,8 +35,9 @@ function MatchProfileSingles({
           <p className="text-black">{participant1_name}</p>
         </div>
         <div className="flex flex-col items-center">
-          <p className="text-sm text-black">진행 완료</p>
-          <p className="text-black text-2xl font-bold">2 vs 0</p>
+          <p className="text-black text-2xl font-bold">
+            {participant1_win_set_count} : {participant2_win_set_count}
+          </p>
         </div>
         <div className="flex flex-col items-center gap-4">
           <img

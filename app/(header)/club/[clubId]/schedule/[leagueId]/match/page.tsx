@@ -1,9 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { useState } from "react";
+import { useGetMatches } from "@/lib/api/hooks/matchHook";
+import type { components } from "@/schemas/schema";
+import { useParams } from "next/navigation";
+import { useMemo, useState } from "react";
 import MatchProfileDoubles from "./MatchProfileDoubles";
 import MatchProfileSingles from "./MatchProfileSingles";
+
+type MatchResponse = components["schemas"]["MatchResponse"];
 
 const matches = [
   {
@@ -149,8 +154,38 @@ const matches = [
 ];
 
 function MatchPage() {
+  const params = useParams();
   const [matchTypes, setMatchTypes] = useState(true);
   const [matchDialog, setMatchDialog] = useState<number | null>(null);
+
+  /* TODO: useParams를 이용하여 URL id 가져오기, id 타입 넣어주기 기본은 string*/
+  const { data, isLoading, error } = useGetMatches(
+    1,
+    1,
+    // Number(params.clubId),
+    // Number(params.leagueId),
+  );
+
+  const [singleGames, doubleGames] = useMemo<
+    [MatchResponse[], MatchResponse[]]
+  >(() => {
+    if (data) {
+      const singleGames: MatchResponse[] = [];
+      const doubleGames: MatchResponse[] = [];
+
+      for (const match of data) {
+        if (match.match_type === "SINGLES") {
+          singleGames.push(match);
+        } else if (match.match_type === "DOUBLES") {
+          doubleGames.push(match);
+        }
+      }
+
+      return [singleGames, doubleGames];
+    }
+
+    return [[], []];
+  }, [data]);
 
   const toggleMatchDialog = (index: number) => {
     setMatchDialog((prevIndex) => (prevIndex === index ? null : index));
@@ -163,6 +198,16 @@ function MatchPage() {
   const handleMatchTypeDoubles = () => {
     setMatchTypes(false);
   };
+
+  if (isLoading) {
+    <div>Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="text-red-500">데이터를 불러오는 데 실패했습니다.</div>
+    );
+  }
 
   return (
     <div>
@@ -182,45 +227,45 @@ function MatchPage() {
       </div>
       {matchTypes ? (
         <div className="flex gap-10 w-full flex-wrap mt-5">
-          {matches
-            .filter((match) => match.matchType === "SINGLES")
-            .map((match) =>
-              match.singlesMatch ? (
-                <button
-                  type="button"
-                  key={match.id}
-                  onClick={() => toggleMatchDialog(match.id)}
-                >
-                  <MatchProfileSingles
-                    singlesMatch={match.singlesMatch}
-                    isOpen={matchDialog === match.id}
-                    onClose={() => toggleMatchDialog(match.id)}
-                  />
-                </button>
-              ) : null,
-            )}
+          {singleGames.map((match) => {
+            if (!match.singles_match) {
+              return null;
+            }
+            return (
+              <button
+                type="button"
+                key={match.match_id}
+                onClick={() => toggleMatchDialog(match.match_id as number)}
+              >
+                <MatchProfileSingles
+                  singlesMatch={match.singles_match}
+                  isOpen={matchDialog === match.match_id}
+                  onClose={() => toggleMatchDialog(match.match_id as number)}
+                />
+              </button>
+            );
+          })}
         </div>
       ) : (
         <div className="flex gap-10 w-full flex-wrap mt-5">
-          {matches
-            .filter((match) => match.matchType === "DOUBLES")
-            .map((match) =>
-              match.doublesMatch ? (
-                <button
-                  type="button"
-                  key={match.id}
-                  onClick={() => toggleMatchDialog(match.id)}
-                >
-                  <MatchProfileDoubles
-                    key={match.id}
-                    team1={match.doublesMatch.team1}
-                    team2={match.doublesMatch.team2}
-                    isOpen={matchDialog === match.id}
-                    onClose={() => toggleMatchDialog(match.id)}
-                  />
-                </button>
-              ) : null,
-            )}
+          {doubleGames.map((match) => {
+            if (!match.doubles_match) {
+              return null;
+            }
+            return (
+              <button
+                type="button"
+                key={match.match_id}
+                onClick={() => toggleMatchDialog(match.match_id as number)}
+              >
+                <MatchProfileDoubles
+                  doublesMatch={match.doubles_match}
+                  isOpen={matchDialog === match.match_id}
+                  onClose={() => toggleMatchDialog(match.match_id as number)}
+                />
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
