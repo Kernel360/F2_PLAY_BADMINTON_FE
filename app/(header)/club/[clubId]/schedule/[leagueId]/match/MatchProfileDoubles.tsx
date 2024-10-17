@@ -15,49 +15,49 @@ function MatchProfileDoubles({
   onClose,
 }: MatchProfileDoublesProps) {
   return (
-    <div className="flex">
-      <div className="flex rounded-md bg-gray-200 items-center w-[450px] p-2 justify-between">
-        <div className="flex gap-2">
-          <div className="flex flex-col items-center gap-4">
+    <div className="flex items-center justify-center">
+      <div className="flex rounded-lg bg-gradient-to-r from-blue-100 to-purple-100 items-center w-[500px] p-4 justify-between shadow-lg">
+        <div className="flex gap-4">
+          <div className="flex flex-col items-center gap-2">
             <img
               src={doublesMatch?.team1?.participant1_image}
-              alt="user"
-              className="h-20 w-20 rounded-full"
+              alt={doublesMatch?.team1?.participant1_name}
+              className="h-20 w-20 rounded-full object-cover border-4 border-blue-400 shadow-md"
             />
-            <p className="text-black">
+            <p className="text-gray-700 font-semibold">
               {doublesMatch?.team1?.participant1_name}
             </p>
           </div>
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-2">
             <img
               src={doublesMatch?.team1?.participant2_image}
-              alt="user"
-              className="h-20 w-20 rounded-full"
+              alt={doublesMatch?.team1?.participant2_name}
+              className="h-20 w-20 rounded-full object-cover border-4 border-blue-400 shadow-md"
             />
-            <p className="text-black">
+            <p className="text-gray-700 font-semibold">
               {doublesMatch?.team1?.participant2_name}
             </p>
           </div>
         </div>
-        <p className="text-black text-xl font-bold">1 vs 1</p>
-        <div className="flex gap-2">
-          <div className="flex flex-col items-center gap-4">
+        <p className="text-indigo-600 text-2xl font-bold mx-4">1 vs 1</p>
+        <div className="flex gap-4">
+          <div className="flex flex-col items-center gap-2">
             <img
               src={doublesMatch?.team2?.participant1_image}
-              alt="user"
-              className="h-20 w-20 rounded-full"
+              alt={doublesMatch?.team2?.participant1_name}
+              className="h-20 w-20 rounded-full object-cover border-4 border-purple-400 shadow-md"
             />
-            <p className="text-black">
+            <p className="text-gray-700 font-semibold">
               {doublesMatch?.team2?.participant1_name}
             </p>
           </div>
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-2">
             <img
               src={doublesMatch?.team2?.participant2_image}
-              alt="user"
-              className="h-20 w-20 rounded-full"
+              alt={doublesMatch?.team2?.participant2_name}
+              className="h-20 w-20 rounded-full object-cover border-4 border-purple-400 shadow-md"
             />
-            <p className="text-black">
+            <p className="text-gray-700 font-semibold">
               {doublesMatch?.team2?.participant2_name}
             </p>
           </div>
@@ -73,4 +73,5 @@ function MatchProfileDoubles({
     </div>
   );
 }
+
 export default MatchProfileDoubles;
