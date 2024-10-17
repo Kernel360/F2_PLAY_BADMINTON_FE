@@ -6,7 +6,7 @@ type ClubMemberRoleUpdateRequest =
 type ClubMemberExpelRequest = components["schemas"]["ClubMemberExpelRequest"];
 type ClubMemberBanRequest = components["schemas"]["ClubMemberBanRequest"];
 type ClubMemberBanRecordResponse =
-  components["schemas"]["clubMemberBanRecordResponse"];
+  components["schemas"]["ClubMemberBanRecordResponse"];
 type ClubMemberJoinResponse = components["schemas"]["ClubMemberJoinResponse"];
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;

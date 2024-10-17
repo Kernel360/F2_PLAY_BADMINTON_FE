@@ -2,123 +2,81 @@
 
 import { Button } from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
+import {
+  useGetMembersMyPage,
+  useGetMyMatch,
+  usePostMembersProfileImage,
+  usePutMembersProfileImage,
+} from "@/lib/api/hooks/memberHook";
+import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { ImagePlus } from "lucide-react";
 import type React from "react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MyOneGameResult from "./MyOneGameResult";
 
-const matches = [
-  {
-    id: 1,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 2,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 3,
-    opponentName: "a",
-    result: "LOSE",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 4,
-    opponentName: "a",
-    result: "LOSE",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 5,
-    opponentName: "a",
-    result: "LOSE",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 6,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 7,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 8,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 9,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 10,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 11,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-];
-
 function My() {
+  const { data, isLoading, error } = useGetMembersMyPage();
   const [infoUpdate, setInfoUpdate] = useState(false);
-  const [userImg, setUserImg] = useState("/images/dummy-image.jpg");
-  const [userName, setUserName] = useState("유저이름");
+  const [userImg, setUserImg] = useState<string | undefined>();
   const [visibleCount, setVisibleCount] = useState(5);
-
+  const { mutate: postImageToS3 } = usePostMembersProfileImage();
+  const { mutate: putMembersImage } = usePutMembersProfileImage();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { data: matches } = useGetMyMatch();
+
+  useEffect(() => {
+    if (data) {
+      setUserImg(data.profile_image || "");
+    }
+  }, [data]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // TODO(iamgyu): 서버로 이미지 업로드 로직 추가
-      const imageUrl = URL.createObjectURL(file);
-      setUserImg(imageUrl);
+      uploadImage(file);
     }
+  };
+
+  const uploadImage = (file: File) => {
+    const formData = new FormData();
+    formData.append("multipartFile", file);
+
+    postImageToS3(formData, {
+      onSuccess: (data) => {
+        setUserImg(data);
+      },
+    });
   };
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleInfoUpdate = () => {
+  const handleImageUpdate = () => {
+    putMembersImage(
+      {
+        profile_image_url: userImg,
+      },
+      {
+        onSuccess: () => {
+          alert("이미지 변경이 완료되었습니다");
+        },
+      },
+    );
     setInfoUpdate(!infoUpdate);
-    if (infoUpdate === true) {
-      alert("내용 수정을 완료하였습니다.");
-      /* TODO(iamgyu): UPDATE API 호출*/
-    }
   };
 
   const handleShowMore = () => {
     setVisibleCount((prevCount) => prevCount + 5);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   const ImageUpdate = () => {
     if (infoUpdate) {
@@ -126,7 +84,7 @@ function My() {
         <div className="relative w-64 h-64 rounded-full">
           <img
             alt="previewImg"
-            src={userImg}
+            src={userImg || "/images/dummy-image.jpg"}
             className="object-cover w-full h-full rounded-full"
           />
           <input
@@ -146,7 +104,7 @@ function My() {
 
     return (
       <img
-        src={userImg}
+        src={userImg || "/images/dummy-image.jpg"}
         alt="userImg"
         className="object-cover w-64 h-64 rounded-full"
       />
@@ -160,51 +118,51 @@ function My() {
           <ImageUpdate />
           <div className="flex flex-col gap-8">
             <div className="flex justify-between items-center gap-4">
-              {/* if문 사용 시 useEffect를 사용해야되고 그럴 시 biome 에러로 인해 로직이 복잡해지는 상황 */}
-              {infoUpdate ? (
-                <input
-                  type="text"
-                  className="text-black text-lg rounded-md border border-gray-400 px-1"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  maxLength={16}
-                />
-              ) : (
-                <p className="text-black font-bold text-lg">{userName}</p>
-              )}
+              <p className="text-black font-bold text-lg">{data?.name}</p>
             </div>
-            <div className="flex justify-between items-center gap-4">
-              <p className="text-black font-bold text-lg">소속 동호회 이름</p>
+            <div className="flex items-center gap-4">
+              <p className="text-black font-bold text-lg">소속</p>
+              <p className="text-black text-lg">
+                {data?.club_member_my_page_response?.club_name || "없음"}
+              </p>
             </div>
             <div className="flex items-center gap-4">
               <p className="text-black font-bold text-lg">티어</p>
               <div className="flex items-center gap-1">
-                <img
-                  src="/images/tier-gold.png"
-                  alt="userTier"
-                  className="w-8 h-8"
-                />
-                <p className="text-black">골드</p>
+                <p className="text-black text-lg">
+                  {getTierWithEmoji(
+                    data?.club_member_my_page_response?.tier || "",
+                  )}
+                </p>
               </div>
             </div>
-            <div className="flex justify-between items-center gap-4">
+            <div className="flex items-center gap-4">
               <p className="text-black font-bold text-lg">전적</p>
-              <p className="text-black">00전 | 00승 | 00무 | 00패</p>
+              <p className="text-black">
+                {data?.league_record_info?.match_count}전 |{" "}
+                {data?.league_record_info?.win_count}승 |{" "}
+                {data?.league_record_info?.draw_count}무 |{" "}
+                {data?.league_record_info?.lose_count}패
+              </p>
             </div>
           </div>
         </div>
         <div className="flex gap-4">
           {infoUpdate ? (
-            <Button onClick={handleInfoUpdate}>수정 완료</Button>
+            <Button onClick={handleImageUpdate}>수정 완료</Button>
           ) : (
-            <Button onClick={handleInfoUpdate}>정보 수정</Button>
+            <Button onClick={() => setInfoUpdate(!infoUpdate)}>
+              정보 수정
+            </Button>
           )}
+          {/*
           <Button
             variant="outline"
             className="border-red-500 hover:bg-red-500 text-red-500"
           >
             동호회 탈퇴
           </Button>
+          */}
         </div>
       </div>
       <div className="flex flex-col w-full mt-8">
@@ -217,13 +175,19 @@ function My() {
             <div className="flex-[1]">경기 날짜</div>
           </div>
           <div className="flex flex-col">
-            {matches.slice(0, visibleCount).map((match) => (
-              <MyOneGameResult key={match.id} match={match} />
+            {matches === undefined ||
+              (matches.length === 0 && (
+                <div className="w-full flex justify-center items-center text-lg mt-10 text-gray-700">
+                  기록된 전적이 없습니다
+                </div>
+              ))}
+            {matches?.slice(0, visibleCount).map((match) => (
+              <MyOneGameResult key={match.league_at} match={match} />
             ))}
           </div>
         </div>
         <div className="flex flex-col mt-2 items-center">
-          {visibleCount < matches.length && (
+          {matches !== undefined && visibleCount < matches?.length && (
             <Button
               onClick={handleShowMore}
               className="align-center font-bold w-1/5 hover:bg-white hover:text-primary"
