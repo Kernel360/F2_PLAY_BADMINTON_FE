@@ -2,6 +2,7 @@ import type { components } from "@/schemas/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getIsClubMember,
+  getMembersMatchRecord,
   getMembersMyPage,
   postMembersProfileImage,
   putMembersProfileImage,
@@ -54,5 +55,12 @@ export const usePutMembersProfileImage = () => {
       queryClient.invalidateQueries({ queryKey: ["myPageData"] });
     },
     onError: (error: Error) => alert(error),
+  });
+};
+
+export const useGetMyMatch = () => {
+  return useQuery({
+    queryKey: ["myMatch"],
+    queryFn: getMembersMatchRecord,
   });
 };

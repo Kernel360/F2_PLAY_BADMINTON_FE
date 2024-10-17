@@ -5,6 +5,7 @@ type MemberIsClubMemberResponse =
 type MemberMyPageResponse = components["schemas"]["MemberMyPageResponse"];
 type MemberUpdateRequest = components["schemas"]["MemberUpdateRequest"];
 type MemberResponse = components["schemas"]["MemberResponse"];
+type MemberMatchRecord = components["schemas"]["MatchResultResponse"];
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
@@ -70,6 +71,22 @@ export const putMembersProfileImage = async (
 
   if (!response.ok) {
     throw new Error("프로필 사진 수정에서 에러가 발생하였습니다.");
+  }
+
+  return response.json();
+};
+
+export const getMembersMatchRecord = async (): Promise<MemberMatchRecord[]> => {
+  const response = await fetch(`${BASE_URL}/members/matchesRecord`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("내 경기 결과 조회에 실패하였습니다.");
   }
 
   return response.json();

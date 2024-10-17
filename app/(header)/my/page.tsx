@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
 import {
   useGetMembersMyPage,
+  useGetMyMatch,
   usePostMembersProfileImage,
   usePutMembersProfileImage,
 } from "@/lib/api/hooks/memberHook";
@@ -13,86 +14,6 @@ import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import MyOneGameResult from "./MyOneGameResult";
 
-const matches = [
-  {
-    id: 1,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 2,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 3,
-    opponentName: "a",
-    result: "LOSE",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 4,
-    opponentName: "a",
-    result: "LOSE",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 5,
-    opponentName: "a",
-    result: "LOSE",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 6,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 7,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 8,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 9,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 10,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-  {
-    id: 11,
-    opponentName: "a",
-    result: "WIN",
-    matchType: "SINGLE",
-    matchDate: "2024-09-15",
-  },
-];
-
 function My() {
   const { data, isLoading, error } = useGetMembersMyPage();
   const [infoUpdate, setInfoUpdate] = useState(false);
@@ -101,6 +22,7 @@ function My() {
   const { mutate: postImageToS3 } = usePostMembersProfileImage();
   const { mutate: putMembersImage } = usePutMembersProfileImage();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { data: matches } = useGetMyMatch();
 
   useEffect(() => {
     if (data) {
@@ -253,13 +175,19 @@ function My() {
             <div className="flex-[1]">경기 날짜</div>
           </div>
           <div className="flex flex-col">
-            {matches.slice(0, visibleCount).map((match) => (
-              <MyOneGameResult key={match.id} match={match} />
+            {matches === undefined ||
+              (matches.length === 0 && (
+                <div className="w-full flex justify-center items-center text-lg mt-10 text-gray-700">
+                  기록된 전적이 없습니다
+                </div>
+              ))}
+            {matches?.slice(0, visibleCount).map((match) => (
+              <MyOneGameResult key={match.league_at} match={match} />
             ))}
           </div>
         </div>
         <div className="flex flex-col mt-2 items-center">
-          {visibleCount < matches.length && (
+          {matches !== undefined && visibleCount < matches?.length && (
             <Button
               onClick={handleShowMore}
               className="align-center font-bold w-1/5 hover:bg-white hover:text-primary"

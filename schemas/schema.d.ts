@@ -141,6 +141,8 @@ export interface paths {
      *        - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
      *        - 경로: /club-banner/로 시작
      *        - 파일 확장자: png, jpg, jpeg, gif 중 하나
+     *        - https://badminton-team.s3.ap-northeast-2.amazonaws.com/club-banner/85e45bf0-2f68-4566-b17d-0f08c8b2c333/banner.png
+     *
      */
     post: operations["createClub"];
     delete?: never;
@@ -446,6 +448,26 @@ export interface paths {
      * @description 회원의 마이페이지 접근 시 정보 조회 (동호회 정보 포함)
      */
     get: operations["getMemberInfo"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/members/matchesRecord": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 동호회 회원 경기 조회
+     * @description 동호회 회원 경기 조회.
+     */
+    get: operations["readMemberLeagueRecord"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1011,7 +1033,7 @@ export interface components {
     ClubMemberExpelRequest: {
       expel_reason?: string;
     };
-    clubMemberBanRecordResponse: {
+    ClubMemberBanRecordResponse: {
       /** @enum {string} */
       banned_type?: "THREE_DAYS" | "SEVEN_DAYS" | "TWO_WEEKS" | "PERMANENT";
       banned_reason?: string;
@@ -1084,6 +1106,36 @@ export interface components {
       club_member_my_page_response?: components["schemas"]["ClubMemberMyPageResponse"];
       league_record_info?: components["schemas"]["LeagueRecordInfoResponse"];
     };
+    DoublesMatchResultResponse: {
+      current_team?: components["schemas"]["TeamResultResponse"];
+      opponent_team?: components["schemas"]["TeamResultResponse"];
+      /** @enum {string} */
+      current_team_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
+      /** @enum {string} */
+      opponent_team_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
+    };
+    MatchResultResponse: {
+      /** @enum {string} */
+      match_type?: "SINGLES" | "DOUBLES";
+      singles_match?: components["schemas"]["SinglesMatchResultResponse"];
+      doubles_match?: components["schemas"]["DoublesMatchResultResponse"];
+      /** @enum {string} */
+      match_status?: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
+      /** Format: date-time */
+      league_at?: string;
+    };
+    SinglesMatchResultResponse: {
+      current_player_name?: string;
+      opponent_name?: string;
+      /** @enum {string} */
+      current_player_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
+      /** @enum {string} */
+      opponent_result?: "WIN" | "LOSE" | "DRAW" | "NONE";
+    };
+    TeamResultResponse: {
+      participant1_name?: string;
+      participant2_name?: string;
+    };
     MemberIsClubMemberResponse: {
       is_club_member?: boolean;
       /** @enum {string} */
@@ -1124,9 +1176,9 @@ export interface components {
       /** Format: int32 */
       number?: number;
       sort?: components["schemas"]["SortObject"][];
-      pageable?: components["schemas"]["PageableObject"];
       /** Format: int32 */
       number_of_elements?: number;
+      pageable?: components["schemas"]["PageableObject"];
       empty?: boolean;
     };
     PageableObject: {
@@ -2025,7 +2077,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["clubMemberBanRecordResponse"];
+          "*/*": components["schemas"]["ClubMemberBanRecordResponse"];
         };
       };
     };
@@ -2053,7 +2105,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["clubMemberBanRecordResponse"];
+          "*/*": components["schemas"]["ClubMemberBanRecordResponse"];
         };
       };
     };
@@ -2074,6 +2126,26 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["MemberMyPageResponse"];
+        };
+      };
+    };
+  };
+  readMemberLeagueRecord: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MatchResultResponse"][];
         };
       };
     };
