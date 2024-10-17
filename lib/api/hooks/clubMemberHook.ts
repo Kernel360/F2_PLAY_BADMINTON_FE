@@ -5,6 +5,7 @@ import {
   patchClubMembersBan,
   patchClubMembersExpel,
   patchClubMembersRole,
+  postClubMembers,
 } from "../functions/clubMemberFn";
 
 type ClubMemberRoleUpdate =
@@ -62,6 +63,21 @@ export const usePatchClubMembersBan = (
       patchClubMembersBan(ban, clubId, clubMemberId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clubMembersData"] });
+    },
+    onError: (error: Error) => alert(error),
+  });
+};
+
+export const usePostClubMembers = (clubId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => postClubMembers(clubId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clubMembersData"] });
+      queryClient.invalidateQueries({ queryKey: ["clubsDataById"] });
+      queryClient.invalidateQueries({ queryKey: ["isClubMemberData"] });
+      queryClient.invalidateQueries({ queryKey: ["myInfo"] });
     },
     onError: (error: Error) => alert(error),
   });
