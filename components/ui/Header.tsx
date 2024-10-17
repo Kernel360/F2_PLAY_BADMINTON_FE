@@ -12,6 +12,7 @@ const PersonalSection = () => {
   const { data: isLogin } = useGetLoginState();
   const [showMenu, setShowMenu] = useState(false);
   const { mutate: logout } = usePostLogout();
+  // TODO(Yejin0O0): 백엔드에 세션 확인하는 api 만들어달라고 한 후 로직 바꾸기 ( api 직접 만드는 것은 좋은 방법이 아님 )
   const { data } = useGetMyInfo(!!isLogin?.loggedIn);
   const clubId = data?.club_member_my_page_response?.club_id || null;
   const router = useRouter();
