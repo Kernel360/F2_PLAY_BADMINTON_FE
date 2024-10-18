@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetLoginState } from "@/lib/api/hooks/SessionHook";
 import { useGetClubsById } from "@/lib/api/hooks/clubHook";
 import { usePostClubMembers } from "@/lib/api/hooks/clubMemberHook";
 import { useGetIsClubMember } from "@/lib/api/hooks/memberHook";
@@ -13,6 +14,7 @@ function ClubIntroPage() {
   const { data: clubData, isLoading, error } = useGetClubsById(clubId);
   const { mutate: postClubMembers } = usePostClubMembers(clubId);
   const { data: isJoined } = useGetIsClubMember();
+  const { data: isLogin } = useGetLoginState();
 
   if (isLoading) {
     return (
@@ -44,7 +46,7 @@ function ClubIntroPage() {
           alt="club image"
           className="rounded-md object-cover h-[400px] w-[400px]"
         />
-        {!isJoined?.is_club_member && (
+        {!isJoined?.is_club_member && isLogin && (
           <button
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
             type="button"
