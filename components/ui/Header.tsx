@@ -37,7 +37,7 @@ const PersonalSection = () => {
           size="sm"
           align="center"
           className="cursor-pointer leading-6 items-center"
-          link="/club/create"
+          link="/login"
         >
           동호회 만들기
         </LinkText>
