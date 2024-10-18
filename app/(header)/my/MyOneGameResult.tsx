@@ -7,19 +7,19 @@ type MemberMatchRecord = components["schemas"]["MatchResultResponse"];
 function MyOneGameResult({ match }: { match: MemberMatchRecord }) {
   const MatchResult = () => {
     if (
-      match.singles_match?.opponent_result === "WIN" ||
+      match.singles_match?.current_player_result === "WIN" ||
       match.doubles_match?.current_team_result === "WIN"
     ) {
       return (
         <div className="flex w-1/4 py-1 rounded-full bg-blue-300 text-blue-600 text-sm justify-center">
-          {match.singles_match?.opponent_result ||
+          {match.singles_match?.current_player_result ||
             match.doubles_match?.current_team_result}
         </div>
       );
     }
     return (
       <div className="flex w-1/3 py-1 rounded-full bg-red-300 text-red-600 text-sm justify-center">
-        {match.singles_match?.opponent_result ||
+        {match.singles_match?.current_player_result ||
           match.doubles_match?.current_team_result}
       </div>
     );
