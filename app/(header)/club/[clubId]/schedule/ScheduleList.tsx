@@ -1,6 +1,7 @@
 import IconButton from "@/components/ui/IconButton";
 import { Text } from "@/components/ui/Text";
 import { useGetDateLeagues } from "@/lib/api/hooks/leagueHook";
+import { useGetMyInfo } from "@/lib/api/hooks/memberHook";
 import type { components } from "@/schemas/schema";
 import { getLeagueType } from "@/utils/getLeagueType";
 import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
@@ -23,7 +24,7 @@ function ScheduleList(props: ScheduleListProps) {
     clubId,
     format(selectedDate, "yyyy-MM-dd"),
   );
-
+  const { data: myData } = useGetMyInfo(true);
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     refetch();
@@ -77,16 +78,18 @@ function ScheduleList(props: ScheduleListProps) {
 
   return (
     <div className="w-full px-6 py-3 bg-white relative">
-      <Link href={`/club/${clubId}/schedule/create`}>
-        <IconButton
-          size="sm"
-          color="transparent"
-          radius="round"
-          className="group hover:bg-primary hover:text-white absolute -right-4 -top-4"
-        >
-          <CalendarPlus className="text-primary group-hover:text-white" />
-        </IconButton>
-      </Link>
+      {myData?.club_member_my_page_response?.role !== "ROLE_USER" && (
+        <Link href={`/club/${clubId}/schedule/create`}>
+          <IconButton
+            size="sm"
+            color="transparent"
+            radius="round"
+            className="group hover:bg-primary hover:text-white absolute -right-4 -top-4"
+          >
+            <CalendarPlus className="text-primary group-hover:text-white" />
+          </IconButton>
+        </Link>
+      )}
       <div className="mb-5 text-center">
         <h1 className="text-2xl font-extrabold text-gray-800">
           {format(selectedDate, "yyyy년 MM월 dd일")}
