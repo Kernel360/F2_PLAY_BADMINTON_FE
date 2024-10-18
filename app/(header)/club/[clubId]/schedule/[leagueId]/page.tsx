@@ -9,6 +9,7 @@ import {
   usePostParticipateLeague,
 } from "@/lib/api/hooks/leagueHook";
 import { usePostMatches } from "@/lib/api/hooks/matchHook";
+import { useGetMyInfo } from "@/lib/api/hooks/memberHook";
 import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { format } from "date-fns";
 import {
@@ -48,6 +49,7 @@ function LeaguePage() {
   );
   const { mutate: deleteLeague } = useDeleteLeague(clubId, leagueId);
   const { mutate: createMatch } = usePostMatches(clubId, leagueId);
+  const { data: myData } = useGetMyInfo(true);
 
   const handleParticipate = (isParticipate: boolean) => {
     if (!isParticipate) {
@@ -91,38 +93,43 @@ function LeaguePage() {
   };
 
   const renderButtonByMatchCreatedStatus = () => {
-    if (league?.is_match_created === true) {
+    if (league?.player_limit_count !== league?.recruited_member_count) {
+      return null;
+    }
+
+    if (!league?.is_match_created) {
       return (
-        <Link
-          href={`/club/${clubId}/schedule/${leagueId}/match`}
-          className="flex justify-center items-center gap-4 w-1/3"
+        <Button
+          size="lg"
+          variant="outline"
+          className="items-center justify-center gap-2 border-primary w-1/3 hover:bg-white hover:text-primary"
+          onClick={() =>
+            createMatch(undefined, {
+              onSuccess: () =>
+                router.push(`/club/${clubId}/schedule/${leagueId}/match`),
+            })
+          }
         >
-          <Button
-            size="lg"
-            variant="outline"
-            className="items-center justify-center gap-2 border-primary w-full"
-          >
-            <BookUser size={20} />
-            대진표 보기
-          </Button>
-        </Link>
+          <BookUser size={20} />
+          대진표 생성
+        </Button>
       );
     }
+
     return (
-      <Button
-        size="lg"
-        variant="outline"
-        className="items-center justify-center gap-2 border-primary w-1/3 hover:bg-white hover:text-primary"
-        onClick={() =>
-          createMatch(undefined, {
-            onSuccess: () =>
-              router.push(`/club/${clubId}/schedule/${leagueId}/match`),
-          })
-        }
+      <Link
+        href={`/club/${clubId}/schedule/${leagueId}/match`}
+        className="flex justify-center items-center gap-4 w-1/3"
       >
-        <BookUser size={20} />
-        대진표 생성
-      </Button>
+        <Button
+          size="lg"
+          variant="outline"
+          className="items-center justify-center gap-2 border-primary w-full"
+        >
+          <BookUser size={20} />
+          대진표 보기
+        </Button>
+      </Link>
     );
   };
 
