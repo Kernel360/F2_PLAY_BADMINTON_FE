@@ -46,7 +46,7 @@ function ClubIntroPage() {
           alt="club image"
           className="rounded-md object-cover h-[400px] w-[400px]"
         />
-        {!isJoined?.is_club_member && isLogin && (
+        {!isJoined?.is_club_member && isLogin?.loggedIn && (
           <button
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
             type="button"
