@@ -43,6 +43,8 @@ function SImage({
         height={height}
         layout="responsive"
         objectFit={fit}
+        // TODO(Yejin0O0): 수정 필요
+        className="!h-full"
       />
     </div>
   );
