@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/ui/Header";
+import { Toaster } from "@/components/ui/toaster";
 import { TanstackClientProvider } from "@/lib/TanstackClientProvider";
 import { headers } from "next/headers";
 
@@ -34,6 +35,7 @@ export default function RootLayout({
             {children}
           </TanstackClientProvider>
         </div>
+        <Toaster />
       </body>
     </html>
   );

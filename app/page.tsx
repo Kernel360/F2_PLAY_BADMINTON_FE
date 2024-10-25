@@ -5,19 +5,13 @@ import Grid from "@/components/ui/Grid";
 import { useGetClubs } from "@/lib/api/hooks/clubHook";
 
 export default function page() {
-  const { data, error, isLoading } = useGetClubs();
-
+  const { data, isLoading } = useGetClubs();
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   if (!data) {
-    // TODO: 에러 메시지
     return <div>No data available</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
   }
 
   return (

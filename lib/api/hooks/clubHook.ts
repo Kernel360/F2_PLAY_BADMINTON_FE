@@ -7,15 +7,13 @@ import {
 } from "@/lib/api/functions/clubFn";
 import type { components } from "@/schemas/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import useQueryWithAlert from "./useQueryWithAlert";
 
 type ClubCreate = components["schemas"]["ClubCreateRequest"];
 type ClubUpdate = components["schemas"]["ClubUpdateRequest"];
 
 export const useGetClubs = () => {
-  return useQuery({
-    queryKey: ["clubsData"],
-    queryFn: getClubs,
-  });
+  return useQueryWithAlert(["clubsData"], getClubs);
 };
 
 export const usePostClubs = () => {
