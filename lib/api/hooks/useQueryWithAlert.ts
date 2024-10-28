@@ -1,21 +1,24 @@
 import { useToast } from "@/hooks/use-toast";
-import { useQuery } from "@tanstack/react-query";
+import { type UseQueryResult, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-const useQueryWithAlert = (queryKey: string[], queryFn: () => void) => {
+const useQueryWithAlert = <TData>(
+  queryKey: string[],
+  queryFn: () => Promise<TData>,
+): UseQueryResult<TData> => {
   const { toast } = useToast();
-  const { error, ...rest } = useQuery({ queryKey, queryFn });
+  const queryResult = useQuery({ queryKey, queryFn });
 
   useEffect(() => {
-    if (error) {
+    if (queryResult.error) {
       toast({
         title: "오류가 발생했습니다.",
         variant: "destructive",
       });
     }
-  }, [error, toast]);
+  }, [queryResult.error, toast]);
 
-  return rest;
+  return queryResult;
 };
 
 export default useQueryWithAlert;

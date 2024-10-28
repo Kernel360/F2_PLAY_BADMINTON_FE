@@ -11,9 +11,10 @@ import useQueryWithAlert from "./useQueryWithAlert";
 
 type ClubCreate = components["schemas"]["ClubCreateRequest"];
 type ClubUpdate = components["schemas"]["ClubUpdateRequest"];
+type ClubsData = components["schemas"]["PageClubCardResponse"];
 
 export const useGetClubs = () => {
-  return useQueryWithAlert(["clubsData"], getClubs);
+  return useQueryWithAlert<ClubsData>(["clubsData"], getClubs);
 };
 
 export const usePostClubs = () => {
