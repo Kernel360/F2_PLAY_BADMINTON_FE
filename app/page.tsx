@@ -14,7 +14,7 @@ export default function page() {
   }
 
   if (!data) {
-    return <div>No data available</div>;
+    return <div>데이터가 없습니다. </div>;
   }
 
   return (
