@@ -70,7 +70,7 @@ export default function MonthlyDateCarousel({
           aria-roledescription="carousel"
         >
           <CarouselPrevious
-            className="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-2"
+            className="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-2 z-10"
             aria-label="Previous month"
           >
             <ChevronLeft size={18} className="text-indigo-600" />
@@ -132,7 +132,7 @@ export default function MonthlyDateCarousel({
           </CarouselContent>
 
           <CarouselNext
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-2"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-2 z-10"
             aria-label="Next month"
           >
             <ChevronRight size={18} className="text-indigo-600" />
