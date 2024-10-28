@@ -10,7 +10,8 @@ type ClubUpdateRequest = components["schemas"]["ClubUpdateRequest"];
 type ClubUpdateResponse = components["schemas"]["ClubUpdateResponse"];
 
 export async function getClubs(): Promise<ClubData> {
-  return restClient.get<ClubData>("/clubs?page=0&size=100&sort=clubId");
+  throw new Error("테스트용 에러 발생");
+  // return restClient.get<ClubData>("/clubs?page=0&size=100&sort=clubId");
 }
 
 export const postClubs = async (
