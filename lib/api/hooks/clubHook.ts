@@ -7,15 +7,15 @@ import {
 } from "@/lib/api/functions/clubFn";
 import type { components } from "@/schemas/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import useQueryWithToast from "./useQueryWithToast";
 
 type ClubCreate = components["schemas"]["ClubCreateRequest"];
 type ClubUpdate = components["schemas"]["ClubUpdateRequest"];
+type ClubsData = components["schemas"]["PageClubCardResponse"];
+type ClubDetailsResponse = components["schemas"]["ClubDetailsResponse"];
 
 export const useGetClubs = () => {
-  return useQuery({
-    queryKey: ["clubsData"],
-    queryFn: getClubs,
-  });
+  return useQueryWithToast<ClubsData>(["clubsData"], getClubs);
 };
 
 export const usePostClubs = () => {
@@ -38,10 +38,9 @@ export const usePostClubsImg = () => {
 };
 
 export const useGetClubsById = (clubId: number) => {
-  return useQuery({
-    queryKey: ["clubsDataById", clubId],
-    queryFn: () => getClubsById(clubId),
-  });
+  return useQueryWithToast<ClubDetailsResponse>(["clubsDataById"], () =>
+    getClubsById(clubId),
+  );
 };
 
 export const usePatchClubs = (clubId: number) => {
