@@ -12,6 +12,7 @@ import useQueryWithAlert from "./useQueryWithAlert";
 type ClubCreate = components["schemas"]["ClubCreateRequest"];
 type ClubUpdate = components["schemas"]["ClubUpdateRequest"];
 type ClubsData = components["schemas"]["PageClubCardResponse"];
+type ClubDetailsResponse = components["schemas"]["ClubDetailsResponse"];
 
 export const useGetClubs = () => {
   return useQueryWithAlert<ClubsData>(["clubsData"], getClubs);
@@ -37,10 +38,9 @@ export const usePostClubsImg = () => {
 };
 
 export const useGetClubsById = (clubId: number) => {
-  return useQuery({
-    queryKey: ["clubsDataById", clubId],
-    queryFn: () => getClubsById(clubId),
-  });
+  return useQueryWithAlert<ClubDetailsResponse>(["clubsDataById"], () =>
+    getClubsById(clubId),
+  );
 };
 
 export const usePatchClubs = (clubId: number) => {

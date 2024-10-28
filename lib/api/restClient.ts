@@ -13,7 +13,7 @@ const restClient = {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    return data.content as T;
+    return data as T;
   },
   post: async <T>(url: string, body: string) => {
     const response = await fetch(`${BASE_URL}${url}`, {
@@ -26,7 +26,7 @@ const restClient = {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    return data.content as T;
+    return data as T;
   },
   postImage: async <T>(url: string, image: FormData) => {
     const response = await fetch(`${BASE_URL}${url}`, {
@@ -51,7 +51,7 @@ const restClient = {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    return data.content as T;
+    return data as T;
   },
 };
 

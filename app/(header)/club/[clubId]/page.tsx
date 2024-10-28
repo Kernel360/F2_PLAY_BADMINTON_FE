@@ -11,7 +11,8 @@ import { usePathname } from "next/navigation";
 function ClubIntroPage() {
   const pathname = usePathname();
   const clubId = Number(pathname.split("/")[2]);
-  const { data: clubData, isLoading, error } = useGetClubsById(clubId);
+
+  const { data: clubData, isLoading } = useGetClubsById(clubId);
   const { mutate: postClubMembers } = usePostClubMembers(clubId);
   const { data: isJoined } = useGetIsClubMember();
   const { data: isLogin } = useGetLoginState();
@@ -24,10 +25,8 @@ function ClubIntroPage() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="text-red-500">데이터를 불러오는 데 실패했습니다.</div>
-    );
+  if (!clubData) {
+    return <div>No data available</div>;
   }
 
   const handlePostClubMember = () => {
