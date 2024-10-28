@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetLoginState } from "@/lib/api/hooks/SessionHook";
+// import { useGetLoginState } from "@/lib/api/hooks/SessionHook";
 import { useGetClubsById } from "@/lib/api/hooks/clubHook";
 import { usePostClubMembers } from "@/lib/api/hooks/clubMemberHook";
 import { useGetIsClubMember } from "@/lib/api/hooks/memberHook";
@@ -15,7 +15,7 @@ function ClubIntroPage() {
   const { data: clubData, isLoading } = useGetClubsById(clubId);
   const { mutate: postClubMembers } = usePostClubMembers(clubId);
   const { data: isJoined } = useGetIsClubMember();
-  const { data: isLogin } = useGetLoginState();
+  // const { data: isLogin } = useGetLoginState();
 
   if (isLoading) {
     return (
@@ -45,7 +45,7 @@ function ClubIntroPage() {
           alt="club image"
           className="rounded-md object-cover h-[400px] w-[400px]"
         />
-        {!isJoined?.is_club_member && isLogin?.loggedIn && (
+        {/* {!isJoined?.is_club_member && isLogin?.loggedIn && (
           <button
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
             type="button"
@@ -53,7 +53,7 @@ function ClubIntroPage() {
           >
             동호회 참여하기
           </button>
-        )}
+        )} */}
       </div>
       <div className="flex flex-col flex-1 h-[400px] gap-4">
         <p className="text-3xl font-bold text-black">{clubData?.club_name}</p>

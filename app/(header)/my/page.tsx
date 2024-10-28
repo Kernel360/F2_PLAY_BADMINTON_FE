@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import MyOneGameResult from "./MyOneGameResult";
 
 function My() {
-  const { data, isLoading, error } = useGetMembersMyPage();
+  // const { data, isLoading, error } = useGetMembersMyPage();
   const [infoUpdate, setInfoUpdate] = useState(false);
   const [userImg, setUserImg] = useState<string | undefined>();
   const [visibleCount, setVisibleCount] = useState(5);
@@ -24,11 +24,11 @@ function My() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { data: matches } = useGetMyMatch();
 
-  useEffect(() => {
-    if (data) {
-      setUserImg(data.profile_image || "");
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     setUserImg(data.profile_image || "");
+  //   }
+  // }, [data]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -70,13 +70,13 @@ function My() {
     setVisibleCount((prevCount) => prevCount + 5);
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
 
   const ImageUpdate = () => {
     if (infoUpdate) {
@@ -118,11 +118,11 @@ function My() {
           <ImageUpdate />
           <div className="flex flex-col gap-8">
             <div className="flex justify-between items-center gap-4">
-              <p className="text-black font-bold text-lg">{data?.name}</p>
+              {/* <p className="text-black font-bold text-lg">{data?.name}</p> */}
             </div>
             <div className="flex items-center gap-4">
               <p className="text-black font-bold text-lg">소속</p>
-              <p className="text-black text-lg">
+              {/* <p className="text-black text-lg">
                 {data?.club_member_my_page_response?.club_name || "없음"}
               </p>
             </div>
@@ -143,7 +143,7 @@ function My() {
                 {data?.league_record_info?.win_count}승 |{" "}
                 {data?.league_record_info?.draw_count}무 |{" "}
                 {data?.league_record_info?.lose_count}패
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
