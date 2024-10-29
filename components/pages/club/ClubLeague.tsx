@@ -1,6 +1,7 @@
 "use client";
 
 import DayCell from "@/components/DayCell";
+import LeagueList from "@/components/club/LeagueList";
 import { Calendar } from "@/components/ui/calendar";
 import { useGetMonthLeagues } from "@/lib/api/hooks/leagueHook";
 import type { components } from "@/schemas/schema";
@@ -8,15 +9,14 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import ScheduleList from "./ScheduleList";
 
 type MonthLeagues = components["schemas"]["LeagueReadResponse"];
 
-export default function ClubSchedulePage() {
+function ClubLeague() {
   const [date, setDate] = useState<Date>(new Date());
   const [month, setMonth] = useState<string>(format(new Date(), "yyyy-MM"));
   const clubId = Number(usePathname().split("/")[2]);
-  const { data: scheduleList, refetch } = useGetMonthLeagues(clubId, month);
+  const { data: leagueList, refetch } = useGetMonthLeagues(clubId, month);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -55,12 +55,14 @@ export default function ClubSchedulePage() {
             <DayCell
               date={dayProps.date}
               displayMonth={dayProps.displayMonth}
-              scheduleList={scheduleList as MonthLeagues[]}
+              scheduleList={leagueList as MonthLeagues[]}
             />
           ),
         }}
       />
-      <ScheduleList selectedDate={date} />
+      <LeagueList selectedDate={date} />
     </div>
   );
 }
+
+export default ClubLeague;
