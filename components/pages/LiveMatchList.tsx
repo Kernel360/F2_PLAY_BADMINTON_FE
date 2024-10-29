@@ -216,7 +216,6 @@ function LiveMatchList() {
             key={item.league_id}
             className="flex justify-between items-center p-4 border-b border-gray-200 !m-0"
           >
-            {/* Left Side: Date and Time */}
             <div className="flex flex-col items-center text-center mr-4">
               <p className="font-bold text-gray-800">
                 {format(new Date(item.league_at), "d일")}
@@ -258,7 +257,6 @@ function LiveMatchList() {
               </div>
             </div>
 
-            {/* Right Side: Status Button */}
             <Button
               variant="outline"
               className={`px-4 py-2 rounded-md font-semibold ${
