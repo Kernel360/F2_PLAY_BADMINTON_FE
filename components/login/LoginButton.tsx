@@ -2,7 +2,6 @@ import Image from "@/components/ui/Image";
 import google from "@/public/images/google-logo.png";
 import kakao from "@/public/images/kakao-logo.png";
 import naver from "@/public/images/naver-logo.png";
-import React from "react";
 
 interface LoginButtonProps {
   method?: "naver" | "kakao" | "google";
