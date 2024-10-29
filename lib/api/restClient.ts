@@ -1,5 +1,6 @@
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
+// TODO: class 화 해보는 것도 좋을듯
 const restClient = {
   get: async <T>(url: string) => {
     const response = await fetch(`${BASE_URL}${url}`, {
@@ -16,6 +17,7 @@ const restClient = {
     return data as T;
   },
   post: async <T>(url: string, body: string) => {
+    // TODO: body object로 받고, 이 안에서 stringfy 하기
     const response = await fetch(`${BASE_URL}${url}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
