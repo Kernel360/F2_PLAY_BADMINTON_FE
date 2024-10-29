@@ -7,7 +7,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { components } from "@/schemas/schema";
-import type React from "react";
 import { useState } from "react";
 
 type MatchResponse = components["schemas"]["MatchResponse"];
