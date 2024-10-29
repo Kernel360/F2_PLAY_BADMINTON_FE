@@ -1,11 +1,10 @@
 "use client";
 
+import MemberDropDown from "@/components/club/MemberDropdown";
 import IconButton from "@/components/ui/IconButton";
 import type { components } from "@/schemas/schema";
 import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { AlignJustify } from "lucide-react";
-import React from "react";
-import MemberDropDown from "./MemberDropdown";
 
 type ClubMemberResponse = components["schemas"]["ClubMemberResponse"];
 type LeagueRecordInfoResponse =
