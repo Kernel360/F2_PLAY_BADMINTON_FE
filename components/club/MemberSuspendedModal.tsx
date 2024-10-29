@@ -1,13 +1,11 @@
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { usePatchClubMembersBan } from "@/lib/api/hooks/clubMemberHook";
 import { usePathname } from "next/navigation";
-import type React from "react";
 import { useState } from "react";
 
 interface MemberSuspendedModalProps {

@@ -1,6 +1,5 @@
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -8,7 +7,6 @@ import {
 import { usePatchClubMembersRole } from "@/lib/api/hooks/clubMemberHook";
 import type { components } from "@/schemas/schema";
 import { usePathname } from "next/navigation";
-import type React from "react";
 import { useState } from "react";
 
 interface MemberRoleModalProps {

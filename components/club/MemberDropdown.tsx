@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import MemberSuspendedModal from "@/components/club/MemberSuspendedModal";
+import { useState } from "react";
 import MemberExpelModal from "./MemberExpelModal";
 import MemberRoleModal from "./MemberRoleModal";
-import MemberSuspendedModal from "./MemberSuspendedModal";
 
 function MemberDropDown({ clubMemberId }: { clubMemberId: number }) {
   const [openRoleModal, setOpenRoleModal] = useState(false);
