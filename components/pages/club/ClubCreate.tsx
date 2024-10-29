@@ -4,28 +4,19 @@ import ClubInfoInputDescription from "@/components/club/ClubInputDescription";
 import ClubInfoInputImage from "@/components/club/ClubInputImage";
 import ClubInfoInputName from "@/components/club/ClubInputName";
 import { Button } from "@/components/ui/Button";
-import {
-  useGetClubsById,
-  usePatchClubs,
-  usePostClubsImg,
-} from "@/lib/api/hooks/clubHook";
+import { usePostClubs, usePostClubsImg } from "@/lib/api/hooks/clubHook";
 import type { components } from "@/schemas/schema";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-type ClubUpdate = components["schemas"]["ClubUpdateRequest"];
+type ClubCreate = components["schemas"]["ClubCreateRequest"];
 
-function ClubManage() {
+function ClubCreate() {
   const router = useRouter();
-  const pathname = usePathname();
-  const clubId = Number(pathname.split("/")[2]);
-
-  const { data, isLoading, error } = useGetClubsById(clubId);
-  const { mutate: patchClub } = usePatchClubs(clubId);
-  const { mutate: patchClubImg } = usePostClubsImg();
-
-  const [imgUrl, setImgUrl] = useState<string | undefined>();
+  const [imgUrl, setImgUrl] = useState<string>("/images/dummy-image.jpg");
+  const { mutate: createClubImg } = usePostClubsImg();
+  const { mutate: createClub } = usePostClubs();
 
   const {
     register,
@@ -34,29 +25,20 @@ function ClubManage() {
     setError,
     clearErrors,
     formState: { errors },
-  } = useForm<ClubUpdate>({
+  } = useForm<ClubCreate>({
     defaultValues: { club_name: "", club_description: "", club_image: "" },
     mode: "onBlur",
   });
-
-  useEffect(() => {
-    if (data) {
-      setValue("club_name", data.club_name || "");
-      setValue("club_description", data.club_description || "");
-      setValue("club_image", data.club_image || "");
-      setImgUrl(data.club_image || "/images/dummy-image.jpg");
-    }
-  }, [data, setValue]);
 
   const uploadImage = (file: File) => {
     const formData = new FormData();
     formData.append("multipartFile", file);
 
-    patchClubImg(formData, {
+    createClubImg(formData, {
       onSuccess: (data) => {
         setImgUrl(data);
         setValue("club_image", data);
-        clearErrors("club_image");
+        clearErrors("club_image"); // 업로드 성공 시 에러 메시지 제거
       },
       onError: () => {
         setError("club_image", {
@@ -71,40 +53,35 @@ function ClubManage() {
     const file = event.target.files?.[0];
     if (file) {
       uploadImage(file);
+    } else {
+      setImgUrl("/images/dummy-image.jpg");
     }
   };
 
-  const handleUpdateClub = (data: ClubUpdate) => {
-    patchClub(
-      {
-        club_name: data.club_name,
-        club_description: data.club_description,
-        club_image: imgUrl,
+  const handleCreateClub = (data: ClubCreate) => {
+    const newClubData: ClubCreate = {
+      club_name: data.club_name,
+      club_description: data.club_description,
+      club_image: imgUrl,
+    };
+
+    createClub(newClubData, {
+      onSuccess: (data) => {
+        const clubId = data.club_id;
+        router.push(`/club/${clubId}`);
       },
-      {
-        onSuccess: () => {
-          alert("동호회 정보가 성공적으로 업데이트되었습니다!");
-        },
-      },
-    );
+    });
   };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   return (
     <form
-      onSubmit={handleSubmit(handleUpdateClub)}
+      onSubmit={handleSubmit(handleCreateClub)}
       method="post"
       className="px-14 pt-8 w-full"
     >
       <div className="flex space-x-8 w-full h-[464px] items-center">
         <div className="flex flex-col gap-1 justify-center">
+          {/* 파일 선택 필드를 register로 관리 */}
           <input
             type="text"
             className="hidden"
@@ -114,7 +91,7 @@ function ClubManage() {
           />
           <ClubInfoInputImage
             imagePreview={imgUrl || "/images/dummy-image.jpg"}
-            onImageChange={onImageSelect}
+            onImageChange={(e) => onImageSelect(e)}
           />
           {errors.club_image && (
             <p className="text-red-500">{errors.club_image.message}</p>
@@ -147,11 +124,11 @@ function ClubManage() {
       </div>
       <div className="flex justify-center items-center gap-4">
         <Button size="lg" type="submit">
-          변경 저장
+          완료
         </Button>
       </div>
     </form>
   );
 }
 
-export default ClubManage;
+export default ClubCreate;

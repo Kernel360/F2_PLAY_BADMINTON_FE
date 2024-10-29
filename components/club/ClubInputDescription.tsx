@@ -1,14 +1,14 @@
 import { Textarea } from "@/components/ui/textarea";
 import { forwardRef } from "react";
 
-interface ClubInfoInputDescriptionProps
+interface ClubInputDescriptionProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   description?: string;
 }
 
-const ClubInfoInputDescription = forwardRef<
+const ClubInputDescription = forwardRef<
   HTMLTextAreaElement,
-  ClubInfoInputDescriptionProps
+  ClubInputDescriptionProps
 >((props, ref) => {
   const { description } = props;
   return (
@@ -24,6 +24,4 @@ const ClubInfoInputDescription = forwardRef<
   );
 });
 
-ClubInfoInputDescription.displayName = "ClubInfoInputDescription";
-
-export default ClubInfoInputDescription;
+export default ClubInputDescription;

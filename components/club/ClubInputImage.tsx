@@ -3,14 +3,14 @@ import { ImagePlusIcon } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 
-interface ClubInfoInputImageProps {
+interface ClubInputImageProps {
   imagePreview: string;
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
-const ClubInfoInputImage = ({
+const ClubInputImage = ({
   imagePreview,
   onImageChange,
-}: ClubInfoInputImageProps) => {
+}: ClubInputImageProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleImageClick = () => {
@@ -41,4 +41,4 @@ const ClubInfoInputImage = ({
   );
 };
 
-export default ClubInfoInputImage;
+export default ClubInputImage;

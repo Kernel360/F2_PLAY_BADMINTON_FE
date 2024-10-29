@@ -1,11 +1,11 @@
 import { forwardRef } from "react";
 
-interface ClubInfoInputNameProps
+interface ClubInputNameProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   clubName?: string;
 }
 
-const ClubInfoInputName = forwardRef<HTMLInputElement, ClubInfoInputNameProps>(
+const ClubInputName = forwardRef<HTMLInputElement, ClubInputNameProps>(
   (props, ref) => {
     const { clubName, ...rest } = props;
     return (
@@ -21,6 +21,4 @@ const ClubInfoInputName = forwardRef<HTMLInputElement, ClubInfoInputNameProps>(
   },
 );
 
-ClubInfoInputName.displayName = "ClubInfoInputName";
-
-export default ClubInfoInputName;
+export default ClubInputName;
