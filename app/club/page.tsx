@@ -1,7 +1,7 @@
-import Club from "@/components/pages/club/Club";
+import ClubList from "@/components/pages/club/ClubList";
 
 function ClubPage() {
-  return <Club />;
+  return <ClubList />;
 }
 
 export default ClubPage;
