@@ -1,6 +1,6 @@
 "use client";
 
-import { ClubCard } from "@/components/club/ClubCard";
+import ClubCard from "@/components/club/ClubCard";
 import Grid from "@/components/ui/Grid";
 import { useGetClubs } from "@/lib/api/hooks/clubHook";
 import type { components } from "@/schemas/schema";
