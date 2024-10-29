@@ -9,7 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { format, getDaysInMonth, getMonth, getYear } from "date-fns";
+import { addDays, format, getMonth, getYear } from "date-fns";
 import { ko } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -34,25 +34,24 @@ export default function MonthlyDateCarousel({
   const currentMonth = getMonth(today);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
 
-  const getAllDatesInMonthWithDay = (year: number, month: number) => {
-    const daysInMonth = getDaysInMonth(new Date(year, month));
+  const getDatesForNextThreeWeeks = (startDate: Date) => {
+    const endDate = addDays(startDate, 20); // 21 days in total including today
     const datesWithDays = [];
 
-    for (let i = 1; i <= daysInMonth; i++) {
-      const date = new Date(year, month, i);
+    for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
       const dayOfWeek = format(date, "E", { locale: ko });
       datesWithDays.push({
         date: date,
         dayOfWeek: dayOfWeek,
         dayIndex: date.getDay(),
-        id: i,
+        id: date.getDate(),
       });
     }
 
     return datesWithDays;
   };
 
-  const dates = getAllDatesInMonthWithDay(currentYear, currentMonth);
+  const dates = getDatesForNextThreeWeeks(today);
 
   return (
     <section className="w-full" aria-label="Monthly Date Carousel">
