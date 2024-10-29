@@ -1,0 +1,202 @@
+"use client";
+
+import MyOneGameResult from "@/components/my-page/MyOneGameResult";
+import { Button } from "@/components/ui/Button";
+import IconButton from "@/components/ui/IconButton";
+import {
+  useGetMyMatch,
+  usePostMembersProfileImage,
+  usePutMembersProfileImage,
+} from "@/lib/api/hooks/memberHook";
+import { ImagePlus } from "lucide-react";
+import { useRef, useState } from "react";
+
+function MyPersonal() {
+  // const { data, isLoading, error } = useGetMembersMyPage();
+  const [infoUpdate, setInfoUpdate] = useState(false);
+  const [userImg, setUserImg] = useState<string | undefined>();
+  const [visibleCount, setVisibleCount] = useState(5);
+  const { mutate: postImageToS3 } = usePostMembersProfileImage();
+  const { mutate: putMembersImage } = usePutMembersProfileImage();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { data: matches } = useGetMyMatch();
+
+  // useEffect(() => {
+  //   if (data) {
+  //     setUserImg(data.profile_image || "");
+  //   }
+  // }, [data]);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      uploadImage(file);
+    }
+  };
+
+  const uploadImage = (file: File) => {
+    const formData = new FormData();
+    formData.append("multipartFile", file);
+
+    postImageToS3(formData, {
+      onSuccess: (data) => {
+        setUserImg(data);
+      },
+    });
+  };
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImageUpdate = () => {
+    putMembersImage(
+      {
+        profile_image_url: userImg,
+      },
+      {
+        onSuccess: () => {
+          alert("이미지 변경이 완료되었습니다");
+        },
+      },
+    );
+    setInfoUpdate(!infoUpdate);
+  };
+
+  const handleShowMore = () => {
+    setVisibleCount((prevCount) => prevCount + 5);
+  };
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
+
+  const ImageUpdate = () => {
+    if (infoUpdate) {
+      return (
+        <div className="relative w-64 h-64 rounded-full">
+          <img
+            alt="previewImg"
+            src={userImg || "/images/dummy-image.jpg"}
+            className="object-cover w-full h-full rounded-full"
+          />
+          <input
+            type="file"
+            className="hidden"
+            ref={fileInputRef}
+            onChange={handleImageChange}
+          />
+          <div className="absolute bottom-2 right-2">
+            <IconButton radius="round" size="lg" onClick={handleImageClick}>
+              <ImagePlus width={"80%"} height={"80%"} />
+            </IconButton>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <img
+        src={userImg || "/images/dummy-image.jpg"}
+        alt="userImg"
+        className="object-cover w-64 h-64 rounded-full"
+      />
+    );
+  };
+
+  return (
+    <div className="mt-4 px-16">
+      <div className="flex justify-between">
+        <div className="flex items-center gap-12">
+          <ImageUpdate />
+          <div className="flex flex-col gap-8">
+            <div className="flex justify-between items-center gap-4">
+              {/* <p className="text-black font-bold text-lg">{data?.name}</p> */}
+            </div>
+            <div className="flex items-center gap-4">
+              <p className="text-black font-bold text-lg">소속</p>
+              {/* <p className="text-black text-lg">
+                {data?.club_member_my_page_response?.club_name || "없음"}
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <p className="text-black font-bold text-lg">티어</p>
+              <div className="flex items-center gap-1">
+                <p className="text-black text-lg">
+                  {getTierWithEmoji(
+                    data?.club_member_my_page_response?.tier || "",
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <p className="text-black font-bold text-lg">전적</p>
+              <p className="text-black">
+                {data?.league_record_info?.match_count}전 |{" "}
+                {data?.league_record_info?.win_count}승 |{" "}
+                {data?.league_record_info?.draw_count}무 |{" "}
+                {data?.league_record_info?.lose_count}패
+              </p> */}
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-4">
+          {infoUpdate ? (
+            <Button onClick={handleImageUpdate}>수정 완료</Button>
+          ) : (
+            <Button onClick={() => setInfoUpdate(!infoUpdate)}>
+              정보 수정
+            </Button>
+          )}
+          {/*
+          <Button
+            variant="outline"
+            className="border-red-500 hover:bg-red-500 text-red-500"
+          >
+            동호회 탈퇴
+          </Button>
+          */}
+        </div>
+      </div>
+      <div className="flex flex-col w-full mt-8">
+        <p className="text-black font-bold text-xl">경기 결과</p>
+        <div className="flex flex-col mt-4">
+          <div className="flex font-bold text-gray-600 bg-gray-100 p-2 rounded-md">
+            <div className="flex-[2]">대결 상대</div>
+            <div className="flex-[1]">경기 방식</div>
+            <div className="flex-[1]">경기 결과</div>
+            <div className="flex-[1]">경기 날짜</div>
+          </div>
+          <div className="flex flex-col">
+            {matches === undefined ||
+              (matches.length === 0 && (
+                <div className="w-full flex justify-center items-center text-lg mt-10 text-gray-700">
+                  기록된 전적이 없습니다
+                </div>
+              ))}
+            {matches?.slice(0, visibleCount).map((match) => (
+              <MyOneGameResult key={match.league_at} match={match} />
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-col mt-2 items-center">
+          {matches !== undefined && visibleCount < matches?.length && (
+            <Button
+              onClick={handleShowMore}
+              className="align-center font-bold w-1/5 hover:bg-white hover:text-primary"
+              variant="ghost"
+            >
+              더보기
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default MyPersonal;
