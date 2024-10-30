@@ -20,7 +20,13 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: NotoSans, -apple-system, sans-serif;
+}
+
+@font-face {
+  font-family: "NotoSans";
+  font-weight: 200;
+  src: url("/fonts/NotoSansKR-Medium.ttf") format("truetype");
 }
 
 @layer utilities {
