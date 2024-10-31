@@ -1,7 +1,7 @@
-import LeagueCreate from "@/components/pages/club/LeaueCreate";
+// import LeagueCreate from "@/components/pages/club/LeaueCreate";
 
-function LeagueCreatePage() {
-  return <LeagueCreate />;
-}
+// function LeagueCreatePage() {
+//   return <LeagueCreate />;
+// }
 
-export default LeagueCreatePage;
+// export default LeagueCreatePage;

@@ -1,10 +1,10 @@
 import type { components } from "@/schemas/schema";
-import MatchScoreModalDoubles from "./MatchScoreModalDoubles";
+// import MatchScoreModalDoubles from "./MatchScoreModalDoubles";
 
-type MatchResponse = components["schemas"]["MatchResponse"];
+type MatchResponse = components["schemas"]["BracketResponse"];
 
 interface MatchProfileDoublesProps {
-  doublesMatch: MatchResponse["doubles_match"];
+  doublesMatch: MatchResponse["doubles_match_info_list"];
   isOpen: boolean;
   onClose: () => void;
 }
@@ -16,11 +16,12 @@ function MatchProfileDoubles({
 }: MatchProfileDoublesProps) {
   return (
     <div className="flex items-center justify-center">
-      <div className="flex rounded-lg bg-gradient-to-r from-blue-100 to-purple-100 items-center w-[500px] p-4 justify-between shadow-lg">
+      주석
+      {/* <div className="flex rounded-lg bg-gradient-to-r from-blue-100 to-purple-100 items-center w-[500px] p-4 justify-between shadow-lg">
         <div className="flex gap-4">
           <div className="flex flex-col items-center gap-2">
             <img
-              src={doublesMatch?.team1?.participant1_image}
+              src={doublesMatch.?.}
               alt={doublesMatch?.team1?.participant1_name}
               className="h-20 w-20 rounded-full object-cover border-4 border-blue-400 shadow-md"
             />
@@ -61,16 +62,16 @@ function MatchProfileDoubles({
               {doublesMatch?.team2?.participant2_name}
             </p>
           </div>
-        </div>
-      </div>
-      {isOpen && (
-        <MatchScoreModalDoubles
-          doublesMatch={doublesMatch}
-          isOpen={isOpen}
-          onClose={onClose}
-        />
-      )}
+        </div> */}
     </div>
+    // isOpen && (
+    //   <MatchScoreModalDoubles
+    //     doublesMatch={doublesMatch}
+    //     isOpen={isOpen}
+    //     onClose={onClose}
+    //   />
+    // );
+    // </div>
   );
 }
 

@@ -3,7 +3,7 @@
 // import { useGetLoginState } from "@/lib/api/hooks/SessionHook";
 import { useGetClubsById } from "@/lib/api/hooks/clubHook";
 import { usePostClubMembers } from "@/lib/api/hooks/clubMemberHook";
-import { useGetIsClubMember } from "@/lib/api/hooks/memberHook";
+// import { useGetIsClubMember } from "@/lib/api/hooks/memberHook";
 import { format } from "date-fns";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -14,7 +14,7 @@ function ClubIntro() {
 
   const { data: clubData, isLoading } = useGetClubsById(clubId);
   const { mutate: postClubMembers } = usePostClubMembers(clubId);
-  const { data: isJoined } = useGetIsClubMember();
+  // const { data: isJoined } = useGetIsClubMember();
   // const { data: isLogin } = useGetLoginState();
 
   if (isLoading) {

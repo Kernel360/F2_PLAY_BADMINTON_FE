@@ -9,7 +9,7 @@ type LeagueParticipantResponse =
 type LeagueParticipationCancelResponse =
   components["schemas"]["LeagueParticipationCancelResponse"];
 type LeagueUpdateRequest = components["schemas"]["LeagueUpdateRequest"];
-type LeagueUpdateResponse = components["schemas"]["LeagueUpdateResponse"];
+// type LeagueUpdateResponse = components["schemas"]["LeagueUpdateResponse"];
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
@@ -129,25 +129,25 @@ export const deleteParticipateLeague = async (
   return response.json();
 };
 
-export const patchLeagues = async (
-  leagueData: LeagueUpdateRequest,
-  clubId: number,
-  leagueId: number,
-): Promise<LeagueUpdateResponse> => {
-  const response = await fetch(
-    `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}`,
-    {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(leagueData),
-    },
-  );
-  if (!response.ok) {
-    throw new Error("경기 수정에 실패했습니다.");
-  }
-  return response.json();
-};
+// export const patchLeagues = async (
+//   leagueData: LeagueUpdateRequest,
+//   clubId: number,
+//   leagueId: number,
+// ): Promise<LeagueUpdateResponse> => {
+//   const response = await fetch(
+//     `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}`,
+//     {
+//       method: "PATCH",
+//       headers: { "Content-Type": "application/json" },
+//       credentials: "include",
+//       body: JSON.stringify(leagueData),
+//     },
+//   );
+//   if (!response.ok) {
+//     throw new Error("경기 수정에 실패했습니다.");
+//   }
+//   return response.json();
+// };
 
 export const deleteLeagues = async (
   clubId: number,

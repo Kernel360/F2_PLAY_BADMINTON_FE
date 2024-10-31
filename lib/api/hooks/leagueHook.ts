@@ -6,7 +6,7 @@ import {
   getDateLeagues,
   getLeagueDetail,
   getMonthLeagues,
-  patchLeagues,
+  // patchLeagues,
   postLeagues,
   postParticipateLeague,
 } from "../functions/leagueFn";
@@ -75,18 +75,18 @@ export const useDeleteParticipateLeague = (
   });
 };
 
-export const usePatchLeague = (clubId: number, leagueId: number) => {
-  const queryClient = useQueryClient();
+// export const usePatchLeague = (clubId: number, leagueId: number) => {
+//   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (leagueData: LeagueUpdateRequest) =>
-      patchLeagues(leagueData, clubId, leagueId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
-};
+//   return useMutation({
+//     mutationFn: (leagueData: LeagueUpdateRequest) =>
+//       patchLeagues(leagueData, clubId, leagueId),
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+//     },
+//     onError: (error: Error) => alert(error),
+//   });
+// };
 
 export const useDeleteLeague = (clubId: number, leagueId: number) => {
   const queryClient = useQueryClient();

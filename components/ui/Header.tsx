@@ -1,6 +1,6 @@
 "use client";
 import { useGetLoginState, usePostLogout } from "@/lib/api/hooks/SessionHook";
-import { useGetMyInfo } from "@/lib/api/hooks/memberHook";
+// import { useGetMyInfo } from "@/lib/api/hooks/memberHook";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";

@@ -6,7 +6,7 @@ import IconButton from "@/components/ui/IconButton";
 import {
   useGetMyMatch,
   usePostMembersProfileImage,
-  usePutMembersProfileImage,
+  // usePutMembersProfileImage,
 } from "@/lib/api/hooks/memberHook";
 import { ImagePlus } from "lucide-react";
 import { useRef, useState } from "react";
@@ -17,7 +17,7 @@ function MyPersonal() {
   const [userImg, setUserImg] = useState<string | undefined>();
   const [visibleCount, setVisibleCount] = useState(5);
   const { mutate: postImageToS3 } = usePostMembersProfileImage();
-  const { mutate: putMembersImage } = usePutMembersProfileImage();
+  // const { mutate: putMembersImage } = usePutMembersProfileImage();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { data: matches } = useGetMyMatch();
 
@@ -50,16 +50,16 @@ function MyPersonal() {
   };
 
   const handleImageUpdate = () => {
-    putMembersImage(
-      {
-        profile_image_url: userImg,
-      },
-      {
-        onSuccess: () => {
-          alert("이미지 변경이 완료되었습니다");
-        },
-      },
-    );
+    // putMembersImage(
+    //   {
+    //     profile_image_url: userImg,
+    //   },
+    //   {
+    //     onSuccess: () => {
+    //       alert("이미지 변경이 완료되었습니다");
+    //     },
+    //   },
+    // );
     setInfoUpdate(!infoUpdate);
   };
 

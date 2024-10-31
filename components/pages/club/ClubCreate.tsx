@@ -65,12 +65,12 @@ function ClubCreate() {
       club_image: imgUrl,
     };
 
-    createClub(newClubData, {
-      onSuccess: (data) => {
-        const clubId = data.club_id;
-        router.push(`/club/${clubId}`);
-      },
-    });
+    // createClub(newClubData, {
+    //   onSuccess: (data) => {
+    //     const clubId = data.club_id;
+    //     router.push(`/club/${clubId}`);
+    //   },
+    // });
   };
 
   return (

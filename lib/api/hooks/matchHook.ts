@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getMatches, postMatches } from "../functions/matchFn";
+import { postMatches } from "../functions/matchFn";
 
-export const useGetMatches = (clubId: number, leagueId: number) => {
-  return useQuery({
-    queryKey: ["matchesData"],
-    queryFn: () => getMatches(clubId, leagueId),
-  });
-};
+// export const useGetMatches = (clubId: number, leagueId: number) => {
+//   return useQuery({
+//     queryKey: ["matchesData"],
+//     queryFn: () => getMatches(clubId, leagueId),
+//   });
+// };
 
 export const usePostMatches = (clubId: number, leagueId: number) => {
   const queryClient = useQueryClient();

@@ -2,27 +2,27 @@ import type { components } from "@/schemas/schema";
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
-type MatchResponse = components["schemas"]["MatchResponse"];
+// type MatchResponse = components["schemas"]["MatchResponse"];
 
-export const getMatches = async (
-  clubId: number,
-  leagueId: number,
-): Promise<MatchResponse[]> => {
-  const response = await fetch(
-    `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}/matches`,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    },
-  );
+// export const getMatches = async (
+//   clubId: number,
+//   leagueId: number,
+// ): Promise<MatchResponse[]> => {
+//   const response = await fetch(
+//     `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}/matches`,
+//     {
+//       method: "GET",
+//       headers: { "Content-Type": "application/json" },
+//       credentials: "include",
+//     },
+//   );
 
-  if (!response.ok) {
-    throw new Error("대진표 조회에 실패했습니다.");
-  }
+//   if (!response.ok) {
+//     throw new Error("대진표 조회에 실패했습니다.");
+//   }
 
-  return response.json();
-};
+//   return response.json();
+// };
 
 export const postMatches = async (
   clubId: number,
