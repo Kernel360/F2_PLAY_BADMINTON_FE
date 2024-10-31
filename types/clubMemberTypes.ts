@@ -3,8 +3,8 @@ import type { components } from "@/schemas/schema";
 export type GetClubMemberListResponse =
   components["schemas"]["CommonResponseMapClubMemberRoleListClubMemberResponse"];
 
-export type PostClubMemberJoinResponse =
-  components["schemas"]["CommonResponseClubMemberJoinResponse"];
+// export type PostClubMemberJoinResponse =
+//   components["schemas"]["CommonResponseClubMemberJoinResponse"];
 
 export type DeleteClubMemberExitResponse =
   components["schemas"]["CommonResponseClubMemberWithdrawResponse"];
