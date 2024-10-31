@@ -1,15 +1,8 @@
 import { useToast } from "@/hooks/use-toast";
-import { type UseQueryResult, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-interface CommonResponse<T> {
-  result?: "SUCCESS" | "FAIL";
-  data?: T;
-  message?: string;
-  error_code?: string;
-}
-
-type Hello<T> =
+type CommonResponse<T> =
   | {
       result: "SUCCESS";
       data: T;
@@ -27,7 +20,6 @@ const useQueryWithToast = <TData>(
   const { toast } = useToast();
   const queryResult = useQuery<CommonResponse<TData>>({ queryKey, queryFn });
 
-  // queryResult.data?.error_code
   useEffect(() => {
     if (queryResult.error) {
       toast({
@@ -37,7 +29,11 @@ const useQueryWithToast = <TData>(
     }
   }, [queryResult.error, toast]);
 
-  return { isLoading: queryResult.isLoading, data: queryResult.data?.data };
+  if (queryResult.data?.result === "SUCCESS") {
+    return { isLoading: queryResult.isLoading, data: queryResult.data?.data };
+  }
+
+  return { isLoading: queryResult.isLoading, data: undefined };
 };
 
 export default useQueryWithToast;
