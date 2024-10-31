@@ -12,13 +12,13 @@ type ClubsData = components["schemas"]["ClubCardResponse"];
 
 function ClubCard(props: ClubsData) {
   const {
-    club_id,
+    club_token,
     club_name,
     club_image,
     club_member_count_by_tier: tier,
   } = props;
   return (
-    <Link href={`/club/${club_id}`}>
+    <Link href={`/club/${club_token}`}>
       <Card
         className={
           "w-64 rounded-lg shadow-lg overflow-hidden cursor-pointer transition-transform transform hover:scale-105"

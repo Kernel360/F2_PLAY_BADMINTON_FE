@@ -9,7 +9,7 @@ import {
   usePostParticipateLeague,
 } from "@/lib/api/hooks/leagueHook";
 import { usePostMatches } from "@/lib/api/hooks/matchHook";
-import { useGetMyInfo } from "@/lib/api/hooks/memberHook";
+// import { useGetMyInfo } from "@/lib/api/hooks/memberHook";
 import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { format } from "date-fns";
 import {
@@ -48,7 +48,7 @@ function LeagueDetail() {
   );
   const { mutate: deleteLeague } = useDeleteLeague(clubId, leagueId);
   const { mutate: createMatch } = usePostMatches(clubId, leagueId);
-  const { data: myData } = useGetMyInfo(true);
+  // const { data: myData } = useGetMyInfo(true);
 
   const handleParticipate = (isParticipate: boolean) => {
     if (!isParticipate) {

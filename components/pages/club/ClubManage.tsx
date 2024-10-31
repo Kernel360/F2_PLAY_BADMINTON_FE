@@ -21,7 +21,7 @@ function ClubManage() {
   const pathname = usePathname();
   const clubId = Number(pathname.split("/")[2]);
 
-  const { data, isLoading, error } = useGetClubsById(clubId);
+  const { data, isLoading } = useGetClubsById(clubId);
   const { mutate: patchClub } = usePatchClubs(clubId);
   const { mutate: patchClubImg } = usePostClubsImg();
 
@@ -91,10 +91,6 @@ function ClubManage() {
 
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
   }
 
   return (

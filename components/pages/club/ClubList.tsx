@@ -20,8 +20,8 @@ function Club() {
   return (
     <div className="my-10">
       <Grid columns={3} placeItems="center" spacing="lg">
-        {data.content?.map((club: ClubCardResponse) => (
-          <ClubCard key={club.club_id} {...club} />
+        {data?.content?.map((club: ClubCardResponse) => (
+          <ClubCard key={club.club_token} {...club} />
         ))}
       </Grid>
     </div>

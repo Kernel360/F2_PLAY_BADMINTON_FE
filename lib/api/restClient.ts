@@ -10,9 +10,9 @@ const restClient = {
       },
       credentials: "include",
     });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    // if (!response.ok) {
+    //   return response.status;
+    // }
     const data = await response.json();
     return data as T;
   },

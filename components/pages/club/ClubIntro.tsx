@@ -2,8 +2,8 @@
 
 // import { useGetLoginState } from "@/lib/api/hooks/SessionHook";
 import { useGetClubsById } from "@/lib/api/hooks/clubHook";
-import { usePostClubMembers } from "@/lib/api/hooks/clubMemberHook";
-import { useGetIsClubMember } from "@/lib/api/hooks/memberHook";
+// import { usePostClubMembers } from "@/lib/api/hooks/clubMemberHook";
+// import { useGetIsClubMember } from "@/lib/api/hooks/memberHook";
 import { format } from "date-fns";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -13,8 +13,8 @@ function ClubIntro() {
   const clubId = Number(pathname.split("/")[2]);
 
   const { data: clubData, isLoading } = useGetClubsById(clubId);
-  const { mutate: postClubMembers } = usePostClubMembers(clubId);
-  const { data: isJoined } = useGetIsClubMember();
+  // const { mutate: postClubMembers } = usePostClubMembers(clubId);
+  // const { data: isJoined } = useGetIsClubMember();
   // const { data: isLogin } = useGetLoginState();
 
   if (isLoading) {
@@ -29,11 +29,11 @@ function ClubIntro() {
     return <div>No data available</div>;
   }
 
-  const handlePostClubMember = () => {
-    postClubMembers(undefined, {
-      onSuccess: () => alert("동호회 가입에 성공하였습니다!"),
-    });
-  };
+  // const handlePostClubMember = () => {
+  //   postClubMembers(undefined, {
+  //     onSuccess: () => alert("동호회 가입에 성공하였습니다!"),
+  //   });
+  // };
 
   return (
     <div className="flex space-x-8 w-full h-[464px] items-center">

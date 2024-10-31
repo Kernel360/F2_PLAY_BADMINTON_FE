@@ -5,24 +5,26 @@ import {
   postClubs,
   postClubsImg,
 } from "@/lib/api/functions/clubFn";
-import type { components } from "@/schemas/schema";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type {
+  GetClubDetailData,
+  GetClubDetailsResponse,
+  GetClubListData,
+  GetClubListResponse,
+  PatchClubRequest,
+  PostClubRequest,
+} from "@/types/clubTypes";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useQueryWithToast from "./useQueryWithToast";
 
-type ClubCreate = components["schemas"]["ClubCreateRequest"];
-type ClubUpdate = components["schemas"]["ClubUpdateRequest"];
-type ClubsData = components["schemas"]["PageClubCardResponse"];
-type ClubDetailsResponse = components["schemas"]["ClubDetailsResponse"];
-
 export const useGetClubs = () => {
-  return useQueryWithToast<ClubsData>(["clubsData"], getClubs);
+  return useQueryWithToast<GetClubListData>(["clubsData"], getClubs);
 };
 
 export const usePostClubs = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (clubData: ClubCreate) => postClubs(clubData),
+    mutationFn: (clubData: PostClubRequest) => postClubs(clubData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clubsData"] });
     },
@@ -38,7 +40,7 @@ export const usePostClubsImg = () => {
 };
 
 export const useGetClubsById = (clubId: number) => {
-  return useQueryWithToast<ClubDetailsResponse>(["clubsDataById"], () =>
+  return useQueryWithToast<GetClubDetailData>(["clubsDataById"], () =>
     getClubsById(clubId),
   );
 };
@@ -47,7 +49,7 @@ export const usePatchClubs = (clubId: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (clubUpdateData: ClubUpdate) =>
+    mutationFn: (clubUpdateData: PatchClubRequest) =>
       patchClubs(clubUpdateData, clubId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clubsData"] });

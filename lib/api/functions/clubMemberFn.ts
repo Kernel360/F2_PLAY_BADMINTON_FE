@@ -7,7 +7,7 @@ type ClubMemberExpelRequest = components["schemas"]["ClubMemberExpelRequest"];
 type ClubMemberBanRequest = components["schemas"]["ClubMemberBanRequest"];
 type ClubMemberBanRecordResponse =
   components["schemas"]["ClubMemberBanRecordResponse"];
-type ClubMemberJoinResponse = components["schemas"]["ClubMemberJoinResponse"];
+// type ClubMemberJoinResponse = components["schemas"]["ClubMemberJoinResponse"];
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
@@ -99,18 +99,18 @@ export const patchClubMembersBan = async (
   return response.json();
 };
 
-export const postClubMembers = async (
-  clubId: number,
-): Promise<ClubMemberJoinResponse> => {
-  const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
+// export const postClubMembers = async (
+//   clubId: number,
+// ): Promise<ClubMemberJoinResponse> => {
+//   const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     credentials: "include",
+//   });
 
-  if (!response.ok) {
-    throw new Error("동호회 가입 신청에 실패했습니다.");
-  }
+//   if (!response.ok) {
+//     throw new Error("동호회 가입 신청에 실패했습니다.");
+//   }
 
-  return response.json();
-};
+//   return response.json();
+// };

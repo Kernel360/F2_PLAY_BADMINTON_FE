@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { Text } from "@/components/ui/Text";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
-import { useGetLeagueDetail, usePatchLeague } from "@/lib/api/hooks/leagueHook";
+import { useGetLeagueDetail } from "@/lib/api/hooks/leagueHook";
 import type { components } from "@/schemas/schema";
 import {
   DropdownMenu,
@@ -49,7 +49,7 @@ function LeagueUpdate() {
   const [timeValue, setTimeValue] = useState<string>("00:00");
   const [closedAt, setClosedAt] = useState<string>("");
   const { data: league } = useGetLeagueDetail(clubId, leagueId);
-  const { mutate: updateLeague } = usePatchLeague(clubId, leagueId);
+  // const { mutate: updateLeague } = usePatchLeague(clubId, leagueId);
   const { register, handleSubmit, setValue } = useForm<LeagueUpdateRequest>({
     mode: "onBlur",
   });
@@ -76,8 +76,8 @@ function LeagueUpdate() {
         setClosedAt(league.recruiting_closed_at);
       }
 
-      setValue("player_count", league.player_limit_count || 0);
-      setValue("closed_at", league.recruiting_closed_at || "");
+      // setValue("player_count", league.player_limit_count || 0);
+      // setValue("closed_at", league.recruiting_closed_at || "");
     }
   }, [league, setValue]);
 
@@ -120,9 +120,9 @@ function LeagueUpdate() {
   const handleClosedAtSelect = (selectedDate: Date) => {
     const closingDate = endOfDay(selectedDate);
     setClosedAt(formatISO(closingDate));
-    setValue("closed_at", toLocalISOString(closingDate), {
-      shouldValidate: true,
-    });
+    // setValue("closed_at", toLocalISOString(closingDate), {
+    //   shouldValidate: true,
+    // });
   };
 
   const selectedTier = () => {
@@ -142,13 +142,13 @@ function LeagueUpdate() {
   const handleUpdateSchedule = (data: LeagueUpdateRequest) => {
     const updatedScheduleData: LeagueUpdateRequest = {
       ...data,
-      match_generation_type: "RANDOM",
+      // match_generation_type: "RANDOM",
     };
-    updateLeague(updatedScheduleData, {
-      onSuccess: () => {
-        router.push(`/club/${clubId}/schedule`);
-      },
-    });
+    // updateLeague(updatedScheduleData, {
+    //   onSuccess: () => {
+    //     router.push(`/club/${clubId}/schedule`);
+    //   },
+    // });
   };
 
   return (
@@ -384,9 +384,9 @@ function LeagueUpdate() {
             <Input
               type="number"
               placeholder="모집 인원 입력"
-              {...register("player_count", {
-                // required: "모집 인원을 입력해주세요",
-              })}
+              // {...register("player_count", {
+              //   // required: "모집 인원을 입력해주세요",
+              // })}
             />
           </div>
 
@@ -437,9 +437,9 @@ function LeagueUpdate() {
 
             <input
               type="hidden"
-              {...register("closed_at", {
-                // required: "모집 마감 날짜를 선택해주세요",
-              })}
+              // {...register("closed_at", {
+              //   // required: "모집 마감 날짜를 선택해주세요",
+              // })}
             />
           </div>
         </div>
