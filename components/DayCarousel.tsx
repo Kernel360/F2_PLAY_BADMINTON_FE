@@ -7,7 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { addDays, format, getMonth, getYear } from "date-fns";
+import { addDays, format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -54,11 +54,6 @@ export default function MonthlyDateCarousel({
       className="w-full sticky top-[4rem] z-10 bg-white mb-5"
       aria-label="Monthly Date Carousel"
     >
-      {/* <header className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">
-          {format(selectedDate, "MMMM dd yyyy", { locale: ko })}
-        </h2>
-      </header> */}
       <div className="relative w-full">
         <Carousel
           opts={{
@@ -86,10 +81,8 @@ export default function MonthlyDateCarousel({
               } else {
                 if (date.dayIndex === 0) {
                   textColor = "text-red-500"; // Sunday
-                  // dateStyles += " text-red-500"; // 전체 요소도 빨간색
                 } else if (date.dayIndex === 6) {
                   textColor = "text-blue-500"; // Saturday
-                  // dateStyles += " text-blue-500"; // 전체 요소도 파란색
                 }
               }
 
