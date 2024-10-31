@@ -6,7 +6,9 @@ import {
   postClubsImg,
 } from "@/lib/api/functions/clubFn";
 import type {
+  GetClubDetailData,
   GetClubDetailsResponse,
+  GetClubListData,
   GetClubListResponse,
   PatchClubRequest,
   PostClubRequest,
@@ -15,7 +17,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useQueryWithToast from "./useQueryWithToast";
 
 export const useGetClubs = () => {
-  return useQueryWithToast<GetClubListResponse>(["clubsData"], getClubs);
+  return useQueryWithToast<GetClubListData>(["clubsData"], getClubs);
 };
 
 export const usePostClubs = () => {
@@ -38,7 +40,7 @@ export const usePostClubsImg = () => {
 };
 
 export const useGetClubsById = (clubId: number) => {
-  return useQueryWithToast<GetClubDetailsResponse>(["clubsDataById"], () =>
+  return useQueryWithToast<GetClubDetailData>(["clubsDataById"], () =>
     getClubsById(clubId),
   );
 };

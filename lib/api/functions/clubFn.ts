@@ -1,5 +1,6 @@
 import type {
   GetClubDetailsResponse,
+  GetClubListData,
   GetClubListResponse,
   PatchClubRequest,
   PatchClubResponse,

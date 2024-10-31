@@ -2,13 +2,32 @@ import { useToast } from "@/hooks/use-toast";
 import { type UseQueryResult, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-const useQueryWithAlert = <TData>(
-  queryKey: string[],
-  queryFn: () => Promise<TData>,
-): UseQueryResult<TData> => {
-  const { toast } = useToast();
-  const queryResult = useQuery({ queryKey, queryFn });
+interface CommonResponse<T> {
+  result?: "SUCCESS" | "FAIL";
+  data?: T;
+  message?: string;
+  error_code?: string;
+}
 
+type Hello<T> =
+  | {
+      result: "SUCCESS";
+      data: T;
+    }
+  | {
+      result: "FAIL";
+      message: string;
+      error_code: string;
+    };
+
+const useQueryWithToast = <TData>(
+  queryKey: string[],
+  queryFn: () => Promise<CommonResponse<TData>>,
+): { isLoading: boolean; data: TData | undefined } => {
+  const { toast } = useToast();
+  const queryResult = useQuery<CommonResponse<TData>>({ queryKey, queryFn });
+
+  // queryResult.data?.error_code
   useEffect(() => {
     if (queryResult.error) {
       toast({
@@ -18,7 +37,7 @@ const useQueryWithAlert = <TData>(
     }
   }, [queryResult.error, toast]);
 
-  return queryResult;
+  return { isLoading: queryResult.isLoading, data: queryResult.data?.data };
 };
 
-export default useQueryWithAlert;
+export default useQueryWithToast;
