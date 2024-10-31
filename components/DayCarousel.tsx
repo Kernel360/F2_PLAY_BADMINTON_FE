@@ -1,7 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -9,7 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { addDays, format, getMonth, getYear } from "date-fns";
+import { addDays, format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -30,12 +28,10 @@ export default function MonthlyDateCarousel({
   );
 
   const today = new Date();
-  const currentYear = getYear(today);
-  const currentMonth = getMonth(today);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
 
   const getDatesForNextThreeWeeks = (startDate: Date) => {
-    const endDate = addDays(startDate, 20); // 21 days in total including today
+    const endDate = addDays(startDate, 20);
     const datesWithDays = [];
 
     for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
@@ -54,12 +50,10 @@ export default function MonthlyDateCarousel({
   const dates = getDatesForNextThreeWeeks(today);
 
   return (
-    <section className="w-full" aria-label="Monthly Date Carousel">
-      <header className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">
-          {format(selectedDate, "MMMM dd yyyy", { locale: ko })}
-        </h2>
-      </header>
+    <section
+      className="w-full sticky top-[4rem] z-10 bg-white mb-5"
+      aria-label="Monthly Date Carousel"
+    >
       <div className="relative w-full">
         <Carousel
           opts={{
@@ -69,7 +63,7 @@ export default function MonthlyDateCarousel({
           aria-roledescription="carousel"
         >
           <CarouselPrevious
-            className="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-2 z-10"
+            className="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-white hover:bg-gray-50 hover:text-primary rounded-full p-2 z-10"
             aria-label="Previous month"
           >
             <ChevronLeft size={18} className="text-indigo-600" />
@@ -77,7 +71,12 @@ export default function MonthlyDateCarousel({
           <CarouselContent className="flex items-center gap-2 p-4">
             {dates.map((date) => {
               let textColor = "text-gray-600";
+              let dateStyles =
+                "cursor-pointer transition-all duration-200 transform rounded-full w-28 h-14 flex flex-col items-center justify-center";
+
               if (selectedDate.toDateString() === date.date.toDateString()) {
+                dateStyles +=
+                  " bg-blue-500 text-white scale-105 border-2 border-blue-500";
                 textColor = "text-white";
               } else {
                 if (date.dayIndex === 0) {
@@ -85,13 +84,6 @@ export default function MonthlyDateCarousel({
                 } else if (date.dayIndex === 6) {
                   textColor = "text-blue-500"; // Saturday
                 }
-              }
-
-              let dateStyles =
-                "cursor-pointer transition-all duration-200 transform rounded-full w-28 h-14 flex flex-col items-center justify-center text-gray-600";
-              if (selectedDate.toDateString() === date.date.toDateString()) {
-                dateStyles =
-                  "cursor-pointer transition-all duration-200 transform rounded-full w-28 h-14 flex flex-col items-center justify-center bg-blue-500 text-white scale-105 border-2 border-blue-500";
               }
 
               const handleKeyUp = (event: React.KeyboardEvent, date: Date) => {
@@ -106,7 +98,7 @@ export default function MonthlyDateCarousel({
                   className="flex-none basis-1/6"
                 >
                   <button
-                    className={dateStyles}
+                    className={`${dateStyles} ${textColor}`}
                     onClick={() => handleDateSelect(date.date)}
                     onKeyUp={(event) => handleKeyUp(event, date.date)}
                     aria-label={`Select date ${format(
@@ -131,7 +123,7 @@ export default function MonthlyDateCarousel({
           </CarouselContent>
 
           <CarouselNext
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-2 z-10"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white hover:bg-gray-50 hover:text-primary rounded-full p-2 z-10"
             aria-label="Next month"
           >
             <ChevronRight size={18} className="text-indigo-600" />
