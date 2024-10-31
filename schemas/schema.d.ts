@@ -192,7 +192,7 @@ export interface paths {
      * 동호회 가입 신청
      * @description 동호회에 가입을 신청합니다.
      */
-    post: operations["joinClub"];
+    post: operations["applyClub"];
     /**
      * 동호회에서 탈퇴하기
      * @description 동호회에서 탈퇴하기
@@ -608,7 +608,7 @@ export interface paths {
     };
     /**
      * 인기 top10 동호회 검색
-     * @description 인기 top10 도호회를 검색합니다.
+     * @description 인기 top10 동호회를 검색합니다.
      */
     get: operations["clubSearchPopular"];
     put?: never;
@@ -709,6 +709,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -777,6 +778,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -861,6 +863,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -979,6 +982,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -1102,6 +1106,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -1186,15 +1191,16 @@ export interface components {
       /** @enum {string} */
       match_type?: "SINGLES" | "DOUBLES";
     };
-    ClubMemberJoinResponse: {
+    ApplyClubResponse: {
       /** Format: int64 */
-      club_member_id?: number;
-      role?: string;
+      club_apply_id?: number;
+      /** @enum {string} */
+      status?: "APPROVED" | "PENDING" | "REJECTED";
     };
-    CommonResponseClubMemberJoinResponse: {
+    CommonResponseApplyClubResponse: {
       /** @enum {string} */
       result?: "SUCCESS" | "FAIL";
-      data?: components["schemas"]["ClubMemberJoinResponse"];
+      data?: components["schemas"]["ApplyClubResponse"];
       /** @enum {string} */
       error_code?:
         | "BAD_REQUEST"
@@ -1233,6 +1239,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -1247,16 +1254,10 @@ export interface components {
       error_message_for_log?: string;
       error_message_for_client?: string;
     };
-    ClubMemberStatusResponse: {
-      /** Format: int64 */
-      club_member_id?: number;
-      role?: string;
-      status?: string;
-    };
-    CommonResponseClubMemberStatusResponse: {
+    CommonResponseRejectApplyResponse: {
       /** @enum {string} */
       result?: "SUCCESS" | "FAIL";
-      data?: components["schemas"]["ClubMemberStatusResponse"];
+      data?: components["schemas"]["RejectApplyResponse"];
       /** @enum {string} */
       error_code?:
         | "BAD_REQUEST"
@@ -1295,6 +1296,76 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
+    };
+    RejectApplyResponse: {
+      /** Format: int64 */
+      club_apply_id?: number;
+      /** @enum {string} */
+      status?: "APPROVED" | "PENDING" | "REJECTED";
+    };
+    ApproveApplyResponse: {
+      /** Format: int64 */
+      club_apply_id?: number;
+      /** @enum {string} */
+      status?: "APPROVED" | "PENDING" | "REJECTED";
+    };
+    CommonResponseApproveApplyResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["ApproveApplyResponse"];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -1369,6 +1440,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -1476,6 +1548,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -1561,6 +1634,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -1630,6 +1704,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -1649,10 +1724,10 @@ export interface components {
       type?: "THREE_DAYS" | "SEVEN_DAYS" | "TWO_WEEKS" | "PERMANENT";
       banned_reason?: string;
     };
-    CommonResponse: {
+    CommonResponseListOngoingAndUpcomingLeagueResponse: {
       /** @enum {string} */
       result?: "SUCCESS" | "FAIL";
-      data?: Record<string, never>;
+      data?: components["schemas"]["OngoingAndUpcomingLeagueResponse"][];
       /** @enum {string} */
       error_code?:
         | "BAD_REQUEST"
@@ -1691,6 +1766,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -1704,6 +1780,106 @@ export interface components {
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
       error_message_for_client?: string;
+    };
+    OngoingAndUpcomingLeagueResponse: {
+      /** Format: date-time */
+      league_at?: string;
+      league_name?: string;
+      description?: string;
+      /** @enum {string} */
+      match_type?: "SINGLES" | "DOUBLES";
+      /** Format: int32 */
+      player_limit_count?: number;
+      /** Format: int32 */
+      recruited_member_count?: number;
+      /** @enum {string} */
+      league_status?:
+        | "RECRUITING"
+        | "RECRUITING_COMPLETED"
+        | "PLAYING"
+        | "CANCELED"
+        | "FINISHED";
+    };
+    CommonResponseListLeagueSetsScoreInProgressResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["LeagueSetsScoreInProgressResponse"][];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
+    };
+    DoublesMatchPlayerResponse: {
+      team1?: components["schemas"]["TeamResponse"];
+      team2?: components["schemas"]["TeamResponse"];
+    };
+    LeagueSetsScoreInProgressResponse: {
+      /** Format: int64 */
+      match_id?: number;
+      singles_match_player_response?: components["schemas"]["SinglesMatchPlayerResponse"];
+      doubles_match_player_response?: components["schemas"]["DoublesMatchPlayerResponse"];
+      /** Format: int32 */
+      set_score1?: number;
+      /** Format: int32 */
+      set_score2?: number;
+      /** Format: int32 */
+      round_number?: number;
+      /** Format: int32 */
+      set_number?: number;
+    };
+    SinglesMatchPlayerResponse: {
+      participant1_name?: string;
+      participant1_image?: string;
+      participant2_name?: string;
+      participant2_image?: string;
     };
     ClubMemberMyPageInfo: {
       /** Format: int64 */
@@ -1776,6 +1952,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -1885,6 +2062,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -1989,6 +2167,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -2045,6 +2224,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -2174,7 +2354,7 @@ export interface components {
     };
     SinglesSetResponse: {
       /** Format: int32 */
-      set_index?: number;
+      set_number?: number;
       /** Format: int32 */
       score1?: number;
       /** Format: int32 */
@@ -2232,6 +2412,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -2322,6 +2503,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -2397,6 +2579,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -2453,6 +2636,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -2509,6 +2693,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -2583,6 +2768,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -2639,6 +2825,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -2706,6 +2893,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -2779,6 +2967,7 @@ export interface components {
         | "LEAGUE_ALREADY_EXIST"
         | "MATCH_ALREADY_EXIST"
         | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
         | "LEAGUE_ALREADY_PARTICIPATED"
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
@@ -3087,15 +3276,11 @@ export interface operations {
       };
     };
   };
-  joinClub: {
+  applyClub: {
     parameters: {
       query?: never;
       header?: never;
       path: {
-        /**
-         * @description 동호회 ID
-         * @example 1
-         */
         clubToken: string;
       };
       cookie?: never;
@@ -3108,7 +3293,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["CommonResponseClubMemberJoinResponse"];
+          "*/*": components["schemas"]["CommonResponseApplyClubResponse"];
         };
       };
     };
@@ -3138,7 +3323,7 @@ export interface operations {
   rejectClub: {
     parameters: {
       query: {
-        clubMemberId: number;
+        clubApplyId: number;
       };
       header?: never;
       path: {
@@ -3154,7 +3339,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["CommonResponseClubMemberStatusResponse"];
+          "*/*": components["schemas"]["CommonResponseRejectApplyResponse"];
         };
       };
     };
@@ -3162,7 +3347,7 @@ export interface operations {
   approvedClub: {
     parameters: {
       query: {
-        clubMemberId: number;
+        clubApplyId: number;
       };
       header?: never;
       path: {
@@ -3178,7 +3363,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["CommonResponseClubMemberStatusResponse"];
+          "*/*": components["schemas"]["CommonResponseApproveApplyResponse"];
         };
       };
     };
@@ -3451,7 +3636,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["CommonResponse"];
+          "*/*": components["schemas"]["CommonResponseListOngoingAndUpcomingLeagueResponse"];
         };
       };
     };
@@ -3473,7 +3658,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["CommonResponse"];
+          "*/*": components["schemas"]["CommonResponseListLeagueSetsScoreInProgressResponse"];
         };
       };
     };
