@@ -9,9 +9,10 @@ import type {
 } from "@/types/clubTypes";
 import restClient from "../restClient";
 
-export async function getClubs(): Promise<GetClubListResponse> {
+export async function getClubs({ pageParam }): Promise<GetClubListResponse> {
+  const { page, size, sort } = pageParam;
   return restClient.get<GetClubListResponse>(
-    "/clubs?page=0&size=100&sort=clubId",
+    `/clubs?page=${page}&size=${size}&sort=${sort}`,
   );
 }
 
