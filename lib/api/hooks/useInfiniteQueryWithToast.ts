@@ -1,3 +1,4 @@
+import type { ClubParams } from "@/types/clubTypes";
 import {
   type UseInfiniteQueryResult,
   useInfiniteQuery,
@@ -7,7 +8,17 @@ const PAGE_SIZE = 30;
 
 interface CommonResponse<T> {
   result?: "SUCCESS" | "FAIL";
-  data?: T;
+  data?: {
+    content: T[];
+    total_pages: number;
+    total_elements: number;
+    size: number;
+    number: number;
+    first: boolean;
+    last: boolean;
+    number_of_elements: number;
+    empty: boolean;
+  };
   error_code?:
     | "BAD_REQUEST"
     | "INVALID_PARAMETER"
@@ -62,21 +73,17 @@ interface CommonResponse<T> {
 }
 
 const useInfiniteQueryWithToast = <TData>(
-  queryKey: string[],
-  queryFn: ({ pageParam: any }) => Promise<CommonResponse<TData>>,
+  queryKey: (string | number)[],
+  queryFn: (pageParam: unknown) => Promise<CommonResponse<TData>>,
 ): UseInfiniteQueryResult => {
   const queryResult = useInfiniteQuery<CommonResponse<TData>>({
     queryKey,
     queryFn,
     // refetchOnWindowFocus: false,
-    initialPageParam: {
-      page: 0,
-      size: PAGE_SIZE,
-      sort: "clubId",
-    },
+    initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
       console.log(lastPage);
-      if (lastPage.data.content.length === 0) {
+      if (lastPage.data?.last) {
         return null;
       }
 
