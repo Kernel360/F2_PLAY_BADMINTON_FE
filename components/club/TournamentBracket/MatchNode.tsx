@@ -1,6 +1,5 @@
 import { Handle, Position } from "@xyflow/react";
-import { useCallback } from "react";
-import PlayerNode, { type Player } from "./PlayerNode";
+import PlayerNode, { type Player } from "./MatchPlayerBlock";
 
 export type CustomNodeData = {
   player1: Player;
