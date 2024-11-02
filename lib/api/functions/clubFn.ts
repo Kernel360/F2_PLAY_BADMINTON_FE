@@ -1,4 +1,5 @@
 import type {
+  ClubParams,
   GetClubDetailsResponse,
   GetClubListData,
   GetClubListResponse,
@@ -9,11 +10,34 @@ import type {
 } from "@/types/clubTypes";
 import restClient from "../restClient";
 
-export async function getClubs(): Promise<GetClubListResponse> {
-  return restClient.get<GetClubListResponse>(
-    "/clubs?page=0&size=100&sort=clubId",
+// export async function getClubs({
+//   pageParam,
+//   size,
+//   sort,
+// }: {
+//   pageParam: unknown;
+//   size: number;
+//   sort: string;
+// }): Promise<GetClubListResponse> {
+//   return restClient.get<GetClubListResponse>(
+//     `/clubs?page=${pageParam}&size=${size}&sort=${sort}`,
+//   );
+// }
+
+export const getClubs = async ({
+  pageParam,
+  size,
+  sort,
+}: {
+  pageParam: unknown;
+  size: number;
+  sort: string;
+}) => {
+  const res = await fetch(
+    `https://apit.badminton.run/v1/clubs?page=${pageParam}&size=${size}&sort=${sort}`,
   );
-}
+  return res.json();
+};
 
 export const postClubs = async (
   clubData: PostClubRequest,

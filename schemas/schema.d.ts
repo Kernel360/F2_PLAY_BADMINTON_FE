@@ -158,14 +158,18 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/v1/clubs/{clubToken}/leagues/{leagueId}/matches/{matchId}/sets/{setIndex}": {
+  "/v1/clubs/{clubToken}/leagues/{leagueId}/matches/{matchId}/sets/{setNumber}": {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /**
+     * 스코어 보드에서 특정 매치의 세트를 조회합니다.
+     * @description 스코어 보드에서 세트 점수, 경기 참여자 정보, 이긴 세트 수, 현황 등을 조회할 수 있습니다.
+     */
+    get: operations["getMatchSet"];
     put?: never;
     /** 세트별 점수 저장 */
     post: operations["updateSetsScore"];
@@ -1124,8 +1128,7 @@ export interface components {
     LeagueParticipantResponse: {
       /** Format: int64 */
       league_id?: number;
-      /** Format: int64 */
-      member_id?: number;
+      member_token?: string;
       /** Format: date-time */
       created_at?: string;
       /** Format: date-time */
@@ -1144,6 +1147,63 @@ export interface components {
       round_number?: number;
       singles_match_info_list?: components["schemas"]["SinglesMatchResponse"][];
       doubles_match_info_list?: components["schemas"]["DoublesMatchResponse"][];
+    };
+    CommonResponseBracketResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["BracketResponse"];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
     };
     DoublesMatchResponse: {
       /** Format: int64 */
@@ -1178,6 +1238,63 @@ export interface components {
       score1?: number;
       /** Format: int32 */
       score2?: number;
+    };
+    CommonResponseSetScoreUpdateResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["SetScoreUpdateResponse"];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
     };
     SetScoreUpdateResponse: {
       /** Format: int64 */
@@ -2020,10 +2137,10 @@ export interface components {
       /** Format: int64 */
       bronze_club_member_count?: number;
     };
-    CommonResponsePageClubCardResponse: {
+    CommonResponseCustomPageResponseClubCardResponse: {
       /** @enum {string} */
       result?: "SUCCESS" | "FAIL";
-      data?: components["schemas"]["PageClubCardResponse"];
+      data?: components["schemas"]["CustomPageResponseClubCardResponse"];
       /** @enum {string} */
       error_code?:
         | "BAD_REQUEST"
@@ -2077,41 +2194,21 @@ export interface components {
       error_message_for_log?: string;
       error_message_for_client?: string;
     };
-    PageClubCardResponse: {
+    CustomPageResponseClubCardResponse: {
+      content?: components["schemas"]["ClubCardResponse"][];
+      /** Format: int32 */
+      total_pages?: number;
       /** Format: int64 */
       total_elements?: number;
       /** Format: int32 */
-      total_pages?: number;
+      size?: number;
+      /** Format: int32 */
+      number?: number;
       first?: boolean;
       last?: boolean;
       /** Format: int32 */
-      size?: number;
-      content?: components["schemas"]["ClubCardResponse"][];
-      /** Format: int32 */
-      number?: number;
-      sort?: components["schemas"]["SortObject"][];
-      /** Format: int32 */
       number_of_elements?: number;
-      pageable?: components["schemas"]["PageableObject"];
       empty?: boolean;
-    };
-    PageableObject: {
-      /** Format: int64 */
-      offset?: number;
-      sort?: components["schemas"]["SortObject"][];
-      paged?: boolean;
-      /** Format: int32 */
-      page_number?: number;
-      /** Format: int32 */
-      page_size?: number;
-      unpaged?: boolean;
-    };
-    SortObject: {
-      direction?: string;
-      null_handling?: string;
-      ascending?: boolean;
-      property?: string;
-      ignore_case?: boolean;
     };
     ClubDetailsResponse: {
       club_token?: string;
@@ -2332,6 +2429,63 @@ export interface components {
        */
       is_match_created?: boolean;
     };
+    CommonResponseMatchDetailsResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["MatchDetailsResponse"];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
+    };
     DoublesSetResponse: {
       /** Format: int32 */
       set_number?: number;
@@ -2359,6 +2513,134 @@ export interface components {
       score1?: number;
       /** Format: int32 */
       score2?: number;
+    };
+    CommonResponseMatchSetResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["MatchSetResponse"];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
+    };
+    MatchSetResponse: {
+      singles_match_player_response?: components["schemas"]["SinglesMatchPlayerResponse"];
+      doubles_match_player_response?: components["schemas"]["DoublesMatchPlayerResponse"];
+      /** Format: int32 */
+      set_score1?: number;
+      /** Format: int32 */
+      set_score2?: number;
+      /** Format: int32 */
+      win_set_score1?: number;
+      /** Format: int32 */
+      win_set_score2?: number;
+      /** Format: int32 */
+      set_number?: number;
+    };
+    CommonResponseListSetScoreResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["SetScoreResponse"][];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
     };
     SetScoreResponse: {
       /** Format: int64 */
@@ -2722,8 +3004,7 @@ export interface components {
       is_deleted?: boolean;
     };
     ClubDeleteResponse: {
-      /** Format: int64 */
-      club_id?: number;
+      club_token?: string;
       is_club_deleted?: boolean;
     };
     CommonResponseClubDeleteResponse: {
@@ -3078,7 +3359,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["CommonResponsePageClubCardResponse"];
+          "*/*": components["schemas"]["CommonResponseCustomPageResponseClubCardResponse"];
         };
       };
     };
@@ -3197,7 +3478,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["BracketResponse"];
+          "*/*": components["schemas"]["CommonResponseBracketResponse"];
         };
       };
     };
@@ -3220,7 +3501,32 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["BracketResponse"];
+          "*/*": components["schemas"]["CommonResponseBracketResponse"];
+        };
+      };
+    };
+  };
+  getMatchSet: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubToken: string;
+        leagueId: number;
+        matchId: number;
+        setNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseMatchSetResponse"];
         };
       };
     };
@@ -3233,7 +3539,7 @@ export interface operations {
         clubToken: string;
         leagueId: number;
         matchId: number;
-        setIndex: number;
+        setNumber: number;
       };
       cookie?: never;
     };
@@ -3249,7 +3555,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["SetScoreUpdateResponse"];
+          "*/*": components["schemas"]["CommonResponseSetScoreUpdateResponse"];
         };
       };
     };
@@ -3722,7 +4028,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["MatchDetailsResponse"];
+          "*/*": components["schemas"]["CommonResponseMatchDetailsResponse"];
         };
       };
     };
@@ -3745,7 +4051,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["SetScoreResponse"][];
+          "*/*": components["schemas"]["CommonResponseListSetScoreResponse"];
         };
       };
     };
@@ -3822,7 +4128,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["CommonResponsePageClubCardResponse"];
+          "*/*": components["schemas"]["CommonResponseCustomPageResponseClubCardResponse"];
         };
       };
     };

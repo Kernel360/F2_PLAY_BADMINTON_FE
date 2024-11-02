@@ -6,6 +6,7 @@ import {
   postClubsImg,
 } from "@/lib/api/functions/clubFn";
 import type {
+  ClubParams,
   GetClubDetailData,
   GetClubDetailsResponse,
   GetClubListData,
@@ -13,11 +14,22 @@ import type {
   PatchClubRequest,
   PostClubRequest,
 } from "@/types/clubTypes";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import useQueryWithToast from "./useQueryWithToast";
 
-export const useGetClubs = () => {
-  return useQueryWithToast<GetClubListData>(["clubsData"], getClubs);
+export const useGetClubs = (size: number, sort: string) => {
+  return useInfiniteQuery<GetClubListResponse>({
+    queryKey: ["projects", size, sort],
+    queryFn: ({ pageParam }) => getClubs({ pageParam, size, sort }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, pages) => {
+      return !lastPage?.data?.last ? pages.length : null;
+    },
+  });
 };
 
 export const usePostClubs = () => {
