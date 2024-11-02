@@ -19,7 +19,6 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import useInfiniteQueryWithToast from "./useInfiniteQueryWithToast";
 import useQueryWithToast from "./useQueryWithToast";
 
 export const useGetClubs = (size: number, sort: string) => {

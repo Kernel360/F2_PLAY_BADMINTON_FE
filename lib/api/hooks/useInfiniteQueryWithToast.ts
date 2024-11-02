@@ -72,38 +72,38 @@ interface CommonResponse<T> {
   error_message_for_client?: string;
 }
 
-const useInfiniteQueryWithToast = <TData>(
-  queryKey: (string | number)[],
-  queryFn: (pageParam: unknown) => Promise<CommonResponse<TData>>,
-): UseInfiniteQueryResult => {
-  const queryResult = useInfiniteQuery<CommonResponse<TData>>({
-    queryKey,
-    queryFn,
-    // refetchOnWindowFocus: false,
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => {
-      console.log(lastPage);
-      if (lastPage.data?.last) {
-        return null;
-      }
+// const useInfiniteQueryWithToast = <TData>(
+//   queryKey: (string | number)[],
+//   queryFn: (pageParam: unknown) => Promise<CommonResponse<TData>>,
+// ): UseInfiniteQueryResult => {
+//   const queryResult = useInfiniteQuery<CommonResponse<TData>>({
+//     queryKey,
+//     queryFn,
+//     // refetchOnWindowFocus: false,
+//     initialPageParam: 0,
+//     getNextPageParam: (lastPage, pages) => {
+//       console.log(lastPage);
+//       if (lastPage.data?.last) {
+//         return null;
+//       }
 
-      return {
-        page: pages.length,
-        size: PAGE_SIZE,
-        sort: "clubId",
-      };
-    },
-  });
+//       return {
+//         page: pages.length,
+//         size: PAGE_SIZE,
+//         sort: "clubId",
+//       };
+//     },
+//   });
 
-  if (!queryResult.data) {
-    return [];
-  }
+//   if (!queryResult.data) {
+//     return [];
+//   }
 
-  const data = queryResult.data.pages.flatMap((page) =>
-    page.data ? page.data : [],
-  );
+//   const data = queryResult.data.pages.flatMap((page) =>
+//     page.data ? page.data : [],
+//   );
 
-  return { ...queryResult, data };
-};
+//   return { ...queryResult, data };
+// };
 
-export default useInfiniteQueryWithToast;
+// export default useInfiniteQueryWithToast;
