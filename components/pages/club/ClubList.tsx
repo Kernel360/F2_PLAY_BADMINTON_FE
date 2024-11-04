@@ -149,11 +149,11 @@ function ClubList() {
       <section>
         <div className="mb-4">
           <h2 className="text-xl font-bold mb-6 text-gray-800">
-            최근 활동 Up 동호회{" "}
-            <span className="text-sm text-primary">TRENDING</span>
+            놓치면 아쉬운 동호회{" "}
+            <span className="text-sm text-primary">TREND</span>
           </h2>
           <p className="text-sm text-gray-500">
-            최근 활발한 경기 활동을 펼치고 있는 동호회입니다
+            활발한 활동으로 주목받고 있는 동호회를 확인해보세요
           </p>
         </div>
         <Carousel opts={{ align: "start" }} className="w-full relative">
@@ -175,7 +175,8 @@ function ClubList() {
       <section>
         <div className="mb-4">
           <h2 className="text-xl font-bold mb-6 text-gray-800">
-            신규 동호회 <span className="text-sm text-orange-500">NEW</span>
+            따끈따끈한 신규 동호회{" "}
+            <span className="text-sm text-orange-500">NEW</span>
           </h2>
           <p className="text-sm text-gray-500">
             새롭게 만들어진 신생 동호회들을 만나보세요
