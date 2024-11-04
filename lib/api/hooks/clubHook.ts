@@ -10,15 +10,13 @@ import {
 } from "@/lib/api/functions/clubFn";
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
+  ClubCardResponse,
   ClubParams,
-  GetActivityClubListData,
   GetClubDetailData,
   GetClubDetailsResponse,
   GetClubListData,
   GetClubListResponse,
-  GetPopularClubListData,
   GetPopularClubListResponse,
-  GetRecentlyClubListData,
   PatchClubRequest,
   PostClubRequest,
 } from "@/types/clubTypes";
@@ -40,22 +38,20 @@ export const useGetClubs = (size: number, sort: string) => {
 };
 
 export const useGetPopularClubs = () => {
-  return useQueryWithToast<GetPopularClubListData[]>(["clubsPopularData"], () =>
+  return useQueryWithToast<ClubCardResponse[]>(["clubsPopularData"], () =>
     getPopularClubs(),
   );
 };
 
 export const useGetActivityClubs = () => {
-  return useQueryWithToast<GetActivityClubListData[]>(
-    ["clubsActivityData"],
-    () => getActivityClubs(),
+  return useQueryWithToast<ClubCardResponse[]>(["clubsActivityData"], () =>
+    getActivityClubs(),
   );
 };
 
 export const useGetRecentlyClubs = () => {
-  return useQueryWithToast<GetRecentlyClubListData[]>(
-    ["clubsRecentlyData"],
-    () => getRecentlyClubs(),
+  return useQueryWithToast<ClubCardResponse[]>(["clubsRecentlyData"], () =>
+    getRecentlyClubs(),
   );
 };
 

@@ -41,8 +41,8 @@ function LeagueUpdate() {
   const router = useRouter();
   const clubId = Number(usePathname().split("/")[2]);
   const leagueId = Number(usePathname().split("/")[4]);
-  const [tierLimit, setTierLimit] =
-    useState<LeagueUpdateRequest["tier_limit"]>("GOLD");
+  // const [tierLimit, setTierLimit] =
+  //   useState<LeagueUpdateRequest["tier_limit"]>("GOLD");
   const [type, setType] =
     useState<LeagueUpdateRequest["match_type"]>("SINGLES");
   const [date, setDate] = useState<Date>();
@@ -58,18 +58,18 @@ function LeagueUpdate() {
     if (league) {
       setValue("league_name", league.league_name || "");
       setValue("description", league.league_description || "");
-      setValue("league_location", league.league_location || "");
-      setTierLimit(league.required_tier || "GOLD");
+      // setValue("league_location", league.league_location || "");
+      // setTierLimit(league.required_tier || "GOLD");
       setType(league.match_type || "SINGLES");
-      setValue("tier_limit", league.required_tier || "GOLD");
+      // setValue("tier_limit", league.required_tier || "GOLD");
       setValue("match_type", league.match_type || "SINGLES");
-      setValue("league_at", league.league_at || "");
+      // setValue("league_at", league.league_at || "");
 
       if (league.league_at) {
         const leagueDate = new Date(league.league_at);
         setDate(leagueDate);
         setTimeValue(format(leagueDate, "HH:mm"));
-        setValue("league_at", league.league_at);
+        // setValue("league_at", league.league_at);
       }
 
       if (league.recruiting_closed_at) {
@@ -96,9 +96,9 @@ function LeagueUpdate() {
     if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
       const newDate = setHours(setMinutes(date, minutes ?? 0), hours ?? 0);
       setDate(newDate);
-      setValue("league_at", toLocalISOString(newDate), {
-        shouldValidate: true,
-      });
+      // setValue("league_at", toLocalISOString(newDate), {
+      //   shouldValidate: true,
+      // });
       setTimeValue(time);
     }
   };
@@ -111,9 +111,9 @@ function LeagueUpdate() {
         hours ?? 0,
       );
       setDate(newDate);
-      setValue("league_at", toLocalISOString(newDate), {
-        shouldValidate: true,
-      });
+      // setValue("league_at", toLocalISOString(newDate), {
+      //   shouldValidate: true,
+      // });
     }
   };
 
@@ -125,14 +125,14 @@ function LeagueUpdate() {
     // });
   };
 
-  const selectedTier = () => {
-    setValue("tier_limit", tierLimit, { shouldValidate: true });
-    return tierLimit === "GOLD"
-      ? "🥇 골드"
-      : tierLimit === "SILVER"
-        ? "🥈 실버"
-        : "🥉 브론즈";
-  };
+  // const selectedTier = () => {
+  //   setValue("tier_limit", tierLimit, { shouldValidate: true });
+  //   return tierLimit === "GOLD"
+  //     ? "🥇 골드"
+  //     : tierLimit === "SILVER"
+  //       ? "🥈 실버"
+  //       : "🥉 브론즈";
+  // };
 
   const selectedType = () => {
     setValue("match_type", type, { shouldValidate: true });
@@ -230,12 +230,12 @@ function LeagueUpdate() {
                 />
               </PopoverContent>
             </Popover>
-            <input
+            {/* <input
               type="hidden"
               {...register("league_at", {
                 required: "경기 시간을 선택해주세요",
               })}
-            />
+            /> */}
           </div>
 
           <div>
@@ -270,7 +270,7 @@ function LeagueUpdate() {
                     </svg>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-full p-2 border border-gray-200 bg-white rounded-md shadow-lg">
+                {/* <DropdownMenuContent className="w-full p-2 border border-gray-200 bg-white rounded-md shadow-lg">
                   <DropdownMenuRadioGroup
                     value={tierLimit}
                     onValueChange={(value) =>
@@ -291,7 +291,7 @@ function LeagueUpdate() {
                       복식
                     </DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
+                </DropdownMenuContent> */}
               </DropdownMenu>
               <input
                 type="hidden"
@@ -318,7 +318,7 @@ function LeagueUpdate() {
                     variant="outline"
                     className="w-full hover:bg-white hover:text-black text-black text-left p-2 flex items-center justify-between border-gray-200 rounded-md"
                   >
-                    <span className="flex items-center">{selectedTier()}</span>
+                    {/* <span className="flex items-center">{selectedTier()}</span> */}
                     <svg
                       className="w-4 h-4 ml-2"
                       xmlns="http://www.w3.org/2000/svg"
@@ -337,7 +337,7 @@ function LeagueUpdate() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-full p-2 border border-gray-200 bg-white rounded-md shadow-lg">
-                  <DropdownMenuRadioGroup
+                  {/* <DropdownMenuRadioGroup
                     value={tierLimit}
                     onValueChange={(value) =>
                       setTierLimit(value as LeagueUpdateRequest["tier_limit"])
@@ -362,14 +362,14 @@ function LeagueUpdate() {
                     >
                       🥉 브론즈
                     </DropdownMenuRadioItem>
-                  </DropdownMenuRadioGroup>
+                  </DropdownMenuRadioGroup> */}
                 </DropdownMenuContent>
               </DropdownMenu>
               <input
                 type="hidden"
-                {...register("tier_limit", {
-                  //   required: "지원 가능 티어를 선택해주세요",
-                })}
+                // {...register("tier_limit", {
+                //   //   required: "지원 가능 티어를 선택해주세요",
+                // })}
               />
             </div>
           </div>
@@ -399,9 +399,9 @@ function LeagueUpdate() {
             </div>
             <Input
               placeholder="장소 입력"
-              {...register("league_location", {
-                // required: "경기 장소를 입력해주세요",
-              })}
+              // {...register("league_location", {
+              //   // required: "경기 장소를 입력해주세요",
+              // })}
             />
           </div>
 
