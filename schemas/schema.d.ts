@@ -483,6 +483,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/v1/members/myClubs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 회원이 속한 동호회를 볼 수 있습니다
+     * @description 회원이 속한 동호회를 볼 수 있습니다
+     */
+    get: operations["getMyClubs"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/v1/members/matchesRecord": {
     parameters: {
       query?: never;
@@ -583,6 +603,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/v1/clubs/{clubToken}/applicants": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 특정 동호회에 가입 신청한 유저 리스트 조회
+     * @description 특정 동호회에 가입 신청한 유저 리스트 조회
+     */
+    get: operations["getClubApplicant"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/v1/clubs/search": {
     parameters: {
       query?: never;
@@ -595,6 +635,26 @@ export interface paths {
      * @description 검색 조건에 맞는 동호회를 조회합니다.
      */
     get: operations["clubSearch"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/clubs/recently": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 최근 생성된 top10 동호회 검색
+     * @description 최근 생성된 동호회 top10을 검색합니다.
+     */
+    get: operations["clubSearchRecently"];
     put?: never;
     post?: never;
     delete?: never;
@@ -723,6 +783,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -792,6 +856,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -877,6 +945,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -887,29 +959,30 @@ export interface components {
        * @description 경기 이름
        * @example 지역 예선 경기
        */
-      league_name?: string;
+      league_name: string;
       /**
        * @description 경기 설명
        * @example 이 경기는 지역 예선 경기입니다.
        */
-      description?: string;
+      description: string;
       /**
        * @description 경기 장소
-       * @example 성동구 서울숲 체육센터
+       * @example 서울시 성동구 서울숲 체육센터
        */
-      league_location?: string;
+      full_address: string;
       /**
        * @description 최소 티어
        * @example BRONZE
        * @enum {string}
        */
-      tier_limit?: "GOLD" | "SILVER" | "BRONZE";
+      tier_limit: "GOLD" | "SILVER" | "BRONZE";
       /**
        * @description 경기 상태
        * @example RECRUITING
        * @enum {string}
        */
-      league_status?:
+      league_status:
+        | "ALL"
         | "RECRUITING"
         | "RECRUITING_COMPLETED"
         | "PLAYING"
@@ -920,29 +993,29 @@ export interface components {
        * @example SINGLES
        * @enum {string}
        */
-      match_type?: "SINGLES" | "DOUBLES";
+      match_type: "SINGLES" | "DOUBLES";
       /**
        * Format: date-time
        * @description 경기 시작 날짜
        */
-      league_at?: string;
+      league_at: string;
       /**
        * Format: date-time
        * @description 모집 마감 날짜
        */
-      recruiting_closed_at?: string;
+      recruiting_closed_at: string;
       /**
        * Format: int32
        * @description 참가 인원
        * @example 16
        */
-      player_limit_count?: number;
+      player_limit_count: number;
       /**
        * @description 대진표 생성 조건
        * @example FREE
        * @enum {string}
        */
-      match_generation_type?: "FREE" | "TOURNAMENT";
+      match_generation_type: "FREE" | "TOURNAMENT";
     };
     CommonResponseLeagueCreateResponse: {
       /** @enum {string} */
@@ -996,6 +1069,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1013,6 +1090,16 @@ export interface components {
        */
       description?: string;
       /**
+       * @description 경기 장소
+       * @example 서울시 성동구 서울숲 체육센터
+       */
+      full_address?: string;
+      /**
+       * @description 경기 리전
+       * @example 서울시
+       */
+      region?: string;
+      /**
        * @description 최소 티어
        * @example GOLD
        * @enum {string}
@@ -1020,10 +1107,11 @@ export interface components {
       required_tier?: "GOLD" | "SILVER" | "BRONZE";
       /**
        * @description 현재 경기 상태
-       * @example OPEN
+       * @example RECRUITING
        * @enum {string}
        */
       status?:
+        | "ALL"
         | "RECRUITING"
         | "RECRUITING_COMPLETED"
         | "PLAYING"
@@ -1120,6 +1208,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1200,6 +1292,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1235,9 +1331,9 @@ export interface components {
     };
     SetScoreUpdateRequest: {
       /** Format: int32 */
-      score1?: number;
+      score1: number;
       /** Format: int32 */
-      score2?: number;
+      score2: number;
     };
     CommonResponseSetScoreUpdateResponse: {
       /** @enum {string} */
@@ -1291,6 +1387,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1308,16 +1408,20 @@ export interface components {
       /** @enum {string} */
       match_type?: "SINGLES" | "DOUBLES";
     };
-    ApplyClubResponse: {
+    ClubApplyRequest: {
+      apply_reason?: string;
+    };
+    ClubApplyResponse: {
       /** Format: int64 */
       club_apply_id?: number;
+      apply_reason?: string;
       /** @enum {string} */
       status?: "APPROVED" | "PENDING" | "REJECTED";
     };
-    CommonResponseApplyClubResponse: {
+    CommonResponseClubApplyResponse: {
       /** @enum {string} */
       result?: "SUCCESS" | "FAIL";
-      data?: components["schemas"]["ApplyClubResponse"];
+      data?: components["schemas"]["ClubApplyResponse"];
       /** @enum {string} */
       error_code?:
         | "BAD_REQUEST"
@@ -1366,6 +1470,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1423,6 +1531,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1492,6 +1604,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1567,6 +1683,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1577,51 +1697,30 @@ export interface components {
        * @description 경기 이름
        * @example 배드민턴 경기
        */
-      league_name?: string;
+      league_name: string;
       /**
        * @description 경기 설명
        * @example 이 경기는 지역 예선 경기입니다.
        */
-      description?: string;
+      description: string;
       /**
-       * @description 경기 장소
-       * @example 성동구 서울숲 체육센터
+       * Format: int32
+       * @description 기존 참가 인원보다 적게 입력할 수 없습니다.
+       * @example 16
        */
-      league_location?: string;
-      /**
-       * @description 최소 티어
-       * @example GOLD
-       * @enum {string}
-       */
-      tier_limit?: "GOLD" | "SILVER" | "BRONZE";
+      player_limit_count: number;
       /**
        * @description 경기 방식
        * @example SINGLES
        * @enum {string}
        */
-      match_type?: "SINGLES" | "DOUBLES";
-      /**
-       * Format: date-time
-       * @description 경기 시작 날짜
-       */
-      league_at?: string;
-      /**
-       * Format: date-time
-       * @description 모집 마감 날짜
-       */
-      recruiting_closed_at?: string;
-      /**
-       * Format: int32
-       * @description 참가 인원
-       * @example 16
-       */
-      player_limit_count?: number;
+      match_type: "SINGLES" | "DOUBLES";
       /**
        * @description 매칭 조건
-       * @example TIER
+       * @example FREE
        * @enum {string}
        */
-      match_generation_type?: "FREE" | "TOURNAMENT";
+      match_generation_type: "FREE" | "TOURNAMENT";
     };
     CommonResponseLeagueUpdateInfoWithParticipantCountInfo: {
       /** @enum {string} */
@@ -1675,6 +1774,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1683,19 +1786,36 @@ export interface components {
     LeagueUpdateInfoWithParticipantCountInfo: {
       /** Format: int64 */
       league_id?: number;
-      /** Format: date-time */
-      league_at?: string;
       league_name?: string;
-      /** @enum {string} */
-      match_type?: "SINGLES" | "DOUBLES";
+      league_description?: string;
+      full_address?: string;
+      region?: string;
       /** @enum {string} */
       required_tier?: "GOLD" | "SILVER" | "BRONZE";
+      /** @enum {string} */
+      league_status?:
+        | "ALL"
+        | "RECRUITING"
+        | "RECRUITING_COMPLETED"
+        | "PLAYING"
+        | "CANCELED"
+        | "FINISHED";
+      /** @enum {string} */
+      match_type?: "SINGLES" | "DOUBLES";
+      /** Format: date-time */
+      league_at?: string;
       /** Format: date-time */
       recruiting_close_at?: string;
+      /** @enum {string} */
+      match_generation_type?: "FREE" | "TOURNAMENT";
       /** Format: int32 */
       player_limit_count?: number;
       /** Format: int32 */
-      participant_count?: number;
+      recruited_member_count?: number;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      modified_at?: string;
     };
     ClubMemberRoleUpdateRequest: {
       /** @enum {string} */
@@ -1761,6 +1881,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1831,6 +1955,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1893,6 +2021,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1911,6 +2043,7 @@ export interface components {
       recruited_member_count?: number;
       /** @enum {string} */
       league_status?:
+        | "ALL"
         | "RECRUITING"
         | "RECRUITING_COMPLETED"
         | "PLAYING"
@@ -1969,6 +2102,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1998,16 +2135,95 @@ export interface components {
       participant2_name?: string;
       participant2_image?: string;
     };
-    ClubMemberMyPageInfo: {
-      /** Format: int64 */
+    /** @description ClubMember information */
+    ClubMemberMyPageResponse: {
+      /**
+       * Format: int64
+       * @description Club ID
+       * @example 1
+       */
       club_id?: number;
-      /** Format: int64 */
+      /**
+       * Format: int64
+       * @description Club member ID
+       * @example 1
+       */
       club_member_id?: number;
+      /**
+       * @description Club name
+       * @example 배드민턴 동호회
+       */
       club_name?: string;
-      /** @enum {string} */
+      /**
+       * @description Member role
+       * @example ROLE_USER
+       * @enum {string}
+       */
       role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
     };
-    LeagueRecordInfo: {
+    CommonResponseMemberMyPageResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["MemberMyPageResponse"];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
+    };
+    /** @description League record information */
+    LeagueRecordResponse: {
       /** Format: int32 */
       win_count?: number;
       /** Format: int32 */
@@ -2017,15 +2233,117 @@ export interface components {
       /** Format: int32 */
       match_count?: number;
     };
-    MemberMyPageInfo: {
+    /** @description Unified member response */
+    MemberMyPageResponse: {
+      /**
+       * @description Member Token
+       * @example token
+       */
       member_token?: string;
+      /**
+       * @description Member name
+       * @example 김철수
+       */
       name?: string;
+      /**
+       * @description Email
+       * @example example@email.com
+       */
       email?: string;
+      /**
+       * @description Profile image URL
+       * @example https://example.com/profile.jpg
+       */
       profile_image?: string;
-      /** @enum {string} */
+      /**
+       * @description Tier
+       * @example GOLD
+       * @enum {string}
+       */
       tier?: "GOLD" | "SILVER" | "BRONZE";
-      league_record_info?: components["schemas"]["LeagueRecordInfo"];
-      club_member_my_page_infos?: components["schemas"]["ClubMemberMyPageInfo"][];
+      league_record_response?: components["schemas"]["LeagueRecordResponse"];
+      /** @description ClubMember information */
+      club_member_my_page_responses?: components["schemas"]["ClubMemberMyPageResponse"][];
+    };
+    ClubCardResponse: {
+      club_token?: string;
+      club_name?: string;
+      club_description?: string;
+      club_image?: string;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      modified_at?: string;
+      club_member_count_by_tier?: components["schemas"]["ClubMemberCountByTier"];
+    };
+    ClubMemberCountByTier: {
+      /** Format: int64 */
+      gold_club_member_count?: number;
+      /** Format: int64 */
+      silver_club_member_count?: number;
+      /** Format: int64 */
+      bronze_club_member_count?: number;
+    };
+    CommonResponseListClubCardResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["ClubCardResponse"][];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
     };
     CommonResponseListMatchResultResponse: {
       /** @enum {string} */
@@ -2079,6 +2397,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2117,25 +2439,6 @@ export interface components {
     TeamResultResponse: {
       participant1_name?: string;
       participant2_name?: string;
-    };
-    ClubCardResponse: {
-      club_token?: string;
-      club_name?: string;
-      club_description?: string;
-      club_image?: string;
-      /** Format: date-time */
-      created_at?: string;
-      /** Format: date-time */
-      modified_at?: string;
-      club_member_count_by_tier?: components["schemas"]["ClubMemberCountByTier"];
-    };
-    ClubMemberCountByTier: {
-      /** Format: int64 */
-      gold_club_member_count?: number;
-      /** Format: int64 */
-      silver_club_member_count?: number;
-      /** Format: int64 */
-      bronze_club_member_count?: number;
     };
     CommonResponseCustomPageResponseClubCardResponse: {
       /** @enum {string} */
@@ -2189,6 +2492,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2274,6 +2581,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2331,6 +2642,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2354,9 +2669,14 @@ export interface components {
       league_description?: string;
       /**
        * @description 경기 장소
+       * @example 서울시 동대문구 장충동 체육관
+       */
+      full_address?: string;
+      /**
+       * @description 경기 장소 리전
        * @example 장충동 체육관
        */
-      league_location?: string;
+      region?: string;
       /**
        * @description 최소 티어, 예시) GOLD | SILVER | BRONZE
        * @example GOLD
@@ -2369,6 +2689,7 @@ export interface components {
        * @enum {string}
        */
       league_status?:
+        | "ALL"
         | "RECRUITING"
         | "RECRUITING_COMPLETED"
         | "PLAYING"
@@ -2481,6 +2802,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2566,6 +2891,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2637,6 +2966,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2704,6 +3037,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2722,10 +3059,11 @@ export interface components {
       league_name?: string;
       /**
        * @description 현재 경기 상태
-       * @example OPEN
+       * @example RECRUITING
        * @enum {string}
        */
       status?:
+        | "ALL"
         | "RECRUITING"
         | "RECRUITING_COMPLETED"
         | "PLAYING"
@@ -2795,6 +3133,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2871,15 +3213,29 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
       error_message_for_client?: string;
     };
-    CommonResponseListClubCardResponse: {
+    ClubApplicantResponse: {
+      /** Format: int64 */
+      club_apply_id?: number;
+      name?: string;
+      /** @enum {string} */
+      tier?: "GOLD" | "SILVER" | "BRONZE";
+      apply_reason?: string;
+      /** @enum {string} */
+      status?: "APPROVED" | "PENDING" | "REJECTED";
+    };
+    CommonResponseListClubApplicantResponse: {
       /** @enum {string} */
       result?: "SUCCESS" | "FAIL";
-      data?: components["schemas"]["ClubCardResponse"][];
+      data?: components["schemas"]["ClubApplicantResponse"][];
       /** @enum {string} */
       error_code?:
         | "BAD_REQUEST"
@@ -2928,6 +3284,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2985,6 +3345,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3059,6 +3423,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3116,6 +3484,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3126,6 +3498,7 @@ export interface components {
       league_id?: number;
       /** @enum {string} */
       league_status?:
+        | "ALL"
         | "RECRUITING"
         | "RECRUITING_COMPLETED"
         | "PLAYING"
@@ -3184,6 +3557,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3258,6 +3635,10 @@ export interface components {
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
         | "INSUFFICIENT_TIER"
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3591,7 +3972,11 @@ export interface operations {
       };
       cookie?: never;
     };
-    requestBody?: never;
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ClubApplyRequest"];
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -3599,7 +3984,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["CommonResponseApplyClubResponse"];
+          "*/*": components["schemas"]["CommonResponseClubApplyResponse"];
         };
       };
     };
@@ -3928,6 +4313,26 @@ export interface operations {
   getLeaguesByDate: {
     parameters: {
       query: {
+        leagueStatus?: "ALL" | "RECRUITING" | "PLAYING";
+        region?:
+          | "ALL"
+          | "SEOUL"
+          | "GYEONGGI"
+          | "INCHEON"
+          | "GANGWON"
+          | "DAEJEON"
+          | "SEJONG"
+          | "CHUNGNAM"
+          | "CHUNGBUK"
+          | "DAEGU"
+          | "GYEONGBUK"
+          | "BUSAN"
+          | "ULSAN"
+          | "GYEONGNAM"
+          | "GWANGJU"
+          | "JEONNAM"
+          | "JEONBUK"
+          | "JEJU";
         date: string;
       };
       header?: never;
@@ -3984,7 +4389,27 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["MemberMyPageInfo"];
+          "*/*": components["schemas"]["CommonResponseMemberMyPageResponse"];
+        };
+      };
+    };
+  };
+  getMyClubs: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseListClubCardResponse"];
         };
       };
     };
@@ -4108,6 +4533,28 @@ export interface operations {
       };
     };
   };
+  getClubApplicant: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubToken: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseListClubApplicantResponse"];
+        };
+      };
+    };
+  };
   clubSearch: {
     parameters: {
       query?: {
@@ -4129,6 +4576,26 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["CommonResponseCustomPageResponseClubCardResponse"];
+        };
+      };
+    };
+  };
+  clubSearchRecently: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseListClubCardResponse"];
         };
       };
     };

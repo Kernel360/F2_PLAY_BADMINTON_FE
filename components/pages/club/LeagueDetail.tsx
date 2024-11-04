@@ -196,7 +196,7 @@ function LeagueDetail() {
           <div>
             <p className="text-xs text-gray-500">경기 장소</p>
             <p className="text-sm font-semibold text-gray-800">
-              {league?.league_location}
+              {league?.region}
             </p>
           </div>
         </div>

@@ -1,28 +1,15 @@
 import type {
-  ClubParams,
+  GetActivityClubListResponse,
   GetClubDetailsResponse,
-  GetClubListData,
   GetClubListResponse,
+  GetPopularClubListResponse,
+  GetRecentlyClubListResponse,
   PatchClubRequest,
   PatchClubResponse,
   PostClubRequest,
   PostClubResponse,
 } from "@/types/clubTypes";
 import restClient from "../restClient";
-
-// export async function getClubs({
-//   pageParam,
-//   size,
-//   sort,
-// }: {
-//   pageParam: unknown;
-//   size: number;
-//   sort: string;
-// }): Promise<GetClubListResponse> {
-//   return restClient.get<GetClubListResponse>(
-//     `/clubs?page=${pageParam}&size=${size}&sort=${sort}`,
-//   );
-// }
 
 export const getClubs = async ({
   pageParam,
@@ -33,11 +20,25 @@ export const getClubs = async ({
   size: number;
   sort: string;
 }) => {
-  const res = await fetch(
-    `https://apit.badminton.run/v1/clubs?page=${pageParam}&size=${size}&sort=${sort}`,
+  return restClient.get<GetClubListResponse>(
+    `/clubs?page=${pageParam}&size=${size}&sort=${sort}`,
   );
-  return res.json();
 };
+
+export const getPopularClubs =
+  async (): Promise<GetPopularClubListResponse> => {
+    return restClient.get<GetPopularClubListResponse>("/clubs/popular");
+  };
+
+export const getActivityClubs =
+  async (): Promise<GetActivityClubListResponse> => {
+    return restClient.get<GetActivityClubListResponse>("/clubs/activity");
+  };
+
+export const getRecentlyClubs =
+  async (): Promise<GetRecentlyClubListResponse> => {
+    return restClient.get<GetRecentlyClubListResponse>("/clubs/recently");
+  };
 
 export const postClubs = async (
   clubData: PostClubRequest,

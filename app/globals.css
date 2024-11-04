@@ -20,13 +20,19 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: NotoSans, -apple-system, sans-serif;
+  font-family: Pretendard, -apple-system, sans-serif;
 }
 
 @font-face {
   font-family: "NotoSans";
   font-weight: 200;
   src: url("/fonts/NotoSansKR-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 200;
+  src: url("/fonts/Pretendard-Medium.woff") format("woff");
 }
 
 @layer utilities {

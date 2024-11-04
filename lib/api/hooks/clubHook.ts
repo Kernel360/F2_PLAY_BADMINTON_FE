@@ -1,16 +1,22 @@
 import {
+  getActivityClubs,
   getClubs,
   getClubsById,
+  getPopularClubs,
+  getRecentlyClubs,
   patchClubs,
   postClubs,
   postClubsImg,
 } from "@/lib/api/functions/clubFn";
+import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
+  ClubCardResponse,
   ClubParams,
   GetClubDetailData,
   GetClubDetailsResponse,
   GetClubListData,
   GetClubListResponse,
+  GetPopularClubListResponse,
   PatchClubRequest,
   PostClubRequest,
 } from "@/types/clubTypes";
@@ -19,7 +25,6 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import useQueryWithToast from "./useQueryWithToast";
 
 export const useGetClubs = (size: number, sort: string) => {
   return useInfiniteQuery<GetClubListResponse>({
@@ -30,6 +35,24 @@ export const useGetClubs = (size: number, sort: string) => {
       return !lastPage?.data?.last ? pages.length : null;
     },
   });
+};
+
+export const useGetPopularClubs = () => {
+  return useQueryWithToast<ClubCardResponse[]>(["clubsPopularData"], () =>
+    getPopularClubs(),
+  );
+};
+
+export const useGetActivityClubs = () => {
+  return useQueryWithToast<ClubCardResponse[]>(["clubsActivityData"], () =>
+    getActivityClubs(),
+  );
+};
+
+export const useGetRecentlyClubs = () => {
+  return useQueryWithToast<ClubCardResponse[]>(["clubsRecentlyData"], () =>
+    getRecentlyClubs(),
+  );
 };
 
 export const usePostClubs = () => {
