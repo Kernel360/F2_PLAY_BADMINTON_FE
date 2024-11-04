@@ -25,6 +25,7 @@ const imageUrl = [
   "/images/banner-rules.png",
   "/images/banner-process.png",
   "/images/banner-polite.png",
+  "/images/banner-match.png",
 ];
 
 function ClubList() {
