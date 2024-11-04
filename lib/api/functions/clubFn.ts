@@ -3,6 +3,8 @@ import type {
   GetClubDetailsResponse,
   GetClubListData,
   GetClubListResponse,
+  GetPopularClubListData,
+  GetPopularClubListResponse,
   PatchClubRequest,
   PatchClubResponse,
   PostClubRequest,
@@ -38,6 +40,11 @@ export const getClubs = async ({
   );
   return res.json();
 };
+
+export const getPopularClubs =
+  async (): Promise<GetPopularClubListResponse> => {
+    return restClient.get<GetPopularClubListResponse>("/clubs/popular");
+  };
 
 export const postClubs = async (
   clubData: PostClubRequest,

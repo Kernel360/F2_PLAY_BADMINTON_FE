@@ -4,12 +4,17 @@ export type GetClubListResponse =
   components["schemas"]["CommonResponseCustomPageResponseClubCardResponse"];
 export type GetClubListData =
   components["schemas"]["CustomPageResponseClubCardResponse"];
-export type PostClubRequest = components["schemas"]["ClubCreateRequest"];
-export type PostClubResponse =
-  components["schemas"]["CommonResponseClubCreateResponse"];
+export type GetPopularClubListResponse =
+  components["schemas"]["CommonResponseListClubCardResponse"];
+export type GetPopularClubListData = components["schemas"]["ClubCardResponse"];
 export type GetClubDetailsResponse =
   components["schemas"]["CommonResponseClubDetailsResponse"];
 export type GetClubDetailData = components["schemas"]["ClubDetailsResponse"];
+
+export type PostClubRequest = components["schemas"]["ClubCreateRequest"];
+export type PostClubResponse =
+  components["schemas"]["CommonResponseClubCreateResponse"];
+
 export type PatchClubRequest = components["schemas"]["ClubUpdateRequest"];
 export type PatchClubResponse =
   components["schemas"]["CommonResponseClubUpdateResponse"];

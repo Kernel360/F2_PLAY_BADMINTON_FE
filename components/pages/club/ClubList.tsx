@@ -8,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"; // Assuming a Shadcn-based Carousel component
-import { useGetClubs } from "@/lib/api/hooks/clubHook";
+import { useGetClubs, useGetPopularClubs } from "@/lib/api/hooks/clubHook";
 import type { components } from "@/schemas/schema";
 import type { GetClubListData } from "@/types/clubTypes";
 import React from "react";
@@ -16,10 +16,7 @@ import React from "react";
 type ClubCardResponse = components["schemas"]["ClubCardResponse"];
 
 function ClubList() {
-  const { data: topClubs, isLoading: topLoading } = useGetClubs(
-    10,
-    "popularity",
-  );
+  const { data: topClubs, isLoading: topLoading } = useGetPopularClubs();
   const { data: recentClubs, isLoading: recentLoading } = useGetClubs(
     10,
     "recent",
@@ -53,30 +50,6 @@ function ClubList() {
     <div className="space-y-16">
       <section>
         <h2 className="text-2xl font-semibold mb-4">인기 Top 동호회</h2>
-        <Carousel>
-          {topClubs?.pages[0]?.data?.content?.map((club: ClubCardResponse) => (
-            <CarouselItem key={club.club_token}>
-              <ClubCard {...club} />
-            </CarouselItem>
-          ))}
-        </Carousel>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">최근 활동 Up 동호회</h2>
-        <Carousel>
-          {recentClubs?.pages[0]?.data?.content?.map(
-            (club: ClubCardResponse) => (
-              <CarouselItem key={club.club_token}>
-                <ClubCard {...club} />
-              </CarouselItem>
-            ),
-          )}
-        </Carousel>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">신규 동호회</h2>
         <Carousel
           opts={{
             align: "start",
@@ -98,6 +71,23 @@ function ClubList() {
           <CarouselPrevious className="-left-3 bg-white" />
           <CarouselNext className="-right-3 bg-white" />
         </Carousel>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">최근 활동 Up 동호회</h2>
+        <Carousel>
+          {recentClubs?.pages[0]?.data?.content?.map(
+            (club: ClubCardResponse) => (
+              <CarouselItem key={club.club_token}>
+                <ClubCard {...club} />
+              </CarouselItem>
+            ),
+          )}
+        </Carousel>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">신규 동호회</h2>
       </section>
 
       <section>

@@ -1,16 +1,20 @@
 import {
   getClubs,
   getClubsById,
+  getPopularClubs,
   patchClubs,
   postClubs,
   postClubsImg,
 } from "@/lib/api/functions/clubFn";
+import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   ClubParams,
   GetClubDetailData,
   GetClubDetailsResponse,
   GetClubListData,
   GetClubListResponse,
+  GetPopularClubListData,
+  GetPopularClubListResponse,
   PatchClubRequest,
   PostClubRequest,
 } from "@/types/clubTypes";
@@ -19,7 +23,6 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import useQueryWithToast from "./useQueryWithToast";
 
 export const useGetClubs = (size: number, sort: string) => {
   return useInfiniteQuery<GetClubListResponse>({
@@ -30,6 +33,12 @@ export const useGetClubs = (size: number, sort: string) => {
       return !lastPage?.data?.last ? pages.length : null;
     },
   });
+};
+
+export const useGetPopularClubs = () => {
+  return useQueryWithToast<GetPopularClubListData[]>(["clubsPopularData"], () =>
+    getPopularClubs(),
+  );
 };
 
 export const usePostClubs = () => {
