@@ -7,33 +7,33 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel"; // Assuming a Shadcn-based Carousel component
-import { useGetClubs, useGetPopularClubs } from "@/lib/api/hooks/clubHook";
+} from "@/components/ui/carousel";
+import {
+  useGetActivityClubs,
+  useGetClubs,
+  useGetPopularClubs,
+  useGetRecentlyClubs,
+} from "@/lib/api/hooks/clubHook";
 import type { components } from "@/schemas/schema";
-import type { GetClubListData } from "@/types/clubTypes";
 import React from "react";
 
 type ClubCardResponse = components["schemas"]["ClubCardResponse"];
 
 function ClubList() {
   const { data: topClubs, isLoading: topLoading } = useGetPopularClubs();
-  const { data: recentClubs, isLoading: recentLoading } = useGetClubs(
-    10,
-    "recent",
-  );
-  const { data: newClubs, isLoading: newLoading } = useGetClubs(
-    10,
-    "createdAt",
-  );
+  const { data: activityClubs, isLoading: activityLoading } =
+    useGetActivityClubs();
+  const { data: recentlyClubs, isLoading: recentlyLoading } =
+    useGetRecentlyClubs();
   const { data, isLoading, fetchNextPage, hasNextPage } = useGetClubs(
     9,
     "clubId",
   );
 
-  if (topLoading || recentLoading || newLoading || isLoading) {
+  if (topLoading || activityLoading || recentlyLoading || isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        Loading...
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <span className="text-lg text-gray-700">Loading...</span>
       </div>
     );
   }
@@ -47,26 +47,24 @@ function ClubList() {
   }
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-16 py-6">
       <section>
-        <h2 className="text-2xl font-semibold mb-4">인기 Top 동호회</h2>
-        <Carousel
-          opts={{
-            align: "start",
-          }}
-          className="w-full relative"
-        >
-          <CarouselContent>
-            {newClubs?.pages[0]?.data?.content?.map(
-              (club: ClubCardResponse) => (
-                <CarouselItem
-                  key={club.club_token}
-                  className="md:basis-1/2 lg:basis-1/3"
-                >
-                  <ClubCard {...club} />
-                </CarouselItem>
-              ),
-            )}
+        <h2 className="text-xl font-bold mb-6 text-gray-800">
+          인기 Top 동호회
+        </h2>
+        <p className="text-sm text-gray-500">
+          많은 회원들이 활동 중인 인기 동호회를 소개합니다.
+        </p>
+        <Carousel opts={{ align: "start" }} className="w-full relative">
+          <CarouselContent className="gap-4">
+            {topClubs?.map((club: ClubCardResponse) => (
+              <CarouselItem
+                key={club.club_token}
+                className="md:basis-1/3 lg:basis-1/4 p-2 rounded-lg shadow-sm  transition-shadow"
+              >
+                <ClubCard {...club} />
+              </CarouselItem>
+            ))}
           </CarouselContent>
           <CarouselPrevious className="-left-3 bg-white" />
           <CarouselNext className="-right-3 bg-white" />
@@ -74,25 +72,57 @@ function ClubList() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold mb-4">최근 활동 Up 동호회</h2>
-        <Carousel>
-          {recentClubs?.pages[0]?.data?.content?.map(
-            (club: ClubCardResponse) => (
-              <CarouselItem key={club.club_token}>
+        <h2 className="text-xl font-bold mb-6 text-gray-800">
+          최근 활동 Up 동호회
+        </h2>
+        <p className="text-sm text-gray-500">
+          최근 활발히 활동 중인 동호회를 확인하세요.
+        </p>
+        <Carousel opts={{ align: "start" }} className="w-full relative">
+          <CarouselContent className="gap-4">
+            {activityClubs?.map((club: ClubCardResponse) => (
+              <CarouselItem
+                key={club.club_token}
+                className="md:basis-1/3 lg:basis-1/4 p-2 rounded-lg shadow-sm  transition-shadow"
+              >
                 <ClubCard {...club} />
               </CarouselItem>
-            ),
-          )}
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="-left-3 bg-white" />
+          <CarouselNext className="-right-3 bg-white" />
         </Carousel>
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold mb-4">신규 동호회</h2>
+        <h2 className="text-xl font-bold mb-6 text-gray-800">신규 동호회</h2>
+        <p className="text-sm text-gray-500">
+          새롭게 만들어진 동호회들을 만나보세요.
+        </p>
+        <Carousel opts={{ align: "start" }} className="w-full relative">
+          <CarouselContent className="gap-4">
+            {recentlyClubs?.map((club: ClubCardResponse) => (
+              <CarouselItem
+                key={club.club_token}
+                className="md:basis-1/3 lg:basis-1/4 p-2 rounded-lg shadow-sm  transition-shadow"
+              >
+                <ClubCard {...club} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="-left-3 bg-white" />
+          <CarouselNext className="-right-3 bg-white" />
+        </Carousel>
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold mb-4">전체 동호회 리스트</h2>
-        <div className="my-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <h2 className="text-xl font-bold mb-6 text-gray-800">
+          전체 동호회 리스트
+        </h2>
+        <p className="text-sm text-gray-500">
+          다양한 분야의 동호회 목록을 한눈에 확인하세요.
+        </p>
+        <div className="mb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {data?.pages.map((group) => (
             <React.Fragment key={group.data?.number_of_elements}>
               {group?.data?.content?.map((club: ClubCardResponse) => (
@@ -100,16 +130,18 @@ function ClubList() {
               ))}
             </React.Fragment>
           ))}
-          {hasNextPage && (
+        </div>
+        {hasNextPage && (
+          <div className="text-center">
             <button
               type="button"
               onClick={() => fetchNextPage()}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+              className="mt-4 px-6 py-2 font-semibold rounded-lg"
             >
-              Load More
+              더보기
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </section>
     </div>
   );

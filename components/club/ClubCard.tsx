@@ -16,7 +16,7 @@ function ClubCard(props: ClubsData) {
 
   return (
     <Link href={`/club/${club_token}`} className="block">
-      <Card className=" max-w-md h-fit rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300 border border-gray-100 bg-white">
+      <Card className=" max-w-md h-fit rounded-xl shadow-md overflow-hidden cursor-pointer transition-shadow duration-300 border border-gray-100 bg-white">
         <CardHeader className="p-0">
           <img
             src={club_image || "/images/dummy-image.jpg"}

@@ -1,10 +1,13 @@
 import type {
   ClubParams,
+  GetActivityClubListResponse,
   GetClubDetailsResponse,
   GetClubListData,
   GetClubListResponse,
   GetPopularClubListData,
   GetPopularClubListResponse,
+  GetRecentlyClubListData,
+  GetRecentlyClubListResponse,
   PatchClubRequest,
   PatchClubResponse,
   PostClubRequest,
@@ -44,6 +47,16 @@ export const getClubs = async ({
 export const getPopularClubs =
   async (): Promise<GetPopularClubListResponse> => {
     return restClient.get<GetPopularClubListResponse>("/clubs/popular");
+  };
+
+export const getActivityClubs =
+  async (): Promise<GetActivityClubListResponse> => {
+    return restClient.get<GetActivityClubListResponse>("/clubs/activity");
+  };
+
+export const getRecentlyClubs =
+  async (): Promise<GetRecentlyClubListResponse> => {
+    return restClient.get<GetRecentlyClubListResponse>("/clubs/recently");
   };
 
 export const postClubs = async (
