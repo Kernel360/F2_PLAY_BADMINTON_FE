@@ -1,12 +1,12 @@
 "use client";
 
 import ClubCard from "@/components/club/ClubCard";
+import ClubCarousel from "@/components/club/ClubCarousel";
+import { Button } from "@/components/ui/Button";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
   useGetActivityClubs,
@@ -21,13 +21,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 type ClubCardResponse = components["schemas"]["ClubCardResponse"];
 
-const imageUrl = [
-  "/images/banner-rules.png",
-  "/images/banner-process.png",
-  "/images/dummy-image.jpg",
-  "/images/dummy-image.jpg",
-  "/images/dummy-image.jpg",
-];
+const imageUrl = ["/images/banner-rules.png", "/images/banner-process.png"];
 
 function ClubList() {
   const { data: topClubs, isLoading: topLoading } = useGetPopularClubs();
@@ -96,8 +90,8 @@ function ClubList() {
             {imageUrl.map((url, index) => (
               <CarouselItem key={url} className="w-full h-[346px]">
                 <img
-                  src={`${url}`} // 실제 이미지 경로로 대체 필요
-                  alt={`슬라이드 ${index + 1}`}
+                  src={`${url}`}
+                  alt={`banner ${index + 1}`}
                   className="w-[1048px] h-[346px] object-fit rounded-lg"
                 />
               </CarouselItem>
@@ -130,46 +124,20 @@ function ClubList() {
             많은 사랑을 받는 인기 동호회를 확인해보세요
           </p>
         </div>
-        <Carousel opts={{ align: "start" }} className="w-full relative">
-          <CarouselContent>
-            {topClubs?.map((club: ClubCardResponse) => (
-              <CarouselItem
-                key={club.club_token}
-                className="md:basis-1/3 lg:basis-1/4"
-              >
-                <ClubCard {...club} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="absolute -left-3 bg-white" />
-          <CarouselNext className="absolute -right-3 bg-white" />
-        </Carousel>
+        <ClubCarousel clubs={topClubs || []} />
       </section>
 
       <section>
         <div className="mb-4">
           <h2 className="text-xl font-bold mb-6 text-gray-800">
             놓치면 아쉬운 동호회{" "}
-            <span className="text-sm text-primary">TREND</span>
+            <span className="text-sm text-primary">FOCUS</span>
           </h2>
           <p className="text-sm text-gray-500">
             활발한 활동으로 주목받고 있는 동호회를 확인해보세요
           </p>
         </div>
-        <Carousel opts={{ align: "start" }} className="w-full relative">
-          <CarouselContent>
-            {activityClubs?.map((club: ClubCardResponse) => (
-              <CarouselItem
-                key={club.club_token}
-                className="md:basis-1/3 lg:basis-1/4"
-              >
-                <ClubCard {...club} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="-left-3 bg-white" />
-          <CarouselNext className="-right-3 bg-white" />
-        </Carousel>
+        <ClubCarousel clubs={activityClubs || []} />
       </section>
 
       <section>
@@ -182,20 +150,7 @@ function ClubList() {
             새롭게 만들어진 신생 동호회들을 만나보세요
           </p>
         </div>
-        <Carousel opts={{ align: "start" }} className="w-full relative">
-          <CarouselContent>
-            {recentlyClubs?.map((club: ClubCardResponse) => (
-              <CarouselItem
-                key={club.club_token}
-                className="md:basis-1/3 lg:basis-1/4"
-              >
-                <ClubCard {...club} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="-left-3 bg-white" />
-          <CarouselNext className="-right-3 bg-white" />
-        </Carousel>
+        <ClubCarousel clubs={recentlyClubs || []} />
       </section>
 
       <section>
@@ -212,14 +167,14 @@ function ClubList() {
           ))}
         </div>
         {hasNextPage && (
-          <div className="text-center">
-            <button
+          <div className="w-full flex justify-center items-center">
+            <Button
               type="button"
               onClick={() => fetchNextPage()}
-              className="mt-4 px-6 py-2 font-semibold rounded-lg"
+              className="mt-4 px-6 py-2 font-semibold rounded-lg duration-300 shadow-md hover:shadow-lg focus:ring-2"
             >
               더보기
-            </button>
+            </Button>
           </div>
         )}
       </section>

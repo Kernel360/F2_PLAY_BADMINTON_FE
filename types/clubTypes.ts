@@ -9,17 +9,13 @@ export type GetClubListData =
 export type GetPopularClubListResponse =
   components["schemas"]["CommonResponseListClubCardResponse"];
 
-export type GetPopularClubListData = components["schemas"]["ClubCardResponse"];
+export type ClubCardResponse = components["schemas"]["ClubCardResponse"];
 
 export type GetActivityClubListResponse =
   components["schemas"]["CommonResponseListClubCardResponse"];
 
-export type GetActivityClubListData = components["schemas"]["ClubCardResponse"];
-
 export type GetRecentlyClubListResponse =
   components["schemas"]["CommonResponseListClubCardResponse"];
-
-export type GetRecentlyClubListData = components["schemas"]["ClubCardResponse"];
 
 export type GetClubDetailsResponse =
   components["schemas"]["CommonResponseClubDetailsResponse"];
