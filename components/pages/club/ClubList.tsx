@@ -135,14 +135,14 @@ function ClubList() {
             {topClubs?.map((club: ClubCardResponse) => (
               <CarouselItem
                 key={club.club_token}
-                className="md:basis-1/3 lg:basis-1/4 p-2 rounded-lg "
+                className="md:basis-1/3 lg:basis-1/4"
               >
                 <ClubCard {...club} />
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="-left-3 bg-white" />
-          <CarouselNext className="-right-3 bg-white" />
+          <CarouselPrevious className="absolute -left-3 bg-white" />
+          <CarouselNext className="absolute -right-3 bg-white" />
         </Carousel>
       </section>
 
@@ -161,7 +161,7 @@ function ClubList() {
             {activityClubs?.map((club: ClubCardResponse) => (
               <CarouselItem
                 key={club.club_token}
-                className="md:basis-1/3 lg:basis-1/4 p-2 rounded-lg "
+                className="md:basis-1/3 lg:basis-1/4"
               >
                 <ClubCard {...club} />
               </CarouselItem>
@@ -176,18 +176,18 @@ function ClubList() {
         <div className="mb-4">
           <h2 className="text-xl font-bold mb-6 text-gray-800">
             따끈따끈한 신규 동호회{" "}
-            <span className="text-sm text-orange-500">NEW</span>
+            <span className="text-sm text-green-500">NEW</span>
           </h2>
           <p className="text-sm text-gray-500">
             새롭게 만들어진 신생 동호회들을 만나보세요
           </p>
         </div>
-        <Carousel className="w-full relative">
+        <Carousel opts={{ align: "start" }} className="w-full relative">
           <CarouselContent>
             {recentlyClubs?.map((club: ClubCardResponse) => (
               <CarouselItem
                 key={club.club_token}
-                className="md:basis-1/3 lg:basis-1/4 p-2 rounded-lg"
+                className="md:basis-1/3 lg:basis-1/4"
               >
                 <ClubCard {...club} />
               </CarouselItem>
