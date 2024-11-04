@@ -21,7 +21,11 @@ import React, { useCallback, useEffect, useState } from "react";
 
 type ClubCardResponse = components["schemas"]["ClubCardResponse"];
 
-const imageUrl = ["/images/banner-rules.png", "/images/banner-process.png"];
+const imageUrl = [
+  "/images/banner-rules.png",
+  "/images/banner-process.png",
+  "/images/banner-polite.png",
+];
 
 function ClubList() {
   const { data: topClubs, isLoading: topLoading } = useGetPopularClubs();
