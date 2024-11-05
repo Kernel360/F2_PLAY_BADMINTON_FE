@@ -4,6 +4,7 @@ import {
   getClubsById,
   getPopularClubs,
   getRecentlyClubs,
+  getSearchClubs,
   patchClubs,
   postClubs,
   postClubsImg,
@@ -28,8 +29,24 @@ import {
 
 export const useGetClubs = (size: number, sort: string) => {
   return useInfiniteQuery<GetClubListResponse>({
-    queryKey: ["projects", size, sort],
+    queryKey: ["clubList", size, sort],
     queryFn: ({ pageParam }) => getClubs({ pageParam, size, sort }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, pages) => {
+      return !lastPage?.data?.last ? pages.length : null;
+    },
+  });
+};
+
+export const useGetSearchClubs = (
+  size: number,
+  sort: string,
+  keyword: string,
+) => {
+  return useInfiniteQuery<GetClubListResponse>({
+    queryKey: ["searchClubList", size, sort, keyword],
+    queryFn: ({ pageParam }) =>
+      getSearchClubs({ pageParam, size, sort, keyword }),
     initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
       return !lastPage?.data?.last ? pages.length : null;
