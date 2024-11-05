@@ -3,12 +3,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   // getIsClubMember,
   getMembersMatchRecord,
-  // getMembersMyPage,
+  getMembersMyPage,
   postMembersProfileImage,
   // putMembersProfileImage,
 } from "../functions/memberFn";
+import useQueryWithToast from "./useQueryWithToast";
 
 type MemberImageUpdate = components["schemas"]["MemberUpdateRequest"];
+type MemberMyPageData = components["schemas"]["MemberMyPageResponse"];
 
 // export const useGetIsClubMember = () => {
 //   return useQuery({
@@ -17,12 +19,9 @@ type MemberImageUpdate = components["schemas"]["MemberUpdateRequest"];
 //   });
 // };
 
-// export const useGetMembersMyPage = () => {
-//   return useQuery({
-//     queryKey: ["myPageData"],
-//     queryFn: getMembersMyPage,
-//   });
-// };
+export const useGetMembersMyPage = () => {
+  return useQueryWithToast<MemberMyPageData>(["myPage"], getMembersMyPage);
+};
 
 // export const useGetMyInfo = (isEnabled: boolean) => {
 //   return useQuery({
