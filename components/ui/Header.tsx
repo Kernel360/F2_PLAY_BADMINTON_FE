@@ -1,12 +1,13 @@
 "use client";
 
 import SImage from "@/components/ui/Image";
-import { Input } from "@/components/ui/Input";
 import { usePostLogout } from "@/lib/api/hooks/SessionHook";
 import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
+import { Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
+import { useRef } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +19,27 @@ function Header() {
   const path = usePathname();
   const router = useRouter();
   const { data, isLoading } = useGetMembersSession();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleSearch = () => {
+    if (inputRef.current) {
+      const query = inputRef.current.value.replace(/\n/g, "").trim();
+      if (query) {
+        router.push(`/search?q=${encodeURIComponent(query)}`);
+      }
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && inputRef.current) {
+      handleSearch();
+    }
+  };
+
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    handleSearch();
+  };
 
   const { mutate: logout } = usePostLogout();
 
@@ -75,7 +97,10 @@ function Header() {
     );
   } else {
     userMenu = (
-      <Link href="/login">
+      <Link
+        href="/login"
+        className="hover:bg-gray-100 px-3 py-2 rounded-md h-fit"
+      >
         <p className="rounded-full h-fit text-gray-500 text-sm">로그인</p>
       </Link>
     );
@@ -96,10 +121,27 @@ function Header() {
           </Link>
         </nav>
       </div>
-      <div className="flex items-center justify-end space-x-4 w-1/2 gap-2">
-        <div className="w-1/2">
-          <Input search radius="round" placeholder="동호회 검색" size="sm" />
+      <div className="flex items-center justify-end space-x-4 w-1/2 ">
+        <div className="w-1/2 flex justify-center items-center gap-1 mr-2">
+          <div className="relative flex-grow">
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder="동호회 이름을 검색하세요"
+              className="p-2 outline-none border-none w-full rounded-lg bg-gray-50 text-gray-500 focus-visible:ring-2"
+              onKeyDown={handleKeyDown}
+            />
+            <button
+              type="button"
+              onClick={handleButtonClick}
+              tabIndex={0}
+              className="absolute top-1/2 right-0 transform -translate-y-1/2 h-10 w-10 flex justify-center items-center rounded-lg focus-visible:ring-2"
+            >
+              <Search className="h-5 w-5 text-gray-500" />
+            </button>
+          </div>
         </div>
+
         {userMenu}
       </div>
     </div>

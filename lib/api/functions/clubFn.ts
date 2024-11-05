@@ -25,6 +25,22 @@ export const getClubs = async ({
   );
 };
 
+export const getSearchClubs = async ({
+  pageParam,
+  size,
+  sort,
+  keyword,
+}: {
+  pageParam: unknown;
+  size: number;
+  sort: string;
+  keyword: string;
+}) => {
+  return restClient.get<GetClubListResponse>(
+    `/clubs/search?page=${pageParam}&size=${size}&sort=${sort}&keyword=${keyword}`,
+  );
+};
+
 export const getPopularClubs =
   async (): Promise<GetPopularClubListResponse> => {
     return restClient.get<GetPopularClubListResponse>("/clubs/popular");
