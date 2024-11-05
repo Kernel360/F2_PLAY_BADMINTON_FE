@@ -463,6 +463,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/v1/members/session": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 로그인 세션을 확인합니다.
+     * @description 로그인 세션을 확인하여 로그인 여부를 판단할 때 사용합니다.
+     */
+    get: operations["getMySummaryInfo"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/v1/members/myPage": {
     parameters: {
       query?: never;
@@ -787,6 +807,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -860,6 +882,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -949,6 +973,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1073,6 +1099,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1212,6 +1240,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1296,6 +1326,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1391,6 +1423,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1474,6 +1508,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1535,6 +1571,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1608,6 +1646,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1687,6 +1727,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1778,6 +1820,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1885,6 +1929,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1959,6 +2005,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2025,6 +2073,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2106,6 +2156,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2134,6 +2186,98 @@ export interface components {
       participant1_image?: string;
       participant2_name?: string;
       participant2_image?: string;
+    };
+    CommonResponseSimpleMemberResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["SimpleMemberResponse"];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
+    };
+    /** @description 로그인 세션 확인 Dto */
+    SimpleMemberResponse: {
+      /**
+       * @description 회원 이름
+       * @example 이선우
+       */
+      name?: string;
+      /**
+       * @description oAuth 로그인 이메일
+       * @example qosle@naver.com
+       */
+      email?: string;
+      /**
+       * @description oAuth 제공 ID
+       * @example 1070449979547641023123
+       * @enum {string}
+       */
+      member_tier?: "GOLD" | "SILVER" | "BRONZE";
+      /**
+       * @description 회원 역할
+       * @example AUTHORIZATION_USER
+       */
+      authorization?: string;
+      /**
+       * @description oAuth 제공 이미지
+       * @example 1070449979547641023123
+       */
+      profile_image?: string;
     };
     /** @description ClubMember information */
     ClubMemberMyPageResponse: {
@@ -2217,6 +2361,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2340,6 +2486,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2401,6 +2549,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2496,6 +2646,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2585,6 +2737,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2646,6 +2800,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2806,6 +2962,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2895,6 +3053,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2970,6 +3130,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3041,6 +3203,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3137,6 +3301,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3217,6 +3383,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3288,6 +3456,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3349,6 +3519,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3427,6 +3599,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3488,6 +3662,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3561,6 +3737,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3639,6 +3817,8 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4370,6 +4550,26 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["CommonResponseListLeagueSetsScoreInProgressResponse"];
+        };
+      };
+    };
+  };
+  getMySummaryInfo: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseSimpleMemberResponse"];
         };
       };
     };
