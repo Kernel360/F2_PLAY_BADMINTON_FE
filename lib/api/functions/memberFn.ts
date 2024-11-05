@@ -1,32 +1,17 @@
 import type { components } from "@/schemas/schema";
+import type { GetMemberSessionResponse } from "@/types/memberTypes";
 import restClient from "../restClient";
 
-// type MemberIsClubMemberResponse =
-//   components["schemas"]["MemberIsClubMemberResponse"];
 type MemberMyPageResponse =
   components["schemas"]["CommonResponseMemberMyPageResponse"];
-// type MemberUpdateRequest = components["schemas"]["MemberUpdateRequest"];
-// type MemberResponse = components["schemas"]["MemberResponse"];
 type MemberMatchRecord = components["schemas"]["MatchResultResponse"];
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
-// export const getIsClubMember =
-//   async (): Promise<MemberIsClubMemberResponse> => {
-//     const response = await fetch(`${BASE_URL}/members/is-club-member`, {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       credentials: "include",
-//     });
-
-//     if (!response.ok) {
-//       throw new Error("멤버가 클럽에 속해있는지 조회할 수 없습니다.");
-//     }
-
-//     return response.json();
-//   };
+export const getMembersSession =
+  async (): Promise<GetMemberSessionResponse> => {
+    return restClient.get<GetMemberSessionResponse>("/members/session");
+  };
 
 export const getMembersMyPage = async (): Promise<MemberMyPageResponse> => {
   return restClient.get<MemberMyPageResponse>("/members/myPage");

@@ -3,7 +3,7 @@
 import SImage from "@/components/ui/Image";
 import { Input } from "@/components/ui/Input";
 import { usePostLogout } from "@/lib/api/hooks/SessionHook";
-import { useGetMembersMyPage } from "@/lib/api/hooks/memberHook";
+import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
@@ -17,7 +17,7 @@ import {
 function Header() {
   const path = usePathname();
   const router = useRouter();
-  const { data, isLoading } = useGetMembersMyPage();
+  const { data, isLoading } = useGetMembersSession();
 
   const { mutate: logout } = usePostLogout();
 

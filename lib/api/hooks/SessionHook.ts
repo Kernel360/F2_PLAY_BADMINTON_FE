@@ -15,7 +15,7 @@ export const usePostLogout = () => {
     mutationFn: postLogout,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["loginState"] });
-      queryClient.invalidateQueries({ queryKey: ["myPage"] });
+      queryClient.invalidateQueries({ queryKey: ["mySession"] });
     },
     onError: (error: Error) => alert(error),
   });
