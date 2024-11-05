@@ -1,27 +1,35 @@
 import type { components } from "@/schemas/schema";
+import type {
+  GetMemberSessionData,
+  MemberMyPageData,
+} from "@/types/memberTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   // getIsClubMember,
   getMembersMatchRecord,
-  // getMembersMyPage,
+  getMembersMyPage,
+  getMembersSession,
   postMembersProfileImage,
   // putMembersProfileImage,
 } from "../functions/memberFn";
+import useQueryWithToast from "./useQueryWithToast";
 
-type MemberImageUpdate = components["schemas"]["MemberUpdateRequest"];
+export const useGetMembersSession = () => {
+  return useQuery({
+    queryKey: ["mySession"],
+    queryFn: async () => {
+      const result = await getMembersSession();
 
-// export const useGetIsClubMember = () => {
-//   return useQuery({
-//     queryKey: ["isClubMemberData"],
-//     queryFn: getIsClubMember,
-//   });
-// };
+      if (result.result === "FAIL") {
+        return null;
+      }
+      return result.data;
+    },
+  });
+};
 
 // export const useGetMembersMyPage = () => {
-//   return useQuery({
-//     queryKey: ["myPageData"],
-//     queryFn: getMembersMyPage,
-//   });
+//   return useQueryWithToast<MemberMyPageData>(["myPage"], getMembersMyPage);
 // };
 
 // export const useGetMyInfo = (isEnabled: boolean) => {
