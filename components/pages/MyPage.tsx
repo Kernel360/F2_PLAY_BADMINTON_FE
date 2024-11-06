@@ -26,41 +26,12 @@ import {
 import Link from "next/link";
 import type { ChangeEvent } from "react";
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+import EditProfileDialog from "./myPage/EditProfileDialog";
 
 function MyPage() {
   const { data: myPage } = useGetMembersMyPage();
   const { data: myClubs } = useGetMembersMyClubs();
   const { data: matchRecord } = useGetMembersMatchesRecord();
-
-  const [name, setName] = useState<string>(myPage?.name || "");
-  const [profileImage, setProfileImage] = useState<string>(
-    myPage?.profile_image || "",
-  );
-
-  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setProfileImage(URL.createObjectURL(file));
-    }
-  };
-
-  const handleSave = () => {
-    // Save logic (e.g., API call to update the profile)
-    console.log("이름:", name);
-    console.log("프로필 이미지:", profileImage);
-  };
-
-  const handleImageRemove = () => {
-    setProfileImage(""); // 이미지 삭제
-  };
 
   const getMatchDetails = (match: GetMemberMachesRecordData) => {
     const isSingles = match.match_type === "SINGLES";
@@ -128,78 +99,14 @@ function MyPage() {
               </span>
             </div>
 
-            <Dialog>
-              <DialogTrigger className="w-full flex justify-center items-center">
-                <div className="w-fit flex p-1 text-sm rounded-md justify-center items-center">
-                  <Edit className="mr-1 h-4 w-4 text-blue-600" /> 수정
-                </div>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogTitle className="text-center">프로필 수정</DialogTitle>
-                <DialogDescription className="text-center mt-2">
-                  닉네임과 프로필 이미지를 수정할 수 있습니다.
-                </DialogDescription>
-
-                <div className="flex flex-col items-center gap-4 mt-6">
-                  {/* 프로필 이미지 */}
-                  <div className="relative">
-                    <Avatar className="w-24 h-24 rounded-full">
-                      <AvatarImage src={profileImage} alt="프로필 미리보기" />
-                      <AvatarFallback />
-                    </Avatar>
-
-                    {/* 이미지 수정 아이콘 */}
-                    <div className="absolute bottom-0 right-0 bg-black bg-opacity-60 rounded-full p-1 cursor-pointer">
-                      <label htmlFor="file-input">
-                        <Camera className="text-white h-5 w-5" />
-                      </label>
-                      <input
-                        id="file-input"
-                        type="file"
-                        className="hidden"
-                        onChange={handleImageUpload}
-                      />
-                    </div>
-                  </div>
-
-                  {/* 이미지 삭제 버튼 */}
-                  {profileImage && (
-                    <button
-                      type="button"
-                      onClick={handleImageRemove}
-                      className="text-sm text-gray-500 mt-2"
-                    >
-                      이미지 삭제
-                    </button>
-                  )}
-
-                  {/* 닉네임 수정 입력 필드 */}
-                  <div className="w-full mt-4">
-                    <Label htmlFor="name" className="text-gray-700">
-                      닉네임
-                    </Label>
-                    <input
-                      id="name"
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="닉네임을 입력하세요"
-                      className="mt-1"
-                    />
-                  </div>
-                </div>
-
-                <DialogFooter>
-                  <Button
-                    variant="outline"
-                    onClick={handleSave}
-                    className="w-full"
-                  >
-                    저장
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            {myPage && (
+              <EditProfileDialog
+                initialName={myPage.name || ""}
+                initialProfileImage={
+                  myPage.profile_image || "/images/dummy-image.jpg"
+                }
+              />
+            )}
           </div>
 
           {/* 전적 정보 */}

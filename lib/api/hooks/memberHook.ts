@@ -4,6 +4,7 @@ import type {
   GetMemberMyClubsData,
   GetMemberMyPageData,
   GetMemberSessionData,
+  PutMemberProfileRequest,
 } from "@/types/memberTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -13,6 +14,7 @@ import {
   getMembersMyPage,
   getMembersSession,
   postMembersProfileImage,
+  putMembersProfile,
   // putMembersProfileImage,
 } from "../functions/memberFn";
 import useQueryWithToast from "./useQueryWithToast";
@@ -49,36 +51,31 @@ export const useGetMembersMatchesRecord = () => {
   );
 };
 
-// export const useGetMyInfo = (isEnabled: boolean) => {
-//   return useQuery({
-//     queryKey: ["myInfo"],
-//     queryFn: getMembersMyPage,
-//     enabled: isEnabled,
-//   });
-// };
-
 export const usePostMembersProfileImage = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (profileImage: FormData) =>
-      postMembersProfileImage(profileImage),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["myPageData"] });
+    mutationFn: (profileImage: FormData) => {
+      console.log(4);
+      return postMembersProfileImage(profileImage);
     },
+    // onSuccess: () => {
+    //   queryClient.invalidateQueries({ queryKey: ["myPage"] });
+    // },
     onError: (error: Error) => alert(error),
   });
 };
 
-// export const usePutMembersProfileImage = () => {
-//   const queryClient = useQueryClient();
+export const usePutMembersProfile = () => {
+  const queryClient = useQueryClient();
 
-//   return useMutation({
-//     mutationFn: (profileImage: MemberImageUpdate) =>
-//       putMembersProfileImage(profileImage),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ["myPageData"] });
-//     },
-//     onError: (error: Error) => alert(error),
-//   });
-// };
+  return useMutation({
+    mutationFn: (profileImage: PutMemberProfileRequest) =>
+      putMembersProfile(profileImage),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myPage"] });
+      queryClient.invalidateQueries({ queryKey: ["mySession"] });
+    },
+    onError: (error: Error) => alert(error),
+  });
+};

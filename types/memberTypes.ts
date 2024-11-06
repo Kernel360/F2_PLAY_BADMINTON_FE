@@ -22,4 +22,11 @@ export type GetMemberMachesRecordResponse =
 export type GetMemberMachesRecordData =
   components["schemas"]["MatchResultResponse"];
 
-export type MemberImageUpdate = components["schemas"]["MemberUpdateRequest"];
+export type PostMembersProfileImageResponse =
+  components["schemas"]["CommonResponseString"];
+
+export type PutMemberProfileResponse =
+  components["schemas"]["CommonResponseMemberUpdateResponse"];
+
+export type PutMemberProfileRequest =
+  components["schemas"]["MemberUpdateRequest"];
