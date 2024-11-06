@@ -1,12 +1,15 @@
 import type { components } from "@/schemas/schema";
 import type {
+  GetMemberMachesRecordData,
+  GetMemberMyClubsData,
+  GetMemberMyPageData,
   GetMemberSessionData,
-  MemberMyPageData,
 } from "@/types/memberTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  getMembersMatchesRecord,
   // getIsClubMember,
-  getMembersMatchRecord,
+  getMembersMyClubs,
   getMembersMyPage,
   getMembersSession,
   postMembersProfileImage,
@@ -28,9 +31,23 @@ export const useGetMembersSession = () => {
   });
 };
 
-// export const useGetMembersMyPage = () => {
-//   return useQueryWithToast<MemberMyPageData>(["myPage"], getMembersMyPage);
-// };
+export const useGetMembersMyPage = () => {
+  return useQueryWithToast<GetMemberMyPageData>(["myPage"], getMembersMyPage);
+};
+
+export const useGetMembersMyClubs = () => {
+  return useQueryWithToast<GetMemberMyClubsData[]>(
+    ["myClubs"],
+    getMembersMyClubs,
+  );
+};
+
+export const useGetMembersMatchesRecord = () => {
+  return useQueryWithToast<GetMemberMachesRecordData[]>(
+    ["matchesRecord"],
+    getMembersMatchesRecord,
+  );
+};
 
 // export const useGetMyInfo = (isEnabled: boolean) => {
 //   return useQuery({
@@ -65,10 +82,3 @@ export const usePostMembersProfileImage = () => {
 //     onError: (error: Error) => alert(error),
 //   });
 // };
-
-export const useGetMyMatch = () => {
-  return useQuery({
-    queryKey: ["myMatch"],
-    queryFn: getMembersMatchRecord,
-  });
-};

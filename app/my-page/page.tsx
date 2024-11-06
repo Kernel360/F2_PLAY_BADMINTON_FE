@@ -1,7 +1,7 @@
-import MyPersonal from "@/components/pages/MyPersonal";
+import MyPage from "@/components/pages/MyPage";
 
-function MyPage() {
-  return <MyPersonal />;
+function Page() {
+  return <MyPage />;
 }
 
-export default MyPage;
+export default Page;

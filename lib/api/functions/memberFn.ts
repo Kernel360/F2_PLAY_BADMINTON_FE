@@ -1,10 +1,12 @@
 import type { components } from "@/schemas/schema";
-import type { GetMemberSessionResponse } from "@/types/memberTypes";
+import type {
+  GetMemberMachesRecordResponse,
+  GetMemberMyClubsResponse,
+  GetMemberMyPageData,
+  GetMemberMyPageResponse,
+  GetMemberSessionResponse,
+} from "@/types/memberTypes";
 import restClient from "../restClient";
-
-type MemberMyPageResponse =
-  components["schemas"]["CommonResponseMemberMyPageResponse"];
-type MemberMatchRecord = components["schemas"]["MatchResultResponse"];
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
@@ -13,9 +15,21 @@ export const getMembersSession =
     return restClient.get<GetMemberSessionResponse>("/members/session");
   };
 
-export const getMembersMyPage = async (): Promise<MemberMyPageResponse> => {
-  return restClient.get<MemberMyPageResponse>("/members/myPage");
+export const getMembersMyPage = async (): Promise<GetMemberMyPageResponse> => {
+  return restClient.get<GetMemberMyPageResponse>("/members/myPage");
 };
+
+export const getMembersMyClubs =
+  async (): Promise<GetMemberMyClubsResponse> => {
+    return restClient.get<GetMemberMyClubsResponse>("/members/myClubs");
+  };
+
+export const getMembersMatchesRecord =
+  async (): Promise<GetMemberMachesRecordResponse> => {
+    return restClient.get<GetMemberMachesRecordResponse>(
+      "/members/matchesRecord",
+    );
+  };
 
 export const postMembersProfileImage = async (
   profileImage: FormData,
@@ -50,19 +64,3 @@ export const postMembersProfileImage = async (
 
 //   return response.json();
 // };
-
-export const getMembersMatchRecord = async (): Promise<MemberMatchRecord[]> => {
-  const response = await fetch(`${BASE_URL}/members/matchesRecord`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
-
-  if (!response.ok) {
-    throw new Error("내 경기 결과 조회에 실패하였습니다.");
-  }
-
-  return response.json();
-};
