@@ -3,19 +3,16 @@ import type {
   GetMemberMachesRecordData,
   GetMemberMyClubsData,
   GetMemberMyPageData,
-  GetMemberSessionData,
   PutMemberProfileRequest,
 } from "@/types/memberTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getMembersMatchesRecord,
-  // getIsClubMember,
   getMembersMyClubs,
   getMembersMyPage,
   getMembersSession,
   postMembersProfileImage,
   putMembersProfile,
-  // putMembersProfileImage,
 } from "../functions/memberFn";
 import useQueryWithToast from "./useQueryWithToast";
 
@@ -52,16 +49,10 @@ export const useGetMembersMatchesRecord = () => {
 };
 
 export const usePostMembersProfileImage = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: (profileImage: FormData) => {
-      console.log(4);
       return postMembersProfileImage(profileImage);
     },
-    // onSuccess: () => {
-    //   queryClient.invalidateQueries({ queryKey: ["myPage"] });
-    // },
     onError: (error: Error) => alert(error),
   });
 };
