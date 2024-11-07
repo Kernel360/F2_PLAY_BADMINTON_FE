@@ -36,11 +36,11 @@ function MyPage() {
   const getMatchDetails = (match: GetMemberMachesRecordData) => {
     const isSingles = match.match_type === "SINGLES";
     const opponentName = isSingles
-      ? match.singles_match?.opponent_name || "알 수 없음"
-      : `${match.doubles_match?.opponent_team?.participant1_name || "알 수 없음"}, ${match.doubles_match?.opponent_team?.participant2_name || "알 수 없음"}`;
+      ? match.singles_match?.opponent_name || ""
+      : `${match.doubles_match?.opponent_team?.participant1_name || ""}, ${match.doubles_match?.opponent_team?.participant2_name || ""}`;
 
     const matchTypeLabel = isSingles ? "단식" : "복식";
-    const matchTypeStyles = isSingles ? "text-blue-600" : "text-green-600";
+    const matchTypeStyles = isSingles ? "text-primary" : "text-green-500";
 
     let matchResult = "진행 중";
     let resultBadgeVariant:
@@ -192,7 +192,7 @@ function MyPage() {
         <Card className="border rounded-lg flex flex-col h-[45vh]">
           <CardHeader className="border-b py-3 px-6">
             <CardTitle className="text-sm font-semibold text-gray-800 flex items-center gap-2">
-              <Trophy className="text-yellow-500 h-5 w-5" /> 경기 결과
+              <Trophy className="text-primary h-5 w-5" /> 경기 결과
             </CardTitle>
           </CardHeader>
           <CardContent className="flex-1 overflow-y-auto">
@@ -209,41 +209,52 @@ function MyPage() {
                 return (
                   <div
                     key={match.match_id}
-                    className="flex flex-col border-b p-4 last:border-0"
+                    className="flex flex-row items-center border-b p-4 last:border-0 gap-4"
                   >
-                    <div className="flex justify-between items-center gap-4">
-                      <div className="flex items-center gap-2">
-                        <div
-                          className={`w-1 h-4 ${matchTypeLabel === "단식" ? "bg-blue-500" : "bg-green-500"} rounded-full`}
-                        />
-                        <span
-                          className={`font-semibold text-sm ${matchTypeStyles}`}
-                        >
-                          {matchTypeLabel}
-                        </span>
-                      </div>
+                    <div className="flex items-center gap-2 w-1/5">
+                      <div
+                        className={`w-1 h-4 ${
+                          matchTypeLabel === "단식"
+                            ? "bg-blue-500"
+                            : "bg-green-500"
+                        } rounded-full`}
+                      />
+                      <span
+                        className={`font-semibold text-sm ${matchTypeStyles}`}
+                      >
+                        {matchTypeLabel}
+                      </span>
+                    </div>
 
-                      <div className="flex items-center text-gray-700 gap-1">
+                    <div className="flex items-center text-gray-700 gap-1 w-1/4">
+                      {matchTypeLabel === "단식" ? (
                         <User
                           className="text-gray-500 h-4 w-4"
                           aria-hidden="true"
                         />
-                        <span className="text-sm font-medium truncate">
-                          {opponentName}
-                        </span>
-                      </div>
+                      ) : (
+                        <Users
+                          className="text-gray-500 h-4 w-4"
+                          aria-hidden="true"
+                        />
+                      )}
+                      <span className="text-sm font-medium truncate">
+                        {opponentName}
+                      </span>
+                    </div>
 
+                    <div className="flex items-center justify-center w-1/5">
                       <Badge
                         variant={resultBadgeVariant}
-                        className="text-sm rounded-full"
+                        className="text-sm rounded-full px-2"
                       >
                         {matchResult}
                       </Badge>
+                    </div>
 
-                      <span className="text-sm text-gray-500">
-                        {match.league_at &&
-                          format(new Date(match.league_at), "yyyy년 MM월 dd일")}
-                      </span>
+                    <div className="text-sm text-gray-500 w-1/4 text-right">
+                      {match.league_at &&
+                        format(new Date(match.league_at), "yyyy년 MM월 dd일")}
                     </div>
                   </div>
                 );
