@@ -13,7 +13,7 @@ import {
 
 type LeagueCreateRequest = components["schemas"]["LeagueCreateRequest"];
 type LeagueUpdateRequest = components["schemas"]["LeagueUpdateRequest"];
-export const usePostLeagues = (clubId: number) => {
+export const usePostLeagues = (clubId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -41,7 +41,7 @@ export const useGetDateLeagues = (clubId: number, date: string) => {
   });
 };
 
-export const useGetLeagueDetail = (clubId: number, leagueId: number) => {
+export const useGetLeagueDetail = (clubId: string, leagueId: string) => {
   return useQuery({
     queryKey: ["leagueDetailData"],
     queryFn: () => getLeagueDetail(clubId, leagueId),

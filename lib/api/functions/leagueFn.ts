@@ -15,7 +15,7 @@ const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 export const postLeagues = async (
   leagueData: LeagueCreateRequest,
-  clubId: number,
+  clubId: string,
 ): Promise<LeagueCreateResponse> => {
   const response = await fetch(`${BASE_URL}/clubs/${clubId}/leagues`, {
     method: "POST",
@@ -70,8 +70,8 @@ export const getDateLeagues = async (
 };
 
 export const getLeagueDetail = async (
-  clubId: number,
-  leagueId: number,
+  clubId: string,
+  leagueId: string,
 ): Promise<LeagueDetailResponse> => {
   const response = await fetch(
     `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}`,
