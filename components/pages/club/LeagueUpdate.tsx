@@ -10,6 +10,7 @@ function LeagueUpdate() {
     clubId as string,
     leagueId as string,
   );
+
   return (
     <div className="container mx-auto rounded-lg space-y-6 ">
       <div className="border-b pb-4">
@@ -17,7 +18,6 @@ function LeagueUpdate() {
       </div>
       {league && (
         <LeagueForm
-          // mode="update"
           clubId={clubId as string}
           leagueId={leagueId as string}
           initialData={league}

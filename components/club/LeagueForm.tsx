@@ -12,10 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
-import { usePostLeagues } from "@/lib/api/hooks/leagueHook";
+import { usePatchLeague, usePostLeague } from "@/lib/api/hooks/leagueHook";
 import type {
   GetLeagueDetailData,
-  LeagueUpdateRequest,
+  PatchLeagueRequest,
   PostLeagueRequest,
   TierLimit,
 } from "@/types/leagueTypes";
@@ -42,7 +42,7 @@ import { useForm } from "react-hook-form";
 
 type LeagueFormRequest =
   | (PostLeagueRequest & { mode: "create" })
-  | (LeagueUpdateRequest & { mode: "update" });
+  | (PatchLeagueRequest & { mode: "update" });
 
 interface LeagueFormProps {
   clubId: string;
@@ -60,9 +60,13 @@ function LeagueForm(props: LeagueFormProps) {
   const [timeValue, setTimeValue] = useState<string>("00:00");
   const [closedAt, setClosedAt] = useState<string>("");
 
-  const { mutate: createLeague } = usePostLeagues(clubId);
+  const { mutate: createLeague } = usePostLeague(clubId);
 
-  // const { mutate: updateLeague } = usePatchLeague(clubId, leagueId);
+  const { mutate: updateLeague } = usePatchLeague(
+    clubId as string,
+    leagueId as string,
+  );
+
   const { register, handleSubmit, setValue, getValues } =
     useForm<LeagueFormRequest>({
       mode: "onBlur",
@@ -71,14 +75,6 @@ function LeagueForm(props: LeagueFormProps) {
         ...initialData,
       },
     });
-
-  // useEffect(() => {
-  //   if (initialData) {
-  //     setValue("mode", "update");
-  //   } else {
-  //     setValue("mode", "create");
-  //   }
-  // }, [initialData, setValue]);
 
   console.log("outside useEffect", getValues());
 
@@ -155,15 +151,15 @@ function LeagueForm(props: LeagueFormProps) {
         },
       });
     } else if (data.mode === "update") {
-      const updatedScheduleData: LeagueUpdateRequest = {
+      const updatedScheduleData: PatchLeagueRequest = {
         ...data,
-        // match_generation_type: "RANDOM",
+        match_generation_type: "FREE",
       };
-      // updateLeague(updatedScheduleData, {
-      //   onSuccess: () => {
-      //     router.push(`/club/${clubId}/league`);
-      //   },
-      // });
+      updateLeague(updatedScheduleData, {
+        onSuccess: () => {
+          router.push(`/club/${clubId}/league`);
+        },
+      });
     }
   };
 
@@ -287,7 +283,7 @@ function LeagueForm(props: LeagueFormProps) {
                 <DropdownMenuRadioGroup
                   value={tierLimit}
                   onValueChange={(value) =>
-                    setType(value as LeagueUpdateRequest["match_type"])
+                    setType(value as PatchLeagueRequest["match_type"])
                   }
                   className="w-full"
                 >

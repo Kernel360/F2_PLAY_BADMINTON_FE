@@ -1,7 +1,5 @@
 import type { components } from "@/schemas/schema";
 
-export type PatchLeaguesRequest = components["schemas"]["LeagueUpdateRequest"];
-
 export type GetLeagueDetailResponse =
   components["schemas"]["CommonResponseLeagueDetailsResponse"];
 
@@ -13,9 +11,13 @@ export type PostLeagueRequest = components["schemas"]["LeagueCreateRequest"];
 export type PostLeagueResponse =
   components["schemas"]["CommonResponseLeagueCreateResponse"];
 
-export type PostLeagueCreateData =
-  components["schemas"]["LeagueCreateResponse"];
+export type PostLeagueData = components["schemas"]["LeagueCreateResponse"];
 
-export type LeagueUpdateRequest = components["schemas"]["LeagueUpdateRequest"];
+export type PatchLeagueRequest = components["schemas"]["LeagueUpdateRequest"];
+
+export type PatchLeagueResponse =
+  components["schemas"]["CommonResponseLeagueUpdateResponse"];
+
+export type PatchLeagueData = components["schemas"]["LeagueUpdateResponse"];
 
 export type TierLimit = "GOLD" | "SILVER" | "BRONZE";
