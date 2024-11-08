@@ -147,7 +147,11 @@ function LeagueCreate() {
         <h2 className="text-2xl font-bold text-gray-800">경기 생성</h2>
       </div>
 
-      <LeagueForm clubId={clubId as string} leagueId={leagueId as string} />
+      <LeagueForm
+        // mode="create"
+        clubId={clubId as string}
+        leagueId={leagueId as string}
+      />
     </div>
   );
 }

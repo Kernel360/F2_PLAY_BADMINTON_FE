@@ -15,11 +15,14 @@ function LeagueUpdate() {
       <div className="border-b pb-4">
         <h2 className="text-2xl font-bold text-gray-800">경기 수정</h2>
       </div>
-      <LeagueForm
-        clubId={clubId as string}
-        leagueId={leagueId as string}
-        initialData={league}
-      />
+      {league && (
+        <LeagueForm
+          // mode="update"
+          clubId={clubId as string}
+          leagueId={leagueId as string}
+          initialData={league}
+        />
+      )}
     </div>
   );
 }

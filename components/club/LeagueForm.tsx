@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
 import { usePostLeagues } from "@/lib/api/hooks/leagueHook";
-import type { components } from "@/schemas/schema";
 import type {
   GetLeagueDetailData,
   LeagueCreateRequest,
@@ -68,11 +67,23 @@ function LeagueForm(props: LeagueFormProps) {
   // const { mutate: updateLeague } = usePatchLeague(clubId, leagueId);
   const { register, handleSubmit, setValue } = useForm<LeagueFormRequest>({
     mode: "onBlur",
-    defaultValues: initialData || {},
+    defaultValues: {
+      mode: initialData ? "update" : "create",
+      ...initialData,
+    },
   });
 
+  // useEffect(() => {
+  //   if (initialData) {
+  //     setValue("mode", "update");
+  //   } else {
+  //     setValue("mode", "create");
+  //   }
+  // }, [initialData, setValue]);
+  console.log("initialData: ", initialData);
   useEffect(() => {
     if (initialData) {
+      console.log("initialData loaded:", initialData);
       setValue("league_name", initialData.league_name || "");
       setValue("description", initialData.league_description || "");
       setValue("full_address", initialData.full_address || "");
@@ -157,25 +168,17 @@ function LeagueForm(props: LeagueFormProps) {
   };
 
   const handleSumbitSchedule = (data: LeagueFormRequest) => {
-    console.log(data);
+    console.log(data.mode);
     if (data.mode === "create") {
       const newScheduleData: LeagueCreateRequest = {
-        league_name: data.league_name,
-        description: data.description,
-        full_address: data.full_address,
-        tier_limit: data.tier_limit,
-        match_type: data.match_type,
-        league_at: data.league_at,
-        recruiting_closed_at: data.recruiting_closed_at,
-        player_limit_count: data.player_limit_count,
-        // 해당 data는 초기 기획 상 RANDOM임
-        match_generation_type: data.match_generation_type,
+        ...data,
+        match_generation_type: "FREE",
         league_status: "ALL",
       };
       console.log(newScheduleData);
       createLeague(newScheduleData, {
         onSuccess: () => {
-          router.push(`/club/${clubId}/schedule`);
+          router.push(`/club/${clubId}/league`);
         },
       });
     } else if (data.mode === "update") {
@@ -185,7 +188,7 @@ function LeagueForm(props: LeagueFormProps) {
       };
       // updateLeague(updatedScheduleData, {
       //   onSuccess: () => {
-      //     router.push(`/club/${clubId}/schedule`);
+      //     router.push(`/club/${clubId}/league`);
       //   },
       // });
     }
@@ -204,8 +207,10 @@ function LeagueForm(props: LeagueFormProps) {
             경기 이름
           </Text>
         </div>
+
         <Input
           placeholder="경기 이름을 입력하세요"
+          defaultValue={initialData?.league_name}
           {...register("league_name", {
             //   required: "경기 이름을 입력해주세요",
           })}
