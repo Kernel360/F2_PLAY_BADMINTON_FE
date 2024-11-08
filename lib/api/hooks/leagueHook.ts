@@ -1,5 +1,8 @@
 import type { components } from "@/schemas/schema";
-import type { GetLeagueDetailData } from "@/types/leagueTypes";
+import type {
+  GetLeagueDetailData,
+  PostLeagueRequest,
+} from "@/types/leagueTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   deleteLeagues,
@@ -13,13 +16,11 @@ import {
 } from "../functions/leagueFn";
 import useQueryWithToast from "./useQueryWithToast";
 
-type LeagueCreateRequest = components["schemas"]["LeagueCreateRequest"];
-type LeagueUpdateRequest = components["schemas"]["LeagueUpdateRequest"];
 export const usePostLeagues = (clubId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (leagueData: LeagueCreateRequest) =>
+    mutationFn: (leagueData: PostLeagueRequest) =>
       postLeagues(leagueData, clubId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["leaguesData"] });
