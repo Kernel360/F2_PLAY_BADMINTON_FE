@@ -16,13 +16,12 @@ const restClient = {
     const data = await response.json();
     return data as T;
   },
-  post: async <T>(url: string, body: string) => {
-    // TODO: body object로 받고, 이 안에서 stringfy 하기
+  post: async <T>(url: string, body: object) => {
     const response = await fetch(`${BASE_URL}${url}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: body,
+      body: JSON.stringify(body),
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

@@ -1,4 +1,5 @@
 import type { components } from "@/schemas/schema";
+import type { GetLeagueDetailData } from "@/types/leagueTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   deleteLeagues,
@@ -10,6 +11,7 @@ import {
   postLeagues,
   postParticipateLeague,
 } from "../functions/leagueFn";
+import useQueryWithToast from "./useQueryWithToast";
 
 type LeagueCreateRequest = components["schemas"]["LeagueCreateRequest"];
 type LeagueUpdateRequest = components["schemas"]["LeagueUpdateRequest"];
@@ -42,10 +44,9 @@ export const useGetDateLeagues = (clubId: number, date: string) => {
 };
 
 export const useGetLeagueDetail = (clubId: string, leagueId: string) => {
-  return useQuery({
-    queryKey: ["leagueDetailData"],
-    queryFn: () => getLeagueDetail(clubId, leagueId),
-  });
+  return useQueryWithToast<GetLeagueDetailData>(["leagueDetailData"], () =>
+    getLeagueDetail(clubId, leagueId),
+  );
 };
 
 export const usePostParticipateLeague = (clubId: number, leagueId: number) => {

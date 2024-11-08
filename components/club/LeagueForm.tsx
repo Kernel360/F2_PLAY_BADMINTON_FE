@@ -15,8 +15,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { usePostLeagues } from "@/lib/api/hooks/leagueHook";
 import type {
   GetLeagueDetailData,
-  LeagueCreateRequest,
   LeagueUpdateRequest,
+  PostLeagueRequest,
   TierLimit,
 } from "@/types/leagueTypes";
 import {
@@ -41,7 +41,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type LeagueFormRequest =
-  | (LeagueCreateRequest & { mode: "create" })
+  | (PostLeagueRequest & { mode: "create" })
   | (LeagueUpdateRequest & { mode: "update" });
 
 interface LeagueFormProps {
@@ -52,12 +52,10 @@ interface LeagueFormProps {
 
 function LeagueForm(props: LeagueFormProps) {
   const { clubId, leagueId, initialData } = props;
-
   const router = useRouter();
 
   const [tierLimit, setTierLimit] = useState<TierLimit>("GOLD");
-  const [type, setType] =
-    useState<LeagueCreateRequest["match_type"]>("SINGLES");
+  const [type, setType] = useState<PostLeagueRequest["match_type"]>("SINGLES");
   const [date, setDate] = useState<Date>();
   const [timeValue, setTimeValue] = useState<string>("00:00");
   const [closedAt, setClosedAt] = useState<string>("");
@@ -65,13 +63,14 @@ function LeagueForm(props: LeagueFormProps) {
   const { mutate: createLeague } = usePostLeagues(clubId);
 
   // const { mutate: updateLeague } = usePatchLeague(clubId, leagueId);
-  const { register, handleSubmit, setValue } = useForm<LeagueFormRequest>({
-    mode: "onBlur",
-    defaultValues: {
-      mode: initialData ? "update" : "create",
-      ...initialData,
-    },
-  });
+  const { register, handleSubmit, setValue, getValues } =
+    useForm<LeagueFormRequest>({
+      mode: "onBlur",
+      defaultValues: {
+        mode: initialData ? "update" : "create",
+        ...initialData,
+      },
+    });
 
   // useEffect(() => {
   //   if (initialData) {
@@ -80,34 +79,8 @@ function LeagueForm(props: LeagueFormProps) {
   //     setValue("mode", "create");
   //   }
   // }, [initialData, setValue]);
-  console.log("initialData: ", initialData);
-  useEffect(() => {
-    if (initialData) {
-      console.log("initialData loaded:", initialData);
-      setValue("league_name", initialData.league_name || "");
-      setValue("description", initialData.league_description || "");
-      setValue("full_address", initialData.full_address || "");
-      setTierLimit(initialData.required_tier || "GOLD");
-      setType(initialData.match_type || "SINGLES");
-      setValue("tier_limit", initialData.required_tier || "GOLD");
-      setValue("match_type", initialData.match_type || "SINGLES");
-      setValue("league_at", initialData.league_at || "");
 
-      if (initialData.league_at) {
-        const leagueDate = new Date(initialData.league_at);
-        setDate(leagueDate);
-        setTimeValue(format(leagueDate, "HH:mm"));
-        setValue("league_at", initialData.league_at);
-      }
-
-      if (initialData.recruiting_closed_at) {
-        setClosedAt(initialData.recruiting_closed_at);
-      }
-
-      setValue("player_limit_count", initialData.player_limit_count || 0);
-      setValue("recruiting_closed_at", initialData.recruiting_closed_at || "");
-    }
-  }, [initialData, setValue]);
+  console.log("outside useEffect", getValues());
 
   const toLocalISOString = (date: Date): string => {
     const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm:ss");
@@ -170,7 +143,7 @@ function LeagueForm(props: LeagueFormProps) {
   const handleSumbitSchedule = (data: LeagueFormRequest) => {
     console.log(data.mode);
     if (data.mode === "create") {
-      const newScheduleData: LeagueCreateRequest = {
+      const newScheduleData: PostLeagueRequest = {
         ...data,
         match_generation_type: "FREE",
         league_status: "ALL",
@@ -210,7 +183,7 @@ function LeagueForm(props: LeagueFormProps) {
 
         <Input
           placeholder="경기 이름을 입력하세요"
-          defaultValue={initialData?.league_name}
+          // defaultValue={initialData?.league_name}
           {...register("league_name", {
             //   required: "경기 이름을 입력해주세요",
           })}
