@@ -78,7 +78,7 @@ function ClubIntro() {
                 height={20}
               />
               <p className="pl-1 text-black">
-                {clubData?.club_member_count_by_tier?.gold_club_member_count}명
+                {clubData?.gold_club_member_count}명
               </p>
             </div>
             <div className="flex items-center">
@@ -89,8 +89,7 @@ function ClubIntro() {
                 height={20}
               />
               <p className="pl-1 text-black">
-                {clubData?.club_member_count_by_tier?.silver_club_member_count}
-                명
+                {clubData?.silver_club_member_count}명
               </p>
             </div>
             <div className="flex items-center">
@@ -101,8 +100,7 @@ function ClubIntro() {
                 height={20}
               />
               <p className="pl-1 text-black">
-                {clubData?.club_member_count_by_tier?.bronze_club_member_count}
-                명
+                {clubData?.bronze_club_member_count}명
               </p>
             </div>
           </div>

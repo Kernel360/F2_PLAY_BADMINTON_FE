@@ -80,8 +80,8 @@ export const getLeagueDetail = async (
 };
 
 export const postParticipateLeague = async (
-  clubId: number,
-  leagueId: number,
+  clubId: string,
+  leagueId: string,
 ): Promise<LeagueParticipantResponse> => {
   const response = await fetch(
     `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}/participation`,
@@ -100,8 +100,8 @@ export const postParticipateLeague = async (
 };
 
 export const deleteParticipateLeague = async (
-  clubId: number,
-  leagueId: number,
+  clubId: string,
+  leagueId: string,
 ): Promise<LeagueParticipationCancelResponse> => {
   const response = await fetch(
     `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}/participation`,
@@ -140,8 +140,8 @@ export const patchLeague = async (
 };
 
 export const deleteLeagues = async (
-  clubId: number,
-  leagueId: number,
+  clubId: string,
+  leagueId: string,
 ): Promise<string> => {
   const response = await fetch(
     `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}`,
