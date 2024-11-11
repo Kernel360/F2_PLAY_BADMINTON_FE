@@ -3,7 +3,7 @@
 import MemberDropDown from "@/components/club/MemberDropdown";
 import IconButton from "@/components/ui/IconButton";
 import type { components } from "@/schemas/schema";
-import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
+import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { AlignJustify } from "lucide-react";
 
 type ClubMemberResponse = components["schemas"]["ClubMemberResponse"];
@@ -48,7 +48,7 @@ function MemberInfo({ memberData, isOpen, onToggle }: MemberInfoProps) {
       </div>
       <div className="flex flex-[1] items-center">
         <p className="text-black">
-          {/* {getTierWithEmoji(memberData.tier as string)} */}
+          {/* {getTierWithEmojiAndText(memberData.tier as string)} */}
         </p>
       </div>
       <div className="flex flex-[1] items-center justify-between relative">
