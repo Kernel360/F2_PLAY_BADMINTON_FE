@@ -8,7 +8,7 @@ import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { format } from "date-fns";
 import { CalendarPlus } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 interface ScheduleListProps {
@@ -19,16 +19,15 @@ type DateLeagues = components["schemas"]["LeagueByDateResponse"];
 
 function ScheduleList(props: ScheduleListProps) {
   const { selectedDate } = props;
-  const clubId = Number(usePathname().split("/")[2]);
-  const { data: schedules, refetch } = useGetDateLeagues(
-    clubId,
+  const { clubId } = useParams();
+  const { data: schedules } = useGetDateLeagues(
+    clubId as string,
     format(selectedDate, "yyyy-MM-dd"),
   );
   // const { data: myData } = useGetMyInfo(true);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    refetch();
-  }, [selectedDate]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [selectedDate]);
 
   const renderSchedule = () => {
     if (schedules !== undefined && schedules.length > 0) {
