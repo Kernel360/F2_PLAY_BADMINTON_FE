@@ -4,13 +4,13 @@ import type { components } from "@/schemas/schema";
 type MatchResponse = components["schemas"]["BracketResponse"];
 
 interface MatchProfileDoublesProps {
-  doublesMatch: MatchResponse["doubles_match_info_list"];
+  // doublesMatch: MatchResponse["doubles_match_info_list"];
   isOpen: boolean;
   onClose: () => void;
 }
 
 function MatchProfileDoubles({
-  doublesMatch,
+  // doublesMatch,
   isOpen,
   onClose,
 }: MatchProfileDoublesProps) {

@@ -8,7 +8,7 @@ import { postMatches } from "../functions/matchFn";
 //   });
 // };
 
-export const usePostMatches = (clubId: number, leagueId: number) => {
+export const usePostMatches = (clubId: string, leagueId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({

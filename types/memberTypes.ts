@@ -17,9 +17,12 @@ export type GetMemberMyClubsResponse =
 export type GetMemberMyClubsData = components["schemas"]["ClubCardResponse"];
 
 export type GetMemberMachesRecordResponse =
-  components["schemas"]["CommonResponseListMatchResultResponse"];
+  components["schemas"]["CommonResponseCustomPageResponseMatchResultResponse"];
 
 export type GetMemberMachesRecordData =
+  components["schemas"]["CustomPageResponseMatchResultResponse"];
+
+export type GetMemberMachesRecord =
   components["schemas"]["MatchResultResponse"];
 
 export type PostMembersProfileImageResponse =

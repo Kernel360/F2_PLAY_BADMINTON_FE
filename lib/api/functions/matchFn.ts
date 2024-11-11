@@ -25,8 +25,8 @@ const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 // };
 
 export const postMatches = async (
-  clubId: number,
-  leagueId: number,
+  clubId: string,
+  leagueId: string,
 ): Promise<string> => {
   const response = await fetch(
     `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}/matches`,
