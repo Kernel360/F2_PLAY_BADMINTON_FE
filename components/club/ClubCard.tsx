@@ -11,7 +11,9 @@ function ClubCard(props: ClubsData) {
     club_name,
     club_image,
     club_description,
-    club_member_count_by_tier: tier,
+    gold_club_member_count,
+    silver_club_member_count,
+    bronze_club_member_count,
   } = props;
 
   return (
@@ -39,7 +41,7 @@ function ClubCard(props: ClubsData) {
                 className="w-5 h-5 mr-1"
               />
               <Text className="text-xs text-gray-700 font-semibold">
-                {tier?.gold_club_member_count}명
+                {gold_club_member_count}명
               </Text>
             </div>
             <div className="flex items-center">
@@ -49,7 +51,7 @@ function ClubCard(props: ClubsData) {
                 className="w-5 h-5 mr-1"
               />
               <Text className="text-xs text-gray-700 font-semibold">
-                {tier?.silver_club_member_count}명
+                {silver_club_member_count}명
               </Text>
             </div>
             <div className="flex items-center">
@@ -59,7 +61,7 @@ function ClubCard(props: ClubsData) {
                 className="w-5 h-5 mr-1"
               />
               <Text className="text-xs text-gray-700 font-semibold">
-                {tier?.bronze_club_member_count}명
+                {bronze_club_member_count}명
               </Text>
             </div>
           </div>
