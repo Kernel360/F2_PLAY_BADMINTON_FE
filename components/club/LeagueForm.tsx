@@ -76,8 +76,6 @@ function LeagueForm(props: LeagueFormProps) {
       },
     });
 
-  console.log("outside useEffect", getValues());
-
   const toLocalISOString = (date: Date): string => {
     const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm:ss");
     return `${formattedDate}.000`;
@@ -137,14 +135,12 @@ function LeagueForm(props: LeagueFormProps) {
   };
 
   const handleSumbitSchedule = (data: LeagueFormRequest) => {
-    console.log(data.mode);
     if (data.mode === "create") {
       const newScheduleData: PostLeagueRequest = {
         ...data,
         match_generation_type: "FREE",
         league_status: "ALL",
       };
-      console.log(newScheduleData);
       createLeague(newScheduleData, {
         onSuccess: () => {
           router.push(`/club/${clubId}/league`);
@@ -162,6 +158,22 @@ function LeagueForm(props: LeagueFormProps) {
       });
     }
   };
+
+  useEffect(() => {
+    if (initialData) {
+      setDate(
+        initialData.league_at ? new Date(initialData.league_at) : undefined,
+      );
+      setClosedAt(
+        initialData.recruiting_closed_at
+          ? formatISO(new Date(initialData.recruiting_closed_at))
+          : "",
+      );
+      setValue("description", initialData.league_description);
+      setTierLimit(initialData.required_tier || "GOLD");
+      setType(initialData.match_type || "SINGLES");
+    }
+  }, [initialData, setValue]);
 
   return (
     <form
@@ -181,7 +193,7 @@ function LeagueForm(props: LeagueFormProps) {
           placeholder="경기 이름을 입력하세요"
           // defaultValue={initialData?.league_name}
           {...register("league_name", {
-            //   required: "경기 이름을 입력해주세요",
+            required: "경기 이름을 입력해주세요",
           })}
         />
       </div>
@@ -305,7 +317,7 @@ function LeagueForm(props: LeagueFormProps) {
             <input
               type="hidden"
               {...register("match_type", {
-                //   required: "경기 타입을 선택해주세요",
+                required: "경기 타입을 선택해주세요",
               })}
             />
           </div>
@@ -377,7 +389,7 @@ function LeagueForm(props: LeagueFormProps) {
             <input
               type="hidden"
               {...register("tier_limit", {
-                //   required: "지원 가능 티어를 선택해주세요",
+                required: "지원 가능 티어를 선택해주세요",
               })}
             />
           </div>
@@ -394,7 +406,7 @@ function LeagueForm(props: LeagueFormProps) {
             type="number"
             placeholder="모집 인원 입력"
             {...register("player_limit_count", {
-              // required: "모집 인원을 입력해주세요",
+              required: "모집 인원을 입력해주세요",
             })}
           />
         </div>
@@ -409,7 +421,7 @@ function LeagueForm(props: LeagueFormProps) {
           <Input
             placeholder="장소 입력"
             {...register("full_address", {
-              // required: "경기 장소를 입력해주세요",
+              required: "경기 장소를 입력해주세요",
             })}
           />
         </div>
@@ -447,7 +459,7 @@ function LeagueForm(props: LeagueFormProps) {
           <input
             type="hidden"
             {...register("recruiting_closed_at", {
-              // required: "모집 마감 날짜를 선택해주세요",
+              required: "모집 마감 날짜를 선택해주세요",
             })}
           />
         </div>
