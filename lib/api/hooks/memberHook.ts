@@ -1,16 +1,18 @@
 import type { components } from "@/schemas/schema";
 import type {
-  GetMemberSessionData,
-  MemberMyPageData,
+  GetMemberMachesRecordData,
+  GetMemberMyClubsData,
+  GetMemberMyPageData,
+  PutMemberProfileRequest,
 } from "@/types/memberTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  // getIsClubMember,
-  getMembersMatchRecord,
+  getMembersMatchesRecord,
+  getMembersMyClubs,
   getMembersMyPage,
   getMembersSession,
   postMembersProfileImage,
-  // putMembersProfileImage,
+  putMembersProfile,
 } from "../functions/memberFn";
 import useQueryWithToast from "./useQueryWithToast";
 
@@ -28,47 +30,43 @@ export const useGetMembersSession = () => {
   });
 };
 
-// export const useGetMembersMyPage = () => {
-//   return useQueryWithToast<MemberMyPageData>(["myPage"], getMembersMyPage);
-// };
+export const useGetMembersMyPage = () => {
+  return useQueryWithToast<GetMemberMyPageData>(["myPage"], getMembersMyPage);
+};
 
-// export const useGetMyInfo = (isEnabled: boolean) => {
-//   return useQuery({
-//     queryKey: ["myInfo"],
-//     queryFn: getMembersMyPage,
-//     enabled: isEnabled,
-//   });
-// };
+export const useGetMembersMyClubs = () => {
+  return useQueryWithToast<GetMemberMyClubsData[]>(
+    ["myClubs"],
+    getMembersMyClubs,
+  );
+};
+
+export const useGetMembersMatchesRecord = () => {
+  return useQueryWithToast<GetMemberMachesRecordData[]>(
+    ["matchesRecord"],
+    getMembersMatchesRecord,
+  );
+};
 
 export const usePostMembersProfileImage = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (profileImage: FormData) =>
-      postMembersProfileImage(profileImage),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["myPageData"] });
+    mutationFn: (profileImage: FormData) => {
+      return postMembersProfileImage(profileImage);
     },
     onError: (error: Error) => alert(error),
   });
 };
 
-// export const usePutMembersProfileImage = () => {
-//   const queryClient = useQueryClient();
+export const usePutMembersProfile = () => {
+  const queryClient = useQueryClient();
 
-//   return useMutation({
-//     mutationFn: (profileImage: MemberImageUpdate) =>
-//       putMembersProfileImage(profileImage),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ["myPageData"] });
-//     },
-//     onError: (error: Error) => alert(error),
-//   });
-// };
-
-export const useGetMyMatch = () => {
-  return useQuery({
-    queryKey: ["myMatch"],
-    queryFn: getMembersMatchRecord,
+  return useMutation({
+    mutationFn: (profileImage: PutMemberProfileRequest) =>
+      putMembersProfile(profileImage),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myPage"] });
+      queryClient.invalidateQueries({ queryKey: ["mySession"] });
+    },
+    onError: (error: Error) => alert(error),
   });
 };

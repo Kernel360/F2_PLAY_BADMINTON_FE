@@ -7,7 +7,9 @@ import { Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
+import { useRef, useState } from "react";
 import { useRef } from "react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +22,7 @@ function Header() {
   const router = useRouter();
   const { data, isLoading } = useGetMembersSession();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [open, setOpen] = useState(false);
 
   const handleSearch = () => {
     if (inputRef.current) {
@@ -72,7 +75,7 @@ function Header() {
     userMenu = null;
   } else if (data) {
     userMenu = (
-      <DropdownMenu>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger className="focus-visible:ring-2 rounded-full">
           <SImage
             src={data.profile_image || "/images/dummy-image.jpg"}
@@ -83,7 +86,10 @@ function Header() {
           />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem className="w-full flex justify-center items-center cursor-pointer">
+          <DropdownMenuItem
+            className="w-full flex justify-center items-center cursor-pointer"
+            onClick={() => setOpen(false)}
+          >
             <Link href="/my-page">마이페이지</Link>
           </DropdownMenuItem>
           <DropdownMenuItem
