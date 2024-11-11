@@ -22,6 +22,9 @@ export type GetMemberMachesRecordResponse =
 export type GetMemberMachesRecordData =
   components["schemas"]["CustomPageResponseMatchResultResponse"];
 
+export type GetMemberMachesRecord =
+  components["schemas"]["MatchResultResponse"];
+
 export type PostMembersProfileImageResponse =
   components["schemas"]["CommonResponseString"];
 
