@@ -1,8 +1,6 @@
-import type { components } from "@/schemas/schema";
 import type {
   GetLeagueDetailData,
   PatchLeagueRequest,
-  PatchLeagueResponse,
   PostLeagueRequest,
 } from "@/types/leagueTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -91,18 +89,6 @@ export const usePatchLeague = (clubId: string, leagueId: string) => {
     },
     onError: (error: Error) => alert(error),
   });
-
-  // const queryClient = useQueryClient();
-
-  // return useMutation({
-  //   mutationFn: (leagueData: PostLeagueRequest) =>
-  //     postLeagues(leagueData, clubId),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["leaguesData"] });
-  //     queryClient.invalidateQueries({ queryKey: ["leaguesDateData"] });
-  //   },
-  //   onError: (error: Error) => alert(error),
-  // });
 };
 
 export const useDeleteLeague = (clubId: number, leagueId: number) => {
