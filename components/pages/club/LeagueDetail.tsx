@@ -26,28 +26,33 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 function LeagueDetail() {
   const pathname = usePathname();
-  const clubId = Number(pathname.split("/")[2]);
-  const leagueId = Number(pathname.split("/")[4]);
+  const { clubId, leagueId } = useParams();
   const router = useRouter();
   const {
     data: league,
     isLoading,
-    error,
-  } = useGetLeagueDetail(clubId, leagueId);
+    // error,
+  } = useGetLeagueDetail(clubId as string, leagueId as string);
   const { mutate: postParticipate } = usePostParticipateLeague(
-    clubId,
-    leagueId,
+    clubId as string,
+    leagueId as string,
   );
   const { mutate: deleteParticipate } = useDeleteParticipateLeague(
-    clubId,
-    leagueId,
+    clubId as string,
+    leagueId as string,
   );
-  const { mutate: deleteLeague } = useDeleteLeague(clubId, leagueId);
-  const { mutate: createMatch } = usePostMatches(clubId, leagueId);
+  const { mutate: deleteLeague } = useDeleteLeague(
+    clubId as string,
+    leagueId as string,
+  );
+  const { mutate: createMatch } = usePostMatches(
+    clubId as string,
+    leagueId as string,
+  );
   // const { data: myData } = useGetMyInfo(true);
 
   const handleParticipate = (isParticipate: boolean) => {
@@ -79,9 +84,9 @@ function LeagueDetail() {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
 
   const handleDelete = () => {
     if (confirm("정말로 삭제하시겠습니까?")) {

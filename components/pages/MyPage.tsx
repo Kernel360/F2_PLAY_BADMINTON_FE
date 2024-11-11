@@ -9,7 +9,7 @@ import {
   useGetMembersMyClubs,
   useGetMembersMyPage,
 } from "@/lib/api/hooks/memberHook";
-import type { GetMemberMachesRecordData } from "@/types/memberTypes";
+import type { GetMemberMachesRecord } from "@/types/memberTypes";
 import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { format } from "date-fns";
 import { History, Inbox, Medal, Trophy, User, Users } from "lucide-react";
@@ -21,11 +21,11 @@ function MyPage() {
   const { data: myClubs } = useGetMembersMyClubs();
   const { data: matchRecord } = useGetMembersMatchesRecord();
 
-  const getMatchDetails = (match: GetMemberMachesRecordData) => {
+  const getMatchDetails = (match: GetMemberMachesRecord) => {
     const isSingles = match.match_type === "SINGLES";
     const opponentName = isSingles
       ? match.singles_match?.opponent_name || ""
-      : `${match.doubles_match?.opponent_team?.participant1_name || ""}, ${match.doubles_match?.opponent_team?.participant2_name || ""}`;
+      : `${match.doubles_match?.opponent_team_participant1_name || ""}, ${match.doubles_match?.opponent_team_participant2_name || ""}`;
 
     const matchTypeLabel = isSingles ? "단식" : "복식";
     const matchTypeStyles = isSingles ? "text-primary" : "text-green-500";
@@ -104,25 +104,25 @@ function MyPage() {
               <div className="flex flex-col items-center">
                 <p className="text-xs font-semibold text-gray-600">총 경기</p>
                 <span className="text-lg font-bold text-gray-900">
-                  {myPage?.league_record_response?.match_count || 0}
+                  {myPage?.match_count || 0}
                 </span>
               </div>
               <div className="flex flex-col items-center">
                 <p className="text-xs font-semibold text-primary">승리</p>
                 <span className="text-lg font-bold text-primary">
-                  {myPage?.league_record_response?.win_count || 0}
+                  {myPage?.win_count || 0}
                 </span>
               </div>
               <div className="flex flex-col items-center">
                 <p className="text-xs font-semibold text-gray-500">무승부</p>
                 <span className="text-lg font-bold text-gray-500">
-                  {myPage?.league_record_response?.draw_count || 0}
+                  {myPage?.draw_count || 0}
                 </span>
               </div>
               <div className="flex flex-col items-center">
                 <p className="text-xs font-semibold text-red-600">패배</p>
                 <span className="text-lg font-bold text-red-600">
-                  {myPage?.league_record_response?.lose_count || 0}
+                  {myPage?.lose_count || 0}
                 </span>
               </div>
             </div>
@@ -182,8 +182,8 @@ function MyPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="flex-1 overflow-y-auto">
-            {matchRecord?.length ? (
-              matchRecord.map((match) => {
+            {matchRecord?.content?.length ? (
+              matchRecord.content?.map((match) => {
                 const {
                   opponentName,
                   matchTypeLabel,

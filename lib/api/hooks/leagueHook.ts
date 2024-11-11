@@ -1,4 +1,5 @@
 import type {
+  GetLeagueDateData,
   GetLeagueDetailData,
   PatchLeagueRequest,
   PostLeagueRequest,
@@ -38,11 +39,14 @@ export const useGetMonthLeagues = (clubId: number, date: string) => {
   });
 };
 
-export const useGetDateLeagues = (clubId: number, date: string) => {
-  return useQuery({
-    queryKey: ["leaguesDateData"],
-    queryFn: () => getDateLeague(clubId, date),
-  });
+export const useGetDateLeagues = (clubId: string, date: string) => {
+  return useQueryWithToast<GetLeagueDateData[]>(["clubsActivityData"], () =>
+    getDateLeague(clubId, date),
+  );
+  // return useQuery({
+  //   queryKey: ["leaguesDateData"],
+  //   queryFn: () => getDateLeague(clubId, date),
+  // });
 };
 
 export const useGetLeagueDetail = (clubId: string, leagueId: string) => {
@@ -51,7 +55,7 @@ export const useGetLeagueDetail = (clubId: string, leagueId: string) => {
   );
 };
 
-export const usePostParticipateLeague = (clubId: number, leagueId: number) => {
+export const usePostParticipateLeague = (clubId: string, leagueId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -64,8 +68,8 @@ export const usePostParticipateLeague = (clubId: number, leagueId: number) => {
 };
 
 export const useDeleteParticipateLeague = (
-  clubId: number,
-  leagueId: number,
+  clubId: string,
+  leagueId: string,
 ) => {
   const queryClient = useQueryClient();
 
@@ -91,7 +95,7 @@ export const usePatchLeague = (clubId: string, leagueId: string) => {
   });
 };
 
-export const useDeleteLeague = (clubId: number, leagueId: number) => {
+export const useDeleteLeague = (clubId: string, leagueId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({

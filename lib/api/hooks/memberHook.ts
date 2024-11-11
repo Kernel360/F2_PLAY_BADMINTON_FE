@@ -42,7 +42,7 @@ export const useGetMembersMyClubs = () => {
 };
 
 export const useGetMembersMatchesRecord = () => {
-  return useQueryWithToast<GetMemberMachesRecordData[]>(
+  return useQueryWithToast<GetMemberMachesRecordData>(
     ["matchesRecord"],
     getMembersMatchesRecord,
   );
