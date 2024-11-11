@@ -31,8 +31,8 @@ function MyOneGameResult({ match }: { match: MemberMatchRecord }) {
         <p className="text-lg font-bold">vs</p>
         <p>
           {match.singles_match?.opponent_name}
-          {match.doubles_match?.opponent_team?.participant1_name}{" "}
-          {match.doubles_match?.opponent_team?.participant2_name}
+          {match.doubles_match?.opponent_team_participant1_name}{" "}
+          {match.doubles_match?.opponent_team_participant2_name}
         </p>
       </div>
       <p className="flex-[1]">
