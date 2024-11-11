@@ -194,8 +194,7 @@ function EditProfileDialog({
                       id="name"
                       {...field}
                       placeholder="닉네임을 입력하세요"
-                      // value={initialName}
-                      className="mt-1 h-10 rounded-sm text-black border border-gray-300"
+                      className="mt-1 px-2 h-10 rounded-sm text-black border border-gray-300"
                     />
                   </FormControl>
                   <FormMessage />

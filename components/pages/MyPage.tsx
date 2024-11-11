@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,19 +12,8 @@ import {
 import type { GetMemberMachesRecordData } from "@/types/memberTypes";
 import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
 import { format } from "date-fns";
-import {
-  Camera,
-  Edit,
-  History,
-  Inbox,
-  Medal,
-  Trophy,
-  User,
-  Users,
-} from "lucide-react";
+import { History, Inbox, Medal, Trophy, User, Users } from "lucide-react";
 import Link from "next/link";
-import type { ChangeEvent } from "react";
-import { useState } from "react";
 import EditProfileDialog from "./myPage/EditProfileDialog";
 
 function MyPage() {
@@ -86,17 +74,15 @@ function MyPage() {
               <AvatarFallback />
             </Avatar>
             <div className="flex flex-col justify-center items-center">
-              <h2 className="text-xl font-semibold text-gray-900">
-                {myPage?.name}
-              </h2>
+              <div className="flex gap-1 justify-center items-center">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {myPage?.name}
+                </h2>
+                <p className="text-xs text-gray-500">
+                  ({getTierWithEmoji(myPage?.tier || "")} )
+                </p>
+              </div>
               <p className="text-sm text-gray-500">{myPage?.email}</p>
-            </div>
-
-            {/* 티어 배지 */}
-            <div className="mt-3">
-              <span className="text-xs font-semibold text-white bg-blue-500 px-3 py-1 rounded-full">
-                티어: {getTierWithEmoji(myPage?.tier || "")}
-              </span>
             </div>
 
             {myPage && (
