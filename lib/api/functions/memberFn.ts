@@ -1,15 +1,10 @@
 import type { components } from "@/schemas/schema";
-import type {
-  GetMemberMachesRecordResponse,
-  GetMemberMyClubsResponse,
-  GetMemberMyPageData,
-  GetMemberMyPageResponse,
-  GetMemberSessionResponse,
-  PostMembersProfileImageResponse,
-  PutMemberProfileRequest,
-  PutMemberProfileResponse,
-} from "@/types/memberTypes";
+import type { GetMemberSessionResponse } from "@/types/memberTypes";
 import restClient from "../restClient";
+
+type MemberMyPageResponse =
+  components["schemas"]["CommonResponseMemberMyPageResponse"];
+type MemberMatchRecord = components["schemas"]["MatchResultResponse"];
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
@@ -18,53 +13,26 @@ export const getMembersSession =
     return restClient.get<GetMemberSessionResponse>("/members/session");
   };
 
-export const getMembersMyPage = async (): Promise<GetMemberMyPageResponse> => {
-  return restClient.get<GetMemberMyPageResponse>("/members/myPage");
+export const getMembersMyPage = async (): Promise<MemberMyPageResponse> => {
+  return restClient.get<MemberMyPageResponse>("/members/myPage");
 };
-
-export const getMembersMyClubs =
-  async (): Promise<GetMemberMyClubsResponse> => {
-    return restClient.get<GetMemberMyClubsResponse>("/members/myClubs");
-  };
-
-export const getMembersMatchesRecord =
-  async (): Promise<GetMemberMachesRecordResponse> => {
-    return restClient.get<GetMemberMachesRecordResponse>(
-      "/members/matchesRecord",
-    );
-  };
 
 export const postMembersProfileImage = async (
   profileImage: FormData,
-): Promise<PostMembersProfileImageResponse> => {
-  return restClient.postImage<PostMembersProfileImageResponse>(
-    "/members/profileImage",
-    profileImage,
-  );
+): Promise<string> => {
+  const response = await fetch(`${BASE_URL}/members/profileImage`, {
+    method: "POST",
+    // headers: { "Content-Type": "multipart/form-data" },
+    credentials: "include",
+    body: profileImage,
+  });
+
+  if (!response.ok) {
+    throw new Error("프로필 사진을 S3에 업로드를 실패했습니다.");
+  }
+
+  return response.text();
 };
-
-export const putMembersProfile = async (
-  profile: PutMemberProfileRequest,
-): Promise<PutMemberProfileResponse> => {
-  return restClient.put<PutMemberProfileResponse>("/members", profile);
-};
-
-// export const postMembersProfileImage = async (
-//   profileImage: FormData,
-// ): Promise<string> => {
-//   const response = await fetch(`${BASE_URL}/members/profileImage`, {
-//     method: "POST",
-//     // headers: { "Content-Type": "multipart/form-data" },
-//     credentials: "include",
-//     body: profileImage,
-//   });
-
-//   if (!response.ok) {
-//     throw new Error("프로필 사진을 S3에 업로드를 실패했습니다.");
-//   }
-
-//   return response.text();
-// };
 
 // export const putMembersProfileImage = async (
 //   profileImage: MemberUpdateRequest,
@@ -82,3 +50,19 @@ export const putMembersProfile = async (
 
 //   return response.json();
 // };
+
+export const getMembersMatchRecord = async (): Promise<MemberMatchRecord[]> => {
+  const response = await fetch(`${BASE_URL}/members/matchesRecord`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("내 경기 결과 조회에 실패하였습니다.");
+  }
+
+  return response.json();
+};
