@@ -59,7 +59,7 @@ export const getRecentlyClubs =
 export const postClubs = async (
   clubData: PostClubRequest,
 ): Promise<PostClubResponse> => {
-  return restClient.post<PostClubResponse>("/clubs", JSON.stringify(clubData));
+  return restClient.post<PostClubResponse>("/clubs", clubData);
 };
 
 export const postClubsImg = async (clubImg: FormData): Promise<string> => {

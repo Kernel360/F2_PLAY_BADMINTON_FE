@@ -1,24 +1,28 @@
-import type { components } from "@/schemas/schema";
+import type {
+  GetLeagueDetailData,
+  PatchLeagueRequest,
+  PostLeagueRequest,
+} from "@/types/leagueTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   deleteLeagues,
   deleteParticipateLeague,
-  getDateLeagues,
+  getDateLeague,
   getLeagueDetail,
   getMonthLeagues,
+  patchLeague,
   // patchLeagues,
-  postLeagues,
+  postLeague,
   postParticipateLeague,
 } from "../functions/leagueFn";
+import useQueryWithToast from "./useQueryWithToast";
 
-type LeagueCreateRequest = components["schemas"]["LeagueCreateRequest"];
-type LeagueUpdateRequest = components["schemas"]["LeagueUpdateRequest"];
-export const usePostLeagues = (clubId: number) => {
+export const usePostLeague = (clubId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (leagueData: LeagueCreateRequest) =>
-      postLeagues(leagueData, clubId),
+    mutationFn: (leagueData: PostLeagueRequest) =>
+      postLeague(leagueData, clubId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["leaguesData"] });
       queryClient.invalidateQueries({ queryKey: ["leaguesDateData"] });
@@ -37,15 +41,14 @@ export const useGetMonthLeagues = (clubId: number, date: string) => {
 export const useGetDateLeagues = (clubId: number, date: string) => {
   return useQuery({
     queryKey: ["leaguesDateData"],
-    queryFn: () => getDateLeagues(clubId, date),
+    queryFn: () => getDateLeague(clubId, date),
   });
 };
 
-export const useGetLeagueDetail = (clubId: number, leagueId: number) => {
-  return useQuery({
-    queryKey: ["leagueDetailData"],
-    queryFn: () => getLeagueDetail(clubId, leagueId),
-  });
+export const useGetLeagueDetail = (clubId: string, leagueId: string) => {
+  return useQueryWithToast<GetLeagueDetailData>(["leagueDetailData"], () =>
+    getLeagueDetail(clubId, leagueId),
+  );
 };
 
 export const usePostParticipateLeague = (clubId: number, leagueId: number) => {
@@ -75,18 +78,18 @@ export const useDeleteParticipateLeague = (
   });
 };
 
-// export const usePatchLeague = (clubId: number, leagueId: number) => {
-//   const queryClient = useQueryClient();
+export const usePatchLeague = (clubId: string, leagueId: string) => {
+  const queryClient = useQueryClient();
 
-//   return useMutation({
-//     mutationFn: (leagueData: LeagueUpdateRequest) =>
-//       patchLeagues(leagueData, clubId, leagueId),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
-//     },
-//     onError: (error: Error) => alert(error),
-//   });
-// };
+  return useMutation({
+    mutationFn: (leagueData: PatchLeagueRequest) =>
+      patchLeague(leagueData, clubId, leagueId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+    },
+    onError: (error: Error) => alert(error),
+  });
+};
 
 export const useDeleteLeague = (clubId: number, leagueId: number) => {
   const queryClient = useQueryClient();
