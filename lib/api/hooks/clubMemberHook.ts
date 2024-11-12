@@ -17,7 +17,7 @@ type ClubMemberRoleUpdate =
 type ClubMemberExpelUpdate = components["schemas"]["ClubMemberExpelRequest"];
 type ClubMemberBanUpdate = components["schemas"]["ClubMemberBanRequest"];
 
-export const useGetClubMembers = (clubId: number) => {
+export const useGetClubMembers = (clubId: string) => {
   return useQuery({
     queryKey: ["clubMembersData"],
     queryFn: () => getClubMembers(clubId),

@@ -24,7 +24,7 @@ interface ClubMembersData {
 }
 
 export const getClubMembers = async (
-  clubId: number,
+  clubId: string,
 ): Promise<ClubMembersData> => {
   const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
     method: "GET",

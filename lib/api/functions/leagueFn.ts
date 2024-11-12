@@ -14,8 +14,6 @@ type LeagueParticipantResponse =
   components["schemas"]["LeagueParticipantResponse"];
 type LeagueParticipationCancelResponse =
   components["schemas"]["LeagueParticipationCancelResponse"];
-type LeagueUpdateRequest = components["schemas"]["LeagueUpdateRequest"];
-// type LeagueUpdateResponse = components["schemas"]["LeagueUpdateResponse"];
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
@@ -30,43 +28,21 @@ export const postLeague = async (
 };
 
 export const getMonthLeagues = async (
-  clubId: number,
+  clubId: string,
   date: string,
 ): Promise<GetLeagueMonthResponse> => {
-  const response = await fetch(
-    `${BASE_URL}/clubs/${clubId}/leagues/month?date=${date}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    },
+  return restClient.get<GetLeagueMonthResponse>(
+    `/clubs/${clubId}/leagues/month?date=${date}`,
   );
-  if (!response.ok) {
-    throw new Error("리그 정보를 확인할 수 없습니다.");
-  }
-  return response.json();
 };
 
 export const getDateLeague = async (
   clubId: string,
   date: string,
 ): Promise<GetLeagueDateResponse> => {
-  const response = await fetch(
-    `${BASE_URL}/clubs/${clubId}/leagues/date?date=${date}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    },
+  return restClient.get<GetLeagueDateResponse>(
+    `/clubs/${clubId}/leagues/date?date=${date}`,
   );
-  if (!response.ok) {
-    throw new Error("리그 일별 정보를 확인할 수 없습니다.");
-  }
-  return response.json();
 };
 
 // TODO: props 타입 분리
