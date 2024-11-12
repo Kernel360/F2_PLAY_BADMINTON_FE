@@ -91,7 +91,7 @@ export const usePostClubsImg = () => {
   });
 };
 
-export const useGetClubsById = (clubId: number) => {
+export const useGetClubsById = (clubId: string) => {
   return useQueryWithToast<GetClubDetailData>(["clubsDataById"], () =>
     getClubsById(clubId),
   );
