@@ -171,7 +171,7 @@ export interface paths {
      * 대진표 생성
      * @description 대진표를 생성합니다.
      */
-    post: operations["makeMatches"];
+    post: operations["generateBracket"];
     delete?: never;
     options?: never;
     head?: never;
@@ -643,6 +643,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/v1/clubs/{clubToken}/clubMembers/check": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 동호회 회원인지 조회
+     * @description 동호회에 가입한 회원인지 조회.
+     */
+    get: operations["checkIsClubMember"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/v1/clubs/{clubToken}/applicants": {
     parameters: {
       query?: never;
@@ -810,6 +830,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -905,6 +926,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1006,6 +1028,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1063,7 +1086,7 @@ export interface components {
       recruiting_closed_at: string;
       /**
        * Format: int32
-       * @description 참가 인원
+       * @description 참가인원: 토너먼트 싱글이면 2의 제곱, 더블이면 참가자수 /2 가 2의 제곱
        * @example 16
        */
       player_limit_count: number;
@@ -1132,6 +1155,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1256,6 +1280,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1290,7 +1315,7 @@ export interface components {
        * @description 대진표 생성 타입(FREE | TOURNAMENT)
        * @enum {string}
        */
-      bracket_type: "FREE" | "TOURNAMENT";
+      match_generation_type: "FREE" | "TOURNAMENT";
       /**
        * @description 매치 타입(SINGLES | DOUBLES)
        * @enum {string}
@@ -1303,9 +1328,9 @@ export interface components {
       match_status: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
       /**
        * Format: int32
-       * @description 라운드 번호(단식이면 1, 2, 3, ... | 복식이면 ... 32, 16, 8, 4, 2, 1
+       * @description 전체 라운드 수
        */
-      round_number: number;
+      total_round: number;
       /** @description 단식 매치 리스트 */
       singles_match_response_list?: components["schemas"]["SinglesMatchResponse"][];
       /** @description 복식 매치 리스트 */
@@ -1369,6 +1394,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1407,6 +1433,8 @@ export interface components {
        * @description 팀 2 이긴 세트수
        */
       team2_win_set_count?: number;
+      /** Format: int32 */
+      round_number?: number;
     };
     /** @description 단식 매치 리스트 */
     SinglesMatchResponse: {
@@ -1433,6 +1461,8 @@ export interface components {
        * @description 경기 참가자 2 이긴 세트수
        */
       participant2_win_set_count?: number;
+      /** Format: int32 */
+      round_number?: number;
     };
     SetScoreUpdateRequest: {
       /** Format: int32 */
@@ -1498,6 +1528,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1605,6 +1636,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1668,6 +1700,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1752,6 +1785,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1843,6 +1877,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1936,6 +1971,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2083,6 +2119,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2164,6 +2201,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2232,6 +2270,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2350,6 +2389,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2487,6 +2527,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2550,6 +2591,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2716,6 +2758,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2837,6 +2880,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2959,6 +3003,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3094,6 +3139,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3157,6 +3203,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3296,6 +3343,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3418,6 +3466,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3510,6 +3559,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3595,6 +3645,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3688,6 +3739,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3792,10 +3844,84 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
       error_message_for_client?: string;
+    };
+    CommonResponseMemberIsClubMemberResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["MemberIsClubMemberResponse"];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
+    };
+    MemberIsClubMemberResponse: {
+      /** @description 동호회 가입 여부 */
+      is_club_member: boolean;
+      /**
+       * @description 동호회 역할
+       * @enum {string}
+       */
+      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
     };
     ClubApplicantResponse: {
       /**
@@ -3876,6 +4002,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3939,6 +4066,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4021,6 +4149,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4084,6 +4213,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4165,6 +4295,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4257,6 +4388,7 @@ export interface components {
         | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4502,7 +4634,7 @@ export interface operations {
       };
     };
   };
-  makeMatches: {
+  generateBracket: {
     parameters: {
       query?: never;
       header?: never;
@@ -5192,6 +5324,28 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["CommonResponseListLeagueByDateResponse"];
+        };
+      };
+    };
+  };
+  checkIsClubMember: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubToken: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseMemberIsClubMemberResponse"];
         };
       };
     };
