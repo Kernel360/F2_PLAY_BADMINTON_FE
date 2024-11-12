@@ -10,7 +10,7 @@ type ClubMemberResponse = components["schemas"]["ClubMemberResponse"];
 
 function ClubMember() {
   const { clubId } = useParams();
-  const { data, error, isLoading } = useGetClubMembers(clubId as string);
+  const { data, isLoading } = useGetClubMembers(clubId as string);
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>();
 
   const toggleDropdown = (index: number) => {
@@ -23,14 +23,11 @@ function ClubMember() {
   if (!data) {
     return <div>No data available</div>;
   }
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   const members = [
-    ...(data.ROLE_OWNER ?? []),
-    ...(data.ROLE_MANAGER ?? []),
-    ...(data.ROLE_USER ?? []),
+    ...(data.role_owner ?? []),
+    ...(data.role_manager ?? []),
+    ...(data.role_user ?? []),
   ];
 
   return (

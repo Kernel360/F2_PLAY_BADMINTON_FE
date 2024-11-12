@@ -1,6 +1,9 @@
 import type { components } from "@/schemas/schema";
-import type { GetClubMemberCheckData } from "@/types/clubMemberTypes";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type {
+  GetClubMemberCheckData,
+  GetClubMemberListData,
+} from "@/types/clubMemberTypes";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getClubMembers,
   getClubMembersCheck,
@@ -18,10 +21,9 @@ type ClubMemberExpelUpdate = components["schemas"]["ClubMemberExpelRequest"];
 type ClubMemberBanUpdate = components["schemas"]["ClubMemberBanRequest"];
 
 export const useGetClubMembers = (clubId: string) => {
-  return useQuery({
-    queryKey: ["clubMembersData"],
-    queryFn: () => getClubMembers(clubId),
-  });
+  return useQueryWithToast<GetClubMemberListData>(["clubMembers"], () =>
+    getClubMembers(clubId),
+  );
 };
 
 export const useGetClubMembersCheck = (clubId: string) => {

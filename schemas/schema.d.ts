@@ -3784,12 +3784,15 @@ export interface components {
        */
       participant_count: number;
     };
-    CommonResponseMapClubMemberRoleListClubMemberResponse: {
+    ClubMemberRoleResponse: {
+      role_owner?: components["schemas"]["ClubMemberResponse"][];
+      role_manager?: components["schemas"]["ClubMemberResponse"][];
+      role_user?: components["schemas"]["ClubMemberResponse"][];
+    };
+    CommonResponseClubMemberRoleResponse: {
       /** @enum {string} */
       result?: "SUCCESS" | "FAIL";
-      data?: {
-        [key: string]: components["schemas"]["ClubMemberResponse"][];
-      };
+      data?: components["schemas"]["ClubMemberRoleResponse"];
       /** @enum {string} */
       error_code?:
         | "BAD_REQUEST"
@@ -4728,7 +4731,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["CommonResponseMapClubMemberRoleListClubMemberResponse"];
+          "*/*": components["schemas"]["CommonResponseClubMemberRoleResponse"];
         };
       };
     };

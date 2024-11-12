@@ -1,7 +1,7 @@
 import type { components } from "@/schemas/schema";
 import type {
   GetClubMemberCheckResponse,
-  PostClubMemberRequest,
+  GetClubMemberListResponse,
   PostClubMemberResponse,
 } from "@/types/clubMemberTypes";
 import restClient from "../restClient";
@@ -25,18 +25,10 @@ interface ClubMembersData {
 
 export const getClubMembers = async (
   clubId: string,
-): Promise<ClubMembersData> => {
-  const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
-
-  if (!response.ok) {
-    throw new Error("멤버 정보 조회에 실패했습니다.");
-  }
-
-  return response.json();
+): Promise<GetClubMemberListResponse> => {
+  return restClient.get<GetClubMemberListResponse>(
+    `/clubs/${clubId}/clubMembers`,
+  );
 };
 
 export const getClubMembersCheck = async (
