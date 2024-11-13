@@ -1,10 +1,11 @@
 import type {
   GetLeagueDateData,
   GetLeagueDetailData,
+  GetLeagueMonthData,
   PatchLeagueRequest,
   PostLeagueRequest,
 } from "@/types/leagueTypes";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   deleteLeagues,
   deleteParticipateLeague,
@@ -12,7 +13,6 @@ import {
   getLeagueDetail,
   getMonthLeagues,
   patchLeague,
-  // patchLeagues,
   postLeague,
   postParticipateLeague,
 } from "../functions/leagueFn";
@@ -32,21 +32,16 @@ export const usePostLeague = (clubId: string) => {
   });
 };
 
-export const useGetMonthLeagues = (clubId: number, date: string) => {
-  return useQuery({
-    queryKey: ["leaguesData"],
-    queryFn: () => getMonthLeagues(clubId, date),
-  });
+export const useGetMonthLeagues = (clubId: string, date: string) => {
+  return useQueryWithToast<GetLeagueMonthData[]>(["leaguesMonthData"], () =>
+    getMonthLeagues(clubId, date),
+  );
 };
 
 export const useGetDateLeagues = (clubId: string, date: string) => {
-  return useQueryWithToast<GetLeagueDateData[]>(["clubsActivityData"], () =>
+  return useQueryWithToast<GetLeagueDateData[]>(["leaguesDateData"], () =>
     getDateLeague(clubId, date),
   );
-  // return useQuery({
-  //   queryKey: ["leaguesDateData"],
-  //   queryFn: () => getDateLeague(clubId, date),
-  // });
 };
 
 export const useGetLeagueDetail = (clubId: string, leagueId: string) => {

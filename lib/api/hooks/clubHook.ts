@@ -97,7 +97,7 @@ export const useGetClubsById = (clubId: string) => {
   );
 };
 
-export const usePatchClubs = (clubId: number) => {
+export const usePatchClubs = (clubId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({

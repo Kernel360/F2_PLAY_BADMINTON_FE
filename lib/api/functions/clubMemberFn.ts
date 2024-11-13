@@ -1,4 +1,10 @@
 import type { components } from "@/schemas/schema";
+import type {
+  GetClubMemberCheckResponse,
+  GetClubMemberListResponse,
+  PostClubMemberResponse,
+} from "@/types/clubMemberTypes";
+import restClient from "../restClient";
 
 type ClubMemberResponse = components["schemas"]["ClubMemberResponse"];
 type ClubMemberRoleUpdateRequest =
@@ -18,46 +24,57 @@ interface ClubMembersData {
 }
 
 export const getClubMembers = async (
-  clubId: number,
-): Promise<ClubMembersData> => {
-  const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
+  clubId: string,
+): Promise<GetClubMemberListResponse> => {
+  return restClient.get<GetClubMemberListResponse>(
+    `/clubs/${clubId}/clubMembers`,
+  );
+};
 
-  if (!response.ok) {
-    throw new Error("멤버 정보 조회에 실패했습니다.");
-  }
+export const getClubMembersCheck = async (
+  clubId: string,
+): Promise<GetClubMemberCheckResponse> => {
+  return restClient.get<GetClubMemberCheckResponse>(
+    `/clubs/${clubId}/clubMembers/check`,
+  );
+};
 
-  return response.json();
+export const postClubMembers = async (
+  clubId: string,
+  // applyReason: PostClubMemberRequest,
+): Promise<PostClubMemberResponse> => {
+  // const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
+  //   method: "POST",
+  //   headers: { "Content-Type": "application/json" },
+  //   credentials: "include",
+  // });
+
+  // if (!response.ok) {
+  //   throw new Error("동호회 가입 신청에 실패했습니다.");
+  // }
+
+  // return response.json();
+
+  return restClient.post<PostClubMemberResponse>(
+    `/clubs/${clubId}/clubMembers`,
+    { apply_reason: "test" },
+  );
 };
 
 export const patchClubMembersRole = async (
   role: ClubMemberRoleUpdateRequest,
-  clubId: number,
+  clubId: string,
   clubMemberId: number,
 ): Promise<ClubMemberResponse> => {
-  const response = await fetch(
-    `${BASE_URL}/clubs/${clubId}/clubMembers/role?clubMemberId=${clubMemberId}`,
-    {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(role),
-    },
+  return restClient.patch<ClubMemberResponse>(
+    `/clubs/${clubId}/clubMembers/role?clubMemberId=${clubMemberId}`,
+    role,
   );
-  console.log(role, clubId, clubMemberId);
-  if (!response.ok) {
-    throw new Error("멤버 역할 변경에 실패했습니다.");
-  }
-
-  return response.json();
 };
 
 export const patchClubMembersExpel = async (
   expelReason: ClubMemberExpelRequest,
-  clubId: number,
+  clubId: string,
   clubMemberId: number,
 ): Promise<ClubMemberBanRecordResponse> => {
   const response = await fetch(
@@ -79,7 +96,7 @@ export const patchClubMembersExpel = async (
 
 export const patchClubMembersBan = async (
   ban: ClubMemberBanRequest,
-  clubId: number,
+  clubId: string,
   clubMemberId: number,
 ): Promise<ClubMemberBanRecordResponse> => {
   const response = await fetch(
@@ -98,19 +115,3 @@ export const patchClubMembersBan = async (
 
   return response.json();
 };
-
-// export const postClubMembers = async (
-//   clubId: number,
-// ): Promise<ClubMemberJoinResponse> => {
-//   const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     credentials: "include",
-//   });
-
-//   if (!response.ok) {
-//     throw new Error("동호회 가입 신청에 실패했습니다.");
-//   }
-
-//   return response.json();
-// };
