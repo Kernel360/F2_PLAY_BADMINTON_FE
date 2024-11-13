@@ -11,6 +11,13 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { usePatchLeague, usePostLeague } from "@/lib/api/hooks/leagueHook";
 import type {
@@ -122,16 +129,10 @@ function LeagueForm(props: LeagueFormProps) {
 
   const selectedTier = () => {
     setValue("tier_limit", tierLimit, { shouldValidate: true });
-    return tierLimit === "GOLD"
-      ? "🥇 골드"
-      : tierLimit === "SILVER"
-        ? "🥈 실버"
-        : "🥉 브론즈";
   };
 
   const selectedType = () => {
     setValue("match_type", type, { shouldValidate: true });
-    return type === "SINGLES" ? "단식" : "복식";
   };
 
   const handleSumbitSchedule = (data: LeagueFormRequest) => {
@@ -267,53 +268,25 @@ function LeagueForm(props: LeagueFormProps) {
             </Text>
           </div>
           <div className="w-full">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full hover:bg-white hover:text-black text-black text-left p-2 flex items-center justify-between border-gray-200 rounded-md"
+            <Select onValueChange={selectedType}>
+              <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black">
+                <SelectValue placeholder="경기 타입 선택하기" />
+              </SelectTrigger>
+              <SelectContent className="w-full border cursor-pointer border-gray-200 bg-white rounded-md shadow-lg">
+                <SelectItem
+                  value="SINGLES"
+                  className="flex items-center text-black cursor-pointer"
                 >
-                  <span className="flex items-center">{selectedType()}</span>
-                  <svg
-                    className="w-4 h-4 ml-2"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    />
-                    <title>경기 타입 선택하기</title>
-                  </svg>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-full p-2 border border-gray-200 bg-white rounded-md shadow-lg">
-                <DropdownMenuRadioGroup
-                  value={tierLimit}
-                  onValueChange={(value) =>
-                    setType(value as PatchLeagueRequest["match_type"])
-                  }
-                  className="w-full"
+                  단식
+                </SelectItem>
+                <SelectItem
+                  value="DOUBLES"
+                  className="flex items-center text-black cursor-pointer"
                 >
-                  <DropdownMenuRadioItem
-                    value="SINGLES"
-                    className="flex items-center p-2 cursor-pointer text-black w-full "
-                  >
-                    단식
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem
-                    value="DOUBLES"
-                    className="flex items-center p-2 w-full cursor-pointer text-black"
-                  >
-                    복식
-                  </DropdownMenuRadioItem>
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  복식
+                </SelectItem>
+              </SelectContent>
+            </Select>
             <input
               type="hidden"
               {...register("match_type", {
@@ -333,59 +306,32 @@ function LeagueForm(props: LeagueFormProps) {
             </Text>
           </div>
           <div className="w-full">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full hover:bg-white hover:text-black text-black text-left p-2 flex items-center justify-between border-gray-200 rounded-md"
+            <Select onValueChange={selectedTier}>
+              <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black">
+                <SelectValue placeholder="최소 티어 선택하기" />
+              </SelectTrigger>
+              <SelectContent className="w-full border cursor-pointer border-gray-200 bg-white rounded-md shadow-lg">
+                <SelectItem
+                  value="GOLD"
+                  className="flex items-center text-black cursor-pointer"
                 >
-                  <span className="flex items-center">{selectedTier()}</span>
-                  <svg
-                    className="w-4 h-4 ml-2"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    />
-                    <title>최소 티어 선택하기</title>
-                  </svg>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-full p-2 border border-gray-200 bg-white rounded-md shadow-lg">
-                <DropdownMenuRadioGroup
-                  value={tierLimit}
-                  onValueChange={(value) =>
-                    setTierLimit(value as "GOLD" | "SILVER" | "BRONZE")
-                  }
-                  className="w-full"
+                  🥇 골드
+                </SelectItem>
+                <SelectItem
+                  value="SILVER"
+                  className="flex items-center text-black cursor-pointer"
                 >
-                  <DropdownMenuRadioItem
-                    value="GOLD"
-                    className="flex items-center p-2 cursor-pointer text-black w-full "
-                  >
-                    🥇 골드
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem
-                    value="SILVER"
-                    className="flex items-center p-2 w-full cursor-pointer text-black"
-                  >
-                    🥈 실버
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem
-                    value="BRONZE"
-                    className="flex items-center p-2 w-full cursor-pointer text-black"
-                  >
-                    🥉 브론즈
-                  </DropdownMenuRadioItem>
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  🥈 실버
+                </SelectItem>
+                <SelectItem
+                  value="BRONZE"
+                  className="flex items-center text-black cursor-pointer"
+                >
+                  🥉 브론즈
+                </SelectItem>
+              </SelectContent>
+            </Select>
+
             <input
               type="hidden"
               {...register("tier_limit", {
