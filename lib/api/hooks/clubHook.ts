@@ -91,13 +91,13 @@ export const usePostClubsImg = () => {
   });
 };
 
-export const useGetClubsById = (clubId: number) => {
+export const useGetClubsById = (clubId: string) => {
   return useQueryWithToast<GetClubDetailData>(["clubsDataById"], () =>
     getClubsById(clubId),
   );
 };
 
-export const usePatchClubs = (clubId: number) => {
+export const usePatchClubs = (clubId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({

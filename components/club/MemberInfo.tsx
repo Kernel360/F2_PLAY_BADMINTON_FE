@@ -20,18 +20,18 @@ function MemberInfo({ memberData, isOpen, onToggle }: MemberInfoProps) {
   // const { win_count, lose_count, draw_count, match_count } =
   // (memberData.league_record_info_response as LeagueRecordInfoResponse) || 0;
 
-  // const changeRoleWord = (role: string) => {
-  //   switch (role) {
-  //     case "ROLE_OWNER":
-  //       return "회장";
-  //     case "ROLE_MANAGER":
-  //       return "매니저";
-  //     case "ROLE_USER":
-  //       return "회원";
-  //     default:
-  //       return "";
-  //   }
-  // };
+  const changeRoleWord = (role: string) => {
+    switch (role) {
+      case "ROLE_OWNER":
+        return "회장";
+      case "ROLE_MANAGER":
+        return "매니저";
+      case "ROLE_USER":
+        return "회원";
+      default:
+        return "";
+    }
+  };
 
   return (
     <div className="flex justify-center">
@@ -44,16 +44,19 @@ function MemberInfo({ memberData, isOpen, onToggle }: MemberInfoProps) {
         <p className="text-black">{memberData.name}</p>
       </div>
       <div className="flex flex-[1] items-center">
-        {/* <p className="text-black">{changeRoleWord(memberData.role ?? "")}</p> */}
+        <p className="text-black">{changeRoleWord(memberData.role ?? "")}</p>
       </div>
       <div className="flex flex-[1] items-center">
         <p className="text-black">
-          {/* {getTierWithEmojiAndText(memberData.tier as string)} */}
+          {getTierWithEmojiAndText(memberData.tier as string)}
         </p>
       </div>
       <div className="flex flex-[1] items-center justify-between relative">
         <p className="text-black">
-          {/* {match_count}전 | {win_count}승 | {draw_count}무 | {lose_count}패 */}
+          {memberData.league_record.match_count}전 |{" "}
+          {memberData.league_record.win_count}승 |{" "}
+          {memberData.league_record.draw_count}무 |{" "}
+          {memberData.league_record.lose_count}패
         </p>
         <IconButton size="sm" color="transparent" onClick={onToggle}>
           <AlignJustify width="80%" height="80%" className="text-gray-400" />

@@ -67,17 +67,17 @@ export const postClubsImg = async (clubImg: FormData): Promise<string> => {
 };
 
 export const getClubsById = async (
-  clubId: number,
+  clubId: string,
 ): Promise<GetClubDetailsResponse> => {
   return restClient.get<GetClubDetailsResponse>(`/clubs/${clubId}`);
 };
 
 export const patchClubs = async (
   clubUpdateData: PatchClubRequest,
-  clubId: number,
+  clubId: string,
 ): Promise<PatchClubResponse> => {
   return restClient.patch<PatchClubResponse>(
     `/clubs/${clubId}`,
-    JSON.stringify(clubUpdateData),
+    clubUpdateData,
   );
 };

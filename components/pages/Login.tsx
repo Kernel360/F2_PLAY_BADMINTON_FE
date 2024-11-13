@@ -4,8 +4,8 @@ import brand from "@/public/images/main-logo.png";
 import Link from "next/link";
 
 const NAVER_OAUTH_URL = process.env.NEXT_NAVER_OAUTH_URL || "";
-const GOOGLE_OAUTH_URL = process.env.NEXT_NAVER_OAUTH_URL || "";
-const KAKAO_OAUTH_URL = process.env.NEXT_NAVER_OAUTH_URL || "";
+const GOOGLE_OAUTH_URL = process.env.NEXT_GOOGLE_OAUTH_URL || "";
+const KAKAO_OAUTH_URL = process.env.NEXT_KAKAO_OAUTH_URL || "";
 
 function Login() {
   return (

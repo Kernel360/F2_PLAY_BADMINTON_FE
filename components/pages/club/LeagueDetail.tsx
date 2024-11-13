@@ -91,7 +91,7 @@ function LeagueDetail() {
   const handleDelete = () => {
     if (confirm("정말로 삭제하시겠습니까?")) {
       deleteLeague(undefined, {
-        onSuccess: () => router.push(`/club/${clubId}/schedule`),
+        onSuccess: () => router.push(`/club/${clubId}/league`),
       });
     }
   };
@@ -110,7 +110,7 @@ function LeagueDetail() {
           onClick={() =>
             createMatch(undefined, {
               onSuccess: () =>
-                router.push(`/club/${clubId}/schedule/${leagueId}/match`),
+                router.push(`/club/${clubId}/league/${leagueId}/match`),
             })
           }
         >
@@ -122,7 +122,7 @@ function LeagueDetail() {
 
     return (
       <Link
-        href={`/club/${clubId}/schedule/${leagueId}/match`}
+        href={`/club/${clubId}/league/${leagueId}/match`}
         className="flex justify-center items-center gap-4 w-1/3"
       >
         <Button
@@ -153,7 +153,7 @@ function LeagueDetail() {
           </div>
         </div>
         <div className="flex justify-center gap-2">
-          <Link href={`/club/${clubId}/schedule/${leagueId}/update`}>
+          <Link href={`/club/${clubId}/league/${leagueId}/update`}>
             <Button
               size="sm"
               variant="outline"

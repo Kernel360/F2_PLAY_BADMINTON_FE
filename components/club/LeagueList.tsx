@@ -3,6 +3,7 @@ import { Text } from "@/components/ui/Text";
 import { useGetDateLeagues } from "@/lib/api/hooks/leagueHook";
 // import { useGetMyInfo } from "@/lib/api/hooks/memberHook";
 import type { components } from "@/schemas/schema";
+import type { GetLeagueDateData } from "@/types/leagueTypes";
 import { getLeagueType } from "@/utils/getLeagueType";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
@@ -15,26 +16,24 @@ interface ScheduleListProps {
   selectedDate: Date;
 }
 
-type DateLeagues = components["schemas"]["LeagueByDateResponse"];
-
 function ScheduleList(props: ScheduleListProps) {
   const { selectedDate } = props;
   const { clubId } = useParams();
-  const { data: schedules } = useGetDateLeagues(
+  const { data: schedules, refetch: schedulesRefetch } = useGetDateLeagues(
     clubId as string,
     format(selectedDate, "yyyy-MM-dd"),
   );
-  // const { data: myData } = useGetMyInfo(true);
-  // useEffect(() => {
-  //   refetch();
-  // }, [selectedDate]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    schedulesRefetch();
+  }, [selectedDate, schedulesRefetch]);
 
   const renderSchedule = () => {
     if (schedules !== undefined && schedules.length > 0) {
-      return schedules.map((schedule: DateLeagues) => (
+      return schedules.map((schedule: GetLeagueDateData) => (
         <Link
           key={schedule.league_id}
-          href={`/club/${clubId}/schedule/${schedule.league_id}`}
+          href={`/club/${clubId}/league/${schedule.league_id}`}
         >
           <div className="bg-white py-4 px-6 rounded-xl border border-solid hover:shadow-lg transform transition-transform duration-300 cursor-pointer">
             <div className="flex justify-between items-start mb-4">
@@ -80,8 +79,7 @@ function ScheduleList(props: ScheduleListProps) {
 
   return (
     <div className="w-full px-6 py-3 bg-white relative">
-      {/* {myData?.club_member_my_page_response?.role !== "ROLE_USER" && ( */}
-      <Link href={`/club/${clubId}/schedule/create`}>
+      <Link href={`/club/${clubId}/league/create`}>
         <IconButton
           size="sm"
           color="transparent"
@@ -91,7 +89,6 @@ function ScheduleList(props: ScheduleListProps) {
           <CalendarPlus className="text-primary group-hover:text-white" />
         </IconButton>
       </Link>
-      {/* )} */}
       <div className="mb-5 text-center">
         <h1 className="text-2xl font-extrabold text-gray-800">
           {format(selectedDate, "yyyy년 MM월 dd일")}

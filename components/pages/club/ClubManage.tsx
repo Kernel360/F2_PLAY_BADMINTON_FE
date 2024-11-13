@@ -10,23 +10,20 @@ import {
   usePostClubsImg,
 } from "@/lib/api/hooks/clubHook";
 import type { components } from "@/schemas/schema";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type ClubUpdate = components["schemas"]["ClubUpdateRequest"];
 
 function ClubManage() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const clubId = Number(pathname.split("/")[2]);
+  const { clubId } = useParams();
 
-  const { data, isLoading } = useGetClubsById(clubId);
-  const { mutate: patchClub } = usePatchClubs(clubId);
+  const { data, isLoading } = useGetClubsById(clubId as string);
+  const { mutate: patchClub } = usePatchClubs(clubId as string);
   const { mutate: patchClubImg } = usePostClubsImg();
 
   const [imgUrl, setImgUrl] = useState<string | undefined>();
-
   const {
     register,
     handleSubmit,

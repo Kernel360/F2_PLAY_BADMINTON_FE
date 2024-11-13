@@ -1,21 +1,20 @@
 "use client";
 
-// import { useGetLoginState } from "@/lib/api/hooks/SessionHook";
+import { postClubMembers } from "@/lib/api/functions/clubMemberFn";
 import { useGetClubsById } from "@/lib/api/hooks/clubHook";
-// import { usePostClubMembers } from "@/lib/api/hooks/clubMemberHook";
-// import { useGetIsClubMember } from "@/lib/api/hooks/memberHook";
+import {
+  useGetClubMembersCheck,
+  usePostClubMembers,
+} from "@/lib/api/hooks/clubMemberHook";
 import { format } from "date-fns";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 function ClubIntro() {
-  const pathname = usePathname();
-  const clubId = Number(pathname.split("/")[2]);
+  const { clubId } = useParams();
 
-  const { data: clubData, isLoading } = useGetClubsById(clubId);
-  // const { mutate: postClubMembers } = usePostClubMembers(clubId);
-  // const { data: isJoined } = useGetIsClubMember();
-  // const { data: isLogin } = useGetLoginState();
+  const { data: clubData, isLoading } = useGetClubsById(clubId as string);
+  const { mutate: postClubMembers } = usePostClubMembers(clubId as string);
 
   if (isLoading) {
     return (
@@ -29,23 +28,22 @@ function ClubIntro() {
     return <div>No data available</div>;
   }
 
-  // const handlePostClubMember = () => {
-  //   postClubMembers(undefined, {
-  //     onSuccess: () => alert("동호회 가입에 성공하였습니다!"),
-  //   });
-  // };
+  // TODO: applyReason dialog 생성하기
+  const handlePostClubMember = () => {
+    postClubMembers();
+  };
 
   return (
     <div className="flex space-x-8 w-full h-[464px] items-center">
       <div className="w-[400px] flex flex-col items-center gap-2">
-        <Image
-          src={clubData?.club_image as string}
+        <img
+          src={(clubData?.club_image as string) || "/images/dummy-image.jpg"}
           width={400}
           height={400}
-          alt="club image"
+          alt="club_banner"
           className="rounded-md object-cover h-[400px] w-[400px]"
         />
-        {/* {!isJoined?.is_club_member && isLogin?.loggedIn && (
+        {!clubData.is_club_member && (
           <button
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
             type="button"
@@ -53,7 +51,7 @@ function ClubIntro() {
           >
             동호회 참여하기
           </button>
-        )} */}
+        )}
       </div>
       <div className="flex flex-col flex-1 h-[400px] gap-4">
         <p className="text-3xl font-bold text-black">{clubData?.club_name}</p>

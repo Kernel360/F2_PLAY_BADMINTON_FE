@@ -4,19 +4,20 @@ import DayCell from "@/components/DayCell";
 import LeagueList from "@/components/club/LeagueList";
 import { Calendar } from "@/components/ui/calendar";
 import { useGetMonthLeagues } from "@/lib/api/hooks/leagueHook";
-import type { components } from "@/schemas/schema";
+import type { GetLeagueMonthData } from "@/types/leagueTypes";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
-type MonthLeagues = components["schemas"]["LeagueReadResponse"];
 
 function ClubLeague() {
   const [date, setDate] = useState<Date>(new Date());
   const [month, setMonth] = useState<string>(format(new Date(), "yyyy-MM"));
-  const clubId = Number(usePathname().split("/")[2]);
-  const { data: leagueList, refetch } = useGetMonthLeagues(clubId, month);
+  const { clubId } = useParams();
+  const { data: leagueList, refetch } = useGetMonthLeagues(
+    clubId as string,
+    month,
+  );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -55,7 +56,7 @@ function ClubLeague() {
             <DayCell
               date={dayProps.date}
               displayMonth={dayProps.displayMonth}
-              scheduleList={leagueList as MonthLeagues[]}
+              scheduleList={leagueList as GetLeagueMonthData[]}
             />
           ),
         }}
