@@ -5,13 +5,6 @@ import { Input } from "@/components/ui/Input";
 import { Text } from "@/components/ui/Text";
 import { Calendar } from "@/components/ui/calendar";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -224,13 +217,13 @@ function LeagueForm(props: LeagueFormProps) {
             </Text>
           </div>
           <Popover>
-            <PopoverTrigger asChild>
+            <PopoverTrigger asChild disabled={!!initialData}>
               <Button
                 variant="outline"
                 className="w-full text-left p-3 text-black hover:bg-white hover:text-black"
               >
                 {date
-                  ? format(date, "yyyy-MM-dd a hh시 mm분")
+                  ? format(date, "yyyy년 MM월 dd일 a hh시 mm분", { locale: ko })
                   : "경기 시간 선택"}
               </Button>
             </PopoverTrigger>
@@ -312,6 +305,7 @@ function LeagueForm(props: LeagueFormProps) {
             <Select
               onValueChange={selectedTier}
               defaultValue={initialData?.required_tier}
+              disabled={!!initialData}
             >
               <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black">
                 <SelectValue placeholder="최소 티어 선택하기" />
@@ -366,7 +360,7 @@ function LeagueForm(props: LeagueFormProps) {
         <div className="w-full">
           <div className="flex gap-2 mb-4 items-center">
             <MapPin className="text-gray-500" size={24} />
-            <Text size="lg" className="block text-gray-600">
+            <Text size="lg" className="block text-gray-500">
               경기 장소
             </Text>
           </div>
@@ -375,6 +369,7 @@ function LeagueForm(props: LeagueFormProps) {
             {...register("full_address", {
               required: "경기 장소를 입력해주세요",
             })}
+            disabled={!!initialData}
           />
         </div>
 
@@ -387,13 +382,13 @@ function LeagueForm(props: LeagueFormProps) {
           </div>
 
           <Popover>
-            <PopoverTrigger asChild>
+            <PopoverTrigger disabled={!!initialData} asChild>
               <Button
                 variant="outline"
                 className="w-full text-left p-3  text-black hover:bg-white hover:text-black"
               >
                 {closedAt
-                  ? format(new Date(closedAt), "yyyy-MM-dd")
+                  ? format(new Date(closedAt), "yyyy년 MM월 dd일")
                   : "모집 마감 날짜 선택"}
               </Button>
             </PopoverTrigger>
