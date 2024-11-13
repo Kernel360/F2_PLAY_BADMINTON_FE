@@ -29,6 +29,7 @@ import { ko } from "date-fns/locale";
 import {
   Award,
   Calendar as CalendarIcon,
+  GitCompare,
   MapPin,
   Milestone,
   PencilLine,
@@ -480,7 +481,7 @@ function LeagueForm(props: LeagueFormProps) {
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2 mb-4 items-center ">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
-                  <Users className="text-gray-500" size={20} />
+                  <GitCompare className="text-gray-500" size={20} />
                   대진표 타입
                 </FormLabel>
                 <FormControl>
