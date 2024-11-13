@@ -268,7 +268,10 @@ function LeagueForm(props: LeagueFormProps) {
             </Text>
           </div>
           <div className="w-full">
-            <Select onValueChange={selectedType}>
+            <Select
+              onValueChange={selectedType}
+              defaultValue={initialData?.match_type}
+            >
               <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black">
                 <SelectValue placeholder="경기 타입 선택하기" />
               </SelectTrigger>
@@ -306,7 +309,10 @@ function LeagueForm(props: LeagueFormProps) {
             </Text>
           </div>
           <div className="w-full">
-            <Select onValueChange={selectedTier}>
+            <Select
+              onValueChange={selectedTier}
+              defaultValue={initialData?.required_tier}
+            >
               <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black">
                 <SelectValue placeholder="최소 티어 선택하기" />
               </SelectTrigger>
