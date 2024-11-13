@@ -63,29 +63,18 @@ export const postClubMembers = async (
 
 export const patchClubMembersRole = async (
   role: ClubMemberRoleUpdateRequest,
-  clubId: number,
+  clubId: string,
   clubMemberId: number,
 ): Promise<ClubMemberResponse> => {
-  const response = await fetch(
-    `${BASE_URL}/clubs/${clubId}/clubMembers/role?clubMemberId=${clubMemberId}`,
-    {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(role),
-    },
+  return restClient.patch<ClubMemberResponse>(
+    `/clubs/${clubId}/clubMembers/role?clubMemberId=${clubMemberId}`,
+    role,
   );
-  console.log(role, clubId, clubMemberId);
-  if (!response.ok) {
-    throw new Error("멤버 역할 변경에 실패했습니다.");
-  }
-
-  return response.json();
 };
 
 export const patchClubMembersExpel = async (
   expelReason: ClubMemberExpelRequest,
-  clubId: number,
+  clubId: string,
   clubMemberId: number,
 ): Promise<ClubMemberBanRecordResponse> => {
   const response = await fetch(
@@ -107,7 +96,7 @@ export const patchClubMembersExpel = async (
 
 export const patchClubMembersBan = async (
   ban: ClubMemberBanRequest,
-  clubId: number,
+  clubId: string,
   clubMemberId: number,
 ): Promise<ClubMemberBanRecordResponse> => {
   const response = await fetch(

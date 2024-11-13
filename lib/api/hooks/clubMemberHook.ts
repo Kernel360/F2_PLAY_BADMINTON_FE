@@ -45,7 +45,7 @@ export const usePostClubMembers = (clubId: string) => {
 };
 
 export const usePatchClubMembersRole = (
-  clubId: number,
+  clubId: string,
   clubMemberId: number,
 ) => {
   const queryClient = useQueryClient();
@@ -54,14 +54,14 @@ export const usePatchClubMembersRole = (
     mutationFn: (role: ClubMemberRoleUpdate) =>
       patchClubMembersRole(role, clubId, clubMemberId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clubMembersData"] });
+      queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
     },
     onError: (error: Error) => alert(error),
   });
 };
 
 export const usePatchClubMembersExpel = (
-  clubId: number,
+  clubId: string,
   clubMemberId: number,
 ) => {
   const queryClient = useQueryClient();
@@ -70,14 +70,14 @@ export const usePatchClubMembersExpel = (
     mutationFn: (expelReason: ClubMemberExpelUpdate) =>
       patchClubMembersExpel(expelReason, clubId, clubMemberId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clubMembersData"] });
+      queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
     },
     onError: (error: Error) => alert(error),
   });
 };
 
 export const usePatchClubMembersBan = (
-  clubId: number,
+  clubId: string,
   clubMemberId: number,
 ) => {
   const queryClient = useQueryClient();
@@ -86,7 +86,7 @@ export const usePatchClubMembersBan = (
     mutationFn: (ban: ClubMemberBanUpdate) =>
       patchClubMembersBan(ban, clubId, clubMemberId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clubMembersData"] });
+      queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
     },
     onError: (error: Error) => alert(error),
   });
