@@ -1322,10 +1322,16 @@ export interface components {
        */
       match_type: "SINGLES" | "DOUBLES";
       /**
-       * @description 매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)
+       * @description 리그 상태(PLAYING | CANCELED | FINISHED)
        * @enum {string}
        */
-      match_status: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
+      league_status:
+        | "ALL"
+        | "RECRUITING"
+        | "RECRUITING_COMPLETED"
+        | "PLAYING"
+        | "CANCELED"
+        | "FINISHED";
       /**
        * Format: int32
        * @description 전체 라운드 수
@@ -1407,34 +1413,36 @@ export interface components {
        * @description 매치 아이디
        */
       match_id?: number;
-      /** @description 팀 1 경기 참가자 1 이름 */
-      participant1_name?: string;
-      /** @description 팀 1 경기 참가자 1 이미지 */
-      participant1_image?: string;
-      /** @description 팀 1 경기 참가자 2 이름 */
-      participant2_name?: string;
-      /** @description 팀 1 경기 참가자 2 이미지 */
-      participant2_image?: string;
-      /** @description 팀 2 경기 참가자 3 이름 */
-      participant3_name?: string;
-      /** @description 팀 2 경기 참가자 3 이미지 */
-      participant3_image?: string;
-      /** @description 팀 2 경기 참가자 4 이름 */
-      participant4_name?: string;
-      /** @description 팀 2 경기 참가자 4 이미지 */
-      participant4_image?: string;
-      /**
-       * Format: int32
-       * @description 팀 1 이긴 세트수
-       */
-      team1_win_set_count?: number;
-      /**
-       * Format: int32
-       * @description 팀 2 이긴 세트수
-       */
-      team2_win_set_count?: number;
       /** Format: int32 */
       round_number?: number;
+      /**
+       * @description 매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)
+       * @enum {string}
+       */
+      match_status?: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
+      team1?: components["schemas"]["MatchTeamResponse"];
+      team2?: components["schemas"]["MatchTeamResponse"];
+      winners_token?: string[];
+    };
+    /** @description 팀2 */
+    MatchTeamResponse: {
+      participant1?: components["schemas"]["Participant"];
+      participant2?: components["schemas"]["Participant"];
+      /** Format: int32 */
+      team1_win_set_count?: number;
+    };
+    Participant: {
+      /** @description 참가자 토큰 */
+      member_token?: string;
+      /** @description 참가자 이름 */
+      name?: string;
+      /** @description 참가자 이미지 */
+      image?: string;
+      /**
+       * Format: int32
+       * @description 이긴 세트수
+       */
+      participant_win_set_count?: number;
     };
     /** @description 단식 매치 리스트 */
     SinglesMatchResponse: {
@@ -1443,26 +1451,19 @@ export interface components {
        * @description 매치 아이디
        */
       match_id?: number;
-      /** @description 경기 참가자 1 이름 */
-      participant1_name?: string;
-      /** @description 경기 참가자 1 이미지 */
-      participant1_image?: string;
       /**
        * Format: int32
-       * @description 경기 참가자 1 이긴 세트수
+       * @description 매치의 라운드 번호
        */
-      participant1_win_set_count?: number;
-      /** @description 경기 참가자 2 이름 */
-      participant2_name?: string;
-      /** @description 경기 참가자 2 이미지 */
-      participant2_image?: string;
-      /**
-       * Format: int32
-       * @description 경기 참가자 2 이긴 세트수
-       */
-      participant2_win_set_count?: number;
-      /** Format: int32 */
       round_number?: number;
+      /**
+       * @description 매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)
+       * @enum {string}
+       */
+      match_status?: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
+      participant1?: components["schemas"]["Participant"];
+      participant2?: components["schemas"]["Participant"];
+      winner_token?: string;
     };
     SetScoreUpdateRequest: {
       /** Format: int32 */
@@ -2054,12 +2055,26 @@ export interface components {
       role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
     };
     ClubMemberResponse: {
-      /** Format: int64 */
+      /**
+       * Format: int64
+       * @description 동호회 회원 ID
+       */
       club_member_id: number;
+      /** @description 동호회 회원 이미지 */
       image: string;
+      /** @description 동호회 회원 이름 */
       name: string;
-      /** @enum {string} */
+      /**
+       * @description 동호회 회원 role
+       * @enum {string}
+       */
       role: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
+      league_record: components["schemas"]["LeagueRecordResponse"];
+      /**
+       * @description 동호회 회원 티어
+       * @enum {string}
+       */
+      tier: "GOLD" | "SILVER" | "BRONZE";
     };
     CommonResponseClubMemberResponse: {
       /** @enum {string} */
@@ -2124,6 +2139,17 @@ export interface components {
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
       error_message_for_client?: string;
+    };
+    /** @description 동호회 회원 경기 전적 */
+    LeagueRecordResponse: {
+      /** Format: int32 */
+      win_count?: number;
+      /** Format: int32 */
+      lose_count?: number;
+      /** Format: int32 */
+      draw_count?: number;
+      /** Format: int32 */
+      match_count?: number;
     };
     ClubMemberExpelRequest: {
       expel_reason?: string;

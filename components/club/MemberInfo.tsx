@@ -48,12 +48,15 @@ function MemberInfo({ memberData, isOpen, onToggle }: MemberInfoProps) {
       </div>
       <div className="flex flex-[1] items-center">
         <p className="text-black">
-          {/* {getTierWithEmoji(memberData.tier as string)} */}
+          {getTierWithEmoji(memberData.tier as string)}
         </p>
       </div>
       <div className="flex flex-[1] items-center justify-between relative">
         <p className="text-black">
-          {/* {match_count}전 | {win_count}승 | {draw_count}무 | {lose_count}패 */}
+          {memberData.league_record.match_count}전 |{" "}
+          {memberData.league_record.win_count}승 |{" "}
+          {memberData.league_record.draw_count}무 |{" "}
+          {memberData.league_record.lose_count}패
         </p>
         <IconButton size="sm" color="transparent" onClick={onToggle}>
           <AlignJustify width="80%" height="80%" className="text-gray-400" />
