@@ -19,11 +19,11 @@ const ClubInputImage = ({
 
   return (
     <div className="relative w-[400px] h-[400px] flex flex-col items-center box-content rounded-md">
-      <Image
+      <img
         src={imagePreview}
         width={400}
         height={400}
-        alt="club image"
+        alt="club_banner"
         className="rounded-md object-cover w-[400px] h-[400px] "
       />
       <input

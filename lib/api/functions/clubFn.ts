@@ -74,10 +74,10 @@ export const getClubsById = async (
 
 export const patchClubs = async (
   clubUpdateData: PatchClubRequest,
-  clubId: number,
+  clubId: string,
 ): Promise<PatchClubResponse> => {
   return restClient.patch<PatchClubResponse>(
     `/clubs/${clubId}`,
-    JSON.stringify(clubUpdateData),
+    clubUpdateData,
   );
 };

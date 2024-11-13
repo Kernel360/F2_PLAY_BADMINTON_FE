@@ -38,15 +38,15 @@ const restClient = {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data = await response.json();
+    const data = await response.text();
     return data as T;
   },
-  patch: async <T>(url: string, body: string) => {
+  patch: async <T>(url: string, body: object) => {
     const response = await fetch(`${BASE_URL}${url}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: body,
+      body: JSON.stringify(body),
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

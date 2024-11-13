@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { usePatchClubMembersBan } from "@/lib/api/hooks/clubMemberHook";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
 
 interface MemberSuspendedModalProps {
@@ -19,12 +19,11 @@ function MemberSuspendedModal({
   openSuspendedModal,
   handleSuspendedModal,
 }: MemberSuspendedModalProps) {
-  const pathname = usePathname();
-  const clubId = Number(pathname.split("/")[2]);
+  const { clubId } = useParams();
   const [selectedSuspendedDay, setSelectedSuspendedDay] = useState(0);
   const [banReason, setBanReason] = useState("");
   const { mutate: patchClubMembersBan } = usePatchClubMembersBan(
-    clubId,
+    clubId as string,
     clubMemberId,
   );
 

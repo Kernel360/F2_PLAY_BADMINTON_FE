@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { usePatchClubMembersExpel } from "@/lib/api/hooks/clubMemberHook";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
 
 interface MemberExpelModalProps {
@@ -19,11 +19,10 @@ function MemberExpelModal({
   openExpelModal,
   handleExpelModal,
 }: MemberExpelModalProps) {
-  const pathname = usePathname();
-  const clubId = Number(pathname.split("/")[2]);
+  const { clubId } = useParams();
   const [expelReason, setExpelReason] = useState("");
   const { mutate: patchClubMembersExpel } = usePatchClubMembersExpel(
-    clubId,
+    clubId as string,
     clubMemberId,
   );
 

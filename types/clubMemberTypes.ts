@@ -1,10 +1,23 @@
 import type { components } from "@/schemas/schema";
 
 export type GetClubMemberListResponse =
-  components["schemas"]["CommonResponseMapClubMemberRoleListClubMemberResponse"];
+  components["schemas"]["CommonResponseClubMemberRoleResponse"];
 
-// export type PostClubMemberJoinResponse =
-//   components["schemas"]["CommonResponseClubMemberJoinResponse"];
+export type GetClubMemberListData =
+  components["schemas"]["ClubMemberRoleResponse"];
+
+export type GetClubMemberCheckResponse =
+  components["schemas"]["CommonResponseMemberIsClubMemberResponse"];
+
+export type GetClubMemberCheckData =
+  components["schemas"]["MemberIsClubMemberResponse"];
+
+export type PostClubMemberRequest = components["schemas"]["ClubApplyRequest"];
+
+export type PostClubMemberResponse =
+  components["schemas"]["CommonResponseClubApplyResponse"];
+
+export type PostClubMemberData = components["schemas"]["ClubApplyResponse"];
 
 export type DeleteClubMemberExitResponse =
   components["schemas"]["CommonResponseClubMemberWithdrawResponse"];

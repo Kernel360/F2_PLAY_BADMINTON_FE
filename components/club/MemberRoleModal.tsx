@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dialog";
 import { usePatchClubMembersRole } from "@/lib/api/hooks/clubMemberHook";
 import type { components } from "@/schemas/schema";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
 
 interface MemberRoleModalProps {
@@ -23,11 +23,10 @@ function MemberRoleModal({
   openRoleModal,
   handleRoleModal,
 }: MemberRoleModalProps) {
-  const pathname = usePathname();
-  const clubId = Number(pathname.split("/")[2]);
+  const { clubId } = useParams();
   const [selectedRole, setSelectedRole] = useState("");
   const { mutate: patchClubMembersRole } = usePatchClubMembersRole(
-    clubId,
+    clubId as string,
     clubMemberId,
   );
 
