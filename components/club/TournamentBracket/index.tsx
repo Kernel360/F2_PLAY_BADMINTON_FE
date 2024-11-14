@@ -395,78 +395,107 @@ const mockData = {
 function transformMatchData(data: MatchBracketData) {
   const transformedData: Node<CustomNodeData>[] = [];
   const matchSpacingX = 480; // Horizontal spacing between rounds
-  const matchSpacingY = 150; // Vertical spacing within the same round
+  const matchSpacingY = 150; // Vertical spacing between matches
 
   if (data.singles_match_response_list) {
-    let y = 0;
-    for (
-      let index = 0;
-      index < data.singles_match_response_list.length;
-      index++
-    ) {
-      const prevMatch = data.singles_match_response_list[index - 1];
-      const match = data.singles_match_response_list[index];
-      if (!match) {
-        continue;
-      }
+    // Group matches by rounds
+    const rounds = data.singles_match_response_list.reduce(
+      (acc, match) => {
+        const round = match.round_number ?? 1;
+        if (!acc[round]) acc[round] = [];
+        acc[round].push(match);
+        return acc;
+      },
+      {} as Record<number, typeof data.singles_match_response_list>,
+    );
 
-      if (prevMatch && prevMatch.round_number !== match.round_number) {
-        y = match.round_number ?? 0 * matchSpacingY;
-      }
+    for (const [roundNumber, matches] of Object.entries(rounds)) {
+      const round = Number.parseInt(roundNumber);
+      const roundX = (round - 1) * matchSpacingX;
+      const totalHeight = matches.length * matchSpacingY;
+      const startY = (totalHeight / 2) * -1; // Center the nodes vertically
 
-      const { match_id, round_number, participant1, participant2 } = match;
-      y += matchSpacingY;
+      for (let index = 0; index < matches.length; index++) {
+        const match = matches[index];
 
-      transformedData.push({
-        id: index.toString(),
-        data: {
-          player1: {
-            image: participant1?.image || "/images/dummy-image.jpg",
-            name: participant1?.name,
-            tier: participant1?.tier,
-            participant_win_set_count: participant1?.participant_win_set_count,
+        if (!match) {
+          continue;
+        }
+        const { match_id, participant1, participant2 } = match;
+
+        transformedData.push({
+          id: match_id?.toString() || "",
+          data: {
+            player1: {
+              image: participant1?.image || "/images/dummy-image.jpg",
+              name: participant1?.name,
+              tier: participant1?.tier,
+              participant_win_set_count:
+                participant1?.participant_win_set_count,
+            },
+            player2: {
+              image: participant2?.image || "/images/dummy-image.jpg",
+              name: participant2?.name,
+              tier: participant2?.tier,
+              participant_win_set_count:
+                participant2?.participant_win_set_count,
+            },
           },
-          player2: {
-            image: participant2?.image || "/images/dummy-image.jpg",
-            name: participant2?.name,
-            tier: participant2?.tier,
-            participant_win_set_count: participant2?.participant_win_set_count,
+          position: {
+            x: roundX,
+            y: startY + index * matchSpacingY,
           },
-        },
-        position: {
-          x: (round_number ?? 0 - 1) * matchSpacingX,
-          y: y,
-        },
-        type: "match",
-      });
+          type: "match",
+        });
+      }
     }
-  }
 
-  return transformedData;
+    return transformedData;
+  }
 }
 
 function generateEdges(data: MatchBracketData) {
   const edges: Edge[] = [];
 
   if (data.singles_match_response_list) {
-    for (
-      let index = 0;
-      index < data.singles_match_response_list.length;
-      index++
-    ) {
-      const match = data.singles_match_response_list[index];
-      if (!match) {
-        continue;
-      }
+    // Group matches by rounds
+    const rounds = data.singles_match_response_list.reduce(
+      (acc, match) => {
+        const round = match.round_number ?? 1;
+        if (!acc[round]) acc[round] = [];
+        acc[round].push(match);
+        return acc;
+      },
+      {} as Record<number, typeof data.singles_match_response_list>,
+    );
 
-      edges.push({
-        id: index.toString(),
-        source: index.toString(),
-        target: "8",
-        type: "smoothstep",
-      });
+    // Loop through each round to create edges to the next round
+    for (const roundNumber of Object.keys(rounds)) {
+      const currentRound = Number.parseInt(roundNumber);
+      const nextRound = currentRound + 1;
+
+      // Ensure there is a next round to connect to
+      if (rounds[nextRound]) {
+        const currentRoundMatches = Object.entries(rounds[currentRound] || []);
+
+        for (const [index, match] of currentRoundMatches) {
+          const nextMatchIndex = Math.floor(Number(index) / 2);
+          const targetMatch = rounds[nextRound]?.[nextMatchIndex];
+
+          if (targetMatch) {
+            edges.push({
+              id: `e${match.match_id}-${targetMatch.match_id}`,
+              source: match.match_id?.toString() || "",
+              target: targetMatch.match_id?.toString() || "",
+              type: "smoothstep",
+            });
+          }
+        }
+      }
     }
   }
+
+  return edges;
 }
 
 const initialNodes: Node<CustomNodeData>[] = transformMatchData(
