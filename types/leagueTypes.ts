@@ -30,4 +30,9 @@ export type PatchLeagueResponse =
 
 export type PatchLeagueData = components["schemas"]["LeagueUpdateResponse"];
 
+export type DeleteLeagueResponse =
+  components["schemas"]["CommonResponseLeagueCancelResponse"];
+
+export type DeleteLeagueData = components["schemas"]["LeagueCancelResponse"];
+
 export type TierLimit = "GOLD" | "SILVER" | "BRONZE";
