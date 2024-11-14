@@ -1,4 +1,5 @@
 import type {
+  DeleteLeagueData,
   GetLeagueDateData,
   GetLeagueDetailData,
   GetLeagueMonthData,
@@ -99,11 +100,14 @@ export const usePatchLeague = (clubId: string, leagueId: string) => {
 export const useDeleteLeague = (clubId: string, leagueId: string) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: () => deleteLeagues(clubId, leagueId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
-    },
-    onError: (error: Error) => alert(error),
+  const mutationFn = () => deleteLeagues(clubId, leagueId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+  };
+
+  return useMutationWithToast<DeleteLeagueData, void>({
+    mutationFn,
+    onSuccessCallback,
   });
 };
