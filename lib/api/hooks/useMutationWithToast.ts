@@ -12,7 +12,7 @@ interface CommonResponse<T> {
   error_message_for_client?: string;
 }
 
-const useMutationWithToast = <TData, TRequestBody = void>(
+const useMutationWithToast = <TData, TRequestBody>(
   mutationFn: (requestBody: TRequestBody) => Promise<CommonResponse<TData>>,
   onSuccessCallback?: () => void,
 ): {
