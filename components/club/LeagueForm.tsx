@@ -37,7 +37,7 @@ import {
   Users,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Path, UseFormSetValue } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -129,7 +129,7 @@ function LeagueForm(props: LeagueFormProps) {
   const [timeValue, setTimeValue] = useState<string>("00:00");
   const [closedAt, setClosedAt] = useState<string>("");
 
-  const { mutate: createLeague } = usePostLeague(clubId);
+  const { mutate: createLeague, isSuccess } = usePostLeague(clubId);
 
   const { mutate: updateLeague } = usePatchLeague(
     clubId as string,
@@ -153,9 +153,9 @@ function LeagueForm(props: LeagueFormProps) {
     if (data.mode === "create") {
       createLeague(
         { ...data, league_status: "RECRUITING" },
-        {
-          onSuccess: () => router.push(`/club/${clubId}/league`),
-        },
+        // {
+        //   onSuccess: () => router.push(`/club/${clubId}/league`),
+        // },
       );
     } else {
       updateLeague(data, {
@@ -163,6 +163,12 @@ function LeagueForm(props: LeagueFormProps) {
       });
     }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.push(`/club/${clubId}/league`);
+    }
+  });
 
   const handleLeagueTimeChange = (
     time: string,

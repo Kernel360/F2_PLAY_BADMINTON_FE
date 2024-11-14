@@ -3,6 +3,7 @@ import type {
   GetLeagueDetailData,
   GetLeagueMonthData,
   PatchLeagueRequest,
+  PostLeagueData,
   PostLeagueRequest,
 } from "@/types/leagueTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -16,20 +17,25 @@ import {
   postLeague,
   postParticipateLeague,
 } from "../functions/leagueFn";
+import useMutationWithToast from "./useMutationWithToast";
 import useQueryWithToast from "./useQueryWithToast";
 
 export const usePostLeague = (clubId: string) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (leagueData: PostLeagueRequest) =>
-      postLeague(leagueData, clubId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leaguesData"] });
-      queryClient.invalidateQueries({ queryKey: ["leaguesDateData"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = (leagueData: PostLeagueRequest) => {
+    return postLeague(leagueData, clubId);
+  };
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["leaguesMonthData"] });
+    queryClient.invalidateQueries({ queryKey: ["leaguesDateData"] });
+  };
+
+  return useMutationWithToast<PostLeagueData, PostLeagueRequest>(
+    mutationFn,
+    onSuccessCallback,
+  );
 };
 
 export const useGetMonthLeagues = (clubId: string, date: string) => {
