@@ -52,7 +52,8 @@ const restClient = {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    return response as T;
+    // return response as T;
+    return data as T;
   },
   put: async <T>(url: string, body: object) => {
     const response = await fetch(`${BASE_URL}${url}`, {
@@ -65,6 +66,19 @@ const restClient = {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
+    return data as T;
+  },
+  delete: async <T>(url: string) => {
+    const response = await fetch(`${BASE_URL}${url}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    // return response as T;
     return data as T;
   },
 };
