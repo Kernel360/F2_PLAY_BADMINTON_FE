@@ -864,6 +864,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -963,6 +964,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1068,6 +1070,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1186,6 +1189,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1314,6 +1318,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1437,6 +1442,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1574,6 +1580,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1685,6 +1692,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1752,6 +1760,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1840,6 +1849,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1935,6 +1945,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2032,6 +2043,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2204,6 +2216,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2300,6 +2313,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2372,6 +2386,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2494,6 +2509,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2635,6 +2651,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2702,6 +2719,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2872,6 +2890,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2997,6 +3016,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3123,6 +3143,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3197,8 +3218,6 @@ export interface components {
        * @description 동호회 생성 날짜
        */
       created_at: string;
-      /** @description 본인의 동호회 소속 여부 */
-      is_club_member: boolean;
     };
     CommonResponseClubDetailsResponse: {
       /** @enum {string} */
@@ -3262,6 +3281,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3329,6 +3349,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3472,6 +3493,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3598,6 +3620,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3694,6 +3717,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3783,6 +3807,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3880,6 +3905,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4002,6 +4028,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4069,6 +4096,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4166,6 +4194,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4233,6 +4262,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4319,6 +4349,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4386,6 +4417,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4471,6 +4503,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4567,6 +4600,7 @@ export interface components {
         | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
