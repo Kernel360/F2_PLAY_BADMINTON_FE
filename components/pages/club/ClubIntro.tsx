@@ -14,6 +14,7 @@ function ClubIntro() {
   const { clubId } = useParams();
 
   const { data: clubData, isLoading } = useGetClubsById(clubId as string);
+  const { data: clubMemberData } = useGetClubMembersCheck(clubId as string);
   const { mutate: postClubMembers } = usePostClubMembers(clubId as string);
 
   if (isLoading) {
@@ -43,7 +44,7 @@ function ClubIntro() {
           alt="club_banner"
           className="rounded-md object-cover h-[400px] w-[400px]"
         />
-        {!clubData.is_club_member && (
+        {!clubMemberData?.is_club_member && (
           <button
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
             type="button"
