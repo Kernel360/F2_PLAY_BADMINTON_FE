@@ -36,10 +36,10 @@ function transformMatchData(data: GetMatchesData) {
       const round = Number.parseInt(roundNumber);
       const roundX = (round - 1) * matchSpacingX;
 
-      // For the first round, simply stack the nodes
       if (round === 1) {
+        // 현재 라운드 매치의 총 높이
         const totalHeight = matches.length * matchSpacingY;
-        const startY = (totalHeight / 2) * -1; // Center the nodes vertically
+        const startY = (totalHeight / 2) * -1;
 
         previousRoundYPositions = matches.map(
           (_, index) => startY + index * matchSpacingY,
@@ -117,7 +117,6 @@ function transformMatchData(data: GetMatchesData) {
             type: "match",
           });
 
-          // Store the y position for the next round calculation
           currentRoundYPositions.push(yPosition);
         }
 
