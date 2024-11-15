@@ -1,28 +1,16 @@
-import type { components } from "@/schemas/schema";
+import type { GetMatchesResponse } from "@/types/matchTypes";
+import restClient from "../restClient";
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
-// type MatchResponse = components["schemas"]["MatchResponse"];
-
-// export const getMatches = async (
-//   clubId: number,
-//   leagueId: number,
-// ): Promise<MatchResponse[]> => {
-//   const response = await fetch(
-//     `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}/matches`,
-//     {
-//       method: "GET",
-//       headers: { "Content-Type": "application/json" },
-//       credentials: "include",
-//     },
-//   );
-
-//   if (!response.ok) {
-//     throw new Error("대진표 조회에 실패했습니다.");
-//   }
-
-//   return response.json();
-// };
+export const getMatches = async (
+  clubId: string,
+  leagueId: number,
+): Promise<GetMatchesResponse> => {
+  return restClient.get<GetMatchesResponse>(
+    `/clubs/${clubId}/leagues/${leagueId}/matches`,
+  );
+};
 
 export const postMatches = async (
   clubId: string,
