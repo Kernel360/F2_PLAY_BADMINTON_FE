@@ -9,7 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
+import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
 import Link from "next/link";
 import SImage from "../ui/Image";
@@ -308,7 +308,7 @@ const renderLeagueTierBadge = (tier: LeagueTier) => {
         variant="outline"
         className="font-semibold px-2 py-0.5 text-xs rounded-full border-0 w-fit bg-yellow-200 text-yellow-800"
       >
-        {getTierWithEmoji(tier)}
+        {getTierWithEmojiAndText(tier)}
       </Badge>
     );
   }
@@ -319,7 +319,7 @@ const renderLeagueTierBadge = (tier: LeagueTier) => {
         variant="outline"
         className="font-semibold px-2 py-0.5 text-xs rounded-full border-0 w-fit bg-gray-200 text-gray-700"
       >
-        {getTierWithEmoji(tier)}
+        {getTierWithEmojiAndText(tier)}
       </Badge>
     );
   }
@@ -330,7 +330,7 @@ const renderLeagueTierBadge = (tier: LeagueTier) => {
         variant="outline"
         className="font-semibold px-2 py-0.5 text-xs rounded-full border-0 w-fit bg-orange-200 text-orange-800"
       >
-        {getTierWithEmoji(tier)}
+        {getTierWithEmojiAndText(tier)}
       </Badge>
     );
   }

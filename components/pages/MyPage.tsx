@@ -10,7 +10,7 @@ import {
   useGetMembersMyPage,
 } from "@/lib/api/hooks/memberHook";
 import type { GetMemberMachesRecord } from "@/types/memberTypes";
-import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
+import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
 import { History, Inbox, Medal, Trophy, User, Users } from "lucide-react";
 import Link from "next/link";
@@ -79,7 +79,7 @@ function MyPage() {
                   {myPage?.name}
                 </h2>
                 <p className="text-xs text-gray-500">
-                  ({getTierWithEmoji(myPage?.tier || "")} )
+                  ({getTierWithEmojiAndText(myPage?.tier || "")} )
                 </p>
               </div>
               <p className="text-sm text-gray-500">{myPage?.email}</p>

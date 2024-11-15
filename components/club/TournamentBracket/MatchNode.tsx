@@ -1,9 +1,10 @@
+import type { MatchParticipant } from "@/types/matchTypes";
 import { Handle, Position } from "@xyflow/react";
-import PlayerNode, { type Player } from "./MatchPlayerBlock";
+import MatchPlayerBlock from "./MatchPlayerBlock";
 
 export type CustomNodeData = {
-  player1: Player;
-  player2: Player;
+  player1: MatchParticipant;
+  player2: MatchParticipant;
 };
 
 interface MatchNodeProps {
@@ -14,10 +15,10 @@ interface MatchNodeProps {
 function MatchNode({ data }: MatchNodeProps) {
   return (
     <div>
-      <Handle type="source" position={Position.Left} id="left" />
-      <Handle type="target" position={Position.Right} id="right" />
-      <PlayerNode {...data.player1} />
-      <PlayerNode {...data.player2} />
+      <MatchPlayerBlock {...data.player1} />
+      <MatchPlayerBlock {...data.player2} />
+      <Handle type="source" position={Position.Right} id="Right" />
+      <Handle type="target" position={Position.Left} id="Left" />
     </div>
   );
 }
