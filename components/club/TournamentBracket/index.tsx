@@ -331,74 +331,12 @@ const mockData = {
   ],
 };
 
-// TODO: posiiton은 library 사용해서 정해보기
-// const initialNodes: Node<CustomNodeData>[] = [
-//   {
-//     id: "1",
-//     data: {
-//       player1: {
-//         image: "/images/dummy-image.jpg",
-//         name: "윤예진",
-//         tier: "BRONZE",
-//         participant_win_set_count: 0,
-//       },
-//       player2: {
-//         image: "/images/dummy-image.jpg",
-//         name: "이강민",
-//         tier: "BRONZE",
-//         participant_win_set_count: 4,
-//       },
-//     },
-//     position: { x: 5, y: 5 },
-//     type: "match",
-//   },
-//   {
-//     id: "2",
-//     data: {
-//       player1: {
-//         image: "/images/dummy-image.jpg",
-//         name: "윤예진2",
-//         tier: "SILVER",
-//         participant_win_set_count: 0,
-//       },
-//       player2: {
-//         image: "/images/dummy-image.jpg",
-//         name: "이강민2",
-//         tier: "SILVER",
-//         participant_win_set_count: 4,
-//       },
-//     },
-//     position: { x: 5, y: 155 },
-//     type: "match",
-//   },
-//   {
-//     id: "3",
-//     data: {
-//       player1: {
-//         image: "/images/dummy-image.jpg",
-//         name: "윤예진3",
-//         tier: "BRONZE",
-//         participant_win_set_count: 0,
-//       },
-//       player2: {
-//         image: "/images/dummy-image.jpg",
-//         name: "이강민3",
-//         tier: "BRONZE",
-//         participant_win_set_count: 4,
-//       },
-//     },
-//     position: { x: 485, y: 80 },
-//     type: "match",
-//   },
-// ];
-
 function transformMatchData(data: MatchBracketData) {
   const transformedData: Node<CustomNodeData>[] = [];
   const matchSpacingX = 480; // Horizontal spacing between rounds
   const matchSpacingY = 150; // Vertical spacing between matches
 
   if (data.singles_match_response_list) {
-    // Group matches by rounds
     const rounds = data.singles_match_response_list.reduce(
       (acc, match) => {
         const round = match.round_number ?? 1;
@@ -409,56 +347,110 @@ function transformMatchData(data: MatchBracketData) {
       {} as Record<number, typeof data.singles_match_response_list>,
     );
 
+    let previousRoundYPositions: number[] = [];
+
     for (const [roundNumber, matches] of Object.entries(rounds)) {
       const round = Number.parseInt(roundNumber);
       const roundX = (round - 1) * matchSpacingX;
-      const totalHeight = matches.length * matchSpacingY;
-      const startY = (totalHeight / 2) * -1; // Center the nodes vertically
 
-      for (let index = 0; index < matches.length; index++) {
-        const match = matches[index];
+      // For the first round, simply stack the nodes
+      if (round === 1) {
+        const totalHeight = matches.length * matchSpacingY;
+        const startY = (totalHeight / 2) * -1; // Center the nodes vertically
 
-        if (!match) {
-          continue;
+        previousRoundYPositions = matches.map(
+          (_, index) => startY + index * matchSpacingY,
+        );
+
+        for (let index = 0; index < matches.length; index++) {
+          const match = matches[index];
+
+          if (!match) continue;
+
+          const { match_id, participant1, participant2 } = match;
+
+          transformedData.push({
+            id: match_id?.toString() || "",
+            data: {
+              player1: {
+                image: participant1?.image || "/images/dummy-image.jpg",
+                name: participant1?.name,
+                tier: participant1?.tier,
+                participant_win_set_count:
+                  participant1?.participant_win_set_count,
+              },
+              player2: {
+                image: participant2?.image || "/images/dummy-image.jpg",
+                name: participant2?.name,
+                tier: participant2?.tier,
+                participant_win_set_count:
+                  participant2?.participant_win_set_count,
+              },
+            },
+            position: {
+              x: roundX,
+              y: previousRoundYPositions[index] || 0,
+            },
+            type: "match",
+          });
         }
-        const { match_id, participant1, participant2 } = match;
+      } else {
+        const currentRoundYPositions: number[] = [];
 
-        transformedData.push({
-          id: match_id?.toString() || "",
-          data: {
-            player1: {
-              image: participant1?.image || "/images/dummy-image.jpg",
-              name: participant1?.name,
-              tier: participant1?.tier,
-              participant_win_set_count:
-                participant1?.participant_win_set_count,
+        for (let index = 0; index < matches.length; index++) {
+          const match = matches[index];
+
+          if (!match) continue;
+
+          const { match_id, participant1, participant2 } = match;
+
+          const yPosition =
+            ((previousRoundYPositions[index * 2] ?? 0) +
+              (previousRoundYPositions[index * 2 + 1] ?? 0)) /
+            2;
+
+          transformedData.push({
+            id: match_id?.toString() || "",
+            data: {
+              player1: {
+                image: participant1?.image || "/images/dummy-image.jpg",
+                name: participant1?.name,
+                tier: participant1?.tier,
+                participant_win_set_count:
+                  participant1?.participant_win_set_count,
+              },
+              player2: {
+                image: participant2?.image || "/images/dummy-image.jpg",
+                name: participant2?.name,
+                tier: participant2?.tier,
+                participant_win_set_count:
+                  participant2?.participant_win_set_count,
+              },
             },
-            player2: {
-              image: participant2?.image || "/images/dummy-image.jpg",
-              name: participant2?.name,
-              tier: participant2?.tier,
-              participant_win_set_count:
-                participant2?.participant_win_set_count,
+            position: {
+              x: roundX,
+              y: yPosition,
             },
-          },
-          position: {
-            x: roundX,
-            y: startY + index * matchSpacingY,
-          },
-          type: "match",
-        });
+            type: "match",
+          });
+
+          // Store the y position for the next round calculation
+          currentRoundYPositions.push(yPosition);
+        }
+
+        previousRoundYPositions = currentRoundYPositions;
       }
     }
 
     return transformedData;
   }
+  return [];
 }
 
 function generateEdges(data: MatchBracketData) {
   const edges: Edge[] = [];
 
   if (data.singles_match_response_list) {
-    // Group matches by rounds
     const rounds = data.singles_match_response_list.reduce(
       (acc, match) => {
         const round = match.round_number ?? 1;
@@ -469,12 +461,10 @@ function generateEdges(data: MatchBracketData) {
       {} as Record<number, typeof data.singles_match_response_list>,
     );
 
-    // Loop through each round to create edges to the next round
     for (const roundNumber of Object.keys(rounds)) {
       const currentRound = Number.parseInt(roundNumber);
       const nextRound = currentRound + 1;
 
-      // Ensure there is a next round to connect to
       if (rounds[nextRound]) {
         const currentRoundMatches = Object.entries(rounds[currentRound] || []);
 
@@ -504,21 +494,6 @@ const initialNodes: Node<CustomNodeData>[] = transformMatchData(
 
 // TODO: initialEdges 정의하기
 const initialEdges: Edge[] = generateEdges(mockData as MatchBracketData);
-
-// const initialEdges: Edge[] = [
-//   {
-//     id: "e1-3",
-//     source: "1",
-//     target: "3",
-//     type: "smoothstep",
-//   },
-//   {
-//     id: "e2-3",
-//     source: "2",
-//     target: "3",
-//     type: "smoothstep",
-//   },
-// ];
 
 export default function TournamentBracket() {
   const nodeTypes = useMemo(() => ({ match: MatchNode }), []);
