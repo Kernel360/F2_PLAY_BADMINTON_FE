@@ -151,12 +151,9 @@ function LeagueForm(props: LeagueFormProps) {
       data.mode = "create";
     }
     if (data.mode === "create") {
-      createLeague(
-        { ...data, league_status: "RECRUITING" },
-        {
-          onSuccess: () => router.push(`/club/${clubId}/league`),
-        },
-      );
+      createLeague(data, {
+        onSuccess: () => router.push(`/club/${clubId}/league`),
+      });
     } else {
       updateLeague(data, {
         onSuccess: () => router.push(`/club/${clubId}/league`),
