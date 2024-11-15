@@ -499,7 +499,7 @@ export default function TournamentBracket() {
   const nodeTypes = useMemo(() => ({ match: MatchNode }), []);
 
   return (
-    <div className="w-full h-[80vh] bg-gray-900">
+    <div className="w-full h-[65vh] bg-gray-900 rounded-md">
       <ReactFlow
         nodes={initialNodes}
         edges={initialEdges}

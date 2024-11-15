@@ -1,8 +1,7 @@
-// import Match from "@/components/pages/club/Match";
+import Match from "@/components/pages/club/Match";
 
 function MatchPage() {
-  return <div>match</div>;
-  //   return <Match />;
+  return <Match />;
 }
 
 export default MatchPage;
