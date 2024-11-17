@@ -10,7 +10,6 @@ function MatchPlayerBlock({
   tier,
   participant_win_set_count,
 }: MatchPlayerBlockProps) {
-  console.log(name);
   return (
     <div className="flex items-center justify-between gap-3 p-2 rounded-sm bg-gray-700 w-60 h-11">
       {name ? (

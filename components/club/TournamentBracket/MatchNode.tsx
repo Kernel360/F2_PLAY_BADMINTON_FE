@@ -3,8 +3,8 @@ import { Handle, Position } from "@xyflow/react";
 import MatchPlayerBlock from "./MatchPlayerBlock";
 
 export type CustomNodeData = {
-  player1: MatchParticipant;
-  player2: MatchParticipant;
+  team1: MatchParticipant[];
+  team2: MatchParticipant[];
 };
 
 interface MatchNodeProps {
@@ -15,8 +15,14 @@ interface MatchNodeProps {
 function MatchNode({ data }: MatchNodeProps) {
   return (
     <div>
-      <MatchPlayerBlock {...data.player1} />
-      <MatchPlayerBlock {...data.player2} />
+      {data.team1.map((player) => {
+        return <MatchPlayerBlock key={player.member_token} {...player} />;
+      })}
+
+      {data.team2.map((player) => {
+        return <MatchPlayerBlock key={player.member_token} {...player} />;
+      })}
+
       <Handle type="source" position={Position.Right} id="Right" />
       <Handle type="target" position={Position.Left} id="Left" />
     </div>
