@@ -13,6 +13,7 @@ import React, { useMemo } from "react";
 import "@xyflow/react/dist/style.css";
 import type { components } from "@/schemas/schema";
 import type { GetMatchesData, MatchParticipant } from "@/types/matchTypes";
+import { useParams, useRouter } from "next/navigation";
 
 // SinglesMatchResponse는 participant1, participant2만 있음
 type SinglesMatch = components["schemas"]["SinglesMatchResponse"] & {
@@ -284,6 +285,10 @@ export default function TournamentBracket(props: TournamentBracketProps) {
 
   const nodeTypes = useMemo(() => ({ match: MatchNode }), []);
 
+  const router = useRouter();
+
+  const { clubId, leagueId } = useParams();
+
   return (
     <div className="w-full h-[65vh] bg-gray-900 rounded-md">
       <ReactFlow
@@ -294,6 +299,13 @@ export default function TournamentBracket(props: TournamentBracketProps) {
         nodesDraggable={false}
         nodesConnectable={false}
         elementsSelectable={false}
+        onNodeClick={(event, node) => {
+          // 클릭한 노드의 id 값을 가져옵니다
+          const { id } = node;
+
+          // 해당 id를 이용해 URL로 이동합니다
+          router.push(`/club/${clubId}/league/${leagueId}/match/${id}`);
+        }}
       >
         <Controls />
         <MiniMap />
