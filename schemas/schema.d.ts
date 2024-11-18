@@ -205,13 +205,39 @@ export interface paths {
     get: operations["getMatchSet"];
     put?: never;
     /**
-     * 세트별 점수 저장
-     * @description
-     *     0~30 사이의 숫자만 입력
-     *
+     * 세트 종료 버튼
+     * @description 0~30 사이의 숫자만 입력할 수 있습니다.
+     *     현재 세트 종료 버튼을 누를 때 실행되는 API
      *
      */
     post: operations["updateSetsScore"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * 스코어 보드 점수 저장
+     * @description 스코어 보드 점수판을 눌렀을 때 실행되는 API
+     */
+    patch: operations["setScoreBoard"];
+    trace?: never;
+  };
+  "/v1/clubs/{clubToken}/leagues/{leagueId}/matches/{matchId}/sets/init": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 매치 시작  - 첫 세트가 IN_PROGRESS 가 됨
+     * @description
+     *     첫 세트가 IN_PROGRESS 로 변경됩니다.
+     *
+     *
+     */
+    post: operations["startFirstSet"];
     delete?: never;
     options?: never;
     head?: never;
@@ -410,8 +436,9 @@ export interface paths {
      *        - 다음 중 하나여야 합니다:
      *          * ROLE_MANAGER: 동호회 관리자
      *          * ROLE_USER: 일반 회원
+     *          * ROLE_OWNER: 동호회 회장
      *     주의사항:
-     *     - ROLE_MANAGER(동호회 관리자)를 강제 탈퇴시키려면 ROLE_OWNER 권한이 필요합니다.
+     *     - 동호회 회장으로 역할을 변경시키면 이전의 동호회 회장의 역할은 ROLE_USER 가 됩니다.
      */
     patch: operations["updateClubMemberRole"];
     trace?: never;
@@ -586,6 +613,26 @@ export interface paths {
     };
     /** 메인페이지의 각각의 경기를 눌렀을 때, 경기가 진행 중일 경우 점수를 조회한다. */
     get: operations["getLeagueScores"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/leagues/{leagueId}/matches/{matchId}/sets/{setNumber}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 메인페이지에서 진행 중인 경기의 세트 점수를 조회한다.
+     * @description 실시간성 보장을 위해 폴링 방식으로 요청하는 API 입니다.
+     */
+    get: operations["getMatchSetScores"];
     put?: never;
     post?: never;
     delete?: never;
@@ -868,6 +915,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -970,6 +1018,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1078,6 +1127,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1199,6 +1249,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1330,6 +1381,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1456,6 +1508,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1602,6 +1655,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1716,6 +1770,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1786,6 +1841,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1877,6 +1933,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1975,6 +2032,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2075,6 +2133,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2151,6 +2210,99 @@ export interface components {
        * @description 수정 일자
        */
       modified_at: string;
+    };
+    CommonResponseSetScoreResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["SetScoreResponse"];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
+        | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
+        | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
+    };
+    SetScoreResponse: {
+      /**
+       * Format: int64
+       * @description 매치 아이디
+       */
+      match_id: number;
+      /**
+       * Format: int32
+       * @description 세트 번호 (1 | 2 | 3)
+       */
+      set_number: number;
+      /**
+       * Format: int32
+       * @description 스코어 1
+       */
+      score1: number;
+      /**
+       * Format: int32
+       * @description 스코어 2
+       */
+      score2: number;
     };
     ClubMemberRoleUpdateRequest: {
       /** @enum {string} */
@@ -2250,6 +2402,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2349,6 +2502,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2424,6 +2578,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2549,6 +2704,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2693,6 +2849,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2763,6 +2920,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2936,6 +3094,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2978,26 +3137,51 @@ export interface components {
     };
     /** @description 실제 내용 */
     OngoingAndUpcomingLeagueResponse: {
-      /** Format: int64 */
-      league_id?: number;
-      /** Format: date-time */
-      league_at?: string;
-      league_name?: string;
-      description?: string;
-      /** @enum {string} */
-      match_type?: "SINGLES" | "DOUBLES";
-      /** Format: int32 */
-      player_limit_count?: number;
-      /** Format: int32 */
-      recruited_member_count?: number;
-      /** @enum {string} */
-      league_status?:
+      /**
+       * Format: int64
+       * @description 리그 아이디
+       */
+      league_id: number;
+      /**
+       * Format: date-time
+       * @description 경기 시간
+       */
+      league_at: string;
+      /** @description 경기 이름 */
+      league_name: string;
+      /** @description 경기 설명 */
+      description: string;
+      /**
+       * @description 매치 타입
+       * @enum {string}
+       */
+      match_type: "SINGLES" | "DOUBLES";
+      /**
+       * Format: int32
+       * @description 제한 참가 인원
+       */
+      player_limit_count: number;
+      /**
+       * Format: int32
+       * @description 신청된 인원 수
+       */
+      recruited_member_count: number;
+      /**
+       * @description 경기 상태
+       * @enum {string}
+       */
+      league_status:
         | "ALL"
         | "RECRUITING"
         | "RECRUITING_COMPLETED"
         | "PLAYING"
         | "CANCELED"
         | "FINISHED";
+      /**
+       * @description 경기 티어
+       * @enum {string}
+       */
+      required_tier: "GOLD" | "SILVER" | "BRONZE";
     };
     CommonResponseListLeagueSetsScoreInProgressResponse: {
       /** @enum {string} */
@@ -3064,6 +3248,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3072,21 +3257,21 @@ export interface components {
     /** @description 복식 경기 참여자 */
     DoublesMatchPlayerResponse: {
       /** @description 팀 1 경기 참가자 1 이름 */
-      participant1_name?: string;
+      participant1_name: string;
       /** @description 팀 1 경기 참가자 1 이미지 */
-      participant1_image?: string;
+      participant1_image: string;
       /** @description 팀 1 경기 참가자 2 이름 */
-      participant2_name?: string;
+      participant2_name: string;
       /** @description 팀 1 경기 참가자 2 이미지 */
-      participant2_image?: string;
+      participant2_image: string;
       /** @description 팀 2 경기 참가자 3 이름 */
-      participant3_name?: string;
+      participant3_name: string;
       /** @description 팀 2 경기 참가자 3 이미지 */
-      participant3_image?: string;
+      participant3_image: string;
       /** @description 팀 2 경기 참가자 4 이름 */
-      participant4_name?: string;
+      participant4_name: string;
       /** @description 팀 2 경기 참가자 4 이미지 */
-      participant4_image?: string;
+      participant4_image: string;
     };
     LeagueSetsScoreInProgressResponse: {
       /**
@@ -3120,13 +3305,13 @@ export interface components {
     /** @description 단식 경기 참여자 */
     SinglesMatchPlayerResponse: {
       /** @description 경기 참가자 1 이름 */
-      participant1_name?: string;
+      participant1_name: string;
       /** @description 경기 참가자 1 이미지 */
-      participant1_image?: string;
+      participant1_image: string;
       /** @description 경기 참가자 2 이름 */
-      participant2_name?: string;
+      participant2_name: string;
       /** @description 경기 참가자 2 이미지 */
-      participant2_image?: string;
+      participant2_image: string;
     };
     CommonResponseCustomPageResponseClubCardResponse: {
       /** @enum {string} */
@@ -3193,6 +3378,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3333,6 +3519,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3403,6 +3590,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3549,6 +3737,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3678,6 +3867,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3777,32 +3967,11 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
       error_message_for_client?: string;
-    };
-    SetScoreResponse: {
-      /**
-       * Format: int64
-       * @description 매치 아이디
-       */
-      match_id: number;
-      /**
-       * Format: int32
-       * @description 세트 번호 (1 | 2 | 3)
-       */
-      set_number: number;
-      /**
-       * Format: int32
-       * @description 스코어 1
-       */
-      score1: number;
-      /**
-       * Format: int32
-       * @description 스코어 2
-       */
-      score2: number;
     };
     CommonResponseListLeagueReadResponse: {
       /** @enum {string} */
@@ -3869,6 +4038,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3969,6 +4139,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4094,6 +4265,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4164,6 +4336,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4264,6 +4437,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4334,6 +4508,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4423,6 +4598,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4493,6 +4669,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4581,6 +4758,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4680,6 +4858,7 @@ export interface components {
         | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
         | "SET_FINISHED"
         | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4998,6 +5177,59 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["CommonResponseSetScoreUpdateResponse"];
+        };
+      };
+    };
+  };
+  setScoreBoard: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubToken: string;
+        leagueId: number;
+        matchId: number;
+        setNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SetScoreUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseSetScoreResponse"];
+        };
+      };
+    };
+  };
+  startFirstSet: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubToken: string;
+        leagueId: number;
+        matchId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseString"];
         };
       };
     };
@@ -5516,6 +5748,30 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["CommonResponseListLeagueSetsScoreInProgressResponse"];
+        };
+      };
+    };
+  };
+  getMatchSetScores: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        leagueId: number;
+        matchId: number;
+        setNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseSetScoreResponse"];
         };
       };
     };
