@@ -1,12 +1,13 @@
+import { getMatches, postMatches } from "@/lib/api/functions/matchFn";
+import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
+import type { GetMatchesData } from "@/types/matchTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { postMatches } from "../functions/matchFn";
 
-// export const useGetMatches = (clubId: number, leagueId: number) => {
-//   return useQuery({
-//     queryKey: ["matchesData"],
-//     queryFn: () => getMatches(clubId, leagueId),
-//   });
-// };
+export const useGetMatches = (clubId: string, leagueId: number) => {
+  return useQueryWithToast<GetMatchesData>(["matchesData"], () =>
+    getMatches(clubId, leagueId),
+  );
+};
 
 export const usePostMatches = (clubId: string, leagueId: string) => {
   const queryClient = useQueryClient();

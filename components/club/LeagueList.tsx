@@ -5,7 +5,7 @@ import { useGetDateLeagues } from "@/lib/api/hooks/leagueHook";
 import type { components } from "@/schemas/schema";
 import type { GetLeagueDateData } from "@/types/leagueTypes";
 import { getLeagueType } from "@/utils/getLeagueType";
-import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
+import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
 import { CalendarPlus } from "lucide-react";
 import Link from "next/link";
@@ -46,7 +46,7 @@ function ScheduleList(props: ScheduleListProps) {
                 </Text>
               </div>
               <Text className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                {getTierWithEmoji(schedule.required_tier as string)}
+                {getTierWithEmojiAndText(schedule.required_tier as string)}
               </Text>
             </div>
             <div className="flex justify-between items-center text-gray-600">
