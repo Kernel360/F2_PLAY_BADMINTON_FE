@@ -10,13 +10,76 @@ import {
   ReactFlow,
 } from "@xyflow/react";
 import React, { useMemo } from "react";
-
 import "@xyflow/react/dist/style.css";
 import type { components } from "@/schemas/schema";
 import type { GetMatchesData, MatchParticipant } from "@/types/matchTypes";
 
-type Match = components["schemas"]["SinglesMatchResponse"] &
-  components["schemas"]["DoublesMatchResponse"];
+// SinglesMatchResponse는 participant1, participant2만 있음
+type SinglesMatch = components["schemas"]["SinglesMatchResponse"] & {
+  match_type: "SINGLE";
+  participant1: MatchParticipant;
+  participant2: MatchParticipant;
+};
+
+// DoublesMatchResponse는 team1, team2가 있음
+type DoublesMatch = components["schemas"]["DoublesMatchResponse"] & {
+  match_type: "DOUBLE";
+  team1: MatchTeamResponse;
+  team2: MatchTeamResponse;
+};
+
+type Match = SinglesMatch | DoublesMatch;
+
+interface MatchTeamResponse {
+  participant1: MatchParticipant;
+  participant2: MatchParticipant;
+  team1_win_set_count: number;
+}
+
+function transformSinglesMatch(
+  match: SinglesMatch,
+  roundX: number,
+  yPosition: number,
+) {
+  const { match_id, participant1, participant2 } = match;
+
+  return {
+    id: match_id?.toString() || "",
+    data: {
+      team1: [participant1],
+      team2: [participant2],
+    },
+    position: {
+      x: roundX,
+      y: yPosition,
+    },
+    type: "match",
+  };
+}
+
+function transformDoublesMatch(
+  match: DoublesMatch,
+  roundX: number,
+  yPosition: number,
+) {
+  const { match_id, team1, team2 } = match;
+
+  const team1Arr: MatchParticipant[] = [team1.participant1, team1.participant2];
+  const team2Arr: MatchParticipant[] = [team2.participant1, team2.participant2];
+
+  return {
+    id: match_id?.toString() || "",
+    data: {
+      team1: team1Arr,
+      team2: team2Arr,
+    },
+    position: {
+      x: roundX,
+      y: yPosition,
+    },
+    type: "match",
+  };
+}
 
 function transformMatchData(data: GetMatchesData) {
   const transformedData: Node<CustomNodeData>[] = [];
@@ -34,7 +97,23 @@ function transformMatchData(data: GetMatchesData) {
     (acc, match) => {
       const round = match.round_number ?? 1;
       if (!acc[round]) acc[round] = [];
-      acc[round].push(match);
+
+      // Add match_type based on the data structure
+      let matchWithType = { ...(match as Match) };
+
+      if (data.singles_match_response_list) {
+        matchWithType = {
+          ...match,
+          match_type: "SINGLE",
+        } as SinglesMatch;
+      } else {
+        matchWithType = {
+          ...match,
+          match_type: "DOUBLE",
+        } as DoublesMatch;
+      }
+
+      acc[round].push(matchWithType);
       return acc;
     },
     {} as Record<number, Match[]>,
@@ -47,7 +126,7 @@ function transformMatchData(data: GetMatchesData) {
     const roundX = (round - 1) * matchSpacingX;
 
     if (round === 1) {
-      // 현재 라운드 매치의 총 높이
+      // Calculate total height for the current round
       const totalHeight = matches.length * matchSpacingY;
       const startY = (totalHeight / 2) * -1;
 
@@ -60,51 +139,14 @@ function transformMatchData(data: GetMatchesData) {
 
         if (!match) continue;
 
-        const { match_id, team1, team2, participant1, participant2 } = match;
+        const yPosition = previousRoundYPositions[index] || 0;
 
-        const team1Arr: MatchParticipant[] = [];
-        const team2Arr: MatchParticipant[] = [];
-
-        if (team1) {
-          if (team1.participant1) {
-            team2Arr.push(team1.participant1);
-          }
-
-          if (team1.participant2) {
-            team1.participant2 && team2Arr.push(team1.participant2);
-          }
+        // Handle both Singles and Doubles match separately
+        if (match.match_type === "DOUBLE") {
+          transformedData.push(transformDoublesMatch(match, roundX, yPosition));
+        } else {
+          transformedData.push(transformSinglesMatch(match, roundX, yPosition));
         }
-
-        if (team2) {
-          if (team2.participant1) {
-            team2Arr.push(team2.participant1);
-          }
-
-          if (team2.participant2) {
-            team2.participant2 && team2Arr.push(team2.participant2);
-          }
-        }
-
-        if (participant1) {
-          participant1 && team1Arr.push(participant1);
-        }
-
-        if (participant2) {
-          participant2 && team2Arr.push(participant2);
-        }
-
-        transformedData.push({
-          id: match_id?.toString() || "",
-          data: {
-            team1: team1Arr,
-            team2: team2Arr,
-          },
-          position: {
-            x: roundX,
-            y: previousRoundYPositions[index] || 0,
-          },
-          type: "match",
-        });
       }
     } else {
       const currentRoundYPositions: number[] = [];
@@ -114,41 +156,17 @@ function transformMatchData(data: GetMatchesData) {
 
         if (!match) continue;
 
-        const { match_id, participant1, participant2 } = match;
-
         const yPosition =
           ((previousRoundYPositions[index * 2] ?? 0) +
             (previousRoundYPositions[index * 2 + 1] ?? 0)) /
           2;
 
-        transformedData.push({
-          id: match_id?.toString() || "",
-          data: {
-            team1: [
-              {
-                image: participant1?.image || "/images/dummy-image.jpg",
-                name: participant1?.name,
-                tier: participant1?.tier,
-                participant_win_set_count:
-                  participant1?.participant_win_set_count,
-              },
-            ],
-            team2: [
-              {
-                image: participant2?.image || "/images/dummy-image.jpg",
-                name: participant2?.name,
-                tier: participant2?.tier,
-                participant_win_set_count:
-                  participant2?.participant_win_set_count,
-              },
-            ],
-          },
-          position: {
-            x: roundX,
-            y: yPosition,
-          },
-          type: "match",
-        });
+        // Handle both Singles and Doubles match separately
+        if (match.match_type === "DOUBLE") {
+          transformedData.push(transformDoublesMatch(match, roundX, yPosition));
+        } else {
+          transformedData.push(transformSinglesMatch(match, roundX, yPosition));
+        }
 
         currentRoundYPositions.push(yPosition);
       }
@@ -163,37 +181,87 @@ function transformMatchData(data: GetMatchesData) {
 function generateEdges(data: GetMatchesData) {
   const edges: Edge[] = [];
 
-  if (data?.singles_match_response_list) {
-    const rounds = data?.singles_match_response_list.reduce(
-      (acc, match) => {
-        const round = match.round_number ?? 1;
-        if (!acc[round]) acc[round] = [];
-        acc[round].push(match);
-        return acc;
-      },
-      {} as Record<number, typeof data.singles_match_response_list>,
-    );
+  // singles_match_response_list 처리
+  const singlesRounds = data?.singles_match_response_list?.reduce(
+    (acc, match) => {
+      const round = match.round_number ?? 1;
+      if (!acc[round]) acc[round] = [];
+      acc[round].push(match);
+      return acc;
+    },
+    {} as Record<number, typeof data.singles_match_response_list>, // 여기를 명시적으로 지정
+  );
 
-    for (const roundNumber of Object.keys(rounds)) {
-      const currentRound = Number.parseInt(roundNumber);
+  // doubles_match_response_list 처리
+  const doublesRounds = data?.doubles_match_response_list?.reduce(
+    (acc, match) => {
+      const round = match.round_number ?? 1;
+      if (!acc[round]) acc[round] = [];
+      acc[round].push(match);
+      return acc;
+    },
+    {} as Record<number, typeof data.doubles_match_response_list>, // 여기를 명시적으로 지정
+  );
+
+  if (!singlesRounds && !doublesRounds) return edges;
+
+  // singles_rounds에 대한 엣지 처리
+  if (singlesRounds) {
+    for (const roundNumber of Object.keys(singlesRounds)) {
+      const currentRound = Number(roundNumber);
       const nextRound = currentRound + 1;
 
-      if (rounds[nextRound]) {
-        const currentRoundMatches = Object.entries(rounds[currentRound] || []);
+      // currentRoundMatches가 undefined일 경우 빈 배열로 처리
+      const currentRoundMatches = singlesRounds[currentRound] || [];
 
-        for (const [index, match] of currentRoundMatches) {
-          const nextMatchIndex = Math.floor(Number(index) / 2);
-          const targetMatch = rounds[nextRound]?.[nextMatchIndex];
+      if (singlesRounds[nextRound]) {
+        currentRoundMatches.forEach((match, index) => {
+          const nextMatchIndex = Math.floor(index / 2);
+          const targetMatch = singlesRounds[nextRound]?.[nextMatchIndex];
 
           if (targetMatch) {
             edges.push({
               id: `e${match.match_id}-${targetMatch.match_id}`,
-              source: match.match_id?.toString() || "",
-              target: targetMatch.match_id?.toString() || "",
+              source: match.match_id.toString(),
+              target: targetMatch.match_id.toString(),
               type: "smoothstep",
             });
           }
-        }
+        });
+      }
+    }
+  }
+
+  // doubles_rounds에 대한 엣지 처리
+  if (doublesRounds) {
+    for (const roundNumber of Object.keys(doublesRounds)) {
+      const currentRound = Number(roundNumber);
+      const nextRound = currentRound + 1;
+
+      const currentRoundMatches = doublesRounds[currentRound] || [];
+
+      if (doublesRounds[nextRound]) {
+        currentRoundMatches.forEach((match, index) => {
+          const nextMatchIndex = Math.floor(index / 2);
+          const targetMatch = doublesRounds[nextRound]?.[nextMatchIndex];
+
+          if (targetMatch) {
+            // DoublesMatch일 경우
+            edges.push({
+              id: `e${match.match_id}-team1-${targetMatch.match_id}-team1`,
+              source: match.match_id.toString(),
+              target: targetMatch.match_id.toString(),
+              type: "smoothstep",
+            });
+
+            edges.push({
+              id: `e${match.match_id}-team2-${targetMatch.match_id}-team2`,
+              source: match.match_id.toString(),
+              target: targetMatch.match_id.toString(),
+              type: "smoothstep",
+            });
+          }
+        });
       }
     }
   }
@@ -212,9 +280,6 @@ export default function TournamentBracket(props: TournamentBracketProps) {
     nodeData as GetMatchesData,
   );
 
-  console.log(initialNodes);
-
-  // TODO: initialEdges 정의하기
   const initialEdges: Edge[] = generateEdges(nodeData as GetMatchesData);
 
   const nodeTypes = useMemo(() => ({ match: MatchNode }), []);
