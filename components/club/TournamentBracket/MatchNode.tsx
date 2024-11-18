@@ -18,7 +18,7 @@ function MatchNode({ data }: MatchNodeProps) {
   const team2Score = data.team2[0]?.participant_win_set_count || 0;
 
   return (
-    <div>
+    <div className="cursor-pointer">
       <div className="flex bg-gray-700">
         <div>
           {data.team1.map((player) => {
