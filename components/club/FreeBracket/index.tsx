@@ -15,12 +15,12 @@ function FreeBracket(props: FreeBracketProps) {
         nodeData.singles_match_response_list?.map((match) => (
           <div
             key={match.match_id}
-            className="p-4 rounded-lg w-full flex flex-col justify-center items-center border border-solid border-gray-300 "
+            className="p-4 rounded-lg w-full flex flex-col justify-center items-center border border-solid border-gray-300 cursor-pointer"
           >
             <Badge className="bg-yellow-500 hover:bg-yellow-500 text-xs font-semibold text-center mb-2 rounded-sm">
-              {match.round_number}
+              round {match.round_number}
             </Badge>
-            <div className="flex items-center justify-between gap-6">
+            <div className="flex items-center justify-between gap-4">
               <div className="flex items-center space-x-3">
                 <SImage
                   src={match.participant1?.image || "/images/dummy-image.jpg"}
@@ -29,7 +29,7 @@ function FreeBracket(props: FreeBracketProps) {
                   height={45}
                   alt="profile"
                 />
-                <span className="text-gray-800 text-sm font-semibold">
+                <span className="text-gray-800 text-sm font-semibold truncate">
                   {match.participant1?.name}
                 </span>
               </div>
@@ -38,7 +38,7 @@ function FreeBracket(props: FreeBracketProps) {
                 {match.participant2?.participant_win_set_count}
               </span>
               <div className="flex items-center space-x-3">
-                <span className="text-gray-800 text-sm font-semibold">
+                <span className="text-gray-800 text-sm font-semibold ">
                   {match.participant2?.name}
                 </span>
                 <SImage
