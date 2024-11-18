@@ -14,8 +14,8 @@ import { useMemo, useState } from "react";
 function Match() {
   const { clubId, leagueId } = useParams();
 
-  /* TODO: useParams를 이용하여 URL id 가져오기, id 타입 넣어주기 기본은 string*/
-  const { data, isLoading } = useGetMatches(clubId as string, Number(leagueId));
+  // data의 match_generation_type에 따라 다른 컴포넌트 렌더링해줘야 함
+  const { data } = useGetMatches(clubId as string, Number(leagueId));
 
   return <TournamentBracket nodeData={data as GetMatchesData} />;
 }
