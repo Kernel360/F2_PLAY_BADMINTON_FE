@@ -437,6 +437,7 @@ export interface paths {
      *        - 필수 입력 항목입니다.
      *        - 최소 2자 이상이어야 합니다.
      *        - 최대 100자 이하여야 합니다.
+     *     2. 자기자신은 탈퇴 시킬 수 없습니다.
      *
      *
      */
@@ -850,6 +851,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -950,6 +953,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -1056,6 +1061,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -1175,6 +1182,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -1304,6 +1313,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -1428,6 +1439,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -1454,42 +1467,47 @@ export interface components {
        * Format: int64
        * @description 매치 아이디
        */
-      match_id?: number;
+      match_id: number;
       /** Format: int32 */
       round_number?: number;
       /**
        * @description 매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)
        * @enum {string}
        */
-      match_status?: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
-      team1?: components["schemas"]["MatchTeamResponse"];
-      team2?: components["schemas"]["MatchTeamResponse"];
-      winners_token?: string[];
+      match_status: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
+      team1: components["schemas"]["MatchTeamResponse"];
+      team2: components["schemas"]["MatchTeamResponse"];
+      /** @description 승자의 멤버토큰 */
+      winners_token: string[];
     };
     /** @description 팀2 */
     MatchTeamResponse: {
-      participant1?: components["schemas"]["Participant"];
-      participant2?: components["schemas"]["Participant"];
-      /** Format: int32 */
-      team1_win_set_count?: number;
+      participant1: components["schemas"]["Participant"];
+      participant2: components["schemas"]["Participant"];
+      /**
+       * Format: int32
+       * @description 이긴 세트 수
+       */
+      team1_win_set_count: number;
     };
+    /** @description 참가자2 */
     Participant: {
       /** @description 참가자 토큰 */
-      member_token?: string;
+      member_token: string;
       /** @description 참가자 이름 */
-      name?: string;
+      name: string;
       /** @description 참가자 이미지 */
-      image?: string;
+      image: string;
       /**
        * @description 참가자 티어
        * @enum {string}
        */
-      tier?: "GOLD" | "SILVER" | "BRONZE";
+      tier: "GOLD" | "SILVER" | "BRONZE";
       /**
        * Format: int32
        * @description 이긴 세트수
        */
-      participant_win_set_count?: number;
+      participant_win_set_count: number;
     };
     /** @description 단식 매치 리스트 */
     SinglesMatchResponse: {
@@ -1497,20 +1515,21 @@ export interface components {
        * Format: int64
        * @description 매치 아이디
        */
-      match_id?: number;
+      match_id: number;
       /**
        * Format: int32
        * @description 매치의 라운드 번호
        */
-      round_number?: number;
+      round_number: number;
       /**
        * @description 매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)
        * @enum {string}
        */
-      match_status?: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
-      participant1?: components["schemas"]["Participant"];
-      participant2?: components["schemas"]["Participant"];
-      winner_token?: string;
+      match_status: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
+      participant1: components["schemas"]["Participant"];
+      participant2: components["schemas"]["Participant"];
+      /** @description 승자의 맴버 토큰 */
+      winner_token: string;
     };
     SetScoreUpdateRequest: {
       /** Format: int32 */
@@ -1566,6 +1585,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -1678,6 +1699,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -1746,6 +1769,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -1835,6 +1860,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -1931,6 +1958,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -2029,6 +2058,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -2202,6 +2233,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -2299,6 +2332,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -2372,6 +2407,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -2495,6 +2532,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -2637,6 +2676,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -2705,6 +2746,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -2876,6 +2919,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -3002,6 +3047,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -3129,6 +3176,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -3267,6 +3316,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -3335,6 +3386,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -3479,6 +3532,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -3606,6 +3661,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -3703,6 +3760,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -3793,6 +3852,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -3891,6 +3952,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -4014,6 +4077,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -4082,6 +4147,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -4180,6 +4247,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -4248,6 +4317,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -4335,6 +4406,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -4403,6 +4476,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -4489,6 +4564,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
@@ -4586,6 +4663,8 @@ export interface components {
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
         | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
         | "DELETED"
         | "INVALID_PLAYER_COUNT"
         | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
