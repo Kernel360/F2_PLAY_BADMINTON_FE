@@ -129,7 +129,12 @@ function LeagueForm(props: LeagueFormProps) {
   const [timeValue, setTimeValue] = useState<string>("00:00");
   const [closedAt, setClosedAt] = useState<string>("");
 
-  const { mutate: createLeague, isSuccess } = usePostLeague(clubId);
+  const postLeagueOnSuccess = () => router.push(`/club/${clubId}/league`);
+
+  const { mutate: createLeague, isSuccess } = usePostLeague(
+    clubId,
+    postLeagueOnSuccess,
+  );
 
   const { mutate: updateLeague } = usePatchLeague(
     clubId as string,
@@ -151,9 +156,7 @@ function LeagueForm(props: LeagueFormProps) {
       data.mode = "create";
     }
     if (data.mode === "create") {
-      createLeague(data, {
-        onSuccess: () => router.push(`/club/${clubId}/league`),
-      });
+      createLeague(data);
     } else {
       updateLeague(data, {
         onSuccess: () => router.push(`/club/${clubId}/league`),

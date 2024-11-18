@@ -21,7 +21,7 @@ import {
 import useMutationWithToast from "./useMutationWithToast";
 import useQueryWithToast from "./useQueryWithToast";
 
-export const usePostLeague = (clubId: string) => {
+export const usePostLeague = (clubId: string, onSuccess: () => void) => {
   const queryClient = useQueryClient();
 
   const mutationFn = (leagueData: PostLeagueRequest) => {
@@ -106,8 +106,8 @@ export const useDeleteLeague = (clubId: string, leagueId: string) => {
     queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
   };
 
-  return useMutationWithToast<DeleteLeagueData, void>({
+  return useMutationWithToast<DeleteLeagueData, void>(
     mutationFn,
     onSuccessCallback,
-  });
+  );
 };
