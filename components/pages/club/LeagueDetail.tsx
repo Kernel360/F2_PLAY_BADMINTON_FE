@@ -10,7 +10,7 @@ import {
 } from "@/lib/api/hooks/leagueHook";
 import { usePostMatches } from "@/lib/api/hooks/matchHook";
 // import { useGetMyInfo } from "@/lib/api/hooks/memberHook";
-import { getTierWithEmoji } from "@/utils/getTierWithEmoji";
+import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
 import {
   Award,
@@ -229,7 +229,7 @@ function LeagueDetail() {
           <div>
             <p className="text-xs text-gray-500">지원 티어</p>
             <p className="text-sm font-semibold text-gray-800">
-              {getTierWithEmoji(league?.required_tier || "")}
+              {getTierWithEmojiAndText(league?.required_tier || "")}
             </p>
           </div>
         </div>
