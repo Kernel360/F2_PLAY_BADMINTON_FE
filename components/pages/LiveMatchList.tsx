@@ -182,7 +182,7 @@ function LiveMatchList() {
                                     {`${match.round_number}라운드 -  ${match.set_number}세트`}
                                   </Badge>
                                   <div className="flex flex-col gap-4 w-full">
-                                    {/* Singles Match */}
+                                    {/* 단식 */}
                                     {match.singles_match_player_response && (
                                       <div className="flex items-center justify-between gap-4">
                                         <div className="flex items-center space-x-3">
@@ -233,135 +233,126 @@ function LiveMatchList() {
                                         </div>
                                       </div>
                                     )}
-                                    {/* Doubles Match */}
-                                    {match.doubles_match_player_response && (
-                                      <div className="flex flex-col gap-8">
-                                        {/* 팀 A */}
-                                        <div className="flex flex-col items-center gap-6">
-                                          <div className="w-full flex flex-wrap justify-center gap-4">
-                                            {/* 간격 조정 */}
-                                            <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
-                                              <SImage
-                                                src={
-                                                  // match
-                                                  //   .doubles_match_player_response[
-                                                  //   `participant${participantIndex}_image`
-                                                  // ] ||
-                                                  // "/images/dummy-image.jpg"
-                                                  match
-                                                    .doubles_match_player_response
-                                                    ?.participant1_image ||
-                                                  "/images/dummy-image.jpg"
-                                                }
-                                                radius="circular"
-                                                width={50}
-                                                height={50}
-                                                alt={
-                                                  match
-                                                    .doubles_match_player_response
-                                                    .participant1_name
-                                                }
-                                              />
-                                              <span className="text-gray-800 text-sm font-semibold truncate">
-                                                {
-                                                  match
-                                                    .doubles_match_player_response
-                                                    .participant1_name
-                                                }
-                                              </span>
+                                    {/* 복식 */}
+                                    {match.doubles_match_player_response &&
+                                      leagueDetails.data?.length !== 0 && (
+                                        <div className="flex flex-col gap-8">
+                                          <div className="flex flex-col items-center gap-6">
+                                            <div className="w-full flex flex-wrap justify-center gap-4">
+                                              <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
+                                                <SImage
+                                                  src={
+                                                    match
+                                                      .doubles_match_player_response
+                                                      ?.participant1_image ||
+                                                    "/images/dummy-image.jpg"
+                                                  }
+                                                  radius="circular"
+                                                  width={50}
+                                                  height={50}
+                                                  alt={
+                                                    match
+                                                      .doubles_match_player_response
+                                                      .participant1_name
+                                                  }
+                                                />
+                                                <span className="text-gray-800 text-sm font-semibold truncate">
+                                                  {
+                                                    match
+                                                      .doubles_match_player_response
+                                                      .participant1_name
+                                                  }
+                                                </span>
+                                              </div>
+                                              <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
+                                                <SImage
+                                                  src={
+                                                    match
+                                                      .doubles_match_player_response
+                                                      ?.participant2_image ||
+                                                    "/images/dummy-image.jpg"
+                                                  }
+                                                  radius="circular"
+                                                  width={50}
+                                                  height={50}
+                                                  alt={
+                                                    match
+                                                      .doubles_match_player_response
+                                                      .participant2_name
+                                                  }
+                                                />
+                                                <span className="text-gray-800 text-sm font-semibold truncate">
+                                                  {
+                                                    match
+                                                      .doubles_match_player_response
+                                                      .participant2_name
+                                                  }
+                                                </span>
+                                              </div>
                                             </div>
-                                            <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
-                                              <SImage
-                                                src={
-                                                  match
-                                                    .doubles_match_player_response
-                                                    ?.participant2_image ||
-                                                  "/images/dummy-image.jpg"
-                                                }
-                                                radius="circular"
-                                                width={50}
-                                                height={50}
-                                                alt={
-                                                  match
-                                                    .doubles_match_player_response
-                                                    .participant2_name
-                                                }
-                                              />
-                                              <span className="text-gray-800 text-sm font-semibold truncate">
-                                                {
-                                                  match
-                                                    .doubles_match_player_response
-                                                    .participant2_name
-                                                }
-                                              </span>
+                                            <div className="w-full flex flex-col items-center justify-center gap-2 text-xl font-semibold text-gray-900">
+                                              <span>{match.set_score1}</span>
+                                              <Separator />
+                                              <span>{match.set_score2}</span>
                                             </div>
                                           </div>
-                                          <div className="w-full flex flex-col items-center justify-center gap-2 text-xl font-semibold text-gray-900">
-                                            <span>{match.set_score1}</span>
-                                            <Separator />
-                                            <span>{match.set_score2}</span>
-                                          </div>
-                                        </div>
 
-                                        {/* 팀 B */}
-                                        <div className="flex flex-col items-center gap-6">
-                                          <div className="w-full flex flex-wrap justify-center gap-4">
-                                            {" "}
-                                            {/* 간격 조정 */}
-                                            <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
-                                              <SImage
-                                                src={
-                                                  match
-                                                    .doubles_match_player_response
-                                                    ?.participant3_image ||
-                                                  "/images/dummy-image.jpg"
-                                                }
-                                                radius="circular"
-                                                width={50}
-                                                height={50}
-                                                alt={
-                                                  match
-                                                    .doubles_match_player_response
-                                                    .participant3_name
-                                                }
-                                              />
-                                              <span className="text-gray-800 text-sm font-semibold truncate">
-                                                {
-                                                  match
-                                                    .doubles_match_player_response
-                                                    .participant3_name
-                                                }
-                                              </span>
-                                            </div>
-                                            <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
-                                              <SImage
-                                                src={
-                                                  match
-                                                    .doubles_match_player_response
-                                                    ?.participant4_image ||
-                                                  "/images/dummy-image.jpg"
-                                                }
-                                                radius="circular"
-                                                width={50}
-                                                height={50}
-                                                alt={
-                                                  match
-                                                    .doubles_match_player_response
-                                                    .participant4_name
-                                                }
-                                              />
-                                              <span className="text-gray-800 text-sm font-semibold truncate">
-                                                {
-                                                  match
-                                                    .doubles_match_player_response
-                                                    .participant4_name
-                                                }
-                                              </span>
+                                          <div className="flex flex-col items-center gap-6">
+                                            <div className="w-full flex flex-wrap justify-center gap-4">
+                                              <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
+                                                <SImage
+                                                  src={
+                                                    match
+                                                      .doubles_match_player_response
+                                                      ?.participant3_image ||
+                                                    "/images/dummy-image.jpg"
+                                                  }
+                                                  radius="circular"
+                                                  width={50}
+                                                  height={50}
+                                                  alt={
+                                                    match
+                                                      .doubles_match_player_response
+                                                      .participant3_name
+                                                  }
+                                                />
+                                                <span className="text-gray-800 text-sm font-semibold truncate">
+                                                  {
+                                                    match
+                                                      .doubles_match_player_response
+                                                      .participant3_name
+                                                  }
+                                                </span>
+                                              </div>
+                                              <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
+                                                <SImage
+                                                  src={
+                                                    match
+                                                      .doubles_match_player_response
+                                                      ?.participant4_image ||
+                                                    "/images/dummy-image.jpg"
+                                                  }
+                                                  radius="circular"
+                                                  width={50}
+                                                  height={50}
+                                                  alt={
+                                                    match
+                                                      .doubles_match_player_response
+                                                      .participant4_name
+                                                  }
+                                                />
+                                                <span className="text-gray-800 text-sm font-semibold truncate">
+                                                  {
+                                                    match
+                                                      .doubles_match_player_response
+                                                      .participant4_name
+                                                  }
+                                                </span>
+                                              </div>
                                             </div>
                                           </div>
                                         </div>
-                                      </div>
-                                    )}
+                                      )}
                                   </div>
                                 </div>
                               ),
