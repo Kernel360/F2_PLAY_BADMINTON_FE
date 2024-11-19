@@ -3,10 +3,14 @@
 import ClubCard from "@/components/club/ClubCard";
 import ClubCarousel from "@/components/club/ClubCarousel";
 import { Button } from "@/components/ui/Button";
+import { Text } from "@/components/ui/Text";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
   useGetActivityClubs,
@@ -14,9 +18,11 @@ import {
   useGetPopularClubs,
   useGetRecentlyClubs,
 } from "@/lib/api/hooks/clubHook";
+import { useGetMembersMyClubs } from "@/lib/api/hooks/memberHook";
 import type { components } from "@/schemas/schema";
 import Autoplay from "embla-carousel-autoplay";
 import type { UseEmblaCarouselType } from "embla-carousel-react";
+import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
 
 type ClubCardResponse = components["schemas"]["ClubCardResponse"];
@@ -29,6 +35,7 @@ const imageUrl = [
 ];
 
 function ClubList() {
+  const { data: myClubs, isLoading: myClubLoading } = useGetMembersMyClubs();
   const { data: topClubs, isLoading: topLoading } = useGetPopularClubs();
   const { data: activityClubs, isLoading: activityLoading } =
     useGetActivityClubs();
@@ -63,7 +70,13 @@ function ClubList() {
     [api],
   );
 
-  if (topLoading || activityLoading || recentlyLoading || isLoading) {
+  if (
+    myClubLoading ||
+    topLoading ||
+    activityLoading ||
+    recentlyLoading ||
+    isLoading
+  ) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <span className="text-lg text-gray-700">Loading...</span>
@@ -116,6 +129,34 @@ function ClubList() {
               }`}
               onClick={() => scrollTo(index)}
             />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <div className="mb-4 flex gap-2 items-center">
+          <h2 className="text-xl font-bold mb-6 text-gray-800">내 동호회</h2>
+          <Link className="text-sm text-gray-500" href={"/my-page"}>
+            더보기
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <Link href={"/club/create"} className="block">
+            <Card className="h-full w-full rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-shadow duration-200 border border-gray-200 bg-white flex flex-col justify-center items-center">
+              <CardHeader className="p-0 flex justify-center items-center bg-gray-50 rounded-full w-16 h-16 mx-auto mt-6">
+                <span className="text-3xl text-gray-600">+</span>
+              </CardHeader>
+              <CardContent className="px-5 py-4 flex flex-col justify-center items-center">
+                <p className="text-sm text-gray-600 text-center">
+                  새 동호회를 만들어보세요!
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          {myClubs?.slice(0, 3).map((club) => (
+            <ClubCard key={club.club_token} {...club} />
           ))}
         </div>
       </section>
