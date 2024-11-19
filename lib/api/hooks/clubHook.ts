@@ -1,6 +1,7 @@
 import {
   getActivityClubs,
   getClubs,
+  getClubsApplicants,
   getClubsById,
   getPopularClubs,
   getRecentlyClubs,
@@ -12,12 +13,9 @@ import {
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   ClubCardResponse,
-  ClubParams,
+  GetClubApplicantsData,
   GetClubDetailData,
-  GetClubDetailsResponse,
-  GetClubListData,
   GetClubListResponse,
-  GetPopularClubListResponse,
   PatchClubRequest,
   PostClubRequest,
 } from "@/types/clubTypes";
@@ -109,4 +107,10 @@ export const usePatchClubs = (clubId: string) => {
     },
     onError: (error: Error) => alert(error),
   });
+};
+
+export const useGetClubsApplicants = (clubId: string) => {
+  return useQueryWithToast<GetClubApplicantsData[]>(["clubsApplicants"], () =>
+    getClubsApplicants(clubId),
+  );
 };

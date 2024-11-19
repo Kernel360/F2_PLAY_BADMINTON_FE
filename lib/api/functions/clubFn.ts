@@ -1,5 +1,6 @@
 import type {
   GetActivityClubListResponse,
+  GetClubApplicantsResponse,
   GetClubDetailsResponse,
   GetClubListResponse,
   GetPopularClubListResponse,
@@ -79,5 +80,13 @@ export const patchClubs = async (
   return restClient.patch<PatchClubResponse>(
     `/clubs/${clubId}`,
     clubUpdateData,
+  );
+};
+
+export const getClubsApplicants = async (
+  clubId: string,
+): Promise<GetClubApplicantsResponse> => {
+  return restClient.get<GetClubApplicantsResponse>(
+    `/clubs/${clubId}/applicants`,
   );
 };
