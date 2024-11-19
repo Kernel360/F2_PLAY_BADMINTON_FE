@@ -135,19 +135,6 @@ export interface paths {
      *     	프리 더블: 4의 배수
      *
      *
-     *
-     *     1. 경기 이름 2 ~ 20 글자
-     *     2. 경기 설명 2 ~ 1000 글자
-     *     3. 경기 장소 2 ~ 100 글자
-     *     4. 경기 시간: 현재 시간 보다 뒤에 설정
-     *     5. 모집 마감 날짜: 현재 시간 보다 뒤에, 경기 시간 날짜 보다 앞에
-     *     6. 참가인원:
-     *     	토너먼트 싱글: 2의 제곱
-     *     	토너먼트 더블: 참가자 수/2 가 2의 제곱
-     *     	프리 싱글: 2의 배수
-     *     	프리 더블: 4의 배수
-     *
-     *
      */
     post: operations["createLeague"];
     delete?: never;
@@ -198,7 +185,6 @@ export interface paths {
      * @description 대진표를 생성합니다.
      */
     post: operations["generateBracket"];
-    post: operations["generateBracket"];
     delete?: never;
     options?: never;
     head?: never;
@@ -219,12 +205,12 @@ export interface paths {
     get: operations["getMatchSet"];
     put?: never;
     /**
-     * 세트 종료 버튼
+     * 세트 종료 버튼, 누르면 다음 세트가 시작합니다.
      * @description 0~30 사이의 숫자만 입력할 수 있습니다.
      *     현재 세트 종료 버튼을 누를 때 실행되는 API
      *
      */
-    post: operations["updateSetsScore"];
+    post: operations["finishSetsScore"];
     delete?: never;
     options?: never;
     head?: never;
@@ -274,10 +260,6 @@ export interface paths {
     /**
      * 동호회 가입 신청
      * @description 동호회에 가입을 신청합니다.
-     *
-     *     1. 가입 신청 글 2 ~ 20자
-     *
-     *
      *
      *     1. 가입 신청 글 2 ~ 20자
      *
@@ -428,17 +410,6 @@ export interface paths {
      *     	프리 더블: 4의 배수
      *
      *
-     * @description 경기 이름, 설명, 참가자, 싱글/더블, 프리/토너먼트 변경
-     *
-     *     1. 경기 이름 2 ~ 20 글자
-     *     2. 경기 설명 2 ~ 1000 글자
-     *     3. 참가인원:
-     *     	토너먼트 싱글: 2의 제곱
-     *     	토너먼트 더블: 참가자 수/2 가 2의 제곱
-     *     	프리 싱글: 2의 배수
-     *     	프리 더블: 4의 배수
-     *
-     *
      */
     patch: operations["updateLeague"];
     trace?: never;
@@ -493,7 +464,6 @@ export interface paths {
      *        - 필수 입력 항목입니다.
      *        - 최소 2자 이상이어야 합니다.
      *        - 최대 100자 이하여야 합니다.
-     *     2. 자기자신은 탈퇴 시킬 수 없습니다.
      *     2. 자기자신은 탈퇴 시킬 수 없습니다.
      *
      *
@@ -771,26 +741,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/v1/clubs/{clubToken}/clubMembers/check": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /**
-     * 동호회 회원인지 조회
-     * @description 동호회에 가입한 회원인지 조회.
-     */
-    get: operations["checkIsClubMember"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   "/v1/clubs/{clubToken}/applicants": {
     parameters: {
       query?: never;
@@ -932,6 +882,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -947,9 +898,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -1038,6 +986,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -1053,9 +1002,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -1117,24 +1063,6 @@ export interface components {
        * @description 동호회 수정 일자
        */
       modified_at: string;
-      /** @description 동호회 토큰 */
-      club_token: string;
-      /** @description 동호회 이름 */
-      club_name: string;
-      /** @description 동호회 설명 */
-      club_description: string;
-      /** @description 동호회 이미지 url */
-      club_image: string;
-      /**
-       * Format: date-time
-       * @description 동호회 생성 일자
-       */
-      created_at: string;
-      /**
-       * Format: date-time
-       * @description 동호회 수정 일자
-       */
-      modified_at: string;
     };
     CommonResponseClubCreateResponse: {
       /** @enum {string} */
@@ -1168,6 +1096,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -1183,9 +1112,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -1241,18 +1167,15 @@ export interface components {
       /**
        * Format: date-time
        * @description 경기 시작 날짜, 모집 마감 날짜는 현재 시간보다 뒤에 설정되어야 합니다.
-       * @description 경기 시작 날짜, 모집 마감 날짜는 현재 시간보다 뒤에 설정되어야 합니다.
        */
       league_at: string;
       /**
        * Format: date-time
        * @description 모집 마감 날짜, 모집 마감 날짜는 현재 시간보다 뒤에 설정되어야 합니다.
-       * @description 모집 마감 날짜, 모집 마감 날짜는 현재 시간보다 뒤에 설정되어야 합니다.
        */
       recruiting_closed_at: string;
       /**
        * Format: int32
-       * @description 참가인원: 토너먼트 싱글이면 2의 제곱, 더블이면 참가자수 /2 가 2의 제곱, 프리 싱글이면 2의 배수, 프리 더블이면 4의 배수
        * @description 참가인원: 토너먼트 싱글이면 2의 제곱, 더블이면 참가자수 /2 가 2의 제곱, 프리 싱글이면 2의 배수, 프리 더블이면 4의 배수
        * @example 16
        */
@@ -1296,6 +1219,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -1311,9 +1235,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -1347,27 +1268,15 @@ export interface components {
       full_address: string;
       /** @description 경기 리전 */
       region: string;
-      /** @description 경기 이름 */
-      league_name: string;
-      /** @description 경기 설명 */
-      description: string;
-      /** @description 경기 장소 */
-      full_address: string;
-      /** @description 경기 리전 */
-      region: string;
       /**
-       * @description 최소 티어 (GOLD | SILVER | BRONZE)
        * @description 최소 티어 (GOLD | SILVER | BRONZE)
        * @enum {string}
        */
       required_tier: "GOLD" | "SILVER" | "BRONZE";
-      required_tier: "GOLD" | "SILVER" | "BRONZE";
       /**
-       * @description 현재 경기 상태( ALL | RECRUITING | RECRUITING_COMPLETED | PLAYING | CANCELED | FINISHED)
        * @description 현재 경기 상태( ALL | RECRUITING | RECRUITING_COMPLETED | PLAYING | CANCELED | FINISHED)
        * @enum {string}
        */
-      status:
       status:
         | "ALL"
         | "RECRUITING"
@@ -1377,47 +1286,38 @@ export interface components {
         | "FINISHED";
       /**
        * @description 경기 방식 (SINGLES | DOUBLES)
-       * @description 경기 방식 (SINGLES | DOUBLES)
        * @enum {string}
        */
-      match_type: "SINGLES" | "DOUBLES";
       match_type: "SINGLES" | "DOUBLES";
       /**
        * Format: date-time
        * @description 경기 시작 날짜
        */
       league_at: string;
-      league_at: string;
       /**
        * Format: date-time
        * @description 모집 마감 날짜
        */
-      recruiting_closed_at: string;
       recruiting_closed_at: string;
       /**
        * Format: int32
        * @description 참가 인원
        */
       player_limit_count: number;
-      player_limit_count: number;
       /**
        * Format: date-time
        * @description 생성 일자
        */
-      created_at: string;
       created_at: string;
       /**
        * Format: date-time
        * @description 수정 일자
        */
       modified_at: string;
-      modified_at: string;
       /**
-       * @description 매칭 조건 (FREE | TOURNAMENT)
        * @description 매칭 조건 (FREE | TOURNAMENT)
        * @enum {string}
        */
-      match_generation_type: "FREE" | "TOURNAMENT";
       match_generation_type: "FREE" | "TOURNAMENT";
     };
     CommonResponseLeagueParticipantResponse: {
@@ -1452,6 +1352,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -1467,9 +1368,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -1512,60 +1410,8 @@ export interface components {
        * @description 경기 수정 날짜
        */
       modified_at: string;
-      /**
-       * Format: int64
-       * @description 경기 아이디
-       */
-      league_id: number;
-      /** @description 경기 참여자의 유저 토큰 */
-      member_token: string;
-      /**
-       * Format: date-time
-       * @description 경기 생성 날짜
-       */
-      created_at: string;
-      /**
-       * Format: date-time
-       * @description 경기 수정 날짜
-       */
-      modified_at: string;
     };
     BracketResponse: {
-      /**
-       * Format: int64
-       * @description 경기 아이디
-       */
-      league_id: number;
-      /**
-       * @description 대진표 생성 타입(FREE | TOURNAMENT)
-       * @enum {string}
-       */
-      match_generation_type: "FREE" | "TOURNAMENT";
-      /**
-       * @description 매치 타입(SINGLES | DOUBLES)
-       * @enum {string}
-       */
-      match_type: "SINGLES" | "DOUBLES";
-      /**
-       * @description 리그 상태(PLAYING | CANCELED | FINISHED)
-       * @enum {string}
-       */
-      league_status:
-        | "ALL"
-        | "RECRUITING"
-        | "RECRUITING_COMPLETED"
-        | "PLAYING"
-        | "CANCELED"
-        | "FINISHED";
-      /**
-       * Format: int32
-       * @description 전체 라운드 수
-       */
-      total_round: number;
-      /** @description 단식 매치 리스트 */
-      singles_match_response_list?: components["schemas"]["SinglesMatchResponse"][];
-      /** @description 복식 매치 리스트 */
-      doubles_match_response_list?: components["schemas"]["DoublesMatchResponse"][];
       /**
        * Format: int64
        * @description 경기 아이디
@@ -1634,6 +1480,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -1649,9 +1496,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -1677,13 +1521,7 @@ export interface components {
       error_message_for_client?: string;
     };
     /** @description 복식 매치 리스트 */
-    /** @description 복식 매치 리스트 */
     DoublesMatchResponse: {
-      /**
-       * Format: int64
-       * @description 매치 아이디
-       */
-      match_id: number;
       /**
        * Format: int64
        * @description 매치 아이디
@@ -1700,16 +1538,6 @@ export interface components {
       team2: components["schemas"]["MatchTeamResponse"];
       /** @description 승자의 멤버토큰 */
       winners_token: string[];
-      round_number?: number;
-      /**
-       * @description 매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)
-       * @enum {string}
-       */
-      match_status: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
-      team1: components["schemas"]["MatchTeamResponse"];
-      team2: components["schemas"]["MatchTeamResponse"];
-      /** @description 승자의 멤버토큰 */
-      winners_token: string[];
     };
     /** @description 팀2 */
     MatchTeamResponse: {
@@ -1739,56 +1567,7 @@ export interface components {
        * @description 이긴 세트수
        */
       participant_win_set_count: number;
-    /** @description 팀2 */
-    MatchTeamResponse: {
-      participant1: components["schemas"]["Participant"];
-      participant2: components["schemas"]["Participant"];
-      /**
-       * Format: int32
-       * @description 이긴 세트 수
-       */
-      team1_win_set_count: number;
     };
-    /** @description 참가자2 */
-    Participant: {
-      /** @description 참가자 토큰 */
-      member_token: string;
-      /** @description 참가자 이름 */
-      name: string;
-      /** @description 참가자 이미지 */
-      image: string;
-      /**
-       * @description 참가자 티어
-       * @enum {string}
-       */
-      tier: "GOLD" | "SILVER" | "BRONZE";
-      /**
-       * Format: int32
-       * @description 이긴 세트수
-       */
-      participant_win_set_count: number;
-    };
-    /** @description 단식 매치 리스트 */
-    SinglesMatchResponse: {
-      /**
-       * Format: int64
-       * @description 매치 아이디
-       */
-      match_id: number;
-      /**
-       * Format: int32
-       * @description 매치의 라운드 번호
-       */
-      round_number: number;
-      /**
-       * @description 매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)
-       * @enum {string}
-       */
-      match_status: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
-      participant1: components["schemas"]["Participant"];
-      participant2: components["schemas"]["Participant"];
-      /** @description 승자의 맴버 토큰 */
-      winner_token: string;
     /** @description 단식 매치 리스트 */
     SinglesMatchResponse: {
       /**
@@ -1817,10 +1596,10 @@ export interface components {
       /** Format: int32 */
       score2: number;
     };
-    CommonResponseSetScoreUpdateResponse: {
+    CommonResponseSetScoreFinishResponse: {
       /** @enum {string} */
       result?: "SUCCESS" | "FAIL";
-      data?: components["schemas"]["SetScoreUpdateResponse"];
+      data?: components["schemas"]["SetScoreFinishResponse"];
       /** @enum {string} */
       error_code?:
         | "BAD_REQUEST"
@@ -1849,6 +1628,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -1864,9 +1644,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -1891,32 +1668,7 @@ export interface components {
       error_message_for_log?: string;
       error_message_for_client?: string;
     };
-    SetScoreUpdateResponse: {
-      /**
-       * Format: int64
-       * @description 매치 아이디
-       */
-      match_id: number;
-      /**
-       * Format: int32
-       * @description 세트 번호 (1 | 2 | 3)
-       */
-      set_number: number;
-      /**
-       * Format: int32
-       * @description 점수 1
-       */
-      score1: number;
-      /**
-       * Format: int32
-       * @description 점수 2
-       */
-      score2: number;
-      /**
-       * @description 매치 타입 (SINGLES | DOUBLES)
-       * @enum {string}
-       */
-      match_type: "SINGLES" | "DOUBLES";
+    SetScoreFinishResponse: {
       /**
        * Format: int64
        * @description 매치 아이디
@@ -1945,21 +1697,8 @@ export interface components {
     };
     ClubApplyRequest: {
       apply_reason: string;
-      apply_reason: string;
     };
     ClubApplyResponse: {
-      /**
-       * Format: int64
-       * @description 동호회 가입 신청 아이디
-       */
-      club_apply_id: number;
-      /** @description 동호회 가입 신청 이유 */
-      apply_reason: string;
-      /**
-       * @description 동호회 가입 신청 상태
-       * @enum {string}
-       */
-      status: "APPROVED" | "PENDING" | "REJECTED";
       /**
        * Format: int64
        * @description 동호회 가입 신청 아이디
@@ -2005,6 +1744,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -2020,9 +1760,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -2079,6 +1816,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -2094,9 +1832,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -2132,16 +1867,6 @@ export interface components {
        * @enum {string}
        */
       status: "APPROVED" | "PENDING" | "REJECTED";
-      /**
-       * Format: int64
-       * @description 동호회 가입 신청 아이디
-       */
-      club_apply_id: number;
-      /**
-       * @description 동호회 가입 신청 상태
-       * @enum {string}
-       */
-      status: "APPROVED" | "PENDING" | "REJECTED";
     };
     ApproveApplyResponse: {
       /**
@@ -2149,13 +1874,7 @@ export interface components {
        * @description 동호회 가입 신청 아이디
        */
       club_apply_id: number;
-      /**
-       * Format: int64
-       * @description 동호회 가입 신청 아이디
-       */
-      club_apply_id: number;
       /** @enum {string} */
-      status: "APPROVED" | "PENDING" | "REJECTED";
       status: "APPROVED" | "PENDING" | "REJECTED";
     };
     CommonResponseApproveApplyResponse: {
@@ -2190,6 +1909,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -2205,9 +1925,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -2259,24 +1976,6 @@ export interface components {
        * @description 동호회 수정 날짜
        */
       modified_at: string;
-      /** @description 동호회 토큰 */
-      club_token: string;
-      /** @description 동호회 이름 */
-      club_name: string;
-      /** @description 동호회 설명 */
-      club_description: string;
-      /** @description 동호회 이미지 url */
-      club_image: string;
-      /**
-       * Format: date-time
-       * @description 동호회 생성 날짜
-       */
-      created_at: string;
-      /**
-       * Format: date-time
-       * @description 동호회 수정 날짜
-       */
-      modified_at: string;
     };
     CommonResponseClubUpdateResponse: {
       /** @enum {string} */
@@ -2310,6 +2009,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -2325,9 +2025,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -2383,10 +2080,8 @@ export interface components {
       match_generation_type: "FREE" | "TOURNAMENT";
     };
     CommonResponseLeagueUpdateResponse: {
-    CommonResponseLeagueUpdateResponse: {
       /** @enum {string} */
       result?: "SUCCESS" | "FAIL";
-      data?: components["schemas"]["LeagueUpdateResponse"];
       data?: components["schemas"]["LeagueUpdateResponse"];
       /** @enum {string} */
       error_code?:
@@ -2416,6 +2111,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -2431,9 +2127,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -2458,30 +2151,6 @@ export interface components {
       error_message_for_log?: string;
       error_message_for_client?: string;
     };
-    LeagueUpdateResponse: {
-      /**
-       * Format: int64
-       * @description 경기 아이디
-       */
-      league_id: number;
-      /** @description 경기 이름 */
-      league_name: string;
-      /** @description 경기 설명 */
-      league_description: string;
-      /** @description 경기 장소 */
-      full_address: string;
-      /** @description 경기 장소 리전 */
-      region: string;
-      /**
-       * @description 최소 티어, (GOLD | SILVER | BRONZE)
-       * @enum {string}
-       */
-      required_tier: "GOLD" | "SILVER" | "BRONZE";
-      /**
-       * @description 현재 경기 상태( ALL | RECRUITING | RECRUITING_COMPLETED | PLAYING | CANCELED | FINISHED)
-       * @enum {string}
-       */
-      league_status:
     LeagueUpdateResponse: {
       /**
        * Format: int64
@@ -2586,6 +2255,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -2712,6 +2382,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -2762,17 +2433,6 @@ export interface components {
       /** Format: int32 */
       match_count?: number;
     };
-    /** @description 동호회 회원 경기 전적 */
-    LeagueRecordResponse: {
-      /** Format: int32 */
-      win_count?: number;
-      /** Format: int32 */
-      lose_count?: number;
-      /** Format: int32 */
-      draw_count?: number;
-      /** Format: int32 */
-      match_count?: number;
-    };
     ClubMemberExpelRequest: {
       expel_reason?: string;
     };
@@ -2781,18 +2441,7 @@ export interface components {
       banned_type: "THREE_DAYS" | "SEVEN_DAYS" | "TWO_WEEKS" | "PERMANENT";
       /** @description 동호회 정지 이유 */
       banned_reason: string;
-      banned_type: "THREE_DAYS" | "SEVEN_DAYS" | "TWO_WEEKS" | "PERMANENT";
-      /** @description 동호회 정지 이유 */
-      banned_reason: string;
       /** Format: int64 */
-      club_member_id: number;
-      /** @description 동호회 활동 정지 여부 */
-      is_active: boolean;
-      /**
-       * Format: date-time
-       * @description 동호회 활동 정지 해제 날짜
-       */
-      end_date: string;
       club_member_id: number;
       /** @description 동호회 활동 정지 여부 */
       is_active: boolean;
@@ -2834,6 +2483,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -2849,9 +2499,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -2913,6 +2560,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -2928,9 +2576,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -3042,6 +2687,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -3057,9 +2703,6 @@ export interface components {
         | "LEAGUE_NOT_PARTICIPATED"
         | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
         | "CLUB_MEMBER_ALREADY_BANNED"
-        | "LEAGUE_ALREADY_CANCELED"
-        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
-        | "CLUB_MEMBER_OWNER_PROTECT"
         | "LEAGUE_ALREADY_CANCELED"
         | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
         | "CLUB_MEMBER_OWNER_PROTECT"
@@ -3190,6 +2833,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -3230,10 +2874,8 @@ export interface components {
       error_message_for_client?: string;
     };
     CommonResponseCustomPageResponseMatchResultResponse: {
-    CommonResponseCustomPageResponseMatchResultResponse: {
       /** @enum {string} */
       result?: "SUCCESS" | "FAIL";
-      data?: components["schemas"]["CustomPageResponseMatchResultResponse"];
       data?: components["schemas"]["CustomPageResponseMatchResultResponse"];
       /** @enum {string} */
       error_code?:
@@ -3263,6 +2905,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -3302,42 +2945,6 @@ export interface components {
       error_message_for_log?: string;
       error_message_for_client?: string;
     };
-    CustomPageResponseMatchResultResponse: {
-      /** @description 실제 내용 */
-      content: components["schemas"]["MatchResultResponse"][];
-      /**
-       * Format: int32
-       * @description 페이징 설정에 따라 나누어진 총 페이지 수
-       */
-      total_pages: number;
-      /**
-       * Format: int64
-       * @description 페이징된 전체 데이터의 개수
-       */
-      total_elements: number;
-      /**
-       * Format: int32
-       * @description 한 페이지에 포함되는 데이터의 개수
-       */
-      size: number;
-      /**
-       * Format: int32
-       * @description 현재 페이지의 번호
-       */
-      number: number;
-      /** @description 현재 페이지가 첫 번째 페이지인지 여부 */
-      first?: boolean;
-      /** @description 현재 페이지가 마지막 페이지인지 여부 */
-      last?: boolean;
-      /**
-       * Format: int32
-       * @description 현재 페이지에 포함된 데이터의 개수
-       */
-      number_of_elements: number;
-      /** @description 현재 페이지가 비어 있는지 여부 */
-      empty?: boolean;
-    };
-    /** @description 복식 경기 결과 */
     CustomPageResponseMatchResultResponse: {
       /** @description 실제 내용 */
       content: components["schemas"]["MatchResultResponse"][];
@@ -3473,6 +3080,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -3513,29 +3121,6 @@ export interface components {
       error_message_for_client?: string;
     };
     CustomPageResponseOngoingAndUpcomingLeagueResponse: {
-      /** @description 실제 내용 */
-      content: components["schemas"]["OngoingAndUpcomingLeagueResponse"][];
-      /**
-       * Format: int32
-       * @description 페이징 설정에 따라 나누어진 총 페이지 수
-       */
-      total_pages: number;
-      /**
-       * Format: int64
-       * @description 페이징된 전체 데이터의 개수
-       */
-      total_elements: number;
-      /**
-       * Format: int32
-       * @description 한 페이지에 포함되는 데이터의 개수
-       */
-      size: number;
-      /**
-       * Format: int32
-       * @description 현재 페이지의 번호
-       */
-      number: number;
-      /** @description 현재 페이지가 첫 번째 페이지인지 여부 */
       /** @description 실제 내용 */
       content: components["schemas"]["OngoingAndUpcomingLeagueResponse"][];
       /**
@@ -3650,6 +3235,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -3690,7 +3276,6 @@ export interface components {
       error_message_for_client?: string;
     };
     /** @description 복식 경기 참여자 */
-    /** @description 복식 경기 참여자 */
     DoublesMatchPlayerResponse: {
       /** @description 팀 1 경기 참가자 1 이름 */
       participant1_name: string;
@@ -3710,11 +3295,6 @@ export interface components {
       participant4_image: string;
     };
     LeagueSetsScoreInProgressResponse: {
-      /**
-       * Format: int64
-       * @description 매치 아이디
-       */
-      match_id: number;
       /**
        * Format: int64
        * @description 매치 아이디
@@ -3742,28 +3322,7 @@ export interface components {
        * @description 세트 번호 (1 | 2 | 3)
        */
       set_number: number;
-      /**
-       * Format: int32
-       * @description 세트 스코어 1
-       */
-      set_score1: number;
-      /**
-       * Format: int32
-       * @description 세트 스코어 2
-       */
-      set_score2: number;
-      /**
-       * Format: int32
-       * @description 라운드 번호(단식이면 1, 2, 3, ... | 복식이면 ... 32, 16, 8, 4, 2, 1
-       */
-      round_number: number;
-      /**
-       * Format: int32
-       * @description 세트 번호 (1 | 2 | 3)
-       */
-      set_number: number;
     };
-    /** @description 단식 경기 참여자 */
     /** @description 단식 경기 참여자 */
     SinglesMatchPlayerResponse: {
       /** @description 경기 참가자 1 이름 */
@@ -3807,6 +3366,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -3847,29 +3407,6 @@ export interface components {
       error_message_for_client?: string;
     };
     CustomPageResponseClubCardResponse: {
-      /** @description 실제 내용 */
-      content: components["schemas"]["ClubCardResponse"][];
-      /**
-       * Format: int32
-       * @description 페이징 설정에 따라 나누어진 총 페이지 수
-       */
-      total_pages: number;
-      /**
-       * Format: int64
-       * @description 페이징된 전체 데이터의 개수
-       */
-      total_elements: number;
-      /**
-       * Format: int32
-       * @description 한 페이지에 포함되는 데이터의 개수
-       */
-      size: number;
-      /**
-       * Format: int32
-       * @description 현재 페이지의 번호
-       */
-      number: number;
-      /** @description 현재 페이지가 첫 번째 페이지인지 여부 */
       /** @description 실제 내용 */
       content: components["schemas"]["ClubCardResponse"][];
       /**
@@ -3971,6 +3508,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -4042,6 +3580,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -4189,6 +3728,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -4229,21 +3769,12 @@ export interface components {
       error_message_for_client?: string;
     };
     /** @description 복식 경기 세트 */
-    /** @description 복식 경기 세트 */
     DoublesSetResponse: {
       /**
        * Format: int32
        * @description 세트 번호 (1 | 2 | 3)
        */
-      /**
-       * Format: int32
-       * @description 세트 번호 (1 | 2 | 3)
-       */
       set_number?: number;
-      /**
-       * Format: int32
-       * @description 스코어 1
-       */
       /**
        * Format: int32
        * @description 스코어 1
@@ -4328,6 +3859,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -4395,31 +3927,6 @@ export interface components {
        * @description 세트 번호 (1 | 2 | 3)
        */
       set_number: number;
-      /**
-       * Format: int32
-       * @description 세트 점수 1
-       */
-      set_score1: number;
-      /**
-       * Format: int32
-       * @description 세트 점수 2
-       */
-      set_score2: number;
-      /**
-       * Format: int32
-       * @description 이긴 세트수 1
-       */
-      win_set_score1: number;
-      /**
-       * Format: int32
-       * @description 이긴 세트수 2
-       */
-      win_set_score2: number;
-      /**
-       * Format: int32
-       * @description 세트 번호 (1 | 2 | 3)
-       */
-      set_number: number;
     };
     CommonResponseListSetScoreResponse: {
       /** @enum {string} */
@@ -4453,6 +3960,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -4524,6 +4032,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -4568,9 +4077,6 @@ export interface components {
        * Format: int64
        * @description 경기 아이디
        */
-      league_id: number;
-      /** @description 경기 이름 */
-      league_name: string;
       league_id: number;
       /** @description 경기 이름 */
       league_name: string;
@@ -4628,6 +4134,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -4723,61 +4230,6 @@ export interface components {
       role_user?: components["schemas"]["ClubMemberResponse"][];
     };
     CommonResponseClubMemberRoleResponse: {
-      /**
-       * Format: int64
-       * @description 경기 아이디
-       */
-      league_id: number;
-      /**
-       * Format: date-time
-       * @description 경기 시작 날짜
-       */
-      league_at: string;
-      /** @description 경기 이름 */
-      league_name: string;
-      /**
-       * @description 경기 방식 (SINGLES | DOUBLES)
-       * @enum {string}
-       */
-      match_type: "SINGLES" | "DOUBLES";
-      /**
-       * @description 최소 티어, (GOLD | SILVER | BRONZE)
-       * @enum {string}
-       */
-      required_tier: "GOLD" | "SILVER" | "BRONZE";
-      /**
-       * Format: date-time
-       * @description 모집 마감 날짜
-       */
-      recruiting_close_at: string;
-      /**
-       * Format: int32
-       * @description 참가 제한 인원
-       */
-      player_limit_count: number;
-      /**
-       * Format: int32
-       * @description 현재까지 참여한 인원
-       */
-      participant_count: number;
-      /**
-       * @description 현재 경기 상태( ALL | RECRUITING | RECRUITING_COMPLETED | PLAYING | CANCELED | FINISHED)
-       * @enum {string}
-       */
-      status:
-        | "ALL"
-        | "RECRUITING"
-        | "RECRUITING_COMPLETED"
-        | "PLAYING"
-        | "CANCELED"
-        | "FINISHED";
-    };
-    ClubMemberRoleResponse: {
-      role_owner?: components["schemas"]["ClubMemberResponse"][];
-      role_manager?: components["schemas"]["ClubMemberResponse"][];
-      role_user?: components["schemas"]["ClubMemberResponse"][];
-    };
-    CommonResponseClubMemberRoleResponse: {
       /** @enum {string} */
       result?: "SUCCESS" | "FAIL";
       data?: components["schemas"]["ClubMemberRoleResponse"];
@@ -4809,6 +4261,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -4880,6 +4333,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -4918,15 +4372,6 @@ export interface components {
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
       error_message_for_client?: string;
-    };
-    MemberIsClubMemberResponse: {
-      /** @description 동호회 가입 여부 */
-      is_club_member: boolean;
-      /**
-       * @description 동호회 역할
-       * @enum {string}
-       */
-      role?: "ROLE_OWNER" | "ROLE_MANAGER" | "ROLE_USER";
     };
     MemberIsClubMemberResponse: {
       /** @description 동호회 가입 여부 */
@@ -4990,6 +4435,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -5061,6 +4507,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -5118,10 +4565,6 @@ export interface components {
       club_token: string;
       /** @description 동호회 삭제 여부 */
       is_club_deleted: boolean;
-      /** @description 동호회 토큰 */
-      club_token: string;
-      /** @description 동호회 삭제 여부 */
-      is_club_deleted: boolean;
     };
     CommonResponseClubDeleteResponse: {
       /** @enum {string} */
@@ -5155,6 +4598,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -5226,6 +4670,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -5276,16 +4721,6 @@ export interface components {
        * @enum {string}
        */
       league_status:
-      /**
-       * Format: int64
-       * @description 경기 아이디
-       */
-      league_id: number;
-      /**
-       * @description 현재 경기 상태( ALL | RECRUITING | RECRUITING_COMPLETED | PLAYING | CANCELED | FINISHED)
-       * @enum {string}
-       */
-      league_status:
         | "ALL"
         | "RECRUITING"
         | "RECRUITING_COMPLETED"
@@ -5325,6 +4760,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -5385,26 +4821,6 @@ export interface components {
        * @description 취소 일자
        */
       deleted_at: string;
-      /**
-       * Format: int64
-       * @description 경기 아이디
-       */
-      league_id: number;
-      /**
-       * Format: int64
-       * @description 클럽 맴버 아이디
-       */
-      club_member_id: number;
-      /**
-       * Format: date-time
-       * @description 생성 일자
-       */
-      created_at: string;
-      /**
-       * Format: date-time
-       * @description 취소 일자
-       */
-      deleted_at: string;
     };
     ClubMemberWithdrawResponse: {
       /** Format: int64 */
@@ -5445,6 +4861,7 @@ export interface components {
         | "CLUB_MEMBER_NOT_EXIST"
         | "MATCH_DETAILS_NOT_EXIST"
         | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
@@ -5772,7 +5189,7 @@ export interface operations {
       };
     };
   };
-  updateSetsScore: {
+  finishSetsScore: {
     parameters: {
       query?: never;
       header?: never;
@@ -5796,7 +5213,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["CommonResponseSetScoreUpdateResponse"];
+          "*/*": components["schemas"]["CommonResponseSetScoreFinishResponse"];
         };
       };
     };
