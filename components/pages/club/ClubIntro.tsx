@@ -13,9 +13,14 @@ import { useParams, usePathname } from "next/navigation";
 function ClubIntro() {
   const { clubId } = useParams();
 
+  const postClubMembersOnSuccess = () => alert("동호회 신청이 완료되었습니다.");
+
   const { data: clubData, isLoading } = useGetClubsById(clubId as string);
   const { data: clubMemberData } = useGetClubMembersCheck(clubId as string);
-  const { mutate: postClubMembers } = usePostClubMembers(clubId as string);
+  const { mutate: postClubMembers } = usePostClubMembers(
+    clubId as string,
+    postClubMembersOnSuccess,
+  );
 
   if (isLoading) {
     return (
@@ -31,7 +36,7 @@ function ClubIntro() {
 
   // TODO: applyReason dialog 생성하기
   const handlePostClubMember = () => {
-    postClubMembers();
+    postClubMembers({ apply_reason: "test" });
   };
 
   return (

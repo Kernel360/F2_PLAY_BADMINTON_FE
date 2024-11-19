@@ -2,6 +2,8 @@ import type { components } from "@/schemas/schema";
 import type {
   GetClubMemberCheckData,
   GetClubMemberListData,
+  PostClubMemberData,
+  PostClubMemberRequest,
 } from "@/types/clubMemberTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -11,8 +13,8 @@ import {
   patchClubMembersExpel,
   patchClubMembersRole,
   postClubMembers,
-  // postClubMembers,
 } from "../functions/clubMemberFn";
+import useMutationWithToast from "./useMutationWithToast";
 import useQueryWithToast from "./useQueryWithToast";
 
 type ClubMemberRoleUpdate =
@@ -32,16 +34,21 @@ export const useGetClubMembersCheck = (clubId: string) => {
   );
 };
 
-export const usePostClubMembers = (clubId: string) => {
+export const usePostClubMembers = (clubId: string, onSuccess: () => void) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: () => postClubMembers(clubId),
-    // onSuccess: () => {
-    //   queryClient.invalidateQueries({ queryKey: ["clubMembersData"] });
-    // },
-    // onError: (error: Error) => alert(error),
-  });
+  const mutationFn = (applyReason: PostClubMemberRequest) =>
+    postClubMembers(clubId, applyReason);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<PostClubMemberData, PostClubMemberRequest>(
+    mutationFn,
+    onSuccessCallback,
+  );
 };
 
 export const usePatchClubMembersRole = (
@@ -91,18 +98,3 @@ export const usePatchClubMembersBan = (
     onError: (error: Error) => alert(error),
   });
 };
-
-// export const usePostClubMembers = (clubId: number) => {
-//   const queryClient = useQueryClient();
-
-//   return useMutation({
-//     mutationFn: () => postClubMembers(clubId),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ["clubMembersData"] });
-//       queryClient.invalidateQueries({ queryKey: ["clubsDataById"] });
-//       queryClient.invalidateQueries({ queryKey: ["isClubMemberData"] });
-//       queryClient.invalidateQueries({ queryKey: ["myInfo"] });
-//     },
-//     onError: (error: Error) => alert(error),
-//   });
-// };

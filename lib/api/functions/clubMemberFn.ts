@@ -2,6 +2,7 @@ import type { components } from "@/schemas/schema";
 import type {
   GetClubMemberCheckResponse,
   GetClubMemberListResponse,
+  PostClubMemberRequest,
   PostClubMemberResponse,
 } from "@/types/clubMemberTypes";
 import restClient from "../restClient";
@@ -41,7 +42,7 @@ export const getClubMembersCheck = async (
 
 export const postClubMembers = async (
   clubId: string,
-  // applyReason: PostClubMemberRequest,
+  applyReason: PostClubMemberRequest,
 ): Promise<PostClubMemberResponse> => {
   // const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
   //   method: "POST",
@@ -57,7 +58,7 @@ export const postClubMembers = async (
 
   return restClient.post<PostClubMemberResponse>(
     `/clubs/${clubId}/clubMembers`,
-    { apply_reason: "test" },
+    applyReason,
   );
 };
 
