@@ -11,15 +11,16 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { useGetMainLeagues } from "@/lib/api/hooks/mainLeagueHook";
+import {
+  useGetMainLeagues,
+  useGetMainLeaguesMatch,
+} from "@/lib/api/hooks/mainLeagueHook";
 import type { LeagueStatus, TierLimit } from "@/types/leagueTypes";
 import type {
   GetMainLeagues,
-  GetMainLeaguesData,
   GetMainLeaguesMatchData,
 } from "@/types/mainLeagueTypes";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
-import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -91,7 +92,7 @@ const renderLeagueTierBadge = (tier: TierLimit) => {
 function LiveMatchList() {
   const today = format(new Date(), "yyyy-MM-dd");
   const [selectedDate, setSelectedDate] = useState(today);
-  const [openedLeagueId, setOpenedLeagueId] = useState<number | null>(null);
+  const [openedLeagueId, setOpenedLeagueId] = useState<string | null>(null);
 
   const { data, isLoading, fetchNextPage, hasNextPage } = useGetMainLeagues({
     leagueStatus: "ALL",
@@ -100,24 +101,10 @@ function LiveMatchList() {
     size: 9,
   });
 
-  const fetchLeagueDetails = async (leagueId: number) => {
-    const response = await fetch(
-      `https://apit.badminton.run/v1/leagues/${leagueId}`,
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch league details");
-    }
-    return response.json();
-  };
+  const { data: leagueDetails, isLoading: isLeagueDetailsLoading } =
+    useGetMainLeaguesMatch(openedLeagueId as string);
 
-  const { data: leagueDetails, isLoading: isLeagueDetailsLoading } = useQuery({
-    queryKey: ["leagueDetails", openedLeagueId], // 첫 번째 인수는 queryKey
-    queryFn: () => fetchLeagueDetails(openedLeagueId as number), // 두 번째 인수는 queryFn
-    enabled: !!openedLeagueId, // 옵션은 객체 내부에 포함
-    // refetchInterval: 5000, // 5초마다 재요청
-  });
-
-  const handleAccordionChange = (leagueId: number | null) => {
+  const handleAccordionChange = (leagueId: string | null) => {
     setOpenedLeagueId(leagueId); // 아코디언 열림 상태 업데이트
   };
 
@@ -139,9 +126,7 @@ function LiveMatchList() {
           <Accordion
             type="single"
             collapsible
-            onValueChange={(value) =>
-              handleAccordionChange(value ? Number.parseInt(value, 10) : null)
-            }
+            onValueChange={(value) => handleAccordionChange(value)}
           >
             {data?.pages.map((group) => {
               return (

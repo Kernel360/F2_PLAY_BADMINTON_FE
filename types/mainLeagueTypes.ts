@@ -8,3 +8,9 @@ export type GetMainLeaguesData =
 
 export type GetMainLeagues =
   components["schemas"]["OngoingAndUpcomingLeagueResponse"];
+
+export type GetMainLeaguesMatchResponse =
+  components["schemas"]["CommonResponseListLeagueSetsScoreInProgressResponse"];
+
+export type GetMainLeaguesMatchData =
+  components["schemas"]["LeagueSetsScoreInProgressResponse"];
