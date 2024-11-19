@@ -16,6 +16,7 @@ import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
 import Link from "next/link";
 import React, { useState } from "react";
+import Spinner from "../Spinner";
 import SImage from "../ui/Image";
 
 const matchMockData = [
@@ -166,106 +167,113 @@ function LiveMatchList() {
   });
 
   const handleDateSelect = (date: Date) => {
-    console.log("Selected date:", format(date, "yyyy-MM-dd"));
+    const formattedDate = format(date, "yyyy-MM-dd");
+    setSelectedDate(formattedDate); // 상태 업데이트
   };
 
   return (
     <div className="p-4 w-full bg-white">
       <DateCarousel onDateSelect={handleDateSelect} />
-      <div className="mt-3">
-        <Accordion type="single" collapsible>
-          {data?.pages.map((group) => {
-            return (
-              <React.Fragment key={group.data?.number_of_elements}>
-                {group?.data?.content?.map((item: GetMainLeagues) => {
-                  return (
-                    <AccordionItem
-                      key={item.league_id}
-                      value={String(item.league_id)}
-                    >
-                      <div className="flex justify-between items-center p-3 border-b border-gray-200 relative">
-                        <div className="flex flex-col items-center text-center mr-3">
-                          <p className="font-bold text-gray-800 text-md">
-                            {format(new Date(item.league_at), "HH:mm")}
-                          </p>
-                        </div>
-                        <div className="flex flex-col flex-grow pl-3">
-                          <div className="pl-2">
-                            {renderLeagueTierBadge(item.required_tier)}
-                            <div className="flex items-center gap-1 mb-1">
-                              <p className="text-base font-semibold text-gray-900">
-                                {item.league_name}
-                              </p>
-                            </div>
-
-                            <div className="flex items-center gap-2 text-xs text-gray-500">
-                              <span>
-                                {item.match_type === "SINGLES"
-                                  ? "단식"
-                                  : "복식"}
-                              </span>
-                              <span className="text-gray-400">•</span>
-                              <span>
-                                {item.recruited_member_count} /{" "}
-                                {item.player_limit_count}명
-                              </span>
-                            </div>
+      <div className="mt-3 min-h-[50vh]">
+        {isLoading ? (
+          <div>
+            <Spinner />
+          </div>
+        ) : (
+          <Accordion type="single" collapsible>
+            {data?.pages.map((group) => {
+              return (
+                <React.Fragment key={group.data?.number_of_elements}>
+                  {group?.data?.content?.map((item: GetMainLeagues) => {
+                    return (
+                      <AccordionItem
+                        key={item.league_id}
+                        value={String(item.league_id)}
+                      >
+                        <div className="flex justify-between items-center p-3 border-b border-gray-200 relative">
+                          <div className="flex flex-col items-center text-center mr-3">
+                            <p className="font-bold text-gray-800 text-md">
+                              {format(new Date(item.league_at), "HH:mm")}
+                            </p>
                           </div>
-                        </div>
-                        <div className="flex flex-col justify-between items-center">
-                          {renderLeagueStatusButton(item.league_status)}
-                        </div>
-                      </div>
-                      <AccordionContent>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-                          {matchMockData.map((match) => (
-                            <div
-                              key={match.id}
-                              className="p-4 rounded-lg w-full flex flex-col justify-center items-center border border-solid border-gray-300 "
-                            >
-                              <Badge className="bg-yellow-500 hover:bg-yellow-500 text-xs font-semibold text-center mb-2 rounded-sm">
-                                {match.stage}
-                              </Badge>
-                              <div className="flex items-center justify-between gap-6">
-                                <div className="flex items-center space-x-3">
-                                  <SImage
-                                    src={match.team1.profileImage}
-                                    radius="circular"
-                                    width={45}
-                                    height={45}
-                                    alt="profile"
-                                  />
-                                  <span className="text-gray-800 text-sm font-semibold">
-                                    {match.team1.name}
-                                  </span>
-                                </div>
-                                <span className="text-gray-900 font-bold text-lg">
-                                  {match.team1.score} : {match.team2.score}
+                          <div className="flex flex-col flex-grow pl-3">
+                            <div className="pl-2">
+                              {renderLeagueTierBadge(item.required_tier)}
+                              <div className="flex items-center gap-1 mb-1">
+                                <p className="text-base font-semibold text-gray-900">
+                                  {item.league_name}
+                                </p>
+                              </div>
+
+                              <div className="flex items-center gap-2 text-xs text-gray-500">
+                                <span>
+                                  {item.match_type === "SINGLES"
+                                    ? "단식"
+                                    : "복식"}
                                 </span>
-                                <div className="flex items-center space-x-3">
-                                  <span className="text-gray-800 text-sm font-semibold">
-                                    {match.team2.name}
-                                  </span>
-                                  <SImage
-                                    src={match.team2.profileImage}
-                                    radius="circular"
-                                    width={45}
-                                    height={45}
-                                    alt="profile"
-                                  />
-                                </div>
+                                <span className="text-gray-400">•</span>
+                                <span>
+                                  {item.recruited_member_count} /{" "}
+                                  {item.player_limit_count}명
+                                </span>
                               </div>
                             </div>
-                          ))}
+                          </div>
+                          <div className="flex flex-col justify-between items-center">
+                            {renderLeagueStatusButton(item.league_status)}
+                          </div>
                         </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  );
-                })}
-              </React.Fragment>
-            );
-          })}
-        </Accordion>
+                        <AccordionContent>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+                            {matchMockData.map((match) => (
+                              <div
+                                key={match.id}
+                                className="p-4 rounded-lg w-full flex flex-col justify-center items-center border border-solid border-gray-300 "
+                              >
+                                <Badge className="bg-yellow-500 hover:bg-yellow-500 text-xs font-semibold text-center mb-2 rounded-sm">
+                                  {match.stage}
+                                </Badge>
+                                <div className="flex items-center justify-between gap-6">
+                                  <div className="flex items-center space-x-3">
+                                    <SImage
+                                      src={match.team1.profileImage}
+                                      radius="circular"
+                                      width={45}
+                                      height={45}
+                                      alt="profile"
+                                    />
+                                    <span className="text-gray-800 text-sm font-semibold">
+                                      {match.team1.name}
+                                    </span>
+                                  </div>
+                                  <span className="text-gray-900 font-bold text-lg">
+                                    {match.team1.score} : {match.team2.score}
+                                  </span>
+                                  <div className="flex items-center space-x-3">
+                                    <span className="text-gray-800 text-sm font-semibold">
+                                      {match.team2.name}
+                                    </span>
+                                    <SImage
+                                      src={match.team2.profileImage}
+                                      radius="circular"
+                                      width={45}
+                                      height={45}
+                                      alt="profile"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    );
+                  })}
+                </React.Fragment>
+              );
+            })}
+          </Accordion>
+        )}
       </div>
     </div>
   );
