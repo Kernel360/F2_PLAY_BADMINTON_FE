@@ -131,10 +131,7 @@ function LeagueForm(props: LeagueFormProps) {
 
   const postLeagueOnSuccess = () => router.push(`/club/${clubId}/league`);
 
-  const { mutate: createLeague, isSuccess } = usePostLeague(
-    clubId,
-    postLeagueOnSuccess,
-  );
+  const { mutate: createLeague } = usePostLeague(clubId, postLeagueOnSuccess);
 
   const { mutate: updateLeague } = usePatchLeague(
     clubId as string,
@@ -163,12 +160,6 @@ function LeagueForm(props: LeagueFormProps) {
       });
     }
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      router.push(`/club/${clubId}/league`);
-    }
-  });
 
   const handleLeagueTimeChange = (
     time: string,

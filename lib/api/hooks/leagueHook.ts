@@ -31,6 +31,7 @@ export const usePostLeague = (clubId: string, onSuccess: () => void) => {
   const onSuccessCallback = () => {
     queryClient.invalidateQueries({ queryKey: ["leaguesMonthData"] });
     queryClient.invalidateQueries({ queryKey: ["leaguesDateData"] });
+    onSuccess();
   };
 
   return useMutationWithToast<PostLeagueData, PostLeagueRequest>(
