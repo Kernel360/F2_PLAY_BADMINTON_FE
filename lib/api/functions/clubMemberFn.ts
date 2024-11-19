@@ -44,18 +44,6 @@ export const postClubMembers = async (
   clubId: string,
   applyReason: PostClubMemberRequest,
 ): Promise<PostClubMemberResponse> => {
-  // const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   credentials: "include",
-  // });
-
-  // if (!response.ok) {
-  //   throw new Error("동호회 가입 신청에 실패했습니다.");
-  // }
-
-  // return response.json();
-
   return restClient.post<PostClubMemberResponse>(
     `/clubs/${clubId}/clubMembers`,
     applyReason,
