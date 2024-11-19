@@ -101,8 +101,9 @@ function LiveMatchList() {
     size: 9,
   });
 
-  const { data: leagueDetails, isLoading: isLeagueDetailsLoading } =
-    useGetMainLeaguesMatch(openedLeagueId as string);
+  const { data: leagueDetails } = useGetMainLeaguesMatch(
+    openedLeagueId as string,
+  );
 
   const handleAccordionChange = (leagueId: string | null) => {
     setOpenedLeagueId(leagueId); // 아코디언 열림 상태 업데이트
@@ -113,7 +114,6 @@ function LiveMatchList() {
     setSelectedDate(formattedDate); // 상태 업데이트
   };
 
-  console.log(leagueDetails);
   return (
     <div className="p-4 w-full bg-white">
       <DateCarousel onDateSelect={handleDateSelect} />
