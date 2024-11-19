@@ -26,9 +26,9 @@ export const useGetMainLeagues = ({
 
 export const useGetMainLeaguesMatch = (leagueId: string) => {
   return useQuery({
-    queryKey: ["leagueDetails", leagueId], // 첫 번째 인수는 queryKey
-    queryFn: () => getMainLeagueMatch(leagueId), // 두 번째 인수는 queryFn
-    enabled: !!leagueId, // 옵션은 객체 내부에 포함
+    queryKey: ["leagueDetails", leagueId],
+    queryFn: () => getMainLeagueMatch(leagueId),
+    enabled: !!leagueId,
     refetchInterval: 5000, // 5초마다 재요청
   });
 };
