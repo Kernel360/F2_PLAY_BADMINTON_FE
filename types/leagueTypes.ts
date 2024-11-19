@@ -31,3 +31,11 @@ export type PatchLeagueResponse =
 export type PatchLeagueData = components["schemas"]["LeagueUpdateResponse"];
 
 export type TierLimit = "GOLD" | "SILVER" | "BRONZE";
+
+export type LeagueStatus =
+  | "ALL"
+  | "RECRUITING"
+  | "RECRUITING_COMPLETED"
+  | "PLAYING"
+  | "CANCELED"
+  | "FINISHED";
