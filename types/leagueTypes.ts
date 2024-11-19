@@ -36,3 +36,11 @@ export type DeleteLeagueResponse =
 export type DeleteLeagueData = components["schemas"]["LeagueCancelResponse"];
 
 export type TierLimit = "GOLD" | "SILVER" | "BRONZE";
+
+export type LeagueStatus =
+  | "ALL"
+  | "RECRUITING"
+  | "RECRUITING_COMPLETED"
+  | "PLAYING"
+  | "CANCELED"
+  | "FINISHED";
