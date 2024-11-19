@@ -2,6 +2,7 @@ import type { components } from "@/schemas/schema";
 import type {
   GetClubMemberCheckResponse,
   GetClubMemberListResponse,
+  PostClubMemberRequest,
   PostClubMemberResponse,
 } from "@/types/clubMemberTypes";
 import restClient from "../restClient";
@@ -41,23 +42,11 @@ export const getClubMembersCheck = async (
 
 export const postClubMembers = async (
   clubId: string,
-  // applyReason: PostClubMemberRequest,
+  applyReason: PostClubMemberRequest,
 ): Promise<PostClubMemberResponse> => {
-  // const response = await fetch(`${BASE_URL}/clubs/${clubId}/clubMembers`, {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   credentials: "include",
-  // });
-
-  // if (!response.ok) {
-  //   throw new Error("동호회 가입 신청에 실패했습니다.");
-  // }
-
-  // return response.json();
-
   return restClient.post<PostClubMemberResponse>(
     `/clubs/${clubId}/clubMembers`,
-    { apply_reason: "test" },
+    applyReason,
   );
 };
 
