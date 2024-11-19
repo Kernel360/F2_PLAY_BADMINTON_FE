@@ -1,7 +1,9 @@
 "use client";
 
 import DateCarousel from "@/components/DayCarousel";
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/Button";
+import SImage from "@/components/ui/Image";
 import {
   Accordion,
   AccordionContent,
@@ -11,86 +13,17 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useGetMainLeagues } from "@/lib/api/hooks/mainLeagueHook";
 import type { LeagueStatus, TierLimit } from "@/types/leagueTypes";
-import type { GetMainLeagues } from "@/types/mainLeagueTypes";
+import type {
+  GetMainLeagues,
+  GetMainLeaguesData,
+  GetMainLeaguesMatchData,
+} from "@/types/mainLeagueTypes";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
+import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import Link from "next/link";
 import React, { useState } from "react";
-import Spinner from "../Spinner";
-import SImage from "../ui/Image";
-
-const matchMockData = [
-  {
-    id: 1,
-    stage: "8강 3세트",
-    team1: {
-      name: "유저1",
-      profileImage: "https://avatar.iran.liara.run/public/28",
-      score: 3,
-    },
-    team2: {
-      name: "유저2",
-      profileImage: "https://avatar.iran.liara.run/public/98",
-      score: 9,
-    },
-  },
-  {
-    id: 2,
-    stage: "4강 1세트",
-    team1: {
-      name: "유저3",
-      profileImage: "https://avatar.iran.liara.run/public/29",
-      score: 5,
-    },
-    team2: {
-      name: "유저4",
-      profileImage: "https://avatar.iran.liara.run/public/99",
-      score: 7,
-    },
-  },
-  {
-    id: 3,
-    stage: "결승",
-    team1: {
-      name: "유저5",
-      profileImage: "https://avatar.iran.liara.run/public/30",
-      score: 6,
-    },
-    team2: {
-      name: "유저6",
-      profileImage: "https://avatar.iran.liara.run/public/100",
-      score: 4,
-    },
-  },
-  {
-    id: 4,
-    stage: "4강 1세트",
-    team1: {
-      name: "유저3",
-      profileImage: "https://avatar.iran.liara.run/public/29",
-      score: 5,
-    },
-    team2: {
-      name: "유저4",
-      profileImage: "https://avatar.iran.liara.run/public/99",
-      score: 7,
-    },
-  },
-  {
-    id: 5,
-    stage: "결승",
-    team1: {
-      name: "유저5",
-      profileImage: "https://avatar.iran.liara.run/public/30",
-      score: 6,
-    },
-    team2: {
-      name: "유저6",
-      profileImage: "https://avatar.iran.liara.run/public/100",
-      score: 4,
-    },
-  },
-];
+import { Separator } from "../ui/separator";
 
 const renderLeagueStatusButton = (status: LeagueStatus) => {
   if (status === "PLAYING") {
@@ -158,6 +91,7 @@ const renderLeagueTierBadge = (tier: TierLimit) => {
 function LiveMatchList() {
   const today = format(new Date(), "yyyy-MM-dd");
   const [selectedDate, setSelectedDate] = useState(today);
+  const [openedLeagueId, setOpenedLeagueId] = useState<number | null>(null);
 
   const { data, isLoading, fetchNextPage, hasNextPage } = useGetMainLeagues({
     leagueStatus: "ALL",
@@ -166,11 +100,33 @@ function LiveMatchList() {
     size: 9,
   });
 
+  const fetchLeagueDetails = async (leagueId: number) => {
+    const response = await fetch(
+      `https://apit.badminton.run/v1/leagues/${leagueId}`,
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch league details");
+    }
+    return response.json();
+  };
+
+  const { data: leagueDetails, isLoading: isLeagueDetailsLoading } = useQuery({
+    queryKey: ["leagueDetails", openedLeagueId], // 첫 번째 인수는 queryKey
+    queryFn: () => fetchLeagueDetails(openedLeagueId as number), // 두 번째 인수는 queryFn
+    enabled: !!openedLeagueId, // 옵션은 객체 내부에 포함
+    // refetchInterval: 5000, // 5초마다 재요청
+  });
+
+  const handleAccordionChange = (leagueId: number | null) => {
+    setOpenedLeagueId(leagueId); // 아코디언 열림 상태 업데이트
+  };
+
   const handleDateSelect = (date: Date) => {
     const formattedDate = format(date, "yyyy-MM-dd");
     setSelectedDate(formattedDate); // 상태 업데이트
   };
 
+  console.log(leagueDetails);
   return (
     <div className="p-4 w-full bg-white">
       <DateCarousel onDateSelect={handleDateSelect} />
@@ -180,7 +136,13 @@ function LiveMatchList() {
             <Spinner />
           </div>
         ) : (
-          <Accordion type="single" collapsible>
+          <Accordion
+            type="single"
+            collapsible
+            onValueChange={(value) =>
+              handleAccordionChange(value ? Number.parseInt(value, 10) : null)
+            }
+          >
             {data?.pages.map((group) => {
               return (
                 <React.Fragment key={group.data?.number_of_elements}>
@@ -225,45 +187,200 @@ function LiveMatchList() {
                         </div>
                         <AccordionContent>
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-                            {matchMockData.map((match) => (
-                              <div
-                                key={match.id}
-                                className="p-4 rounded-lg w-full flex flex-col justify-center items-center border border-solid border-gray-300 "
-                              >
-                                <Badge className="bg-yellow-500 hover:bg-yellow-500 text-xs font-semibold text-center mb-2 rounded-sm">
-                                  {match.stage}
-                                </Badge>
-                                <div className="flex items-center justify-between gap-6">
-                                  <div className="flex items-center space-x-3">
-                                    <SImage
-                                      src={match.team1.profileImage}
-                                      radius="circular"
-                                      width={45}
-                                      height={45}
-                                      alt="profile"
-                                    />
-                                    <span className="text-gray-800 text-sm font-semibold">
-                                      {match.team1.name}
-                                    </span>
-                                  </div>
-                                  <span className="text-gray-900 font-bold text-lg">
-                                    {match.team1.score} : {match.team2.score}
-                                  </span>
-                                  <div className="flex items-center space-x-3">
-                                    <span className="text-gray-800 text-sm font-semibold">
-                                      {match.team2.name}
-                                    </span>
-                                    <SImage
-                                      src={match.team2.profileImage}
-                                      radius="circular"
-                                      width={45}
-                                      height={45}
-                                      alt="profile"
-                                    />
+                            {leagueDetails?.data?.map(
+                              (match: GetMainLeaguesMatchData) => (
+                                <div
+                                  key={match.match_id}
+                                  className="gap-6 p-4 rounded-lg w-full flex flex-col justify-center items-center border border-solid border-gray-300"
+                                >
+                                  <Badge className="bg-yellow-500 hover:bg-yellow-500 text-xs font-semibold text-center rounded-sm">
+                                    {`${match.round_number}라운드 -  ${match.set_number}세트`}
+                                  </Badge>
+                                  <div className="flex flex-col gap-4 w-full">
+                                    {/* Singles Match */}
+                                    {match.singles_match_player_response && (
+                                      <div className="flex items-center justify-between gap-4">
+                                        <div className="flex items-center space-x-3">
+                                          <SImage
+                                            src={
+                                              match
+                                                .singles_match_player_response
+                                                .participant1_image ||
+                                              "/images/dummy-image.jpg"
+                                            }
+                                            radius="circular"
+                                            width={45}
+                                            height={45}
+                                            alt="profile"
+                                          />
+                                          <span className="text-gray-800 text-sm font-semibold truncate">
+                                            {
+                                              match
+                                                .singles_match_player_response
+                                                .participant1_name
+                                            }
+                                          </span>
+                                        </div>
+                                        <span className="text-gray-900 font-bold text-lg">
+                                          {match.set_score1} :{" "}
+                                          {match.set_score2}
+                                        </span>
+                                        <div className="flex items-center space-x-3">
+                                          <span className="text-gray-800 text-sm font-semibold ">
+                                            {
+                                              match
+                                                .singles_match_player_response
+                                                .participant2_name
+                                            }
+                                          </span>
+                                          <SImage
+                                            src={
+                                              match
+                                                .singles_match_player_response
+                                                .participant2_image ||
+                                              "/images/dummy-image.jpg"
+                                            }
+                                            radius="circular"
+                                            width={45}
+                                            height={45}
+                                            alt="profile"
+                                          />
+                                        </div>
+                                      </div>
+                                    )}
+                                    {/* Doubles Match */}
+                                    {match.doubles_match_player_response && (
+                                      <div className="flex flex-col gap-8">
+                                        {/* 팀 A */}
+                                        <div className="flex flex-col items-center gap-6">
+                                          <div className="w-full flex flex-wrap justify-center gap-4">
+                                            {/* 간격 조정 */}
+                                            <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
+                                              <SImage
+                                                src={
+                                                  // match
+                                                  //   .doubles_match_player_response[
+                                                  //   `participant${participantIndex}_image`
+                                                  // ] ||
+                                                  // "/images/dummy-image.jpg"
+                                                  match
+                                                    .doubles_match_player_response
+                                                    ?.participant1_image ||
+                                                  "/images/dummy-image.jpg"
+                                                }
+                                                radius="circular"
+                                                width={50}
+                                                height={50}
+                                                alt={
+                                                  match
+                                                    .doubles_match_player_response
+                                                    .participant1_name
+                                                }
+                                              />
+                                              <span className="text-gray-800 text-sm font-semibold truncate">
+                                                {
+                                                  match
+                                                    .doubles_match_player_response
+                                                    .participant1_name
+                                                }
+                                              </span>
+                                            </div>
+                                            <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
+                                              <SImage
+                                                src={
+                                                  match
+                                                    .doubles_match_player_response
+                                                    ?.participant2_image ||
+                                                  "/images/dummy-image.jpg"
+                                                }
+                                                radius="circular"
+                                                width={50}
+                                                height={50}
+                                                alt={
+                                                  match
+                                                    .doubles_match_player_response
+                                                    .participant2_name
+                                                }
+                                              />
+                                              <span className="text-gray-800 text-sm font-semibold truncate">
+                                                {
+                                                  match
+                                                    .doubles_match_player_response
+                                                    .participant2_name
+                                                }
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <div className="w-full flex flex-col items-center justify-center gap-2 text-xl font-semibold text-gray-900">
+                                            <span>{match.set_score1}</span>
+                                            <Separator />
+                                            <span>{match.set_score2}</span>
+                                          </div>
+                                        </div>
+
+                                        {/* 팀 B */}
+                                        <div className="flex flex-col items-center gap-6">
+                                          <div className="w-full flex flex-wrap justify-center gap-4">
+                                            {" "}
+                                            {/* 간격 조정 */}
+                                            <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
+                                              <SImage
+                                                src={
+                                                  match
+                                                    .doubles_match_player_response
+                                                    ?.participant3_image ||
+                                                  "/images/dummy-image.jpg"
+                                                }
+                                                radius="circular"
+                                                width={50}
+                                                height={50}
+                                                alt={
+                                                  match
+                                                    .doubles_match_player_response
+                                                    .participant3_name
+                                                }
+                                              />
+                                              <span className="text-gray-800 text-sm font-semibold truncate">
+                                                {
+                                                  match
+                                                    .doubles_match_player_response
+                                                    .participant3_name
+                                                }
+                                              </span>
+                                            </div>
+                                            <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
+                                              <SImage
+                                                src={
+                                                  match
+                                                    .doubles_match_player_response
+                                                    ?.participant4_image ||
+                                                  "/images/dummy-image.jpg"
+                                                }
+                                                radius="circular"
+                                                width={50}
+                                                height={50}
+                                                alt={
+                                                  match
+                                                    .doubles_match_player_response
+                                                    .participant4_name
+                                                }
+                                              />
+                                              <span className="text-gray-800 text-sm font-semibold truncate">
+                                                {
+                                                  match
+                                                    .doubles_match_player_response
+                                                    .participant4_name
+                                                }
+                                              </span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
-                              </div>
-                            ))}
+                              ),
+                            )}
                           </div>
                         </AccordionContent>
                       </AccordionItem>
@@ -275,6 +392,17 @@ function LiveMatchList() {
           </Accordion>
         )}
       </div>
+      {hasNextPage && (
+        <div className="w-full flex justify-center items-center">
+          <Button
+            type="button"
+            onClick={() => fetchNextPage()}
+            className="mt-4 px-6 py-2 font-semibold rounded-lg duration-300 shadow-md hover:shadow-lg focus:ring-2"
+          >
+            더보기
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
