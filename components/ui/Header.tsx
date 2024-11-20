@@ -115,7 +115,10 @@ function Header() {
     <div className="flex items-center justify-between w-full max-w-6xl h-16 px-4 sticky top-0 z-50 backdrop-blur-md">
       <div className="flex items-center space-x-8">
         <Link href="/">
-          <div className="text-2xl cursor-pointer">LOGO</div>
+          <div className="flex gap-2 justify-center items-center text-2xl font-bold cursor-pointer text-black">
+            <img src="/images/logo.png" alt="logo" className="w-10 h-10" />
+            콕콕
+          </div>
         </Link>
         <nav className="flex space-x-4">
           <Link href="/">
