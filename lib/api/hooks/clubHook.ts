@@ -12,20 +12,19 @@ import {
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   ClubCardResponse,
-  ClubParams,
   GetClubDetailData,
-  GetClubDetailsResponse,
-  GetClubListData,
   GetClubListResponse,
-  GetPopularClubListResponse,
   PatchClubRequest,
+  PostClubData,
   PostClubRequest,
+  PostClubResponse,
 } from "@/types/clubTypes";
 import {
   useInfiniteQuery,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
+import useMutationWithToast from "./useMutationWithToast";
 
 export const useGetClubs = (size: number, sort: string) => {
   return useInfiniteQuery<GetClubListResponse>({
@@ -72,20 +71,26 @@ export const useGetRecentlyClubs = () => {
   );
 };
 
-export const usePostClubs = () => {
+export const usePostClubs = (onSuccess: (clubToken: string) => void) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (clubData: PostClubRequest) => postClubs(clubData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clubsData"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = (clubData: PostClubRequest) => postClubs(clubData);
+
+  const onSuccessCallback = (data: PostClubData) => {
+    if (data.club_token) {
+      queryClient.invalidateQueries({ queryKey: ["clubList"] });
+      onSuccess(data.club_token);
+    }
+  };
+
+  return useMutationWithToast<PostClubData, PostClubRequest>(
+    mutationFn,
+    onSuccessCallback,
+  );
 };
 
 export const usePostClubsImg = () => {
-  return useMutation<string, Error, FormData>({
+  return useMutation({
     mutationFn: (clubImg: FormData) => postClubsImg(clubImg),
     onError: (error: Error) => alert(error),
   });
@@ -104,7 +109,7 @@ export const usePatchClubs = (clubId: string) => {
     mutationFn: (clubUpdateData: PatchClubRequest) =>
       patchClubs(clubUpdateData, clubId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clubsData"] });
+      queryClient.invalidateQueries({ queryKey: ["clubList"] });
       queryClient.invalidateQueries({ queryKey: ["clubsDataById"] });
     },
     onError: (error: Error) => alert(error),

@@ -14,7 +14,7 @@ interface CommonResponse<T> {
 
 const useMutationWithToast = <TData, TRequestBody>(
   mutationFn: (requestBody: TRequestBody) => Promise<CommonResponse<TData>>,
-  onSuccessCallback?: () => void,
+  onSuccessCallback?: (data: TData) => void,
 ): {
   isSuccess: boolean;
   isPending: boolean;
@@ -31,8 +31,8 @@ const useMutationWithToast = <TData, TRequestBody>(
   >({
     mutationFn,
     onSuccess: (data) => {
-      if (data.result === "SUCCESS" && onSuccessCallback) {
-        onSuccessCallback();
+      if (data.result === "SUCCESS" && data.data) {
+        onSuccessCallback?.(data.data);
         setDataResult(true);
       }
       if (data.result === "FAIL") {

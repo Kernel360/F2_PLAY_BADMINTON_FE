@@ -16,7 +16,9 @@ function ClubCreate() {
   const router = useRouter();
   const [imgUrl, setImgUrl] = useState<string>("/images/dummy-image.jpg");
   const { mutate: createClubImg } = usePostClubsImg();
-  const { mutate: createClub } = usePostClubs();
+  const { mutate: createClub } = usePostClubs((clubId) => {
+    router.push(`/club/${clubId}`);
+  });
 
   const {
     register,
@@ -36,8 +38,8 @@ function ClubCreate() {
 
     createClubImg(formData, {
       onSuccess: (data) => {
-        setImgUrl(data);
-        setValue("club_image", data);
+        setImgUrl(data.data || "/images/dummy-image.jpg");
+        setValue("club_image", data.data);
         clearErrors("club_image"); // 업로드 성공 시 에러 메시지 제거
       },
       onError: () => {
@@ -65,12 +67,7 @@ function ClubCreate() {
       club_image: imgUrl,
     };
 
-    // createClub(newClubData, {
-    //   onSuccess: (data) => {
-    //     const clubId = data.club_id;
-    //     router.push(`/club/${clubId}`);
-    //   },
-    // });
+    createClub(newClubData);
   };
 
   return (
