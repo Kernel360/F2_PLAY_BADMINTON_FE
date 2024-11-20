@@ -1,8 +1,8 @@
-import type { components } from "@/schemas/schema";
 import type {
   GetMemberMachesRecordData,
   GetMemberMyClubsData,
   GetMemberMyPageData,
+  PutMemberProfileData,
   PutMemberProfileRequest,
 } from "@/types/memberTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -14,6 +14,7 @@ import {
   postMembersProfileImage,
   putMembersProfile,
 } from "../functions/memberFn";
+import useMutationWithToast from "./useMutationWithToast";
 import useQueryWithToast from "./useQueryWithToast";
 
 export const useGetMembersSession = () => {
@@ -57,16 +58,20 @@ export const usePostMembersProfileImage = () => {
   });
 };
 
-export const usePutMembersProfile = () => {
+export const usePutMembersProfile = (onSuccess: () => void) => {
+  const mutationFn = (profileImage: PutMemberProfileRequest) =>
+    putMembersProfile(profileImage);
+
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (profileImage: PutMemberProfileRequest) =>
-      putMembersProfile(profileImage),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["myPage"] });
-      queryClient.invalidateQueries({ queryKey: ["mySession"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["myPage"] });
+    queryClient.invalidateQueries({ queryKey: ["mySession"] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<PutMemberProfileData, PutMemberProfileRequest>(
+    mutationFn,
+    onSuccessCallback,
+  );
 };
