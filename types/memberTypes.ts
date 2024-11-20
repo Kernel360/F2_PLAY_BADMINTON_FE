@@ -31,5 +31,8 @@ export type PostMembersProfileImageResponse =
 export type PutMemberProfileResponse =
   components["schemas"]["CommonResponseMemberUpdateResponse"];
 
+export type PutMemberProfileData =
+  components["schemas"]["MemberUpdateResponse"];
+
 export type PutMemberProfileRequest =
   components["schemas"]["MemberUpdateRequest"];
