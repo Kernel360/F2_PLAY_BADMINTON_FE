@@ -31,14 +31,7 @@ const profileSchema = z.object({
     .string()
     .min(2, "닉네임은 2자 이상 10자 이내로 입력하세요.")
     .max(10, "닉네임은 2자 이상 10자 이내로 입력하세요."),
-  profileImage: z
-    .instanceof(File)
-    .optional()
-    .refine(
-      (file) =>
-        file && ["image/jpeg", "image/png", "image/gif"].includes(file.type),
-      "이미지는 jpg, jpeg, png, gif 형식만 가능합니다.",
-    ),
+  profileImage: z.string(),
 });
 
 type ProfileFormInputs = z.infer<typeof profileSchema>;
@@ -52,8 +45,14 @@ function EditProfileDialog({
   initialName,
   initialProfileImage,
 }: EditProfileDialogProps) {
+  const DEFAULT_IMAGE = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
+
   const { mutate: postProfileImage } = usePostMembersProfileImage();
-  const { mutate: putProfile } = usePutMembersProfile();
+  const { mutate: putProfile } = usePutMembersProfile(() => {
+    setOpen(false);
+    setUploadedImageFile(null);
+  });
+
   const [profileImage, setProfileImage] = useState<string>(initialProfileImage);
   const [uploadedImageFile, setUploadedImageFile] = useState<File | null>(null);
   const [open, setOpen] = useState<boolean>(false);
@@ -62,6 +61,7 @@ function EditProfileDialog({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: initialName,
+      profileImage: initialProfileImage,
     },
   });
 
@@ -71,14 +71,13 @@ function EditProfileDialog({
       const imageUrl = URL.createObjectURL(file);
       setProfileImage(imageUrl);
       setUploadedImageFile(file);
-      form.setValue("profileImage", file);
     }
   };
 
   const handleImageRemove = () => {
     setProfileImage("/images/dummy-image.jpg");
     setUploadedImageFile(null);
-    form.setValue("profileImage", undefined);
+    form.setValue("profileImage", initialProfileImage);
   };
 
   const onSubmit: SubmitHandler<ProfileFormInputs> = (data) => {
@@ -86,21 +85,15 @@ function EditProfileDialog({
     if (uploadedImageFile) {
       const formData = new FormData();
       formData.append("multipartFile", uploadedImageFile);
+
       postProfileImage(formData, {
         onSuccess: (response) => {
           if (response.data) {
-            putProfile(
-              {
-                name,
-                profile_image_url: response.data,
-              },
-              {
-                onSuccess: () => {
-                  setOpen(false);
-                  setUploadedImageFile(null);
-                },
-              },
-            );
+            form.setValue("profileImage", response.data);
+            putProfile({
+              name,
+              profile_image_url: response.data,
+            });
           }
         },
         onError: (error) => {
@@ -108,15 +101,12 @@ function EditProfileDialog({
         },
       });
     } else {
-      putProfile(
-        {
+      console.log("이미지가 업로드되지 않아서 putProfile만 호출");
+      if (profileImage === "/images/dummy-image.jpg")
+        putProfile({
           name,
-          profile_image_url: profileImage,
-        },
-        {
-          onSuccess: () => setOpen(false),
-        },
-      );
+          profile_image_url: DEFAULT_IMAGE,
+        });
     }
   };
 

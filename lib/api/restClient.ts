@@ -38,7 +38,7 @@ const restClient = {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data = await response.text();
+    const data = await response.json();
     return data as T;
   },
   patch: async <T>(url: string, body: object) => {
