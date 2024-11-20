@@ -51,8 +51,8 @@ function ClubManage() {
 
     patchClubImg(formData, {
       onSuccess: (data) => {
-        setImgUrl(data);
-        setValue("club_image", data);
+        setImgUrl(data.data);
+        setValue("club_image", data.data);
         clearErrors("club_image");
       },
       onError: () => {
