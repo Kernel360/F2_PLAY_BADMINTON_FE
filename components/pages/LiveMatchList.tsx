@@ -26,7 +26,11 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Separator } from "../ui/separator";
 
-const renderLeagueStatusButton = (status: LeagueStatus) => {
+const renderLeagueStatusButton = (
+  status: LeagueStatus,
+  clubToken: string,
+  leagueId: number,
+) => {
   if (status === "PLAYING") {
     return (
       <AccordionTrigger className="p-2 h-8 rounded-md text-xs w-[105px] border-0 bg-orange-500 text-white hover:no-underline">
@@ -36,8 +40,7 @@ const renderLeagueStatusButton = (status: LeagueStatus) => {
   }
   if (status === "RECRUITING") {
     return (
-      // TODO: 링크 지정하기
-      <Link href="/">
+      <Link href={`/club/${clubToken}/league/${leagueId}`}>
         <Button className="p-2 h-8 rounded-md text-xs w-[105px] border-0 bg-blue-500 text-white">
           모집중
         </Button>
@@ -167,7 +170,11 @@ function LiveMatchList() {
                             </div>
                           </div>
                           <div className="flex flex-col justify-between items-center">
-                            {renderLeagueStatusButton(item.league_status)}
+                            {renderLeagueStatusButton(
+                              item.league_status,
+                              item.club_token,
+                              item.league_id,
+                            )}
                           </div>
                         </div>
                         <AccordionContent>

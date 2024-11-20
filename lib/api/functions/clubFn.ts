@@ -7,6 +7,7 @@ import type {
   GetRecentlyClubListResponse,
   PatchClubRequest,
   PatchClubResponse,
+  PostClubImageResponse,
   PostClubRequest,
   PostClubResponse,
 } from "@/types/clubTypes";
@@ -63,8 +64,10 @@ export const postClubs = async (
   return restClient.post<PostClubResponse>("/clubs", clubData);
 };
 
-export const postClubsImg = async (clubImg: FormData): Promise<string> => {
-  return restClient.postImage<string>("/clubs/images", clubImg);
+export const postClubsImg = async (
+  clubImg: FormData,
+): Promise<PostClubImageResponse> => {
+  return restClient.postImage<PostClubImageResponse>("/clubs/images", clubImg);
 };
 
 export const getClubsById = async (

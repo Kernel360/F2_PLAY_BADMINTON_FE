@@ -33,6 +33,11 @@ export type PostClubRequest = components["schemas"]["ClubCreateRequest"];
 export type PostClubResponse =
   components["schemas"]["CommonResponseClubCreateResponse"];
 
+export type PostClubData = components["schemas"]["ClubCreateResponse"];
+
+export type PostClubImageResponse =
+  components["schemas"]["CommonResponseString"];
+
 export type PatchClubRequest = components["schemas"]["ClubUpdateRequest"];
 
 export type PatchClubResponse =

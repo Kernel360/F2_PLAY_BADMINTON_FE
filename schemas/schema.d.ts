@@ -3202,6 +3202,8 @@ export interface components {
        * @enum {string}
        */
       required_tier: "GOLD" | "SILVER" | "BRONZE";
+      /** @description 동호회 토큰 */
+      club_token: string;
     };
     CommonResponseListLeagueSetsScoreInProgressResponse: {
       /** @enum {string} */
@@ -5402,13 +5404,13 @@ export interface operations {
       };
     };
     responses: {
-      /** @description 이미지 업로드 성공 */
+      /** @description OK */
       200: {
         headers: {
           [name: string]: unknown;
         };
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["CommonResponseString"];
         };
       };
     };
