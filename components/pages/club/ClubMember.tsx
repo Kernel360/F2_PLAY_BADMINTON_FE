@@ -1,25 +1,59 @@
 "use client";
 
-import MemberInfo from "@/components/club/MemberInfo";
+import MemberBanDialog from "@/components/club/MemberBanDialog";
+import MemberExpelDialog from "@/components/club/MemberExpelDialog";
+import MemberRoleChangeDialog from "@/components/club/MemberRoleChangeDialog";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useGetClubMembers } from "@/lib/api/hooks/clubMemberHook";
-import type { components } from "@/schemas/schema";
-import { useParams, usePathname } from "next/navigation";
-import { useState } from "react";
+import { getTierWithEmojiAndText } from "@/utils/getTier";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { EllipsisVertical } from "lucide-react";
+import { useParams } from "next/navigation";
 
-type ClubMemberResponse = components["schemas"]["ClubMemberResponse"];
+const changeRoleWord = (role: string) => {
+  switch (role) {
+    case "ROLE_OWNER":
+      return <Badge className="bg-zinc-900 text-white">회장</Badge>;
+    case "ROLE_MANAGER":
+      return <Badge className="bg-zinc-500 text-white">매니저</Badge>;
+    case "ROLE_USER":
+      return "회원";
+    default:
+      return "";
+  }
+};
 
 function ClubMember() {
   const { clubId } = useParams();
   const { data, isLoading } = useGetClubMembers(clubId as string);
-  const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>();
-
-  const toggleDropdown = (index: number) => {
-    setOpenDropdownIndex((prevIndex) => (prevIndex === index ? null : index));
-  };
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
   if (!data) {
     return <div>No data available</div>;
   }
@@ -31,24 +65,74 @@ function ClubMember() {
   ];
 
   return (
-    <div className="h-[466px]">
-      <div className="flex flex-col gap-5 h-full overflow-scroll">
-        <div className="flex font-bold text-gray-600 bg-gray-100 p-2 rounded-md">
-          <div className="flex-[1]">멤버</div>
-          <div className="flex-[1]">직책</div>
-          <div className="flex-[1]">티어</div>
-          <div className="flex-[1]">전적</div>
-        </div>
+    <Table>
+      <TableHeader>
+        <TableRow className="hover:bg-white">
+          <TableHead className="text-center">역할</TableHead>
+          <TableHead>회원</TableHead>
+          <TableHead className="text-center">티어</TableHead>
+          <TableHead className="text-center">전적</TableHead>
+          <TableHead className="text-center">정지</TableHead>
+          <TableHead className="text-center"> </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {members.map((member) => (
-          <MemberInfo
-            key={member.club_member_id}
-            memberData={member as ClubMemberResponse}
-            isOpen={openDropdownIndex === member.club_member_id}
-            onToggle={() => toggleDropdown(member.club_member_id as number)}
-          />
+          <TableRow key={member.club_member_id} className="hover:bg-white">
+            <TableCell className="text-black text-center">
+              {changeRoleWord(member.role ?? "")}
+            </TableCell>
+            <TableCell className="flex flex-1 gap-2 justify-start items-center">
+              <img
+                src={member.image}
+                alt="userImg"
+                className="w-8 h-8 rounded-full"
+              />
+              <p className="text-black text-center">{member.name}</p>
+            </TableCell>
+            <TableCell className="text-black text-center">
+              {getTierWithEmojiAndText(member.tier as string)}
+            </TableCell>
+            <TableCell className="text-black text-center">
+              {member.league_record.match_count}전 |{" "}
+              {member.league_record.win_count}승 |{" "}
+              {member.league_record.draw_count}무 |{" "}
+              {member.league_record.lose_count}패
+            </TableCell>
+            <TableCell className="text-black text-center">
+              {member.is_banned ? <p className="text-red-500">정지</p> : ""}
+            </TableCell>
+            <TableCell className="text-gray-500 text-center cursor-pointer flex justify-center">
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <EllipsisVertical />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <div className="relative flex cursor-pointer select-none items-center justify-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-100  focus:bg-accent focus:text-accent-foreground ">
+                    <MemberRoleChangeDialog
+                      clubId={clubId as string}
+                      clubMemberId={member.club_member_id}
+                    />
+                  </div>
+                  <div className="relative flex cursor-pointer select-none items-center justify-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-100  focus:bg-accent focus:text-accent-foreground ">
+                    <MemberBanDialog
+                      clubId={clubId as string}
+                      clubMemberId={member.club_member_id}
+                    />
+                  </div>
+                  <div className="relative flex cursor-pointer select-none items-center justify-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-100  focus:bg-accent focus:text-accent-foreground ">
+                    <MemberExpelDialog
+                      clubId={clubId as string}
+                      clubMemberId={member.club_member_id}
+                    />
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TableCell>
+          </TableRow>
         ))}
-      </div>
-    </div>
+      </TableBody>
+    </Table>
   );
 }
 
