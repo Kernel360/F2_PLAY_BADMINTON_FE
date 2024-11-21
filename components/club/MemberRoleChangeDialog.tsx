@@ -10,25 +10,39 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { usePatchClubMembersRole } from "@/lib/api/hooks/clubMemberHook";
+import type { MemberRole } from "@/types/memberTypes";
 import React, { useState } from "react";
 
 interface MemberRoleChangeDialogProps {
   clubId: string;
   clubMemberId: number;
+  memberRole: MemberRole;
 }
 
 function MemberRoleChangeDialog({
   clubId,
   clubMemberId,
+  memberRole,
 }: MemberRoleChangeDialogProps) {
-  const [selectedRole, setSelectedRole] = useState<string>("ROLE_USER");
+  const [selectedRole, setSelectedRole] = useState<MemberRole>(memberRole);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleRoleChange = (role: string) => {
+  const { mutate: patchClubMembersRole } = usePatchClubMembersRole(
+    clubId as string,
+    clubMemberId,
+    () => {
+      alert("역할 변경이 완료되었습니다");
+      setDialogOpen(false);
+    },
+  );
+
+  const handleRoleChange = (role: MemberRole) => {
     setSelectedRole(role);
   };
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger>역할 변경</DialogTrigger>
       <DialogContent className="max-w-md p-6 rounded-lg shadow-lg">
         <DialogHeader>
@@ -48,15 +62,15 @@ function MemberRoleChangeDialog({
           >
             <div className="flex items-center space-x-3">
               <RadioGroupItem
-                id="role-user"
-                value="ROLE_USER"
+                id="role-owner"
+                value="ROLE_OWNER"
                 className="border-zinc-800 text-zinc-800 checked:bg-zinc-800 checked:text-zinc-800"
               />
               <label
-                htmlFor="role-user"
+                htmlFor="role-owner"
                 className="text-gray-800 cursor-pointer"
               >
-                일반 회원
+                동호회 회장
               </label>
             </div>
             <div className="flex items-center space-x-3">
@@ -69,20 +83,20 @@ function MemberRoleChangeDialog({
                 htmlFor="role-manager"
                 className="text-gray-800 cursor-pointer"
               >
-                동호회 관리자
+                동호회 매니저
               </label>
             </div>
             <div className="flex items-center space-x-3">
               <RadioGroupItem
-                id="role-owner"
-                value="ROLE_OWNER"
+                id="role-user"
+                value="ROLE_USER"
                 className="border-zinc-800 text-zinc-800 checked:bg-zinc-800 checked:text-zinc-800"
               />
               <label
-                htmlFor="role-owner"
+                htmlFor="role-user"
                 className="text-gray-800 cursor-pointer"
               >
-                동호회 회장
+                일반 회원
               </label>
             </div>
           </RadioGroup>
@@ -93,7 +107,7 @@ function MemberRoleChangeDialog({
           </DialogClose>
           <Button
             variant="default"
-            onClick={() => console.log("Selected Role:", selectedRole)}
+            onClick={() => patchClubMembersRole({ role: selectedRole })}
           >
             변경
           </Button>

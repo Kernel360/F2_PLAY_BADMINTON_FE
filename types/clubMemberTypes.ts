@@ -28,6 +28,9 @@ export type PatchClubMemberRoleRequest =
 export type PatchClubMemberRoleResponse =
   components["schemas"]["CommonResponseClubMemberResponse"];
 
+export type PatchClubMemberRoleData =
+  components["schemas"]["ClubMemberResponse"];
+
 export type PatchClubMemberExpelRequest =
   components["schemas"]["ClubMemberExpelRequest"];
 

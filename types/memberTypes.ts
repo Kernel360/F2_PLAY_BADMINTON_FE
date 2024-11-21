@@ -36,3 +36,5 @@ export type PutMemberProfileData =
 
 export type PutMemberProfileRequest =
   components["schemas"]["MemberUpdateRequest"];
+
+export type MemberRole = "ROLE_USER" | "ROLE_OWNER" | "ROLE_MANAGER";

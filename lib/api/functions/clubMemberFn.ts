@@ -2,6 +2,7 @@ import type { components } from "@/schemas/schema";
 import type {
   GetClubMemberCheckResponse,
   GetClubMemberListResponse,
+  PatchClubMemberRoleResponse,
   PostClubMemberRequest,
   PostClubMemberResponse,
 } from "@/types/clubMemberTypes";
@@ -54,8 +55,8 @@ export const patchClubMembersRole = async (
   role: ClubMemberRoleUpdateRequest,
   clubId: string,
   clubMemberId: number,
-): Promise<ClubMemberResponse> => {
-  return restClient.patch<ClubMemberResponse>(
+): Promise<PatchClubMemberRoleResponse> => {
+  return restClient.patch<PatchClubMemberRoleResponse>(
     `/clubs/${clubId}/clubMembers/role?clubMemberId=${clubMemberId}`,
     role,
   );

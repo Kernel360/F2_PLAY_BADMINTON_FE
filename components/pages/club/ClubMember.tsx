@@ -3,17 +3,7 @@
 import MemberBanDialog from "@/components/club/MemberBanDialog";
 import MemberExpelDialog from "@/components/club/MemberExpelDialog";
 import MemberRoleChangeDialog from "@/components/club/MemberRoleChangeDialog";
-import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,9 +17,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetClubMembers } from "@/lib/api/hooks/clubMemberHook";
+import {
+  useGetClubMembers,
+  useGetClubMembersCheck,
+} from "@/lib/api/hooks/clubMemberHook";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
-import { DialogClose } from "@radix-ui/react-dialog";
 import { EllipsisVertical } from "lucide-react";
 import { useParams } from "next/navigation";
 
@@ -49,6 +41,7 @@ const changeRoleWord = (role: string) => {
 function ClubMember() {
   const { clubId } = useParams();
   const { data, isLoading } = useGetClubMembers(clubId as string);
+  const { data: isJoined } = useGetClubMembersCheck(clubId as string);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -102,33 +95,37 @@ function ClubMember() {
             <TableCell className="text-black text-center">
               {member.is_banned ? <p className="text-red-500">정지</p> : ""}
             </TableCell>
-            <TableCell className="text-gray-500 text-center cursor-pointer flex justify-center">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <EllipsisVertical />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <div className="relative flex cursor-pointer select-none items-center justify-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-100  focus:bg-accent focus:text-accent-foreground ">
-                    <MemberRoleChangeDialog
-                      clubId={clubId as string}
-                      clubMemberId={member.club_member_id}
-                    />
-                  </div>
-                  <div className="relative flex cursor-pointer select-none items-center justify-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-100  focus:bg-accent focus:text-accent-foreground ">
-                    <MemberBanDialog
-                      clubId={clubId as string}
-                      clubMemberId={member.club_member_id}
-                    />
-                  </div>
-                  <div className="relative flex cursor-pointer select-none items-center justify-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-100  focus:bg-accent focus:text-accent-foreground ">
-                    <MemberExpelDialog
-                      clubId={clubId as string}
-                      clubMemberId={member.club_member_id}
-                    />
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TableCell>
+            {member.role !== "ROLE_OWNER" &&
+              isJoined?.role === "ROLE_OWNER" && (
+                <TableCell className="text-gray-500 text-center cursor-pointer flex justify-center">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <EllipsisVertical />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <div className="relative flex cursor-pointer select-none items-center justify-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-100  focus:bg-accent focus:text-accent-foreground ">
+                        <MemberRoleChangeDialog
+                          clubId={clubId as string}
+                          clubMemberId={member.club_member_id}
+                          memberRole={member.role}
+                        />
+                      </div>
+                      <div className="relative flex cursor-pointer select-none items-center justify-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-100  focus:bg-accent focus:text-accent-foreground ">
+                        <MemberBanDialog
+                          clubId={clubId as string}
+                          clubMemberId={member.club_member_id}
+                        />
+                      </div>
+                      <div className="relative flex cursor-pointer select-none items-center justify-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-100  focus:bg-accent focus:text-accent-foreground ">
+                        <MemberExpelDialog
+                          clubId={clubId as string}
+                          clubMemberId={member.club_member_id}
+                        />
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              )}
           </TableRow>
         ))}
       </TableBody>

@@ -2,9 +2,12 @@ import type { components } from "@/schemas/schema";
 import type {
   GetClubMemberCheckData,
   GetClubMemberListData,
+  PatchClubMemberRoleData,
+  PatchClubMemberRoleRequest,
   PostClubMemberData,
   PostClubMemberRequest,
 } from "@/types/clubMemberTypes";
+import { MemberRole } from "@/types/memberTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getClubMembers,
@@ -54,17 +57,22 @@ export const usePostClubMembers = (clubId: string, onSuccess: () => void) => {
 export const usePatchClubMembersRole = (
   clubId: string,
   clubMemberId: number,
+  onSuccess: () => void,
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (role: ClubMemberRoleUpdate) =>
-      patchClubMembersRole(role, clubId, clubMemberId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = (role: PatchClubMemberRoleRequest) =>
+    patchClubMembersRole(role, clubId, clubMemberId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<
+    PatchClubMemberRoleData,
+    PatchClubMemberRoleRequest
+  >(mutationFn, onSuccessCallback);
 };
 
 export const usePatchClubMembersExpel = (

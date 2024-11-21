@@ -18,7 +18,6 @@ interface MemberExpelModalProps {
 
 function MemberExpelDialog({ clubId, clubMemberId }: MemberExpelModalProps) {
   const [expelReason, setExpelReason] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
 
   return (
     <Dialog>
