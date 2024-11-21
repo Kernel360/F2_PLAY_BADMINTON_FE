@@ -5,11 +5,11 @@ import { Text } from "@/components/ui/Text";
 import {
   useDeleteLeague,
   useDeleteParticipateLeague,
+  useGetLeagueCheck,
   useGetLeagueDetail,
   usePostParticipateLeague,
 } from "@/lib/api/hooks/leagueHook";
 import { usePostMatches } from "@/lib/api/hooks/matchHook";
-// import { useGetMyInfo } from "@/lib/api/hooks/memberHook";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
 import {
@@ -29,14 +29,16 @@ import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
 function LeagueDetail() {
-  const pathname = usePathname();
   const { clubId, leagueId } = useParams();
   const router = useRouter();
-  const {
-    data: league,
-    isLoading,
-    // error,
-  } = useGetLeagueDetail(clubId as string, leagueId as string);
+  const { data: league, isLoading } = useGetLeagueDetail(
+    clubId as string,
+    leagueId as string,
+  );
+  const { data: leagueCheck } = useGetLeagueCheck(
+    clubId as string,
+    leagueId as string,
+  );
   const { mutate: postParticipate } = usePostParticipateLeague(
     clubId as string,
     leagueId as string,
@@ -258,15 +260,19 @@ function LeagueDetail() {
           <Button
             size="lg"
             variant={
-              league?.is_participated_in_league ? "destructive" : "default"
+              leagueCheck?.data?.is_participated_in_league
+                ? "destructive"
+                : "default"
             }
             className="items-center justify-center gap-2 border-primary w-1/3"
             onClick={() =>
-              handleParticipate(!!league?.is_participated_in_league)
+              handleParticipate(!!leagueCheck?.data?.is_participated_in_league)
             }
           >
             <User size={20} />
-            {league?.is_participated_in_league ? "참가 취소" : "참가하기"}
+            {leagueCheck?.data?.is_participated_in_league
+              ? "참가 취소"
+              : "참가하기"}
           </Button>
         )}
       </div>

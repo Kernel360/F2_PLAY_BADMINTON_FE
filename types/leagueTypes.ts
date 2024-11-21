@@ -6,6 +6,12 @@ export type GetLeagueDetailResponse =
 export type GetLeagueDetailData =
   components["schemas"]["LeagueDetailsResponse"];
 
+export type GetLeagueCheckResponse =
+  components["schemas"]["CommonResponseIsLeagueParticipantResponse"];
+
+export type GetLeagueCheckData =
+  components["schemas"]["IsLeagueParticipantResponse"];
+
 export type GetLeagueDateResponse =
   components["schemas"]["CommonResponseListLeagueByDateResponse"];
 
