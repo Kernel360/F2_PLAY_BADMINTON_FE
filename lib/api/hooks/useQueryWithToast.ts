@@ -1,4 +1,5 @@
 "use client";
+
 import { useToast } from "@/hooks/use-toast";
 import type { ErrorCode } from "@/types/errorCode";
 import { type QueryObserverResult, useQuery } from "@tanstack/react-query";
@@ -12,16 +13,26 @@ interface CommonResponse<T> {
   errorMessageForClient?: string;
 }
 
+interface UseQueryWithToastOptions {
+  enabled?: boolean; // enabled 옵션을 옵셔널로 추가
+}
+
 const useQueryWithToast = <TData>(
   queryKey: string[],
   queryFn: () => Promise<CommonResponse<TData>>,
+  options?: UseQueryWithToastOptions,
 ): {
   isLoading: boolean;
   data: TData | undefined;
   refetch: () => Promise<QueryObserverResult<CommonResponse<TData>>>;
 } => {
   const { toast } = useToast();
-  const queryResult = useQuery<CommonResponse<TData>>({ queryKey, queryFn });
+
+  const queryResult = useQuery<CommonResponse<TData>>({
+    queryKey,
+    queryFn,
+    enabled: options?.enabled ?? true,
+  });
 
   useEffect(() => {
     if (queryResult.data?.result === "FAIL") {
@@ -31,10 +42,6 @@ const useQueryWithToast = <TData>(
       });
     }
   }, [queryResult.data, toast]);
-
-  // if (queryResult.data?.result === "SUCCESS") {
-  //   return { isLoading: queryResult.isLoading, data: queryResult.data?.data };
-  // }
 
   return {
     isLoading: queryResult.isLoading,
