@@ -9,8 +9,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
   useGetActivityClubs,
@@ -48,8 +46,7 @@ function ClubList() {
     12,
     "clubId",
   );
-  const { data: sessionData, isLoading: sessionLoading } =
-    useGetMembersSession();
+  const { data: sessionData } = useGetMembersSession();
 
   const [api, setApi] = useState<UseEmblaCarouselType[1]>();
   const [current, setCurrent] = useState(0);
