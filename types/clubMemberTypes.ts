@@ -42,3 +42,6 @@ export type PatchClubMemberBanRequest =
 
 export type PatchClubMemberBanResponse =
   components["schemas"]["CommonResponseClubMemberBanRecordResponse"];
+
+export type PatchClubMemberBanData =
+  components["schemas"]["ClubMemberBanRecordResponse"];

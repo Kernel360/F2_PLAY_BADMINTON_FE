@@ -2,6 +2,8 @@ import type { components } from "@/schemas/schema";
 import type {
   GetClubMemberCheckData,
   GetClubMemberListData,
+  PatchClubMemberBanData,
+  PatchClubMemberBanRequest,
   PatchClubMemberRoleData,
   PatchClubMemberRoleRequest,
   PostClubMemberData,
@@ -20,8 +22,6 @@ import {
 import useMutationWithToast from "./useMutationWithToast";
 import useQueryWithToast from "./useQueryWithToast";
 
-type ClubMemberRoleUpdate =
-  components["schemas"]["ClubMemberRoleUpdateRequest"];
 type ClubMemberExpelUpdate = components["schemas"]["ClubMemberExpelRequest"];
 type ClubMemberBanUpdate = components["schemas"]["ClubMemberBanRequest"];
 
@@ -94,15 +94,20 @@ export const usePatchClubMembersExpel = (
 export const usePatchClubMembersBan = (
   clubId: string,
   clubMemberId: number,
+  onSuccess: () => void,
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (ban: ClubMemberBanUpdate) =>
-      patchClubMembersBan(ban, clubId, clubMemberId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = (ban: ClubMemberBanUpdate) =>
+    patchClubMembersBan(ban, clubId, clubMemberId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<
+    PatchClubMemberBanData,
+    PatchClubMemberBanRequest
+  >(mutationFn, onSuccessCallback);
 };
