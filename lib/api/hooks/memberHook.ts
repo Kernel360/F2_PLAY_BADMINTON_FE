@@ -36,10 +36,10 @@ export const useGetMembersMyPage = () => {
 };
 
 export const useGetMembersMyClubs = () => {
-  return useQueryWithToast<GetMemberMyClubsData[]>(
-    ["myClubs"],
-    getMembersMyClubs,
-  );
+  return useQuery({
+    queryKey: ["myClubs"],
+    queryFn: getMembersMyClubs,
+  });
 };
 
 export const useGetMembersMatchesRecord = () => {

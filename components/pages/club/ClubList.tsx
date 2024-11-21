@@ -155,7 +155,7 @@ function ClubList() {
             </Card>
           </Link>
 
-          {myClubs?.slice(0, 3).map((club) => (
+          {myClubs?.data?.slice(0, 3).map((club) => (
             <ClubCard key={club.club_token} {...club} />
           ))}
         </div>
