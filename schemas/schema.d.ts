@@ -681,6 +681,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/v1/clubs/{clubToken}/leagues/{leagueId}/check": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 경기의 참여자인지 확인합니다
+     * @description 경기 아이디를 통해 경기 참가자인지 확인합니다.
+     */
+    get: operations["checkLeagueParticipant"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/v1/clubs/{clubToken}/leagues/month": {
     parameters: {
       query?: never;
@@ -3683,8 +3703,6 @@ export interface components {
        * @description 현재까지 참여한 인원
        */
       recruited_member_count: number;
-      /** @description 해당하는 경기에 참여 신청을 했는지 여부 */
-      is_participated_in_league: boolean;
       /**
        * Format: date-time
        * @description 생성 일자
@@ -4001,6 +4019,82 @@ export interface components {
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
       error_message_for_client?: string;
+    };
+    CommonResponseIsLeagueParticipantResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["IsLeagueParticipantResponse"];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MATCH_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
+        | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
+        | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
+    };
+    IsLeagueParticipantResponse: {
+      /** @description 해당하는 경기에 참여 신청을 했는지 여부 */
+      is_participated_in_league: boolean;
     };
     CommonResponseListLeagueReadResponse: {
       /** @enum {string} */
@@ -4404,6 +4498,8 @@ export interface components {
        * @enum {string}
        */
       status: "APPROVED" | "PENDING" | "REJECTED";
+      /** @description 프로필 이미지 */
+      profile_image: string;
     };
     CommonResponseListClubApplicantResponse: {
       /** @enum {string} */
@@ -5858,6 +5954,29 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["CommonResponseListSetScoreResponse"];
+        };
+      };
+    };
+  };
+  checkLeagueParticipant: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubToken: string;
+        leagueId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseIsLeagueParticipantResponse"];
         };
       };
     };

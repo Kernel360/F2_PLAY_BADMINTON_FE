@@ -2,10 +2,18 @@ import type { components } from "@/schemas/schema";
 import type {
   GetClubMemberCheckData,
   GetClubMemberListData,
+  PatchClubMemberBanData,
+  PatchClubMemberBanRequest,
+  PatchClubMemberExpelData,
+  PatchClubMemberExpelRequest,
+  PatchClubMemberRoleData,
+  PatchClubMemberRoleRequest,
+  PostClubMemberApproveData,
   PostClubMemberData,
+  PostClubMemberRejectData,
   PostClubMemberRequest,
 } from "@/types/clubMemberTypes";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   getClubMembers,
   getClubMembersCheck,
@@ -13,14 +21,11 @@ import {
   patchClubMembersExpel,
   patchClubMembersRole,
   postClubMembers,
+  postClubMembersApprove,
+  postClubMembersReject,
 } from "../functions/clubMemberFn";
 import useMutationWithToast from "./useMutationWithToast";
 import useQueryWithToast from "./useQueryWithToast";
-
-type ClubMemberRoleUpdate =
-  components["schemas"]["ClubMemberRoleUpdateRequest"];
-type ClubMemberExpelUpdate = components["schemas"]["ClubMemberExpelRequest"];
-type ClubMemberBanUpdate = components["schemas"]["ClubMemberBanRequest"];
 
 export const useGetClubMembers = (clubId: string) => {
   return useQueryWithToast<GetClubMemberListData>(["clubMembers"], () =>
@@ -54,47 +59,104 @@ export const usePostClubMembers = (clubId: string, onSuccess: () => void) => {
 export const usePatchClubMembersRole = (
   clubId: string,
   clubMemberId: number,
+  onSuccess: () => void,
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (role: ClubMemberRoleUpdate) =>
-      patchClubMembersRole(role, clubId, clubMemberId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = (role: PatchClubMemberRoleRequest) =>
+    patchClubMembersRole(role, clubId, clubMemberId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<
+    PatchClubMemberRoleData,
+    PatchClubMemberRoleRequest
+  >(mutationFn, onSuccessCallback);
 };
 
 export const usePatchClubMembersExpel = (
   clubId: string,
   clubMemberId: number,
+  onSuccess: () => void,
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (expelReason: ClubMemberExpelUpdate) =>
-      patchClubMembersExpel(expelReason, clubId, clubMemberId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = (expelReason: PatchClubMemberExpelRequest) =>
+    patchClubMembersExpel(expelReason, clubId, clubMemberId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<
+    PatchClubMemberExpelData,
+    PatchClubMemberExpelRequest
+  >(mutationFn, onSuccessCallback);
 };
 
 export const usePatchClubMembersBan = (
   clubId: string,
   clubMemberId: number,
+  onSuccess: () => void,
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (ban: ClubMemberBanUpdate) =>
-      patchClubMembersBan(ban, clubId, clubMemberId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = (ban: PatchClubMemberBanRequest) =>
+    patchClubMembersBan(ban, clubId, clubMemberId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<
+    PatchClubMemberBanData,
+    PatchClubMemberBanRequest
+  >(mutationFn, onSuccessCallback);
+};
+
+export const usePostClubMemberApprove = (
+  clubId: string,
+  onSuccess: () => void,
+) => {
+  const queryClient = useQueryClient();
+
+  const mutationFn = (clubApplyId: number) =>
+    postClubMembersApprove(clubId, clubApplyId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
+    queryClient.invalidateQueries({ queryKey: ["clubsApplicants"] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<PostClubMemberApproveData, number>(
+    mutationFn,
+    onSuccessCallback,
+  );
+};
+
+export const usePostClubMemberReject = (
+  clubId: string,
+  onSuccess: () => void,
+) => {
+  const queryClient = useQueryClient();
+
+  const mutationFn = (clubApplyId: number) =>
+    postClubMembersReject(clubId, clubApplyId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
+    queryClient.invalidateQueries({ queryKey: ["clubsApplicants"] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<PostClubMemberRejectData, number>(
+    mutationFn,
+    onSuccessCallback,
+  );
 };
