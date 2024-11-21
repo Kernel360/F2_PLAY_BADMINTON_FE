@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
 import {
   useDeleteLeague,
-  useDeleteParticipateLeague,
+  useDeleteParticipantLeague,
   useGetLeagueCheck,
   useGetLeagueDetail,
-  usePostParticipateLeague,
+  usePostParticipantLeague,
 } from "@/lib/api/hooks/leagueHook";
 import { usePostMatches } from "@/lib/api/hooks/matchHook";
 import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
@@ -40,13 +40,15 @@ function LeagueDetail() {
     clubId as string,
     leagueId as string,
   );
-  const { mutate: postParticipate } = usePostParticipateLeague(
+  const { mutate: postParticipate } = usePostParticipantLeague(
     clubId as string,
     leagueId as string,
+    () => alert("경기 신청이 완료되었습니다"),
   );
-  const { mutate: deleteParticipate } = useDeleteParticipateLeague(
+  const { mutate: deleteParticipate } = useDeleteParticipantLeague(
     clubId as string,
     leagueId as string,
+    () => alert("경기 신청 취소가 완료되었습니다"),
   );
   const { mutate: deleteLeague } = useDeleteLeague(
     clubId as string,
@@ -64,13 +66,9 @@ function LeagueDetail() {
       return router.push("/login");
     }
     if (!isParticipate) {
-      postParticipate(undefined, {
-        onSuccess: () => alert("경기 신청이 완료되었습니다"),
-      });
+      postParticipate();
     } else {
-      deleteParticipate(undefined, {
-        onSuccess: () => alert("경기 신청 취소가 완료되었습니다"),
-      });
+      deleteParticipate();
     }
   };
 

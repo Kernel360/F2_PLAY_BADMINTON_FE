@@ -1,10 +1,12 @@
 import type {
   DeleteLeagueData,
+  DeleteLeagueParticipantData,
   GetLeagueDateData,
   GetLeagueDetailData,
   GetLeagueMonthData,
   PatchLeagueRequest,
   PostLeagueData,
+  PostLeagueParticipantData,
   PostLeagueRequest,
 } from "@/types/leagueTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -66,33 +68,46 @@ export const useGetLeagueCheck = (clubId: string, leagueId: string) => {
   });
 };
 
-export const usePostParticipateLeague = (clubId: string, leagueId: string) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: () => postParticipateLeague(clubId, leagueId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
-      queryClient.invalidateQueries({ queryKey: ["leagueDetailDataCheck"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
-};
-
-export const useDeleteParticipateLeague = (
+export const usePostParticipantLeague = (
   clubId: string,
   leagueId: string,
+  onSuccess: () => void,
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: () => deleteParticipateLeague(clubId, leagueId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
-      queryClient.invalidateQueries({ queryKey: ["leagueDetailDataCheck"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = () => postParticipateLeague({ clubId, leagueId });
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+    queryClient.invalidateQueries({ queryKey: ["leagueDetailDataCheck"] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<PostLeagueParticipantData, void>(
+    mutationFn,
+    onSuccessCallback,
+  );
+};
+
+export const useDeleteParticipantLeague = (
+  clubId: string,
+  leagueId: string,
+  onSuccess: () => void,
+) => {
+  const queryClient = useQueryClient();
+
+  const mutationFn = () => deleteParticipateLeague({ clubId, leagueId });
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+    queryClient.invalidateQueries({ queryKey: ["leagueDetailDataCheck"] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<DeleteLeagueParticipantData, void>(
+    mutationFn,
+    onSuccessCallback,
+  );
 };
 
 export const usePatchLeague = (clubId: string, leagueId: string) => {
