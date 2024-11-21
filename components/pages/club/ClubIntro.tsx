@@ -6,12 +6,14 @@ import {
   useGetClubMembersCheck,
   usePostClubMembers,
 } from "@/lib/api/hooks/clubMemberHook";
+import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
 import { format } from "date-fns";
 import Image from "next/image";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 function ClubIntro() {
   const { clubId } = useParams();
+  const router = useRouter();
 
   const postClubMembersOnSuccess = () => alert("동호회 신청이 완료되었습니다.");
 
@@ -21,6 +23,7 @@ function ClubIntro() {
     clubId as string,
     postClubMembersOnSuccess,
   );
+  const { data: sessionData } = useGetMembersSession();
 
   if (isLoading) {
     return (
@@ -36,7 +39,10 @@ function ClubIntro() {
 
   // TODO: applyReason dialog 생성하기
   const handlePostClubMember = () => {
-    postClubMembers({ apply_reason: "test" });
+    if (sessionData?.result === "SUCCESS") {
+      return postClubMembers({ apply_reason: "test" });
+    }
+    return router.push("/login");
   };
 
   return (

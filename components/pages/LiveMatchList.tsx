@@ -15,6 +15,7 @@ import {
   useGetMainLeagues,
   useGetMainLeaguesMatch,
 } from "@/lib/api/hooks/mainLeagueHook";
+import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
 import type { LeagueStatus, TierLimit } from "@/types/leagueTypes";
 import type {
   GetMainLeagues,
@@ -27,6 +28,7 @@ import React, { useState } from "react";
 import { Separator } from "../ui/separator";
 
 const renderLeagueStatusButton = (
+  isLogined: boolean,
   status: LeagueStatus,
   clubToken: string,
   leagueId: number,
@@ -40,7 +42,9 @@ const renderLeagueStatusButton = (
   }
   if (status === "RECRUITING") {
     return (
-      <Link href={`/club/${clubToken}/league/${leagueId}`}>
+      <Link
+        href={isLogined ? `/club/${clubToken}/league/${leagueId}` : "/login"}
+      >
         <Button className="p-2 h-8 rounded-md text-xs w-[105px] border-0 bg-blue-500 text-white">
           모집중
         </Button>
@@ -104,6 +108,8 @@ function LiveMatchList() {
     size: 9,
   });
 
+  const { data: sessionData } = useGetMembersSession();
+
   const { data: leagueDetails } = useGetMainLeaguesMatch(
     openedLeagueId as string,
   );
@@ -115,6 +121,13 @@ function LiveMatchList() {
   const handleDateSelect = (date: Date) => {
     const formattedDate = format(date, "yyyy-MM-dd");
     setSelectedDate(formattedDate); // 상태 업데이트
+  };
+
+  const loginStatus = () => {
+    if (sessionData?.result === "SUCCESS") {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -171,6 +184,7 @@ function LiveMatchList() {
                           </div>
                           <div className="flex flex-col justify-between items-center">
                             {renderLeagueStatusButton(
+                              loginStatus(),
                               item.league_status,
                               item.club_token,
                               item.league_id,

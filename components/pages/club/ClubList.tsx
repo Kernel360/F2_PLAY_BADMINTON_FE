@@ -9,8 +9,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
   useGetActivityClubs,
@@ -18,7 +16,10 @@ import {
   useGetPopularClubs,
   useGetRecentlyClubs,
 } from "@/lib/api/hooks/clubHook";
-import { useGetMembersMyClubs } from "@/lib/api/hooks/memberHook";
+import {
+  useGetMembersMyClubs,
+  useGetMembersSession,
+} from "@/lib/api/hooks/memberHook";
 import type { components } from "@/schemas/schema";
 import Autoplay from "embla-carousel-autoplay";
 import type { UseEmblaCarouselType } from "embla-carousel-react";
@@ -45,6 +46,7 @@ function ClubList() {
     12,
     "clubId",
   );
+  const { data: sessionData } = useGetMembersSession();
 
   const [api, setApi] = useState<UseEmblaCarouselType[1]>();
   const [current, setCurrent] = useState(0);
@@ -136,14 +138,19 @@ function ClubList() {
       <section>
         <div className="mb-4 flex gap-2 items-center">
           <h2 className="text-xl font-bold mb-6 text-gray-800">내 동호회</h2>
-          <Link className="text-sm text-gray-500" href={"/my-page"}>
-            더보기
-          </Link>
+          {sessionData?.result === "SUCCESS" && (
+            <Link className="text-sm text-gray-500" href={"/my-page"}>
+              더보기
+            </Link>
+          )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <Link href={"/club/create"} className="block">
-            <Card className="h-full w-full rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-shadow duration-200 border border-gray-200 bg-white flex flex-col justify-center items-center">
+          <Link
+            href={sessionData?.result === "SUCCESS" ? "/club/create" : "/login"}
+            className="block"
+          >
+            <Card className="h-[328px] w-full rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-shadow duration-200 border border-gray-200 bg-white flex flex-col justify-center items-center">
               <CardHeader className="p-0 flex justify-center items-center bg-gray-50 rounded-full w-16 h-16 mx-auto mt-6">
                 <span className="text-3xl text-gray-600">+</span>
               </CardHeader>

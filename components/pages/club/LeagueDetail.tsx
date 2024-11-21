@@ -10,6 +10,7 @@ import {
   usePostParticipateLeague,
 } from "@/lib/api/hooks/leagueHook";
 import { usePostMatches } from "@/lib/api/hooks/matchHook";
+import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
 import {
@@ -26,7 +27,7 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 function LeagueDetail() {
   const { clubId, leagueId } = useParams();
@@ -55,9 +56,13 @@ function LeagueDetail() {
     clubId as string,
     leagueId as string,
   );
-  // const { data: myData } = useGetMyInfo(true);
+  const { data: sessionData } = useGetMembersSession();
 
-  const handleParticipate = (isParticipate: boolean) => {
+  const handleParticipate = () => {
+    const isParticipate = !!leagueCheck?.data?.is_participated_in_league;
+    if (sessionData?.result === "FAIL") {
+      return router.push("/login");
+    }
     if (!isParticipate) {
       postParticipate(undefined, {
         onSuccess: () => alert("경기 신청이 완료되었습니다"),
@@ -85,10 +90,6 @@ function LeagueDetail() {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
-  // if (error) {
-  //   return <div>Error: {error.message}</div>;
-  // }
 
   const handleDelete = () => {
     if (confirm("정말로 삭제하시겠습니까?")) {
@@ -265,9 +266,7 @@ function LeagueDetail() {
                 : "default"
             }
             className="items-center justify-center gap-2 border-primary w-1/3"
-            onClick={() =>
-              handleParticipate(!!leagueCheck?.data?.is_participated_in_league)
-            }
+            onClick={() => handleParticipate()}
           >
             <User size={20} />
             {leagueCheck?.data?.is_participated_in_league

@@ -11,8 +11,6 @@ import type {
 } from "@/types/memberTypes";
 import restClient from "../restClient";
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
-
 export const getMembersSession =
   async (): Promise<GetMemberSessionResponse> => {
     return restClient.get<GetMemberSessionResponse>("/members/session");
