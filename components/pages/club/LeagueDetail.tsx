@@ -20,6 +20,7 @@ import {
   CalendarDays,
   Edit,
   Flag,
+  GitCompare,
   MapPin,
   Pencil,
   Pyramid,
@@ -76,22 +77,16 @@ function LeagueDetail() {
     switch (status) {
       case "RECRUITING":
         return "모집 중";
-      case "COMPLETED":
+      case "RECRUITING_COMPLETED":
         return "모집 완료";
+      case "PLAYING":
+        return "경기중";
       case "CANCELED":
         return "경기 취소";
+      case "FINISHED":
+        return "경기 종료";
       default:
         return status;
-    }
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  const handleDelete = () => {
-    if (confirm("정말로 삭제하시겠습니까?")) {
-      deleteLeague();
     }
   };
 
@@ -166,7 +161,7 @@ function LeagueDetail() {
             size="sm"
             variant="destructive"
             className="flex items-center gap-1"
-            onClick={() => handleDelete()}
+            onClick={() => deleteLeague()}
           >
             <Trash2 size={16} />
             삭제
@@ -238,6 +233,15 @@ function LeagueDetail() {
             <p className="text-xs text-gray-500">경기 유형</p>
             <p className="text-sm font-semibold text-gray-800">
               {league?.match_type === "SINGLES" ? "단식" : "복식"}
+            </p>
+          </div>
+        </div>
+        <div className="p-4 bg-gray-100 rounded-lg flex items-center gap-3">
+          <GitCompare className="text-gray-500" size={24} />
+          <div>
+            <p className="text-xs text-gray-500">대진표 타입</p>
+            <p className="text-sm font-semibold text-gray-800">
+              {league?.match_generation_type === "FREE" ? "프리" : "토너먼트"}
             </p>
           </div>
         </div>
