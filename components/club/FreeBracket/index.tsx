@@ -1,5 +1,6 @@
 import SImage from "@/components/ui/Image";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import type { GetMatchesData } from "@/types/matchTypes";
 import React from "react";
 
@@ -48,6 +49,86 @@ function FreeBracket(props: FreeBracketProps) {
                   height={45}
                   alt="profile"
                 />
+              </div>
+            </div>
+          </div>
+        ))}
+
+      {nodeData.match_type === "DOUBLES" &&
+        nodeData.doubles_match_response_list?.map((match) => (
+          <div key={match.match_id} className="flex flex-col gap-8">
+            <div className="flex flex-col items-center gap-6">
+              <div className="w-full flex flex-wrap justify-center gap-4">
+                <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
+                  <SImage
+                    src={
+                      match.team1.participant1.image ||
+                      "/images/dummy-image.jpg"
+                    }
+                    radius="circular"
+                    width={50}
+                    height={50}
+                    alt={match.team1.participant1.name}
+                  />
+                  <span className="text-gray-800 text-sm font-semibold truncate">
+                    {match.team1.participant1.name}
+                  </span>
+                </div>
+                <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
+                  <SImage
+                    src={
+                      match.team1.participant2.image ||
+                      "/images/dummy-image.jpg"
+                    }
+                    radius="circular"
+                    width={50}
+                    height={50}
+                    alt={match.team1.participant2.name}
+                  />
+                  <span className="text-gray-800 text-sm font-semibold truncate">
+                    {match.team1.participant2.name}
+                  </span>
+                </div>
+              </div>
+              <div className="w-full flex flex-col items-center justify-center gap-2 text-xl font-semibold text-gray-900">
+                <span>{match.team1.team1_win_set_count}</span>
+                <Separator />
+                <span>{match.team2.team1_win_set_count}</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-6">
+              <div className="w-full flex flex-wrap justify-center gap-4">
+                <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
+                  <SImage
+                    src={
+                      match.team2.participant1.image ||
+                      "/images/dummy-image.jpg"
+                    }
+                    radius="circular"
+                    width={50}
+                    height={50}
+                    alt={match.team2.participant1.name}
+                  />
+                  <span className="text-gray-800 text-sm font-semibold truncate">
+                    {match.team2.participant1.name}
+                  </span>
+                </div>
+                <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
+                  <SImage
+                    src={
+                      match.team2.participant2.image ||
+                      "/images/dummy-image.jpg"
+                    }
+                    radius="circular"
+                    width={50}
+                    height={50}
+                    alt={match.team2.participant2.name}
+                  />
+                  <span className="text-gray-800 text-sm font-semibold truncate">
+                    {match.team2.participant2.name}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
