@@ -29,6 +29,12 @@ export type PostLeagueResponse =
 
 export type PostLeagueData = components["schemas"]["LeagueCreateResponse"];
 
+export type PostLeagueParticipantResponse =
+  components["schemas"]["CommonResponseLeagueParticipantResponse"];
+
+export type PostLeagueParticipantData =
+  components["schemas"]["LeagueParticipantResponse"];
+
 export type PatchLeagueRequest = components["schemas"]["LeagueUpdateRequest"];
 
 export type PatchLeagueResponse =
@@ -40,6 +46,12 @@ export type DeleteLeagueResponse =
   components["schemas"]["CommonResponseLeagueCancelResponse"];
 
 export type DeleteLeagueData = components["schemas"]["LeagueCancelResponse"];
+
+export type DeleteLeagueParticipantResponse =
+  components["schemas"]["CommonResponseLeagueParticipationCancelResponse"];
+
+export type DeleteLeagueParticipantData =
+  components["schemas"]["LeagueParticipationCancelResponse"];
 
 export type TierLimit = "GOLD" | "SILVER" | "BRONZE";
 
