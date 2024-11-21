@@ -35,14 +35,14 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
               일정
             </TabsTrigger>
           </Link>
-          {isJoined?.is_club_member && (
+          {isJoined?.data?.is_club_member && (
             <Link href={`/club/${clubId}/member`}>
               <TabsTrigger value="member" color="gray">
                 회원
               </TabsTrigger>
             </Link>
           )}
-          {isJoined?.role === "ROLE_OWNER" && (
+          {isJoined?.data?.role === "ROLE_OWNER" && (
             <Link href={`/club/${clubId}/manage`}>
               <TabsTrigger value="manage" color="gray">
                 관리

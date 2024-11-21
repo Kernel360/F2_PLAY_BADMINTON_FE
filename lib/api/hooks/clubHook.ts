@@ -118,8 +118,13 @@ export const usePatchClubs = (clubId: string) => {
   });
 };
 
-export const useGetClubsApplicants = (clubId: string) => {
-  return useQueryWithToast<GetClubApplicantsData[]>(["clubsApplicants"], () =>
-    getClubsApplicants(clubId),
+export const useGetClubsApplicants = (
+  clubId: string,
+  options?: { enabled?: boolean },
+) => {
+  return useQueryWithToast<GetClubApplicantsData[]>(
+    ["clubsApplicants"],
+    () => getClubsApplicants(clubId),
+    options,
   );
 };

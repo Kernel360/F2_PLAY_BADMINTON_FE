@@ -138,8 +138,8 @@ function MyPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="flex-1 overflow-y-auto">
-            {myClubs?.length ? (
-              myClubs.map((club) => (
+            {myClubs?.data?.length ? (
+              myClubs.data.map((club) => (
                 <Link
                   href={`/club/${club.club_token}`}
                   key={club.club_token}
