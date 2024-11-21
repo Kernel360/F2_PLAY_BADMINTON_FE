@@ -61,7 +61,7 @@ export const useGetLeagueDetail = (clubId: string, leagueId: string) => {
 
 export const useGetLeagueCheck = (clubId: string, leagueId: string) => {
   return useQuery({
-    queryKey: ["leagueDetailData"],
+    queryKey: ["leagueDetailDataCheck"],
     queryFn: () => getLeagueCheck(clubId, leagueId),
   });
 };
@@ -73,6 +73,7 @@ export const usePostParticipateLeague = (clubId: string, leagueId: string) => {
     mutationFn: () => postParticipateLeague(clubId, leagueId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+      queryClient.invalidateQueries({ queryKey: ["leagueDetailDataCheck"] });
     },
     onError: (error: Error) => alert(error),
   });
@@ -88,6 +89,7 @@ export const useDeleteParticipateLeague = (
     mutationFn: () => deleteParticipateLeague(clubId, leagueId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+      queryClient.invalidateQueries({ queryKey: ["leagueDetailDataCheck"] });
     },
     onError: (error: Error) => alert(error),
   });
