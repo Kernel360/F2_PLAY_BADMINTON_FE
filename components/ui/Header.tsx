@@ -72,12 +72,12 @@ function Header() {
   let userMenu: ReactNode;
   if (isLoading) {
     userMenu = null;
-  } else if (data) {
+  } else if (data?.result === "SUCCESS") {
     userMenu = (
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger className="focus-visible:ring-2 rounded-full">
           <SImage
-            src={data.profile_image || "/images/dummy-image.jpg"}
+            src={data.data?.profile_image || "/images/dummy-image.jpg"}
             radius="circular"
             width={36}
             height={36}

@@ -20,14 +20,7 @@ import useQueryWithToast from "./useQueryWithToast";
 export const useGetMembersSession = () => {
   return useQuery({
     queryKey: ["mySession"],
-    queryFn: async () => {
-      const result = await getMembersSession();
-
-      if (result.result === "FAIL") {
-        return null;
-      }
-      return result.data;
-    },
+    queryFn: getMembersSession,
   });
 };
 
