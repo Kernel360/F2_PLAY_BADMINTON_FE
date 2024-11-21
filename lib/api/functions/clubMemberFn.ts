@@ -4,20 +4,14 @@ import type {
   GetClubMemberListResponse,
   PatchClubMemberBanRequest,
   PatchClubMemberBanResponse,
+  PatchClubMemberExpelRequest,
+  PatchClubMemberExpelResponse,
   PatchClubMemberRoleRequest,
   PatchClubMemberRoleResponse,
   PostClubMemberRequest,
   PostClubMemberResponse,
 } from "@/types/clubMemberTypes";
 import restClient from "../restClient";
-
-type ClubMemberExpelRequest = components["schemas"]["ClubMemberExpelRequest"];
-type ClubMemberBanRequest = components["schemas"]["ClubMemberBanRequest"];
-type ClubMemberBanRecordResponse =
-  components["schemas"]["ClubMemberBanRecordResponse"];
-// type ClubMemberJoinResponse = components["schemas"]["ClubMemberJoinResponse"];
-
-const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 export const getClubMembers = async (
   clubId: string,
@@ -57,25 +51,14 @@ export const patchClubMembersRole = async (
 };
 
 export const patchClubMembersExpel = async (
-  expelReason: ClubMemberExpelRequest,
+  expel: PatchClubMemberExpelRequest,
   clubId: string,
   clubMemberId: number,
-): Promise<ClubMemberBanRecordResponse> => {
-  const response = await fetch(
-    `${BASE_URL}/clubs/${clubId}/clubMembers/expel?clubMemberId=${clubMemberId}`,
-    {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(expelReason),
-    },
+): Promise<PatchClubMemberExpelResponse> => {
+  return restClient.patch<PatchClubMemberExpelResponse>(
+    `/clubs/${clubId}/clubMembers/expel?clubMemberId=${clubMemberId}`,
+    expel,
   );
-
-  if (!response.ok) {
-    throw new Error("멤버 강제 탈퇴에 실패했습니다.");
-  }
-
-  return response.json();
 };
 
 export const patchClubMembersBan = async (

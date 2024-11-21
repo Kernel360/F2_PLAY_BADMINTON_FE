@@ -37,6 +37,9 @@ export type PatchClubMemberExpelRequest =
 export type PatchClubMemberExpelResponse =
   components["schemas"]["CommonResponseClubMemberBanRecordResponse"];
 
+export type PatchClubMemberExpelData =
+  components["schemas"]["ClubMemberBanRecordResponse"];
+
 export type PatchClubMemberBanRequest =
   components["schemas"]["ClubMemberBanRequest"];
 
