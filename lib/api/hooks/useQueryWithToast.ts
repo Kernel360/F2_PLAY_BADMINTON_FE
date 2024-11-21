@@ -7,9 +7,9 @@ import { useEffect } from "react";
 interface CommonResponse<T> {
   result?: "SUCCESS" | "FAIL";
   data?: T;
-  error_code?: ErrorCode;
-  error_message_for_log?: string;
-  error_message_for_client?: string;
+  errorCode?: ErrorCode;
+  errorMessageForLog?: string;
+  errorMessageForClient?: string;
 }
 
 const useQueryWithToast = <TData>(
@@ -26,7 +26,7 @@ const useQueryWithToast = <TData>(
   useEffect(() => {
     if (queryResult.data?.result === "FAIL") {
       toast({
-        title: queryResult.data?.error_message_for_client,
+        title: queryResult.data?.errorMessageForClient,
         variant: "destructive",
       });
     }

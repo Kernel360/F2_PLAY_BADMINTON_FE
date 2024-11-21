@@ -98,10 +98,10 @@ function ClubMember() {
           </div>
         )}
       </div>
-      {members && isJoined && (
+      {members && isJoined?.data && (
         <ClubMemberList
           members={members}
-          isJoined={isJoined}
+          isJoined={isJoined.data}
           clubId={clubId as string}
         />
       )}

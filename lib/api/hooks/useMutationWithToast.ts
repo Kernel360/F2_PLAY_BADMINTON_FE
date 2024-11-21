@@ -7,9 +7,9 @@ import { useEffect, useState } from "react";
 interface CommonResponse<T> {
   result?: "SUCCESS" | "FAIL";
   data?: T;
-  error_code?: ErrorCode;
-  error_message_for_log?: string;
-  error_message_for_client?: string;
+  errorCode?: ErrorCode;
+  errorMessageForLog?: string;
+  errorMessageForClient?: string;
 }
 
 const useMutationWithToast = <TData, TRequestBody>(
@@ -37,7 +37,7 @@ const useMutationWithToast = <TData, TRequestBody>(
       }
       if (data.result === "FAIL") {
         toast({
-          title: data.error_message_for_client,
+          title: data.errorMessageForClient,
           variant: "destructive",
         });
         setDataResult(false);

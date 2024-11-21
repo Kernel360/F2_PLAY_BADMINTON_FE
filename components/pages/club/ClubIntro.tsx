@@ -49,7 +49,7 @@ function ClubIntro() {
           alt="club_banner"
           className="rounded-md object-cover h-[400px] w-[400px]"
         />
-        {!clubMemberData?.is_club_member && (
+        {!clubMemberData?.data?.is_club_member && (
           <button
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
             type="button"

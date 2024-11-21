@@ -13,7 +13,7 @@ import type {
   PostClubMemberRejectData,
   PostClubMemberRequest,
 } from "@/types/clubMemberTypes";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getClubMembers,
   getClubMembersCheck,
@@ -34,9 +34,10 @@ export const useGetClubMembers = (clubId: string) => {
 };
 
 export const useGetClubMembersCheck = (clubId: string) => {
-  return useQueryWithToast<GetClubMemberCheckData>(["clubMembersCheck"], () =>
-    getClubMembersCheck(clubId),
-  );
+  return useQuery({
+    queryKey: ["clubMembersCheck"],
+    queryFn: () => getClubMembersCheck(clubId),
+  });
 };
 
 export const usePostClubMembers = (clubId: string, onSuccess: () => void) => {
