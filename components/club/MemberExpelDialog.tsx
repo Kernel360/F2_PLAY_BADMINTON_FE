@@ -33,8 +33,8 @@ interface MemberExpelModalProps {
 const expelSchema = z.object({
   expel_reason: z
     .string()
-    .min(2, "제재 사유는 최소 2자 이상이어야 합니다.")
-    .max(100, "제재 사유는 최대 100자까지 입력할 수 있습니다."),
+    .min(2, "내보내기 사유는 최소 2자 이상이어야 합니다.")
+    .max(100, "내보내기 사유는 최대 100자까지 입력할 수 있습니다."),
 });
 
 type ExpelFormValues = z.infer<typeof expelSchema>;
@@ -84,11 +84,11 @@ function MemberExpelDialog({ clubId, clubMemberId }: MemberExpelModalProps) {
               name="expel_reason"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>제재 사유</FormLabel>
+                  <FormLabel>내보내기 사유</FormLabel>
                   <FormControl>
                     <textarea
                       {...field}
-                      placeholder="제재 사유를 입력하세요 (최소 2자, 최대 100자)"
+                      placeholder="내보내기 사유를 입력하세요 (최소 2자, 최대 100자)"
                       className="mt-1 w-full rounded-md border p-2 resize-none text-black focus:ring-1 focus:ring-primary-500"
                     />
                   </FormControl>
