@@ -8,8 +8,8 @@ interface CommonResponse<T> {
   result?: "SUCCESS" | "FAIL";
   data?: T;
   errorCode?: ErrorCode;
-  errorMessageForLog?: string;
-  errorMessageForClient?: string;
+  error_message_for_log?: string;
+  error_message_for_client?: string;
 }
 
 const useMutationWithToast = <TData, TRequestBody>(
@@ -37,7 +37,7 @@ const useMutationWithToast = <TData, TRequestBody>(
       }
       if (data.result === "FAIL") {
         toast({
-          title: data.errorMessageForClient,
+          title: data.error_message_for_client,
           variant: "destructive",
         });
         setDataResult(false);
