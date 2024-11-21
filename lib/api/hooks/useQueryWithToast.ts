@@ -9,8 +9,8 @@ interface CommonResponse<T> {
   result?: "SUCCESS" | "FAIL";
   data?: T;
   errorCode?: ErrorCode;
-  errorMessageForLog?: string;
-  errorMessageForClient?: string;
+  error_message_for_log?: string;
+  error_message_for_client?: string;
 }
 
 interface UseQueryWithToastOptions {
@@ -37,7 +37,7 @@ const useQueryWithToast = <TData>(
   useEffect(() => {
     if (queryResult.data?.result === "FAIL") {
       toast({
-        title: queryResult.data?.errorMessageForClient,
+        title: queryResult.data?.error_message_for_client,
         variant: "destructive",
       });
     }
