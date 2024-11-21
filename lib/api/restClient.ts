@@ -16,7 +16,7 @@ const restClient = {
     const data = await response.json();
     return data as T;
   },
-  post: async <T>(url: string, body: object) => {
+  post: async <T>(url: string, body?: object) => {
     const response = await fetch(`${BASE_URL}${url}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

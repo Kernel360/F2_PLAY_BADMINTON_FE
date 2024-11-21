@@ -26,7 +26,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-interface MemberBanDialogProps {
+interface ClubMemberBanDialogProps {
   clubId: string;
   clubMemberId: number;
 }
@@ -44,7 +44,10 @@ const banSchema = z.object({
 
 type BanFormValues = z.infer<typeof banSchema>;
 
-function MemberBanDialog({ clubId, clubMemberId }: MemberBanDialogProps) {
+function ClubMemberBanDialog({
+  clubId,
+  clubMemberId,
+}: ClubMemberBanDialogProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const { mutate: patchClubMembersBan } = usePatchClubMembersBan(
@@ -70,7 +73,11 @@ function MemberBanDialog({ clubId, clubMemberId }: MemberBanDialogProps) {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger>회원 정지</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button variant="link" className="text-gray-500">
+          회원 정지
+        </Button>
+      </DialogTrigger>
       <DialogContent className="max-w-md p-6 rounded-lg shadow-lg">
         <DialogHeader>
           <DialogTitle className="text-lg font-bold text-gray-900">
@@ -188,4 +195,4 @@ function MemberBanDialog({ clubId, clubMemberId }: MemberBanDialogProps) {
   );
 }
 
-export default MemberBanDialog;
+export default ClubMemberBanDialog;

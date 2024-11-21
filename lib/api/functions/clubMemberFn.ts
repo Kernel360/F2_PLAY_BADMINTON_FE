@@ -8,6 +8,7 @@ import type {
   PatchClubMemberExpelResponse,
   PatchClubMemberRoleRequest,
   PatchClubMemberRoleResponse,
+  PostClubMemberApproveResponse,
   PostClubMemberRequest,
   PostClubMemberResponse,
 } from "@/types/clubMemberTypes";
@@ -69,5 +70,23 @@ export const patchClubMembersBan = async (
   return restClient.patch<PatchClubMemberBanResponse>(
     `/clubs/${clubId}/clubMembers/ban?clubMemberId=${clubMemberId}`,
     ban,
+  );
+};
+
+export const postClubMembersApprove = async (
+  clubId: string,
+  clubApplyId: number,
+): Promise<PostClubMemberApproveResponse> => {
+  return restClient.post<PostClubMemberApproveResponse>(
+    `/clubs/${clubId}/clubMembers/approve?clubApplyId=${clubApplyId}`,
+  );
+};
+
+export const postClubMembersReject = async (
+  clubId: string,
+  clubApplyId: number,
+): Promise<PostClubMemberApproveResponse> => {
+  return restClient.post<PostClubMemberApproveResponse>(
+    `/clubs/${clubId}/clubMembers/reject?clubApplyId=${clubApplyId}`,
   );
 };

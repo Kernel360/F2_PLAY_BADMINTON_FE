@@ -19,6 +19,18 @@ export type PostClubMemberResponse =
 
 export type PostClubMemberData = components["schemas"]["ClubApplyResponse"];
 
+export type PostClubMemberApproveResponse =
+  components["schemas"]["CommonResponseApproveApplyResponse"];
+
+export type PostClubMemberApproveData =
+  components["schemas"]["ApproveApplyResponse"];
+
+export type PostClubMemberRejectResponse =
+  components["schemas"]["CommonResponseRejectApplyResponse"];
+
+export type PostClubMemberRejectData =
+  components["schemas"]["RejectApplyResponse"];
+
 export type DeleteClubMemberExitResponse =
   components["schemas"]["CommonResponseClubMemberWithdrawResponse"];
 
@@ -48,3 +60,5 @@ export type PatchClubMemberBanResponse =
 
 export type PatchClubMemberBanData =
   components["schemas"]["ClubMemberBanRecordResponse"];
+
+export type ClubApplicantsStatus = "APPROVED" | "PENDING" | "REJECTED";

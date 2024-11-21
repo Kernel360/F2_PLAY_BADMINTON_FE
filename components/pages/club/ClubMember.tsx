@@ -1,14 +1,9 @@
 "use client";
 
-import MemberBanDialog from "@/components/club/MemberBanDialog";
-import MemberExpelDialog from "@/components/club/MemberExpelDialog";
-import MemberRoleChangeDialog from "@/components/club/MemberRoleChangeDialog";
-import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import Spinner from "@/components/Spinner";
+import ClubMemberApprovalDialog from "@/components/club/ClubMemberApprovalDialog";
+import ClubMemberList from "@/components/club/ClubMemberList";
+import { Button } from "@/components/ui/Button";
 import {
   Table,
   TableBody,
@@ -17,119 +12,107 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useGetClubsApplicants } from "@/lib/api/hooks/clubHook";
 import {
   useGetClubMembers,
   useGetClubMembersCheck,
 } from "@/lib/api/hooks/clubMemberHook";
+import type { GetClubApplicantsData } from "@/types/clubTypes";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
-import { EllipsisVertical } from "lucide-react";
 import { useParams } from "next/navigation";
-
-const changeRoleWord = (role: string) => {
-  switch (role) {
-    case "ROLE_OWNER":
-      return <Badge className="bg-zinc-900 text-white">회장</Badge>;
-    case "ROLE_MANAGER":
-      return <Badge className="bg-zinc-500 text-white">매니저</Badge>;
-    case "ROLE_USER":
-      return "회원";
-    default:
-      return "";
-  }
-};
+import { useState } from "react";
 
 function ClubMember() {
   const { clubId } = useParams();
-  const { data, isLoading } = useGetClubMembers(clubId as string);
-  const { data: isJoined } = useGetClubMembersCheck(clubId as string);
+  const { data: applicants, isLoading: applicantsLoding } =
+    useGetClubsApplicants(clubId as string);
+  const { data: members, isLoading: membersLoading } = useGetClubMembers(
+    clubId as string,
+  );
+  const { data: isJoined, isLoading: isJoinedLoading } = useGetClubMembersCheck(
+    clubId as string,
+  );
+  const [selectedApplicant, setSelectedApplicant] =
+    useState<GetClubApplicantsData | null>(null);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  const handleModalOpen = (applicant: GetClubApplicantsData) => {
+    setSelectedApplicant(applicant);
+  };
+
+  const handleModalClose = () => {
+    setSelectedApplicant(null);
+  };
+
+  if (applicantsLoding || membersLoading || isJoinedLoading) {
+    return <Spinner />;
   }
-
-  if (!data) {
-    return <div>No data available</div>;
-  }
-
-  const members = [
-    ...(data.role_owner ?? []),
-    ...(data.role_manager ?? []),
-    ...(data.role_user ?? []),
-  ];
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow className="hover:bg-white">
-          <TableHead className="text-center">역할</TableHead>
-          <TableHead>회원</TableHead>
-          <TableHead className="text-center">티어</TableHead>
-          <TableHead className="text-center">전적</TableHead>
-          <TableHead className="text-center">정지</TableHead>
-          <TableHead className="text-center"> </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {members.map((member) => (
-          <TableRow key={member.club_member_id} className="hover:bg-white">
-            <TableCell className="text-black text-center">
-              {changeRoleWord(member.role ?? "")}
-            </TableCell>
-            <TableCell className="flex flex-1 gap-2 justify-start items-center">
-              <img
-                src={member.image}
-                alt="userImg"
-                className="w-8 h-8 rounded-full"
-              />
-              <p className="text-black text-center">{member.name}</p>
-            </TableCell>
-            <TableCell className="text-black text-center">
-              {getTierWithEmojiAndText(member.tier as string)}
-            </TableCell>
-            <TableCell className="text-black text-center">
-              {member.league_record.match_count}전 |{" "}
-              {member.league_record.win_count}승 |{" "}
-              {member.league_record.draw_count}무 |{" "}
-              {member.league_record.lose_count}패
-            </TableCell>
-            <TableCell className="text-black text-center">
-              {member.is_banned ? <p className="text-red-500">정지</p> : ""}
-            </TableCell>
-            {member.role !== "ROLE_OWNER" &&
-              isJoined?.role === "ROLE_OWNER" && (
-                <TableCell className="text-gray-500 text-center cursor-pointer flex justify-center">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <EllipsisVertical />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <div className="relative flex cursor-pointer select-none items-center justify-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-100  focus:bg-accent focus:text-accent-foreground ">
-                        <MemberRoleChangeDialog
-                          clubId={clubId as string}
-                          clubMemberId={member.club_member_id}
-                          memberRole={member.role}
-                        />
-                      </div>
-                      <div className="relative flex cursor-pointer select-none items-center justify-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-100  focus:bg-accent focus:text-accent-foreground ">
-                        <MemberBanDialog
-                          clubId={clubId as string}
-                          clubMemberId={member.club_member_id}
-                        />
-                      </div>
-                      <div className="relative flex cursor-pointer select-none items-center justify-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-100  focus:bg-accent focus:text-accent-foreground ">
-                        <MemberExpelDialog
-                          clubId={clubId as string}
-                          clubMemberId={member.club_member_id}
-                        />
-                      </div>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              )}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <div className="flex flex-col gap-6">
+      <div className="min-h-[200px]">
+        <h2 className="text-black font-bold">동호회 참여 신청</h2>
+        {applicants && applicants.length > 0 ? (
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-white h-16">
+                <TableHead className="text-center">회원</TableHead>
+                <TableHead className="text-center">티어</TableHead>
+                <TableHead className="text-center"> </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {applicants.map((applicant) => (
+                <TableRow
+                  key={applicant.club_apply_id}
+                  className="hover:bg-white h-16"
+                >
+                  <TableCell className="text-black">
+                    <div className="flex items-center justify-center gap-2">
+                      <img
+                        src={applicant.profile_image}
+                        alt="userImg"
+                        className="w-8 h-8 rounded-full"
+                      />
+                      <p className="text-black text-center">{applicant.name}</p>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-black text-center">
+                    {getTierWithEmojiAndText(applicant.tier)}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Button
+                      variant="link"
+                      onClick={() => handleModalOpen(applicant)}
+                      className="text-gray-500"
+                    >
+                      관리
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <div className="min-h-[200px] flex justify-center items-center text-center text-gray-500 mt-4">
+            <p>현재 신청자가 없습니다</p>
+          </div>
+        )}
+      </div>
+      {members && isJoined && (
+        <ClubMemberList
+          members={members}
+          isJoined={isJoined}
+          clubId={clubId as string}
+        />
+      )}
+      {selectedApplicant && (
+        <ClubMemberApprovalDialog
+          applicant={selectedApplicant}
+          clubId={clubId as string}
+          onClose={handleModalClose}
+        />
+      )}
+    </div>
   );
 }
 

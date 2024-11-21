@@ -14,17 +14,17 @@ import { usePatchClubMembersRole } from "@/lib/api/hooks/clubMemberHook";
 import type { MemberRole } from "@/types/memberTypes";
 import React, { useState } from "react";
 
-interface MemberRoleChangeDialogProps {
+interface ClubMemberRoleChangeDialogProps {
   clubId: string;
   clubMemberId: number;
   memberRole: MemberRole;
 }
 
-function MemberRoleChangeDialog({
+function ClubMemberRoleChangeDialog({
   clubId,
   clubMemberId,
   memberRole,
-}: MemberRoleChangeDialogProps) {
+}: ClubMemberRoleChangeDialogProps) {
   const [selectedRole, setSelectedRole] = useState<MemberRole>(memberRole);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -43,7 +43,11 @@ function MemberRoleChangeDialog({
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger>역할 변경</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button variant="link" className="text-gray-500">
+          역할 변경
+        </Button>
+      </DialogTrigger>
       <DialogContent className="max-w-md p-6 rounded-lg shadow-lg">
         <DialogHeader>
           <DialogTitle className="text-lg font-bold text-gray-900">
@@ -117,4 +121,4 @@ function MemberRoleChangeDialog({
   );
 }
 
-export default MemberRoleChangeDialog;
+export default ClubMemberRoleChangeDialog;

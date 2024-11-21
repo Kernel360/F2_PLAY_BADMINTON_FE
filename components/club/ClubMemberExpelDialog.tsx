@@ -25,7 +25,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-interface MemberExpelModalProps {
+interface ClubMemberExpelModalProps {
   clubId: string;
   clubMemberId: number;
 }
@@ -39,7 +39,10 @@ const expelSchema = z.object({
 
 type ExpelFormValues = z.infer<typeof expelSchema>;
 
-function MemberExpelDialog({ clubId, clubMemberId }: MemberExpelModalProps) {
+function ClubMemberExpelDialog({
+  clubId,
+  clubMemberId,
+}: ClubMemberExpelModalProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const { mutate: patchClubMembersExpel } = usePatchClubMembersExpel(
@@ -64,7 +67,11 @@ function MemberExpelDialog({ clubId, clubMemberId }: MemberExpelModalProps) {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger>회원 내보내기</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button variant="link" className="text-gray-500">
+          회원 내보내기
+        </Button>
+      </DialogTrigger>
       <DialogContent className="text-black max-w-md p-6 rounded-lg shadow-lg">
         <DialogHeader>
           <DialogTitle className="text-lg font-bold text-gray-900">
@@ -111,4 +118,4 @@ function MemberExpelDialog({ clubId, clubMemberId }: MemberExpelModalProps) {
   );
 }
 
-export default MemberExpelDialog;
+export default ClubMemberExpelDialog;
