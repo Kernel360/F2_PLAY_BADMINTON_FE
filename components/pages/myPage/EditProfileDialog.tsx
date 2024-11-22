@@ -75,19 +75,26 @@ function EditProfileDialog({
   };
 
   const handleImageRemove = () => {
+    // 이미지 삭제 후 기본 이미지 설정
     // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    setProfileImage(DEFAULT_IMAGE!); // 이미지 삭제 후 기본 이미지 설정
+    setProfileImage(DEFAULT_IMAGE!); // 기본 이미지 설정
     setUploadedImageFile(null); // 업로드된 파일 정보 초기화
     form.setValue("profileImage", DEFAULT_IMAGE); // 폼 값도 기본 이미지로 설정
   };
 
   const onSubmit: SubmitHandler<ProfileFormInputs> = (data) => {
     const { name } = data;
-    // 이름만 수정하는 경우에는 기존 프로필 이미지 유지
-    const profileImageUrl =
-      uploadedImageFile || profileImage === DEFAULT_IMAGE
-        ? profileImage
-        : initialProfileImage;
+    let profileImageUrl: string;
+
+    // 이미지 삭제 후, 수정할 때 기본 이미지를 설정하는 부분
+    if (uploadedImageFile) {
+      profileImageUrl = profileImage; // 업로드된 이미지 사용
+    } else if (profileImage === DEFAULT_IMAGE) {
+      // biome-ignore lint/style/noNonNullAssertion: <explanation>
+      profileImageUrl = DEFAULT_IMAGE!; // 기본 이미지 사용
+    } else {
+      profileImageUrl = initialProfileImage; // 이름만 수정 시 기존 이미지 그대로 사용
+    }
 
     if (uploadedImageFile) {
       const formData = new FormData();
@@ -110,7 +117,7 @@ function EditProfileDialog({
     } else {
       putProfile({
         name,
-        profile_image_url: profileImageUrl, // 이름만 수정 시 기존 이미지 그대로 사용
+        profile_image_url: profileImageUrl, // 선택된 이미지로 업데이트
       });
     }
   };
