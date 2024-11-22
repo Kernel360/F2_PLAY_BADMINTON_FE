@@ -31,7 +31,7 @@ const profileSchema = z.object({
     .string()
     .min(2, "닉네임은 2자 이상 10자 이내로 입력하세요.")
     .max(10, "닉네임은 2자 이상 10자 이내로 입력하세요."),
-  profileImage: z.string(),
+  profileImage: z.string().optional(),
 });
 
 type ProfileFormInputs = z.infer<typeof profileSchema>;
@@ -75,13 +75,27 @@ function EditProfileDialog({
   };
 
   const handleImageRemove = () => {
-    setProfileImage("/images/dummy-image.jpg");
-    setUploadedImageFile(null);
-    form.setValue("profileImage", initialProfileImage);
+    // 이미지 삭제 후 기본 이미지 설정
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    setProfileImage(DEFAULT_IMAGE!); // 기본 이미지 설정
+    setUploadedImageFile(null); // 업로드된 파일 정보 초기화
+    form.setValue("profileImage", DEFAULT_IMAGE); // 폼 값도 기본 이미지로 설정
   };
 
   const onSubmit: SubmitHandler<ProfileFormInputs> = (data) => {
     const { name } = data;
+    let profileImageUrl: string;
+
+    // 이미지 삭제 후, 수정할 때 기본 이미지를 설정하는 부분
+    if (uploadedImageFile) {
+      profileImageUrl = profileImage; // 업로드된 이미지 사용
+    } else if (profileImage === DEFAULT_IMAGE) {
+      // biome-ignore lint/style/noNonNullAssertion: <explanation>
+      profileImageUrl = DEFAULT_IMAGE!; // 기본 이미지 사용
+    } else {
+      profileImageUrl = initialProfileImage; // 이름만 수정 시 기존 이미지 그대로 사용
+    }
+
     if (uploadedImageFile) {
       const formData = new FormData();
       formData.append("multipartFile", uploadedImageFile);
@@ -101,12 +115,10 @@ function EditProfileDialog({
         },
       });
     } else {
-      console.log("이미지가 업로드되지 않아서 putProfile만 호출");
-      if (profileImage === "/images/dummy-image.jpg")
-        putProfile({
-          name,
-          profile_image_url: DEFAULT_IMAGE,
-        });
+      putProfile({
+        name,
+        profile_image_url: profileImageUrl, // 선택된 이미지로 업데이트
+      });
     }
   };
 
@@ -141,7 +153,7 @@ function EditProfileDialog({
                 <FormItem className="w-full flex flex-col gap-2 justify-center items-center">
                   <div className="relative">
                     <Avatar className="w-24 h-24 rounded-full">
-                      <AvatarImage src={profileImage} alt="프로필 미리보기" />
+                      <AvatarImage src={profileImage} alt="프로필" />
                       <AvatarFallback />
                     </Avatar>
                     <div className="absolute bottom-0 right-0 bg-black bg-opacity-60 rounded-full p-1 cursor-pointer">
@@ -157,7 +169,7 @@ function EditProfileDialog({
                       />
                     </div>
                   </div>
-                  {profileImage !== "/images/dummy-image.jpg" && (
+                  {profileImage !== DEFAULT_IMAGE && (
                     <button
                       type="button"
                       onClick={handleImageRemove}
