@@ -127,13 +127,17 @@ function Header() {
           <Link href="/club">
             <p className={getActiveStyle("/club")}>동호회</p>
           </Link>
+          <Link
+            href="https://docs.google.com/forms/d/e/1FAIpQLScw6RdgQyGFMzKhN7yHSXYf20Y2TmnOMhirRU7bD00Eb1uJAw/viewform"
+            className="text-gray-400 flex gap-1"
+          >
+            <BadgeAlert className="text-gray-400" />
+            버그 리포트
+          </Link>
         </nav>
       </div>
       <div className="flex items-center justify-end space-x-4 w-1/2 ">
         <div className="w-2/3 flex justify-center items-center gap-1 mr-2">
-          <Link href="https://docs.google.com/forms/d/e/1FAIpQLScw6RdgQyGFMzKhN7yHSXYf20Y2TmnOMhirRU7bD00Eb1uJAw/viewform">
-            <BadgeAlert className="text-gray-500" />
-          </Link>
           <div className="relative flex-grow">
             <input
               ref={inputRef}
