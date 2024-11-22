@@ -2628,6 +2628,11 @@ export interface components {
        */
       name?: string;
       /**
+       * @description 회원 토큰
+       * @example member_token_1
+       */
+      member_token?: string;
+      /**
        * @description oAuth 로그인 이메일
        * @example qosle@naver.com
        */
@@ -3648,6 +3653,8 @@ export interface components {
        * @description 경기 아이디
        */
       league_id: number;
+      /** @description 경기 오너 토큰 */
+      league_owner_token: string;
       /** @description 경기 이름 */
       league_name: string;
       /** @description 경기 설명 */
