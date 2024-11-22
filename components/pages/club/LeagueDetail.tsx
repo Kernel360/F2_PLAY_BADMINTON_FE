@@ -147,29 +147,31 @@ function LeagueDetail() {
             </Text>
           </div>
         </div>
-        {loginedUser?.data?.member_token === league?.league_owner_token && (
-          <div className="flex justify-center gap-2">
-            <Link href={`/club/${clubId}/league/${leagueId}/update`}>
+        {/* undefined 일 때일 수 있음 |  */}
+        {!!loginedUser?.data &&
+          loginedUser.data.member_token === league?.league_owner_token && (
+            <div className="flex justify-center gap-2">
+              <Link href={`/club/${clubId}/league/${leagueId}/update`}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="flex items-center gap-1 border-primary"
+                >
+                  <Pencil size={16} />
+                  수정
+                </Button>
+              </Link>
               <Button
                 size="sm"
-                variant="outline"
-                className="flex items-center gap-1 border-primary"
+                variant="destructive"
+                className="flex items-center gap-1"
+                onClick={() => deleteLeague()}
               >
-                <Pencil size={16} />
-                수정
+                <Trash2 size={16} />
+                삭제
               </Button>
-            </Link>
-            <Button
-              size="sm"
-              variant="destructive"
-              className="flex items-center gap-1"
-              onClick={() => deleteLeague()}
-            >
-              <Trash2 size={16} />
-              삭제
-            </Button>
-          </div>
-        )}
+            </div>
+          )}
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="p-4 bg-gray-100 rounded-lg flex items-center gap-3">
