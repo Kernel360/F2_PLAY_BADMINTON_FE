@@ -3,7 +3,7 @@
 import SImage from "@/components/ui/Image";
 import { usePostLogout } from "@/lib/api/hooks/SessionHook";
 import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
-import { Search } from "lucide-react";
+import { BadgeAlert, Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
@@ -130,7 +130,10 @@ function Header() {
         </nav>
       </div>
       <div className="flex items-center justify-end space-x-4 w-1/2 ">
-        <div className="w-1/2 flex justify-center items-center gap-1 mr-2">
+        <div className="w-2/3 flex justify-center items-center gap-1 mr-2">
+          <Link href="https://docs.google.com/forms/d/e/1FAIpQLScw6RdgQyGFMzKhN7yHSXYf20Y2TmnOMhirRU7bD00Eb1uJAw/viewform">
+            <BadgeAlert className="text-gray-500" />
+          </Link>
           <div className="relative flex-grow">
             <input
               ref={inputRef}
