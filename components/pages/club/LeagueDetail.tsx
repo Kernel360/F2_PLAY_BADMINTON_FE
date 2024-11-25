@@ -1,6 +1,7 @@
 "use client";
 
 import Spinner from "@/components/Spinner";
+import LeagueInfo from "@/components/club/LeagueDetail/LeagueInfo";
 import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
 import { useGetClubMembersCheck } from "@/lib/api/hooks/clubMemberHook";
@@ -268,82 +269,55 @@ function LeagueDetail() {
           )}
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <div className="p-4 bg-gray-100 rounded-lg flex items-center gap-3">
-          <Calendar className="text-gray-500" size={24} />
-          <div>
-            <p className="text-xs text-gray-500">경기 일자</p>
-            <p className="text-sm font-semibold text-gray-800">
-              {league?.league_at &&
-                format(new Date(league.league_at), "yyyy-MM-dd HH시 mm분")}
-            </p>
-          </div>
-        </div>
+        <LeagueInfo
+          icon={Calendar}
+          label="경기 일자"
+          value={
+            league?.league_at &&
+            format(new Date(league.league_at), "yyyy-MM-dd HH시 mm분")
+          }
+        />
 
-        <div className="p-4 bg-gray-100 rounded-lg flex items-center gap-3">
-          <Flag className="text-gray-500" size={24} />
-          <div>
-            <p className="text-xs text-gray-500">모집 상태</p>
-            <p className="text-sm font-semibold text-gray-800">
-              {getRecruitmentStatusLabel(league?.league_status || "")}
-            </p>
-          </div>
-        </div>
+        <LeagueInfo
+          icon={Flag}
+          label="모집 상태"
+          value={getRecruitmentStatusLabel(league?.league_status || "")}
+        />
 
-        <div className="p-4 bg-gray-100 rounded-lg flex items-center gap-3">
-          <MapPin className="text-gray-500" size={24} />
-          <div>
-            <p className="text-xs text-gray-500">경기 장소</p>
-            <p className="text-sm font-semibold text-gray-800">
-              {league?.region}
-            </p>
-          </div>
-        </div>
-        <div className="p-4 bg-gray-100 rounded-lg flex items-center gap-3">
-          <User className="text-gray-500" size={24} />
-          <div>
-            <p className="text-xs text-gray-500">모집 인원</p>
-            <p className="text-sm font-semibold text-gray-800">
-              {league?.recruited_member_count} / {league?.player_limit_count} 명
-            </p>
-          </div>
-        </div>
-        <div className="p-4 bg-gray-100 rounded-lg flex items-center gap-3">
-          <Calendar className="text-gray-500" size={24} />
-          <div>
-            <p className="text-xs text-gray-500">모집 마감 일자</p>
-            <p className="text-sm font-semibold text-gray-800">
-              {league?.recruiting_closed_at &&
-                format(new Date(league.recruiting_closed_at), "yyyy-MM-dd")}
-            </p>
-          </div>
-        </div>
-        <div className="p-4 bg-gray-100 rounded-lg flex items-center gap-3">
-          <Award className="text-gray-500" size={24} />
-          <div>
-            <p className="text-xs text-gray-500">지원 티어</p>
-            <p className="text-sm font-semibold text-gray-800">
-              {getTierWithEmojiAndText(league?.required_tier || "")}
-            </p>
-          </div>
-        </div>
-        <div className="p-4 bg-gray-100 rounded-lg flex items-center gap-3">
-          <Pyramid className="text-gray-500" size={24} />
-          <div>
-            <p className="text-xs text-gray-500">경기 유형</p>
-            <p className="text-sm font-semibold text-gray-800">
-              {league?.match_type === "SINGLES" ? "단식" : "복식"}
-            </p>
-          </div>
-        </div>
-        <div className="p-4 bg-gray-100 rounded-lg flex items-center gap-3">
-          <GitCompare className="text-gray-500" size={24} />
-          <div>
-            <p className="text-xs text-gray-500">대진표 타입</p>
-            <p className="text-sm font-semibold text-gray-800">
-              {league?.match_generation_type === "FREE" ? "프리" : "토너먼트"}
-            </p>
-          </div>
-        </div>
+        <LeagueInfo icon={MapPin} label="경기 장소" value={league?.region} />
+
+        <LeagueInfo
+          icon={User}
+          label="모집 인원"
+          value={`${league?.recruited_member_count} / ${league?.player_limit_count} 명`}
+        />
+
+        <LeagueInfo
+          icon={Calendar}
+          label="모집 마감 일자"
+          value={
+            league?.recruiting_closed_at &&
+            format(new Date(league.recruiting_closed_at), "yyyy-MM-dd")
+          }
+        />
+
+        <LeagueInfo
+          icon={Award}
+          label="지원 가능 티어"
+          value={getTierWithEmojiAndText(league?.required_tier || "")}
+        />
+
+        <LeagueInfo
+          icon={Pyramid}
+          label="경기 유형"
+          value={league?.match_type === "SINGLES" ? "단식" : "복식"}
+        />
+
+        <LeagueInfo
+          icon={GitCompare}
+          label="대진표 타입"
+          value={league?.match_generation_type === "FREE" ? "프리" : "토너먼트"}
+        />
       </div>
 
       <div>
