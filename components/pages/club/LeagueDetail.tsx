@@ -1,7 +1,9 @@
 "use client";
 
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
+import { useGetClubMembersCheck } from "@/lib/api/hooks/clubMemberHook";
 import {
   useDeleteLeague,
   useDeleteParticipantLeague,
@@ -11,6 +13,7 @@ import {
 } from "@/lib/api/hooks/leagueHook";
 import { usePostMatches } from "@/lib/api/hooks/matchHook";
 import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
+import type { Tier } from "@/types/commonTypes";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
 import {
@@ -30,6 +33,41 @@ import {
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
+const getRecruitmentStatusLabel = (status: string) => {
+  switch (status) {
+    case "RECRUITING":
+      return "모집 중";
+    case "RECRUITING_COMPLETED":
+      return "모집 완료";
+    case "PLAYING":
+      return "경기중";
+    case "CANCELED":
+      return "경기 취소";
+    case "FINISHED":
+      return "경기 종료";
+    default:
+      return status;
+  }
+};
+
+const canParticipate = (userTier: Tier, targetTier: Tier): boolean => {
+  if (userTier === "GOLD") {
+    return true;
+  }
+
+  if (userTier === "SILVER" && targetTier === "SILVER") {
+    return true;
+  }
+
+  // BRONZE는 BRONZE 경기에만 참가할 수 있음
+  if (userTier === "BRONZE" && targetTier === "BRONZE") {
+    return true;
+  }
+
+  // 나머지 경우는 참가할 수 없음
+  return false;
+};
+
 function LeagueDetail() {
   const { clubId, leagueId } = useParams();
   const router = useRouter();
@@ -42,6 +80,7 @@ function LeagueDetail() {
     clubId as string,
     leagueId as string,
   );
+  const { data: clubMemberCheck } = useGetClubMembersCheck(clubId as string);
   const { mutate: postParticipate } = usePostParticipantLeague(
     clubId as string,
     leagueId as string,
@@ -62,32 +101,22 @@ function LeagueDetail() {
   );
   const { data: sessionData } = useGetMembersSession();
 
-  const handleParticipate = () => {
+  const handleParticipate = (status: boolean) => {
     const isParticipate = !!leagueCheck?.data?.is_participated_in_league;
     if (sessionData?.result === "FAIL") {
+      alert("로그인이 필요한 기능입니다");
       return router.push("/login");
     }
-    if (!isParticipate) {
+
+    if (!clubMemberCheck?.data?.is_club_member) {
+      alert("동호회 가입이 필요합니다");
+      return router.push(`/club/${clubId}`);
+    }
+
+    if (!status) {
       postParticipate();
     } else {
       deleteParticipate();
-    }
-  };
-
-  const getRecruitmentStatusLabel = (status: string) => {
-    switch (status) {
-      case "RECRUITING":
-        return "모집 중";
-      case "RECRUITING_COMPLETED":
-        return "모집 완료";
-      case "PLAYING":
-        return "경기중";
-      case "CANCELED":
-        return "경기 취소";
-      case "FINISHED":
-        return "경기 종료";
-      default:
-        return status;
     }
   };
 
@@ -132,6 +161,72 @@ function LeagueDetail() {
     );
   };
 
+  const renderParticipateButton = () => {
+    // league owner 인 경우 참가 버튼 x
+    if (
+      !!loginedUser?.data &&
+      loginedUser.data.member_token === league?.league_owner_token
+    )
+      return (
+        <Button
+          size="lg"
+          variant="outline"
+          className="cursor-not-allowed items-center justify-center gap-2 border-primary w-1/3 border-zinc-300 text-zinc-500 hover:bg-white hover:text-zinc-500"
+        >
+          경기 생성자는 참가 취소를 할 수 없습니다
+        </Button>
+      );
+
+    // 모집중이 아닌 경우 참가 버튼 x
+    if (league?.league_status !== "RECRUITING")
+      return (
+        <Button
+          size="lg"
+          variant="outline"
+          className="cursor-not-allowed items-center justify-center gap-2 border-primary w-1/3 border-zinc-300 text-zinc-500 hover:bg-white hover:text-zinc-500"
+        >
+          모집중인 경기가 아닙니다
+        </Button>
+      );
+
+    // 자신의 티어보다 높은 경기는 참가 버튼 x
+    if (
+      !!loginedUser?.data &&
+      !canParticipate(loginedUser.data.member_tier, league.required_tier)
+    )
+      return (
+        <Button
+          size="lg"
+          variant="outline"
+          className="cursor-not-allowed items-center justify-center gap-2 border-primary w-1/3 border-zinc-300 text-zinc-500 hover:bg-white hover:text-zinc-500"
+        >
+          참가 티어가 너무 높습니다
+        </Button>
+      );
+
+    if (league.recruited_member_count === league.player_limit_count) {
+      return (
+        <Button
+          size="lg"
+          variant="destructive"
+          className="items-center justify-center gap-2 border-primary w-1/3"
+          onClick={() => handleParticipate(true)}
+        >
+          <User size={20} />
+          참가취소
+        </Button>
+      );
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto  min-h-[530px] flex items-center justify-center bg-white rounded-lg space-y-6">
+        <Spinner />
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto bg-white rounded-lg space-y-6">
       <div className="flex items-center justify-between border-b pb-4">
@@ -147,7 +242,6 @@ function LeagueDetail() {
             </Text>
           </div>
         </div>
-        {/* undefined 일 때일 수 있음 |  */}
         {!!loginedUser?.data &&
           loginedUser.data.member_token === league?.league_owner_token && (
             <div className="flex justify-center gap-2">
@@ -264,7 +358,7 @@ function LeagueDetail() {
       <div className="flex w-full justify-evenly items-center mt-8">
         {renderButtonByMatchCreatedStatus()}
         {/* TODO(Yejin0O0): 지원 가능한 티어 경기에만 버튼 보이도록 수정 */}
-        {league?.league_status === "RECRUITING" && (
+        {/* {league?.league_status === "RECRUITING" && (
           <Button
             size="lg"
             variant={
@@ -280,7 +374,8 @@ function LeagueDetail() {
               ? "참가 취소"
               : "참가하기"}
           </Button>
-        )}
+        )} */}
+        {renderParticipateButton()}
       </div>
     </div>
   );

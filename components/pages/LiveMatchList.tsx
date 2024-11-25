@@ -16,7 +16,7 @@ import {
   useGetMainLeaguesMatch,
 } from "@/lib/api/hooks/mainLeagueHook";
 import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
-import type { LeagueStatus, TierLimit } from "@/types/leagueTypes";
+import type { LeagueStatus, Tier } from "@/types/commonTypes";
 import type {
   GetMainLeagues,
   GetMainLeaguesMatchData,
@@ -61,7 +61,7 @@ const renderLeagueStatusButton = (
   }
 };
 
-const renderLeagueTierBadge = (tier: TierLimit) => {
+const renderLeagueTierBadge = (tier: Tier) => {
   if (tier === "GOLD") {
     return (
       <Badge
