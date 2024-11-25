@@ -357,24 +357,7 @@ function LeagueDetail() {
       </div>
       <div className="flex w-full justify-evenly items-center mt-8">
         {renderButtonByMatchCreatedStatus()}
-        {/* TODO(Yejin0O0): 지원 가능한 티어 경기에만 버튼 보이도록 수정 */}
-        {/* {league?.league_status === "RECRUITING" && (
-          <Button
-            size="lg"
-            variant={
-              leagueCheck?.data?.is_participated_in_league
-                ? "destructive"
-                : "default"
-            }
-            className="items-center justify-center gap-2 border-primary w-1/3"
-            onClick={() => handleParticipate()}
-          >
-            <User size={20} />
-            {leagueCheck?.data?.is_participated_in_league
-              ? "참가 취소"
-              : "참가하기"}
-          </Button>
-        )} */}
+
         {renderParticipateButton()}
       </div>
     </div>
