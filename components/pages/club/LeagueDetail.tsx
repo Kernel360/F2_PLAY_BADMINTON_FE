@@ -28,7 +28,7 @@ import {
   MapPin,
   Pencil,
   Pyramid,
-  Trash2,
+  TicketX,
   User,
 } from "lucide-react";
 import Link from "next/link";
@@ -146,12 +146,12 @@ function LeagueDetail() {
               </Link>
               <Button
                 size="sm"
-                variant="destructive"
-                className="flex items-center gap-1"
+                variant="outline"
+                className="flex items-center gap-1 hover:bg-zinc-500 hover:text-white border-zinc-500 text-zinc-500"
                 onClick={() => deleteLeague()}
               >
-                <Trash2 size={16} />
-                삭제
+                <TicketX size={16} />
+                취소
               </Button>
             </div>
           )}
