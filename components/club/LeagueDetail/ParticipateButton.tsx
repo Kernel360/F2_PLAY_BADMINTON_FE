@@ -57,6 +57,10 @@ function ParticipateButton({
     loginedUser &&
     canParticipate(loginedUser?.data?.member_tier, league.required_tier);
 
+  if (league.league_status === "CANCELED") {
+    return null;
+  }
+
   // 로그인 하지 않은 사용자 처리
   if (loginedUser.result === "FAIL") {
     return (
