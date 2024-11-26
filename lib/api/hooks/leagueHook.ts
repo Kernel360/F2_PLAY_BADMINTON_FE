@@ -1,3 +1,16 @@
+import {
+  deleteLeagues,
+  deleteParticipateLeague,
+  getDateLeague,
+  getLeagueCheck,
+  getLeagueDetail,
+  getMonthLeagues,
+  patchLeague,
+  postLeague,
+  postParticipateLeague,
+} from "@/lib/api/functions/leagueFn";
+import useMutationWithToast from "@/lib/api/hooks/useMutationWithToast";
+import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   DeleteLeagueData,
   DeleteLeagueParticipantData,
@@ -10,19 +23,6 @@ import type {
   PostLeagueRequest,
 } from "@/types/leagueTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  deleteLeagues,
-  deleteParticipateLeague,
-  getDateLeague,
-  getLeagueCheck,
-  getLeagueDetail,
-  getMonthLeagues,
-  patchLeague,
-  postLeague,
-  postParticipateLeague,
-} from "../functions/leagueFn";
-import useMutationWithToast from "./useMutationWithToast";
-import useQueryWithToast from "./useQueryWithToast";
 
 export const usePostLeague = (clubId: string, onSuccess: () => void) => {
   const queryClient = useQueryClient();
@@ -123,13 +123,18 @@ export const usePatchLeague = (clubId: string, leagueId: string) => {
   });
 };
 
-export const useDeleteLeague = (clubId: string, leagueId: string) => {
+export const useDeleteLeague = (
+  clubId: string,
+  leagueId: string,
+  onSuccess: () => void,
+) => {
   const queryClient = useQueryClient();
 
   const mutationFn = () => deleteLeagues(clubId, leagueId);
 
   const onSuccessCallback = () => {
     queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+    onSuccess();
   };
 
   return useMutationWithToast<DeleteLeagueData, void>(

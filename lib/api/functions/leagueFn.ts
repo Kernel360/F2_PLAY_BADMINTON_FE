@@ -62,7 +62,6 @@ export const getLeagueCheck = async (
   clubId: string,
   leagueId: string,
 ): Promise<GetLeagueCheckResponse> => {
-  console.log("gd");
   return restClient.get<GetLeagueCheckResponse>(
     `/clubs/${clubId}/leagues/${leagueId}/check`,
   );

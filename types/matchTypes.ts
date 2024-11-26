@@ -5,4 +5,9 @@ export type GetMatchesResponse =
 
 export type GetMatchesData = components["schemas"]["BracketResponse"];
 
+export type PostMatchesResponse =
+  components["schemas"]["CommonResponseBracketResponse"];
+
+export type PostMatchesData = components["schemas"]["BracketResponse"];
+
 export type MatchParticipant = components["schemas"]["Participant"];

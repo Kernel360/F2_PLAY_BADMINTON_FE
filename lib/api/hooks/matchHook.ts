@@ -1,7 +1,8 @@
 import { getMatches, postMatches } from "@/lib/api/functions/matchFn";
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
-import type { GetMatchesData } from "@/types/matchTypes";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { GetMatchesData, PostMatchesData } from "@/types/matchTypes";
+import { useQueryClient } from "@tanstack/react-query";
+import useMutationWithToast from "./useMutationWithToast";
 
 export const useGetMatches = (clubId: string, leagueId: number) => {
   return useQueryWithToast<GetMatchesData>(["matchesData"], () =>
@@ -9,15 +10,22 @@ export const useGetMatches = (clubId: string, leagueId: number) => {
   );
 };
 
-export const usePostMatches = (clubId: string, leagueId: string) => {
+export const usePostMatches = (
+  clubId: string,
+  leagueId: string,
+  onSuccess: () => void,
+) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: () => postMatches(clubId, leagueId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["matchesData"] });
-      queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = () => postMatches(clubId, leagueId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["matchesData"] });
+    queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+    onSuccess();
+  };
+  return useMutationWithToast<PostMatchesData, void>(
+    mutationFn,
+    onSuccessCallback,
+  );
 };

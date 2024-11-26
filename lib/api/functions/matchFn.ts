@@ -1,7 +1,8 @@
-import type { GetMatchesResponse } from "@/types/matchTypes";
-import restClient from "../restClient";
-
-const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
+import restClient from "@/lib/api/restClient";
+import type {
+  GetMatchesResponse,
+  PostMatchesResponse,
+} from "@/types/matchTypes";
 
 export const getMatches = async (
   clubId: string,
@@ -15,18 +16,8 @@ export const getMatches = async (
 export const postMatches = async (
   clubId: string,
   leagueId: string,
-): Promise<string> => {
-  const response = await fetch(
-    `${BASE_URL}/clubs/${clubId}/leagues/${leagueId}/matches`,
-    {
-      method: "POST",
-      credentials: "include",
-    },
+): Promise<PostMatchesResponse> => {
+  return restClient.post<PostMatchesResponse>(
+    `/clubs/${clubId}/leagues/${leagueId}/matches`,
   );
-
-  if (!response.ok) {
-    throw new Error("대진표 생성에 실패했습니다.");
-  }
-
-  return response.text();
 };
