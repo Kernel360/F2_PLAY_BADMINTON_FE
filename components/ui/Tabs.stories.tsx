@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import {
-  type TabTriggerProps,
+  // type TabTriggerProps,
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "./Tabs";
+} from "@/components/ui/tabs";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof Tabs> = {
   title: "Components/ui/Tabs",
@@ -32,25 +32,25 @@ export const Default: Story = {
       <TabsList>
         <TabsTrigger
           value="tab1"
-          color={args.color as TabTriggerProps["color"]}
+          // color={args.color as TabTriggerProps["color"]}
         >
           Tab 1
         </TabsTrigger>
         <TabsTrigger
           value="tab2"
-          color={args.color as TabTriggerProps["color"]}
+          // color={args.color as TabTriggerProps["color"]}
         >
           Tab 2
         </TabsTrigger>
         <TabsTrigger
           value="tab3"
-          color={args.color as TabTriggerProps["color"]}
+          // color={args.color as TabTriggerProps["color"]}
         >
           Tab 3
         </TabsTrigger>
         <TabsTrigger
           value="tab4"
-          color={args.color as TabTriggerProps["color"]}
+          // color={args.color as TabTriggerProps["color"]}
         >
           Tab 4
         </TabsTrigger>

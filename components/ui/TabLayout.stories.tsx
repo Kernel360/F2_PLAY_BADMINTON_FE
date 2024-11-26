@@ -2,7 +2,7 @@ import type { UserStateProps } from "@/types/layoutTypes";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import Header from "./Header";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
 function TabLayout({ isLogin, isJoined }: UserStateProps) {
   return (
