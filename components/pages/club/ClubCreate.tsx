@@ -1,8 +1,5 @@
 "use client";
 
-import ClubInfoInputDescription from "@/components/club/ClubInputDescription";
-import ClubInfoInputImage from "@/components/club/ClubInputImage";
-import ClubInfoInputName from "@/components/club/ClubInputName";
 import { Button } from "@/components/ui/Button";
 import {
   Form,
@@ -13,14 +10,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { usePostClubs, usePostClubsImg } from "@/lib/api/hooks/clubHook";
-import type { components } from "@/schemas/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Camera } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-// Zod 스키마 정의
 const clubCreateSchema = z.object({
   club_name: z
     .string()
@@ -30,48 +26,33 @@ const clubCreateSchema = z.object({
     .string()
     .min(2, "2자 이상 입력해주세요")
     .max(1000, "공백 포함 1000자 이하로 입력해주세요"),
-  club_image: z.string(),
+  club_image: z.string().min(1, "이미지를 업로드하세요"),
 });
 
 type ClubCreate = z.infer<typeof clubCreateSchema>;
 
 function ClubCreate() {
   const router = useRouter();
-  const [imgUrl, setImgUrl] = useState<string>("/images/dummy-image.jpg");
+  const [imgUrl, setImgUrl] = useState<string | undefined>(undefined);
   const { mutate: createClubImg } = usePostClubsImg();
   const { mutate: createClub } = usePostClubs((clubId) => {
     router.push(`/club/${clubId}`);
   });
 
   const form = useForm<ClubCreate>({
-    resolver: zodResolver(clubCreateSchema), // Zod 스키마 연결
+    resolver: zodResolver(clubCreateSchema),
     defaultValues: { club_name: "", club_description: "", club_image: "" },
     mode: "onBlur",
   });
 
-  const isValidImageFile = (fileName: string) => {
-    const allowedExtensions = ["png", "jpg", "jpeg", "gif"];
-    const fileExtension = fileName.split(".").pop()?.toLowerCase();
-    return fileExtension && allowedExtensions.includes(fileExtension);
-  };
-
   const uploadImage = (file: File) => {
-    if (!isValidImageFile(file.name)) {
-      form.setError("club_image", {
-        type: "manual",
-        message:
-          "png, jpg, jpeg, gif 중 하나의 확장자를 가진 파일을 업로드하세요",
-      });
-      return;
-    }
-
     const formData = new FormData();
     formData.append("multipartFile", file);
 
     createClubImg(formData, {
       onSuccess: (data) => {
         if (data.data) {
-          setImgUrl(data.data || "/images/dummy-image.jpg");
+          setImgUrl(data.data || undefined);
           form.setValue("club_image", data.data);
           form.clearErrors("club_image");
         }
@@ -90,11 +71,23 @@ function ClubCreate() {
     if (file) {
       uploadImage(file);
     } else {
-      setImgUrl("/images/dummy-image.jpg");
+      setImgUrl(undefined);
+      form.setError("club_image", {
+        type: "manual",
+        message: "이미지를 다시 업로드하세요",
+      });
     }
   };
 
   const handleCreateClub = (data: ClubCreate) => {
+    if (!imgUrl) {
+      form.setError("club_image", {
+        type: "manual",
+        message: "이미지를 업로드하세요",
+      });
+      return;
+    }
+
     const newClubData: ClubCreate = {
       club_name: data.club_name,
       club_description: data.club_description,
@@ -105,65 +98,94 @@ function ClubCreate() {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleCreateClub)}
-        method="post"
-        className="px-14 pt-8 w-full"
-      >
-        <div className="flex space-x-8 w-full h-[464px] items-center">
-          <div className="flex flex-col gap-1 justify-center">
-            <FormField
-              control={form.control}
-              name="club_image"
-              render={({ field }) => (
-                <FormItem>
-                  <input type="text" className="hidden" {...field} />
-                  <ClubInfoInputImage
-                    imagePreview={imgUrl || "/images/dummy-image.jpg"}
-                    onImageChange={(e) => onImageSelect(e)}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
+    <div className="w-full my-10">
+      <h1 className="text-xl font-bold text-black ">동호회 생성하기</h1>
+
+      <Form {...form}>
+        <div className="max-w-5xl mx-auto space-y-8 mt-4">
+          {/* 이미지 섹션 */}
+          <div className="relative w-full h-[448px] bg-gray-100 overflow-hidden flex justify-center items-center">
+            {imgUrl ? (
+              <img
+                src={imgUrl}
+                alt="Preview"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="flex flex-col items-center text-gray-500">
+                <Camera className="h-10 w-10 mb-2" />
+                <p className="text-sm">이미지를 업로드하세요</p>
+              </div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              className="absolute inset-0 opacity-0 cursor-pointer"
+              onChange={onImageSelect}
             />
           </div>
-          <div className="flex flex-col flex-1 h-[400px] gap-4">
+          {form.formState.errors.club_image && (
+            <p className="text-red-500 text-sm">
+              {form.formState.errors.club_image.message}
+            </p>
+          )}
+
+          {/* 입력 필드 */}
+          <form
+            onSubmit={form.handleSubmit(handleCreateClub)}
+            method="post"
+            className="space-y-6"
+          >
             <FormField
               control={form.control}
               name="club_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>동호회 이름</FormLabel>
+                  <FormLabel className="text-black font-bold">
+                    동호회 이름
+                  </FormLabel>
                   <FormControl>
-                    <ClubInfoInputName {...field} />
+                    <input
+                      {...field}
+                      className="w-full text-black border-b border-gray-300 focus:outline-none focus:border-black p-2"
+                      placeholder="동호회 이름을 입력하세요"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="club_description"
               render={({ field }) => (
-                <FormItem className="h-full">
-                  <FormLabel>동호회 소개</FormLabel>
+                <FormItem>
+                  <FormLabel className="text-black font-bold">
+                    동호회 설명
+                  </FormLabel>
                   <FormControl>
-                    <ClubInfoInputDescription {...field} />
+                    <textarea
+                      {...field}
+                      className="w-full text-black resize-none h-44 border-b border-gray-300 focus:outline-none focus:border-black p-2"
+                      rows={4}
+                      placeholder="동호회의 목적, 활동 내용 등을 입력하세요"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
+
+            <div className="flex justify-center">
+              <Button size="lg" type="submit">
+                생성
+              </Button>
+            </div>
+          </form>
         </div>
-        <div className="flex justify-center items-center gap-4 mt-5">
-          <Button size="lg" type="submit">
-            완료
-          </Button>
-        </div>
-      </form>
-    </Form>
+      </Form>
+    </div>
   );
 }
 
