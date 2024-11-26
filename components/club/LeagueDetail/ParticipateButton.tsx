@@ -44,8 +44,10 @@ function ParticipateButton({
   const isLeagueOwner =
     loginedUser?.data?.member_token === league.league_owner_token;
 
-  // 모집 상태 확인
-  const isRecruiting = league.league_status === "RECRUITING";
+  // 모집 상태 확인 (RECRUITING 또는 RECRUITING_COMPLETED 상태 포함)
+  const isRecruitingOrCompleted =
+    league.league_status === "RECRUITING" ||
+    league.league_status === "RECRUITING_COMPLETED";
 
   // 모집 인원 초과 여부 확인
   const isFull = league.recruited_member_count === league.player_limit_count;
@@ -83,6 +85,19 @@ function ParticipateButton({
     );
   }
 
+  // 모집중 또는 모집 완료 상태가 아닌 경우 처리
+  if (!isRecruitingOrCompleted) {
+    return (
+      <Button
+        size="lg"
+        variant="outline"
+        className="cursor-not-allowed items-center justify-center gap-2 border-primary w-1/3 border-zinc-300 text-zinc-500 hover:bg-white hover:text-zinc-500"
+      >
+        모집중인 경기가 아닙니다
+      </Button>
+    );
+  }
+
   // 참여 신청 한 사람 처리
   if (isParticipating) {
     return (
@@ -94,19 +109,6 @@ function ParticipateButton({
       >
         <User size={20} />
         참가 취소
-      </Button>
-    );
-  }
-
-  // 모집중 아닐 때 처리
-  if (!isRecruiting) {
-    return (
-      <Button
-        size="lg"
-        variant="outline"
-        className="cursor-not-allowed items-center justify-center gap-2 border-primary w-1/3 border-zinc-300 text-zinc-500 hover:bg-white hover:text-zinc-500"
-      >
-        모집중인 경기가 아닙니다
       </Button>
     );
   }
@@ -137,6 +139,7 @@ function ParticipateButton({
     );
   }
 
+  // 참가 신청 가능 버튼
   return (
     <Button
       size="lg"
