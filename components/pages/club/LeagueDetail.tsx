@@ -72,20 +72,21 @@ function LeagueDetail() {
   const { mutate: deleteParticipate } = useDeleteParticipantLeague(
     clubId as string,
     leagueId as string,
-    () => alert("경기 신청 취소가 완료되었습니다"),
+    () => alert("경기 참여 취소가 완료되었습니다"),
   );
   const { mutate: deleteLeague } = useDeleteLeague(
     clubId as string,
     leagueId as string,
+    () => alert("경기 취소가 완료되었습니다"),
   );
   const { mutate: createMatch } = usePostMatches(
     clubId as string,
     leagueId as string,
+    () => router.push(`/club/${clubId}/league/${leagueId}/match`),
   );
-  const { data: sessionData } = useGetMembersSession();
 
   const handleParticipate = (status: boolean) => {
-    if (sessionData?.result === "FAIL") {
+    if (loginedUser?.result === "FAIL") {
       alert("로그인이 필요한 기능입니다");
       return router.push("/login");
     }
@@ -103,9 +104,13 @@ function LeagueDetail() {
   };
 
   const makeMatch = () => {
-    createMatch(undefined, {
-      onSuccess: () => router.push(`/club/${clubId}/league/${leagueId}/match`),
-    });
+    createMatch();
+  };
+
+  const cancelLeague = () => {
+    if (confirm("정말로 경기를 취소하시겠습니까?")) {
+      deleteLeague();
+    }
   };
 
   if (isLoading) {
@@ -132,7 +137,8 @@ function LeagueDetail() {
           </div>
         </div>
         {!!loginedUser?.data &&
-          loginedUser.data.member_token === league?.league_owner_token && (
+          loginedUser.data.member_token === league?.league_owner_token &&
+          league?.league_status !== "CANCELED" && (
             <div className="flex justify-center gap-2">
               <Link href={`/club/${clubId}/league/${leagueId}/update`}>
                 <Button
@@ -148,7 +154,7 @@ function LeagueDetail() {
                 size="sm"
                 variant="outline"
                 className="flex items-center gap-1 hover:bg-zinc-500 hover:text-white border-zinc-500 text-zinc-500"
-                onClick={() => deleteLeague()}
+                onClick={cancelLeague}
               >
                 <TicketX size={16} />
                 취소
