@@ -2,6 +2,8 @@
 
 import Spinner from "@/components/Spinner";
 import LeagueInfo from "@/components/club/LeagueDetail/LeagueInfo";
+import MatchButton from "@/components/club/LeagueDetail/MatchButton";
+import ParticipateButton from "@/components/club/LeagueDetail/ParticipateButton";
 import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
 import { useGetClubMembersCheck } from "@/lib/api/hooks/clubMemberHook";
@@ -14,12 +16,10 @@ import {
 } from "@/lib/api/hooks/leagueHook";
 import { usePostMatches } from "@/lib/api/hooks/matchHook";
 import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
-import type { Tier } from "@/types/commonTypes";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
 import {
   Award,
-  BookUser,
   Calendar,
   CalendarDays,
   Edit,
@@ -49,24 +49,6 @@ const getRecruitmentStatusLabel = (status: string) => {
     default:
       return status;
   }
-};
-
-const canParticipate = (userTier: Tier, targetTier: Tier): boolean => {
-  if (userTier === "GOLD") {
-    return true;
-  }
-
-  if (userTier === "SILVER" && targetTier === "SILVER") {
-    return true;
-  }
-
-  // BRONZE는 BRONZE 경기에만 참가할 수 있음
-  if (userTier === "BRONZE" && targetTier === "BRONZE") {
-    return true;
-  }
-
-  // 나머지 경우는 참가할 수 없음
-  return false;
 };
 
 function LeagueDetail() {
@@ -103,7 +85,6 @@ function LeagueDetail() {
   const { data: sessionData } = useGetMembersSession();
 
   const handleParticipate = (status: boolean) => {
-    const isParticipate = !!leagueCheck?.data?.is_participated_in_league;
     if (sessionData?.result === "FAIL") {
       alert("로그인이 필요한 기능입니다");
       return router.push("/login");
@@ -121,103 +102,10 @@ function LeagueDetail() {
     }
   };
 
-  const renderButtonByMatchCreatedStatus = () => {
-    if (league?.player_limit_count !== league?.recruited_member_count) {
-      return null;
-    }
-
-    if (!league?.is_match_created) {
-      return (
-        <Button
-          size="lg"
-          variant="outline"
-          className="items-center justify-center gap-2 border-primary w-1/3 hover:bg-white hover:text-primary"
-          onClick={() =>
-            createMatch(undefined, {
-              onSuccess: () =>
-                router.push(`/club/${clubId}/league/${leagueId}/match`),
-            })
-          }
-        >
-          <BookUser size={20} />
-          대진표 생성
-        </Button>
-      );
-    }
-
-    return (
-      <Link
-        href={`/club/${clubId}/league/${leagueId}/match`}
-        className="flex justify-center items-center gap-4 w-1/3"
-      >
-        <Button
-          size="lg"
-          variant="outline"
-          className="items-center justify-center gap-2 border-primary w-full"
-        >
-          <BookUser size={20} />
-          대진표 보기
-        </Button>
-      </Link>
-    );
-  };
-
-  const renderParticipateButton = () => {
-    // league owner 인 경우 참가 버튼 x
-    if (
-      !!loginedUser?.data &&
-      loginedUser.data.member_token === league?.league_owner_token
-    )
-      return (
-        <Button
-          size="lg"
-          variant="outline"
-          className="cursor-not-allowed items-center justify-center gap-2 border-primary w-1/3 border-zinc-300 text-zinc-500 hover:bg-white hover:text-zinc-500"
-        >
-          경기 생성자는 참가 취소를 할 수 없습니다
-        </Button>
-      );
-
-    // 모집중이 아닌 경우 참가 버튼 x
-    if (league?.league_status !== "RECRUITING")
-      return (
-        <Button
-          size="lg"
-          variant="outline"
-          className="cursor-not-allowed items-center justify-center gap-2 border-primary w-1/3 border-zinc-300 text-zinc-500 hover:bg-white hover:text-zinc-500"
-        >
-          모집중인 경기가 아닙니다
-        </Button>
-      );
-
-    // 자신의 티어보다 높은 경기는 참가 버튼 x
-    if (
-      !!loginedUser?.data &&
-      !canParticipate(loginedUser.data.member_tier, league.required_tier)
-    )
-      return (
-        <Button
-          size="lg"
-          variant="outline"
-          className="cursor-not-allowed items-center justify-center gap-2 border-primary w-1/3 border-zinc-300 text-zinc-500 hover:bg-white hover:text-zinc-500"
-        >
-          참가 티어가 너무 높습니다
-        </Button>
-      );
-
-    if (league.recruited_member_count === league.player_limit_count) {
-      return (
-        <Button
-          size="lg"
-          variant="destructive"
-          className="items-center justify-center gap-2 border-primary w-1/3"
-          onClick={() => handleParticipate(true)}
-        >
-          <User size={20} />
-          참가취소
-        </Button>
-      );
-    }
+  const makeMatch = () => {
+    createMatch(undefined, {
+      onSuccess: () => router.push(`/club/${clubId}/league/${leagueId}/match`),
+    });
   };
 
   if (isLoading) {
@@ -268,6 +156,7 @@ function LeagueDetail() {
             </div>
           )}
       </div>
+
       <div className="grid grid-cols-2 gap-4">
         <LeagueInfo
           icon={Calendar}
@@ -330,9 +219,22 @@ function LeagueDetail() {
         </div>
       </div>
       <div className="flex w-full justify-evenly items-center mt-8">
-        {renderButtonByMatchCreatedStatus()}
-
-        {renderParticipateButton()}
+        {league && (
+          <MatchButton
+            clubId={clubId as string}
+            leagueId={leagueId as string}
+            league={league}
+            createMatch={makeMatch}
+          />
+        )}
+        {league && loginedUser && (
+          <ParticipateButton
+            league={league}
+            loginedUser={loginedUser}
+            handleParticipate={handleParticipate}
+            isParticipating={!!leagueCheck?.data?.is_participated_in_league}
+          />
+        )}
       </div>
     </div>
   );
