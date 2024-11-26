@@ -103,7 +103,6 @@ function ClubCreate() {
 
       <Form {...form}>
         <div className="max-w-5xl mx-auto space-y-8 mt-4">
-          {/* 이미지 섹션 */}
           <div className="relative w-full h-[448px] bg-gray-100 overflow-hidden flex justify-center items-center">
             {imgUrl ? (
               <img
@@ -130,7 +129,6 @@ function ClubCreate() {
             </p>
           )}
 
-          {/* 입력 필드 */}
           <form
             onSubmit={form.handleSubmit(handleCreateClub)}
             method="post"
