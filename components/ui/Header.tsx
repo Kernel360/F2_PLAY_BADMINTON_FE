@@ -112,15 +112,18 @@ function Header() {
   }
 
   return (
-    <div className="flex items-center justify-between w-full max-w-6xl h-16 px-4 sticky top-0 z-50 backdrop-blur-md">
-      <div className="flex items-center space-x-8">
+    <div className="flex flex-wrap items-center justify-between w-full max-w-6xl h-auto py-2 px-4 sticky top-0 z-50 backdrop-blur-md bg-white">
+      <div className="flex items-center space-x-4">
         <Link href="/">
           <div className="flex gap-2 justify-center items-center text-2xl font-bold cursor-pointer text-black">
-            <img src="/images/logo.png" alt="logo" className="w-10 h-10" />
-            콕콕
+            <img
+              src="/images/header-logo.png"
+              alt="logo"
+              className="w-fit h-12"
+            />
           </div>
         </Link>
-        <nav className="flex space-x-4">
+        <nav className="hidden md:flex space-x-4 h-16 justify-center items-center">
           <Link href="/club">
             <p className={getActiveStyle("/club")}>동호회</p>
           </Link>
@@ -133,14 +136,14 @@ function Header() {
           </Link>
         </nav>
       </div>
-      <div className="flex items-center justify-end space-x-4 w-1/2 ">
-        <div className="w-2/3 flex justify-center items-center gap-1 mr-2">
+      <div className="flex items-center justify-end space-x-4 gap-2 w-1/3 mt-2 md:mt-0">
+        <div className="flex flex-col w-full">
           <div className="relative flex-grow">
             <input
               ref={inputRef}
               type="text"
               placeholder="동호회 이름을 검색하세요"
-              className="p-2 outline-none border-none w-full rounded-lg bg-gray-50 text-gray-500 focus-visible:ring-2"
+              className="p-2 pr-10 text-sm outline-none border-none w-full max-w-full rounded-lg bg-gray-50 text-gray-500 focus-visible:ring-2 placeholder-transparent md:placeholder-gray-400"
               onKeyDown={handleKeyDown}
             />
             <button
@@ -153,7 +156,6 @@ function Header() {
             </button>
           </div>
         </div>
-
         {userMenu}
       </div>
     </div>
