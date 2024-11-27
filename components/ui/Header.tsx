@@ -121,9 +121,6 @@ function Header() {
           </div>
         </Link>
         <nav className="flex space-x-4">
-          <Link href="/">
-            <p className={getActiveStyle("/")}>오늘의경기</p>
-          </Link>
           <Link href="/club">
             <p className={getActiveStyle("/club")}>동호회</p>
           </Link>
