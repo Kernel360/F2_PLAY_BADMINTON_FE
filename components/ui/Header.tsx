@@ -57,7 +57,7 @@ function Header() {
 
   const getActiveStyle = (linkPath: string) => {
     let baseClass =
-      "cursor-pointer hover:text-primary transition-colors duration-300 ";
+      "cursor-pointer hover:text-primary transition-colors duration-300 text-sm ";
     if (
       path === linkPath ||
       (linkPath === "/club" && path.startsWith("/club"))
@@ -133,9 +133,9 @@ function Header() {
             </Link>
             <Link
               href="https://docs.google.com/forms/d/e/1FAIpQLScw6RdgQyGFMzKhN7yHSXYf20Y2TmnOMhirRU7bD00Eb1uJAw/viewform"
-              className="text-gray-400 flex gap-1 items-center"
+              className="text-gray-400 flex gap-1 items-center text-sm"
             >
-              <BadgeAlert className="text-gray-400" />
+              <BadgeAlert className="text-gray-400" size={18} />
               고객의 소리
             </Link>
           </nav>
@@ -173,9 +173,9 @@ function Header() {
         </Link>
         <Link
           href="https://docs.google.com/forms/d/e/1FAIpQLScw6RdgQyGFMzKhN7yHSXYf20Y2TmnOMhirRU7bD00Eb1uJAw/viewform"
-          className="text-gray-400 flex gap-1 items-center"
+          className="text-gray-400 flex gap-1 items-center text-sm"
         >
-          <BadgeAlert className="text-gray-400" />
+          <BadgeAlert className="text-gray-400 text-sm" size={18} />
           고객의 소리
         </Link>
       </nav>
