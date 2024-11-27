@@ -211,7 +211,7 @@ function LiveMatchList() {
                           <AccordionContent>
                             <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
                               {leagueDetails?.data?.length === 0 ? (
-                                <div className="w-full h-20 col-span-2 flex flex-col justify-center items-center gap-2 text-black">
+                                <div className="w-full h-20 col-span-1 sm:col-span-2 lg:col-span-3  flex flex-col justify-center items-center gap-2 text-black">
                                   <img
                                     src="/images/logo.png"
                                     alt="logo"
