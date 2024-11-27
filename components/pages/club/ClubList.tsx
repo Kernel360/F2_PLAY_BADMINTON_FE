@@ -3,13 +3,7 @@
 import ClubCard from "@/components/club/ClubCard";
 import ClubCarousel from "@/components/club/ClubCarousel";
 import { Button } from "@/components/ui/Button";
-import { Text } from "@/components/ui/Text";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
 import {
   useGetActivityClubs,
   useGetClubs,
@@ -21,19 +15,10 @@ import {
   useGetMembersSession,
 } from "@/lib/api/hooks/memberHook";
 import type { components } from "@/schemas/schema";
-import Autoplay from "embla-carousel-autoplay";
-import type { UseEmblaCarouselType } from "embla-carousel-react";
 import Link from "next/link";
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 
 type ClubCardResponse = components["schemas"]["ClubCardResponse"];
-
-const imageUrl = [
-  "/images/banner-rules.png",
-  "/images/banner-process.png",
-  "/images/banner-polite.png",
-  "/images/banner-match.png",
-];
 
 function ClubList() {
   const { data: myClubs, isLoading: myClubLoading } = useGetMembersMyClubs();
@@ -47,30 +32,6 @@ function ClubList() {
     "clubId",
   );
   const { data: sessionData } = useGetMembersSession();
-
-  const [api, setApi] = useState<UseEmblaCarouselType[1]>();
-  const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!api) {
-      return;
-    }
-
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap());
-
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
-  }, [api]);
-
-  const scrollTo = useCallback(
-    (index: number) => {
-      api?.scrollTo(index);
-    },
-    [api],
-  );
 
   if (
     myClubLoading ||
@@ -96,45 +57,6 @@ function ClubList() {
 
   return (
     <div className="space-y-16 py-6">
-      <section>
-        <Carousel
-          plugins={[
-            Autoplay({
-              delay: 5000,
-            }),
-          ]}
-          setApi={setApi}
-          className="w-full"
-        >
-          <CarouselContent>
-            {imageUrl.map((url, index) => (
-              <CarouselItem key={url} className="w-full h-[346px]">
-                <img
-                  src={`${url}`}
-                  alt={`banner ${index + 1}`}
-                  className="w-[1048px] h-[346px] object-fit rounded-lg"
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-        <div className="flex justify-center space-x-2 mt-4 gap-2">
-          {Array.from({ length: count }).map((_, index) => (
-            <button
-              type="button"
-              key={`dots-${
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                index
-              }`}
-              className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-                index === current ? "bg-primary" : "bg-gray-300"
-              }`}
-              onClick={() => scrollTo(index)}
-            />
-          ))}
-        </div>
-      </section>
-
       <section>
         <div className="mb-4 flex gap-2 items-center">
           <h2 className="text-xl font-bold mb-6 text-gray-800">내 동호회</h2>
