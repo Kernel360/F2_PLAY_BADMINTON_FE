@@ -167,7 +167,7 @@ function Header() {
       </div>
 
       {/* 하단: 네비게이션 (작은 화면에서 표시) */}
-      <nav className="flex lg:hidden justify-center items-center space-x-4 mt-4">
+      <nav className="flex lg:hidden justify-center items-center space-x-4 my-4">
         <Link href="/club">
           <p className={getActiveStyle("/club")}>동호회</p>
         </Link>
