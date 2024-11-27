@@ -179,14 +179,14 @@ function LiveMatchList() {
                                   {format(new Date(item.league_at), "HH:mm")}
                                 </p>
                               </div>
-                              <div className="flex flex-col flex-grow pl-3">
+                              <div className="flex flex-col flex-grow pl-3 gap-1">
                                 {renderLeagueTierBadge(item.required_tier)}
-                                <div className="flex items-center gap-1 mb-1">
+                                <div className="flex items-center my-1 pl-1">
                                   <p className="text-base font-semibold text-gray-900">
                                     {item.league_name}
                                   </p>
                                 </div>
-                                <div className="flex items-center gap-2 text-xs text-gray-500">
+                                <div className="flex items-center gap-2 text-xs text-gray-500 pl-1">
                                   <span>
                                     {item.match_type === "SINGLES"
                                       ? "단식"
