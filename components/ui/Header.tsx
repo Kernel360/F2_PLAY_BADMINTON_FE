@@ -104,61 +104,83 @@ function Header() {
     userMenu = (
       <Link
         href="/login"
-        className="hover:bg-gray-100 px-3 py-2 rounded-md h-fit"
+        className="hover:bg-gray-100 flex items-center px-4 py-2 rounded-md text-sm font-medium text-gray-500"
       >
-        <p className="rounded-full h-fit text-gray-500 text-sm">로그인</p>
+        로그인
       </Link>
     );
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-between w-full max-w-6xl h-auto py-2 px-4 sticky top-0 z-50 backdrop-blur-md bg-white">
-      <div className="flex items-center space-x-4">
-        <Link href="/">
-          <div className="flex gap-2 justify-center items-center text-2xl font-bold cursor-pointer text-black">
-            <img
-              src="/images/header-logo.png"
-              alt="logo"
-              className="w-fit h-12"
-            />
-          </div>
-        </Link>
-        <nav className="hidden md:flex space-x-4 h-16 justify-center items-center">
-          <Link href="/club">
-            <p className={getActiveStyle("/club")}>동호회</p>
+    <header className="flex flex-col w-full max-w-6xl px-4 sticky top-0 z-50 bg-white/70 backdrop-blur-md">
+      {/* 상단: 로고, 검색창, 로그인 버튼 */}
+      <div className="flex flex-wrap items-center justify-between gap-4 lg:flex-nowrap lg:gap-8 py-2">
+        <div className="flex items-center justify-center gap-2">
+          <Link href="/">
+            <div className="flex items-center gap-2 text-2xl font-bold cursor-pointer text-black">
+              <img
+                src="/images/header-logo.png"
+                alt="logo"
+                className="w-28 min-w-28 h-12"
+              />
+            </div>
           </Link>
-          <Link
-            href="https://docs.google.com/forms/d/e/1FAIpQLScw6RdgQyGFMzKhN7yHSXYf20Y2TmnOMhirRU7bD00Eb1uJAw/viewform"
-            className="text-gray-400 flex gap-1"
-          >
-            <BadgeAlert className="text-gray-400" />
-            버그 리포트
-          </Link>
-        </nav>
-      </div>
-      <div className="flex items-center justify-end space-x-4 gap-2 w-1/3 mt-2 md:mt-0">
-        <div className="flex flex-col w-full">
-          <div className="relative flex-grow">
+
+          {/* 네비게이션 (큰 화면에서 표시) */}
+          <nav className="hidden lg:flex items-center space-x-4">
+            <Link href="/club">
+              <p className={getActiveStyle("/club")}>동호회</p>
+            </Link>
+            <Link
+              href="https://docs.google.com/forms/d/e/1FAIpQLScw6RdgQyGFMzKhN7yHSXYf20Y2TmnOMhirRU7bD00Eb1uJAw/viewform"
+              className="text-gray-400 flex gap-1 items-center"
+            >
+              <BadgeAlert className="text-gray-400" />
+              고객의 소리
+            </Link>
+          </nav>
+        </div>
+
+        <div className="flex items-center justify-center flex-end gap-2">
+          {/* 검색창 */}
+          <div className="relative flex-grow max-w-[400px]">
             <input
               ref={inputRef}
               type="text"
               placeholder="동호회 이름을 검색하세요"
-              className="p-2 pr-10 text-sm outline-none border-none w-full max-w-full rounded-lg bg-gray-50 text-gray-500 focus-visible:ring-2 placeholder-transparent md:placeholder-gray-400"
+              className="w-full h-10 pl-4 pr-12 text-sm outline-none border-none rounded-lg bg-gray-50 text-gray-500 focus-visible:ring-2 placeholder-transparent md:placeholder-gray-400"
               onKeyDown={handleKeyDown}
             />
             <button
               type="button"
               onClick={handleButtonClick}
               tabIndex={0}
-              className="absolute top-1/2 right-0 transform -translate-y-1/2 h-10 w-10 flex justify-center items-center rounded-lg focus-visible:ring-2"
+              className="absolute top-1/2 right-2 transform -translate-y-1/2 h-8 w-8 flex justify-center items-center rounded-lg focus-visible:ring-2"
             >
               <Search className="h-5 w-5 text-gray-500" />
             </button>
           </div>
+
+          {/* 로그인 버튼 */}
+          <div className="flex-shrink-0">{userMenu}</div>
         </div>
-        {userMenu}
       </div>
-    </div>
+
+      {/* 하단: 네비게이션 (작은 화면에서 표시) */}
+      <nav className="flex lg:hidden justify-center items-center space-x-4 mt-4">
+        <Link href="/club">
+          <p className={getActiveStyle("/club")}>동호회</p>
+        </Link>
+        <Link
+          href="https://docs.google.com/forms/d/e/1FAIpQLScw6RdgQyGFMzKhN7yHSXYf20Y2TmnOMhirRU7bD00Eb1uJAw/viewform"
+          className="text-gray-400 flex gap-1 items-center"
+        >
+          <BadgeAlert className="text-gray-400" />
+          고객의 소리
+        </Link>
+      </nav>
+    </header>
   );
 }
+
 export default Header;
