@@ -52,7 +52,7 @@ export default function MonthlyDateCarousel({
   return (
     <section
       className="w-full sticky top-[4rem] z-10 bg-white mb-5"
-      aria-label="Monthly Date Carousel"
+      aria-label="경기 날짜 선택"
     >
       <div className="relative w-full">
         <Carousel
@@ -68,11 +68,11 @@ export default function MonthlyDateCarousel({
           >
             <ChevronLeft size={18} className="text-indigo-600" />
           </CarouselPrevious>
-          <CarouselContent className="flex items-center gap-2 p-4">
+          <CarouselContent className="flex items-center gap-2 px-2 md:px-4 p-2">
             {dates.map((date) => {
               let textColor = "text-gray-600";
               let dateStyles =
-                "cursor-pointer transition-all duration-200 transform rounded-full w-28 h-14 flex flex-col items-center justify-center";
+                "cursor-pointer transition-all duration-200 transform rounded-full w-16 h-14 flex flex-col items-center justify-center md:w-28";
 
               if (selectedDate.toDateString() === date.date.toDateString()) {
                 dateStyles +=
@@ -95,7 +95,7 @@ export default function MonthlyDateCarousel({
               return (
                 <CarouselItem
                   key={date.date.toISOString()}
-                  className="flex-none basis-1/6"
+                  className="flex-none basis-[20%] sm:basis-[14.2857%] md:basis-1/6"
                 >
                   <button
                     className={`${dateStyles} ${textColor}`}
@@ -109,10 +109,12 @@ export default function MonthlyDateCarousel({
                     type="button"
                   >
                     <div className="flex flex-col items-center justify-center p-0">
-                      <span className={`text-sm font-medium ${textColor}`}>
+                      <span
+                        className={`text-xs md:text-sm font-medium ${textColor}`}
+                      >
                         {format(date.date, "EEE", { locale: ko })}
                       </span>
-                      <span className="text-xl font-bold">
+                      <span className="text-lg md:text-xl font-bold">
                         {format(date.date, "d")}
                       </span>
                     </div>
