@@ -60,6 +60,22 @@ const renderLeagueStatusButton = (
       </Button>
     );
   }
+
+  if (status === "CANCELED") {
+    return (
+      <Button className="p-2 h-8 rounded-md text-xs w-[105px] border-0 bg-gray-300 text-gray-600 hover:bg-gray-300 hover:text-gray-600 cursor-default">
+        경기취소
+      </Button>
+    );
+  }
+
+  if (status === "FINISHED") {
+    return (
+      <Button className="p-2 h-8 rounded-md text-xs w-[105px] border-0 bg-gray-300 text-gray-600 hover:bg-gray-300 hover:text-gray-600 cursor-default">
+        경기종료
+      </Button>
+    );
+  }
 };
 
 const renderLeagueTierBadge = (tier: Tier) => {
