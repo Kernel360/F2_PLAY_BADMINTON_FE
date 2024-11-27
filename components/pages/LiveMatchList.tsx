@@ -63,7 +63,10 @@ const renderLeagueStatusButton = (
 
   if (status === "CANCELED") {
     return (
-      <Button className="p-2 h-8 rounded-md text-xs w-[105px] border-0 bg-gray-300 text-gray-600 hover:bg-gray-300 hover:text-gray-600 cursor-default">
+      <Button
+        variant="outline"
+        className="p-2 h-8 rounded-md text-xs w-[105px] border border-gray-300 text-gray-600 hover:border-gray-300 hover:text-gray-600 hover:bg-white cursor-default"
+      >
         경기취소
       </Button>
     );
@@ -71,7 +74,7 @@ const renderLeagueStatusButton = (
 
   if (status === "FINISHED") {
     return (
-      <Button className="p-2 h-8 rounded-md text-xs w-[105px] border-0 bg-gray-300 text-gray-600 hover:bg-gray-300 hover:text-gray-600 cursor-default">
+      <Button className="p-2 h-8 rounded-md text-xs w-[105px] border-primary hover:border-primary hover:text-primay hover:bg-white cursor-default">
         경기종료
       </Button>
     );
