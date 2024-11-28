@@ -17,106 +17,15 @@ import {
   useGetMainLeagues,
   useGetMainLeaguesMatch,
 } from "@/lib/api/hooks/mainLeagueHook";
-import type { LeagueStatus, Tier } from "@/types/commonTypes";
 import type {
   GetMainLeagues,
   GetMainLeaguesMatchData,
 } from "@/types/mainLeagueTypes";
-import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
 import Link from "next/link";
 import React, { useState } from "react";
-
-const renderLeagueStatusButton = (
-  status: LeagueStatus,
-  clubToken: string,
-  leagueId: number,
-) => {
-  if (status === "PLAYING") {
-    return (
-      <AccordionTrigger className="p-2 h-8 rounded-md text-xs w-[105px] border-0 bg-orange-500 text-white hover:no-underline">
-        진행 상황 보기
-      </AccordionTrigger>
-    );
-  }
-  if (status === "RECRUITING") {
-    return (
-      <Link href={`/club/${clubToken}/league/${leagueId}`}>
-        <Button className="p-2 h-8 rounded-md text-xs w-[105px] border-0 bg-blue-500 text-white">
-          모집중
-        </Button>
-      </Link>
-    );
-  }
-
-  if (status === "RECRUITING_COMPLETED") {
-    return (
-      <Link href={`/club/${clubToken}/league/${leagueId}`}>
-        <Button className="p-2 h-8 rounded-md text-xs w-[105px] border-0 bg-gray-300 text-gray-600 hover:bg-gray-300 hover:text-gray-600">
-          모집마감
-        </Button>
-      </Link>
-    );
-  }
-
-  if (status === "CANCELED") {
-    return (
-      <Link href={`/club/${clubToken}/league/${leagueId}`}>
-        <Button
-          variant="outline"
-          className="p-2 h-8 rounded-md text-xs w-[105px] border border-gray-300 text-gray-600 hover:border-gray-300 hover:text-gray-600 hover:bg-white"
-        >
-          경기취소
-        </Button>
-      </Link>
-    );
-  }
-
-  if (status === "FINISHED") {
-    return (
-      <Link href={`/club/${clubToken}/league/${leagueId}`}>
-        <Button className="p-2 h-8 rounded-md text-xs w-[105px] border-primary hover:border-primary hover:text-primay hover:bg-white">
-          경기종료
-        </Button>
-      </Link>
-    );
-  }
-};
-
-const renderLeagueTierBadge = (tier: Tier) => {
-  if (tier === "GOLD") {
-    return (
-      <Badge
-        variant="outline"
-        className="font-semibold px-2 py-0.5 text-xs rounded-full border-0 w-fit bg-yellow-200 text-yellow-800"
-      >
-        {getTierWithEmojiAndText(tier)}
-      </Badge>
-    );
-  }
-
-  if (tier === "SILVER") {
-    return (
-      <Badge
-        variant="outline"
-        className="font-semibold px-2 py-0.5 text-xs rounded-full border-0 w-fit bg-gray-200 text-gray-700"
-      >
-        {getTierWithEmojiAndText(tier)}
-      </Badge>
-    );
-  }
-
-  if (tier === "BRONZE") {
-    return (
-      <Badge
-        variant="outline"
-        className="font-semibold px-2 py-0.5 text-xs rounded-full border-0 w-fit bg-orange-200 text-orange-800"
-      >
-        {getTierWithEmojiAndText(tier)}
-      </Badge>
-    );
-  }
-};
+import LeagueStatusButton from "../liveMatch/LeagueStatusButton";
+import LeagueTierBadge from "../liveMatch/LeagueTierBadge";
 
 function LiveMatchList() {
   const today = format(new Date(), "yyyy-MM-dd");
@@ -180,7 +89,7 @@ function LiveMatchList() {
                                 </p>
                               </div>
                               <div className="flex flex-col flex-grow pl-3 gap-1">
-                                {renderLeagueTierBadge(item.required_tier)}
+                                <LeagueTierBadge tier={item.required_tier} />
                                 <div className="flex items-center my-1 pl-1">
                                   <p className="text-base font-semibold text-gray-900">
                                     {item.league_name}
@@ -201,11 +110,11 @@ function LiveMatchList() {
                               </div>
                             </Link>
                             <div className="flex items-center">
-                              {renderLeagueStatusButton(
-                                item.league_status,
-                                item.club_token,
-                                item.league_id,
-                              )}
+                              <LeagueStatusButton
+                                status={item.league_status}
+                                clubToken={item.club_token}
+                                leagueId={item.league_id}
+                              />
                             </div>
                           </div>
                           <AccordionContent>
