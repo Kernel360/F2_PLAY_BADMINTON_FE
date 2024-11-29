@@ -65,6 +65,9 @@ function ClubForm(props: ClubFormProps) {
   const { mutate: patchClub } = usePatchClubs(
     initialData?.club_token as string,
     patchClubsOnSuccess,
+
+  const { mutate: patchClub } = usePatchClubs(
+    initialData?.club_token as string,
   );
 
   const form = useForm<ClubForm>({
