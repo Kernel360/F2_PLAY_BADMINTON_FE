@@ -16,10 +16,10 @@ import type {
   GetClubApplicantsData,
   GetClubDetailData,
   GetClubListResponse,
+  PatchClubData,
   PatchClubRequest,
   PostClubData,
   PostClubRequest,
-  PostClubResponse,
 } from "@/types/clubTypes";
 import {
   useInfiniteQuery,
@@ -104,18 +104,22 @@ export const useGetClubsById = (clubId: string) => {
   );
 };
 
-export const usePatchClubs = (clubId: string) => {
+export const usePatchClubs = (clubId: string, onSuccess: () => void) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (clubUpdateData: PatchClubRequest) =>
-      patchClubs(clubUpdateData, clubId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clubList"] });
-      queryClient.invalidateQueries({ queryKey: ["clubsDataById", clubId] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = (clubUpdateData: PatchClubRequest) =>
+    patchClubs(clubUpdateData, clubId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["clubList"] });
+    queryClient.invalidateQueries({ queryKey: ["clubsDataById", clubId] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<PatchClubData, PatchClubRequest>(
+    mutationFn,
+    onSuccessCallback,
+  );
 };
 
 export const useGetClubsApplicants = (
