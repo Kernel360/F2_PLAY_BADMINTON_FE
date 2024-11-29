@@ -60,8 +60,11 @@ function ClubForm(props: ClubFormProps) {
     router.push(`/club/${clubId}`);
   });
 
+  const patchClubsOnSuccess = () => alert("동호회 수정이 완료되었습니다");
+
   const { mutate: patchClub } = usePatchClubs(
     initialData?.club_token as string,
+    patchClubsOnSuccess,
   );
 
   const form = useForm<ClubForm>({

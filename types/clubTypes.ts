@@ -43,6 +43,8 @@ export type PatchClubRequest = components["schemas"]["ClubUpdateRequest"];
 export type PatchClubResponse =
   components["schemas"]["CommonResponseClubUpdateResponse"];
 
+export type PatchClubData = components["schemas"]["ClubUpdateResponse"];
+
 export type ClubParams = {
   page: number;
   size: number;
