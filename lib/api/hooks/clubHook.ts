@@ -99,7 +99,7 @@ export const usePostClubsImg = () => {
 };
 
 export const useGetClubsById = (clubId: string) => {
-  return useQueryWithToast<GetClubDetailData>(["clubsDataById"], () =>
+  return useQueryWithToast<GetClubDetailData>(["clubsDataById", clubId], () =>
     getClubsById(clubId),
   );
 };
@@ -112,7 +112,7 @@ export const usePatchClubs = (clubId: string) => {
       patchClubs(clubUpdateData, clubId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clubList"] });
-      queryClient.invalidateQueries({ queryKey: ["clubsDataById"] });
+      queryClient.invalidateQueries({ queryKey: ["clubsDataById", clubId] });
     },
     onError: (error: Error) => alert(error),
   });

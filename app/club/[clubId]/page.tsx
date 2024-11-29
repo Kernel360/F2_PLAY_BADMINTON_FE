@@ -32,7 +32,7 @@ async function ClubIntroPage({ params }: Props) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["clubsDataById"],
+    queryKey: ["clubsDataById", clubId],
     queryFn: () => getClubsById(clubId),
   });
 
