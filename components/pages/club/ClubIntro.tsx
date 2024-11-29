@@ -5,7 +5,6 @@ import ClubParticipateButton from "@/components/club/ClubIntro/ClubParticipateBu
 import { Separator } from "@/components/ui/separator";
 import { useGetClubsById } from "@/lib/api/hooks/clubHook";
 import { useGetClubMembersCheck } from "@/lib/api/hooks/clubMemberHook";
-import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
 import { getTierWithEmoji } from "@/utils/getTier";
 import { format } from "date-fns";
 import { useParams } from "next/navigation";
@@ -15,8 +14,6 @@ function ClubIntro() {
 
   const { data: clubData, isLoading } = useGetClubsById(clubId as string);
   const { data: clubMemberData } = useGetClubMembersCheck(clubId as string);
-
-  const { data: session } = useGetMembersSession();
 
   if (isLoading) {
     return (
@@ -28,8 +25,8 @@ function ClubIntro() {
 
   if (!clubData) {
     return (
-      <div className="flex justify-center items-center h-screen w-full">
-        데이터 없음
+      <div className="flex justify-center items-center h-screen w-full text-black">
+        동호회가 존재하지 않습니다
       </div>
     );
   }
@@ -116,14 +113,9 @@ function ClubIntro() {
                 </div>
               </div>
             </div>
-            {session?.result === "SUCCESS" &&
-              clubMemberData &&
-              !clubMemberData.data?.is_club_member && (
-                <ClubParticipateButton
-                  session={session}
-                  clubId={clubId as string}
-                />
-              )}
+            {clubMemberData && !clubMemberData.data?.is_club_member && (
+              <ClubParticipateButton clubId={clubId as string} />
+            )}
           </div>
         </div>
       </div>
