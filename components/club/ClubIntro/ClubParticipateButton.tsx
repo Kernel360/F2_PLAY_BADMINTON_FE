@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { usePostClubMembers } from "@/lib/api/hooks/clubMemberHook";
-import type { GetMemberSessionResponse } from "@/types/memberTypes";
+import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -26,7 +26,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 interface ClubParticipateButtonProps {
-  session: GetMemberSessionResponse;
   clubId: string;
 }
 
@@ -38,12 +37,11 @@ const schema = z.object({
     .max(20, "사유는 최대 20자까지 입력 가능합니다."),
 });
 
-function ClubParticipateButton({
-  session,
-  clubId,
-}: ClubParticipateButtonProps) {
+function ClubParticipateButton({ clubId }: ClubParticipateButtonProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+
+  const { data: session } = useGetMembersSession();
 
   const postClubMembersOnSuccess = () => {
     alert("동호회 신청이 완료되었습니다.");
@@ -71,7 +69,7 @@ function ClubParticipateButton({
     }
   };
 
-  if (session.result === "FAIL") {
+  if (session?.result === "FAIL") {
     return (
       <button
         className="w-full px-4 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out"
