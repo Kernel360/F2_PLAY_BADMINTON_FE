@@ -1,24 +1,12 @@
 "use client";
 
 import Scoreboard from "@/components/club/ScoreBoard";
-import TierBadge from "@/components/liveMatch/TierBadge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ParticipantSection from "@/components/club/ScorePage/ParticipantSection";
+import PlayerProfile from "@/components/club/ScorePage/PlayerProfile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { Tier } from "@/types/commonTypes";
+import { useGetSetsDetail } from "@/lib/api/hooks/matchHook";
 import { Trophy, User, Users } from "lucide-react";
-
-const PlayerProfile = ({ player }: { player: any }) => (
-  <div className="flex items-center space-x-4 p-2">
-    <Avatar className="h-10 w-10">
-      <AvatarImage src={player.image} alt={player.name} />
-      <AvatarFallback>{player.name[0]}</AvatarFallback>
-    </Avatar>
-    <div className="flex-1 space-y-1">
-      <p className="text-sm font-medium leading-none">{player.name}</p>
-      <TierBadge tier={player.tier as Tier} />
-    </div>
-  </div>
-);
+import { useParams } from "next/navigation";
 
 const MatchSet = ({ set }: { set: any }) => (
   <div className="flex justify-between items-center py-2 border-b last:border-b-0">
@@ -31,98 +19,19 @@ const MatchSet = ({ set }: { set: any }) => (
   </div>
 );
 
-const TeamSection = ({
-  team,
-  teamNumber,
-}: { team: any; teamNumber: number }) => (
-  <Card className="mb-4">
-    <CardHeader className="pb-2">
-      <CardTitle className="text-lg">Team {teamNumber}</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <PlayerProfile player={team.participant1} />
-      <PlayerProfile player={team.participant2} />
-    </CardContent>
-  </Card>
-);
-
 export default function ScorePage() {
-  const singlesMatch = {
-    match_id: 1,
-    round_number: 1,
-    match_status: "NOT_STARTED",
-    participant1: {
-      member_token: "token1",
-      name: "김철수",
-      image: "/images/dummy-image.jpg",
-      tier: "GOLD",
-      participant_win_set_count: 0,
-    },
-    participant2: {
-      member_token: "token2",
-      name: "이영희",
-      image: "/images/dummy-image.jpg",
-      tier: "SILVER",
-      participant_win_set_count: 0,
-    },
-    winner_token: "string",
-  };
+  const { clubId, leagueId, matchId } = useParams();
+  const { data: setsDetail } = useGetSetsDetail(
+    clubId as string,
+    leagueId as string,
+    matchId as string,
+  );
 
-  const doublesMatch = {
-    match_id: 2,
-    round_number: 1,
-    match_status: "NOT_STARTED",
-    team1: {
-      participant1: {
-        member_token: "token3",
-        name: "박민수",
-        image: "/images/dummy-image.jpg",
-        tier: "GOLD",
-        participant_win_set_count: 0,
-      },
-      participant2: {
-        member_token: "token4",
-        name: "최은영",
-        image: "/images/dummy-image.jpg",
-        tier: "SILVER",
-        participant_win_set_count: 0,
-      },
-      team1_win_set_count: 0,
-    },
-    team2: {
-      participant1: {
-        member_token: "token5",
-        name: "홍길동",
-        image: "/images/dummy-image.jpg",
-        tier: "GOLD",
-        participant_win_set_count: 0,
-      },
-      participant2: {
-        member_token: "token6",
-        name: "이영수",
-        image: "/images/dummy-image.jpg",
-        tier: "SILVER",
-        participant_win_set_count: 0,
-      },
-      team2_win_set_count: 0,
-    },
-    winners_token: ["string"],
-  };
+  const isDoublesMatch = setsDetail?.doubles_match;
 
-  const singlesSets = [
-    { set_number: 1, score1: 21, score2: 15 },
-    { set_number: 2, score1: 18, score2: 21 },
-    { set_number: 3, score1: 21, score2: 19 },
-  ];
-
-  const doublesSets = [
-    { set_number: 1, score1: 21, score2: 17 },
-    { set_number: 2, score1: 21, score2: 18 },
-  ];
-
-  const isDoublesMatch = doublesMatch.match_id !== 0;
-
-  const matchSets = isDoublesMatch ? doublesSets : singlesSets;
+  const matchSets = isDoublesMatch
+    ? setsDetail.doubles_sets
+    : setsDetail?.singles_sets;
 
   return (
     <div className="container mx-auto p-4 space-y-8">
@@ -140,15 +49,19 @@ export default function ScorePage() {
           </CardHeader>
           <CardContent>
             <Scoreboard
+              clubId={clubId as string}
+              leagueId={leagueId as string}
+              matchId={matchId as string}
+              matchStatus="NOT_STARTED"
               player1={
                 isDoublesMatch
-                  ? doublesMatch.team1.participant1.name
-                  : singlesMatch.participant1.name
+                  ? setsDetail.doubles_match?.team1.participant1.name
+                  : setsDetail?.singles_match?.participant1.name
               }
               player2={
                 isDoublesMatch
-                  ? doublesMatch.team2.participant1.name
-                  : singlesMatch.participant2.name
+                  ? setsDetail.doubles_match?.team2.participant1.name
+                  : setsDetail?.singles_match?.participant2.name
               }
             />
           </CardContent>
@@ -165,13 +78,28 @@ export default function ScorePage() {
           <CardContent>
             {isDoublesMatch ? (
               <>
-                <TeamSection team={doublesMatch.team1} teamNumber={1} />
-                <TeamSection team={doublesMatch.team2} teamNumber={2} />
+                <ParticipantSection
+                  team={setsDetail.doubles_match?.team1}
+                  teamNumber={1}
+                />
+                <ParticipantSection
+                  team={setsDetail.doubles_match?.team2}
+                  teamNumber={2}
+                />
               </>
             ) : (
               <div className="space-y-4">
-                <PlayerProfile player={singlesMatch.participant1} />
-                <PlayerProfile player={singlesMatch.participant2} />
+                {setsDetail?.singles_match && (
+                  <>
+                    {" "}
+                    <PlayerProfile
+                      player={setsDetail?.singles_match?.participant1}
+                    />
+                    <PlayerProfile
+                      player={setsDetail?.singles_match?.participant2}
+                    />
+                  </>
+                )}
               </div>
             )}
           </CardContent>
@@ -186,9 +114,10 @@ export default function ScorePage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {matchSets.map((set) => (
+            {/* {matchSets?.map((set) => (
               <MatchSet key={set.set_number} set={set} />
-            ))}
+            ))} */}
+            세트 기록
           </CardContent>
         </Card>
       </div>
