@@ -25,7 +25,7 @@ import { format } from "date-fns";
 import Link from "next/link";
 import React, { useState } from "react";
 import LeagueStatusButton from "../liveMatch/LeagueStatusButton";
-import LeagueTierBadge from "../liveMatch/LeagueTierBadge";
+import LeagueTierBadge from "../liveMatch/TierBadge";
 
 function LiveMatchList() {
   const today = format(new Date(), "yyyy-MM-dd");
