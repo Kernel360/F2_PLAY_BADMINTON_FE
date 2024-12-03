@@ -1,7 +1,7 @@
-import ScorePage from "@/components/pages/club/ScorePage";
+import Scoreboard from "@/components/club/ScoreBoard";
 
 function page() {
-  return <ScorePage />;
+  return <Scoreboard />;
 }
 
 export default page;

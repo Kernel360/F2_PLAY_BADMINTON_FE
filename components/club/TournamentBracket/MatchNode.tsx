@@ -1,11 +1,11 @@
 import { Separator } from "@/components/ui/separator";
-import type { MatchParticipantType } from "@/types/matchTypes";
+import type { MatchParticipant } from "@/types/matchTypes";
 import { Handle, Position } from "@xyflow/react";
 import MatchPlayerBlock from "./MatchPlayerBlock";
 
 export type CustomNodeData = {
-  team1: MatchParticipantType[];
-  team2: MatchParticipantType[];
+  team1: MatchParticipant[];
+  team2: MatchParticipant[];
 };
 
 interface MatchNodeProps {

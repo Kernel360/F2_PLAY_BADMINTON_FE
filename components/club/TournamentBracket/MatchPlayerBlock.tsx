@@ -1,8 +1,8 @@
-import type { MatchParticipantType } from "@/types/matchTypes";
+import type { MatchParticipant } from "@/types/matchTypes";
 import { getTierWithEmoji } from "@/utils/getTier";
 import React from "react";
 
-interface MatchPlayerBlockProps extends MatchParticipantType {}
+interface MatchPlayerBlockProps extends MatchParticipant {}
 
 function MatchPlayerBlock({
   image,
