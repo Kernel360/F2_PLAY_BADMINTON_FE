@@ -1,10 +1,12 @@
 import type { components } from "@/schemas/schema";
 
 export type GetClubMemberListResponse =
-  components["schemas"]["CommonResponseClubMemberRoleResponse"];
+  components["schemas"]["CommonResponseCustomPageResponseClubMemberResponse"];
 
 export type GetClubMemberListData =
-  components["schemas"]["ClubMemberRoleResponse"];
+  components["schemas"]["CustomPageResponseClubMemberResponse"];
+
+export type ClubMemberList = components["schemas"]["ClubMemberResponse"];
 
 export type GetClubMemberCheckResponse =
   components["schemas"]["CommonResponseMemberIsClubMemberResponse"];
