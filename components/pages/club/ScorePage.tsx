@@ -43,7 +43,7 @@ export default function ScorePage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card className="col-span-1 md:col-span-2 lg:col-span-3">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-base">
               <Trophy className="h-5 w-5" />
               실시간 점수
             </CardTitle>
@@ -75,7 +75,7 @@ export default function ScorePage() {
         {/* 참가자 프로필 */}
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-base">
               <Users className="h-5 w-5" />
               참가자 프로필
             </CardTitle>
@@ -114,7 +114,7 @@ export default function ScorePage() {
         {/* 세트 기록 */}
         <Card className="col-span-1 md:col-span-1 lg:col-span-2">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-base">
               <History className="h-5 w-5" />
               세트 기록
             </CardTitle>
