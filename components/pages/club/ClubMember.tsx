@@ -9,7 +9,7 @@ import {
   useGetClubMembers,
   useGetClubMembersCheck,
 } from "@/lib/api/hooks/clubMemberHook";
-import type { GetClubApplicantsData } from "@/types/clubTypes";
+import type { GetClubApplicants } from "@/types/clubTypes";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
@@ -25,9 +25,9 @@ function ClubMember() {
     enabled: isJoined?.data?.role === "ROLE_OWNER",
   });
   const [selectedApplicant, setSelectedApplicant] =
-    useState<GetClubApplicantsData | null>(null);
+    useState<GetClubApplicants | null>(null);
 
-  const handleModalOpen = (applicant: GetClubApplicantsData) => {
+  const handleModalOpen = (applicant: GetClubApplicants) => {
     setSelectedApplicant(applicant);
   };
 

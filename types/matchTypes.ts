@@ -5,9 +5,41 @@ export type GetMatchesResponse =
 
 export type GetMatchesData = components["schemas"]["BracketResponse"];
 
+export type GetSetsDetailResponse =
+  components["schemas"]["CommonResponseMatchDetailsResponse"];
+
+export type GetSetsDetailData = components["schemas"]["MatchDetailsResponse"];
+
+export type GetSetScoreResponse =
+  components["schemas"]["CommonResponseMatchSetResponse"];
+
+export type GetSetScoreData = components["schemas"]["MatchSetResponse"];
+
 export type PostMatchesResponse =
   components["schemas"]["CommonResponseBracketResponse"];
 
 export type PostMatchesData = components["schemas"]["BracketResponse"];
 
-export type MatchParticipant = components["schemas"]["Participant"];
+export type PostMatchStartResponse =
+  components["schemas"]["CommonResponseString"];
+
+export type PostMatchStartData = string;
+
+export type PatchMatchSetScoreRequest =
+  components["schemas"]["SetScoreUpdateRequest"];
+
+export type PatchMatchSetScoreResponse =
+  components["schemas"]["CommonResponseSetScoreResponse"];
+
+export type PatchMatchSetScoreData = components["schemas"]["SetScoreResponse"];
+
+export type MatchParticipantType = components["schemas"]["Participant"];
+
+export type MatchStatusType = "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
+
+export type SetType = {
+  set_number?: number | undefined;
+  score1?: number | undefined;
+  score2?: number | undefined;
+  set_status?: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED" | undefined;
+};

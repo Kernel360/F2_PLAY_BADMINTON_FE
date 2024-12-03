@@ -7,12 +7,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { GetClubApplicantsData } from "@/types/clubTypes";
+import type {
+  GetClubApplicants,
+  GetClubApplicantsData,
+} from "@/types/clubTypes";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
 
 interface ClubMemberApplicantsProps {
-  applicants: GetClubApplicantsData[];
-  onOpenModal: (applicant: GetClubApplicantsData) => void;
+  applicants: GetClubApplicantsData;
+  onOpenModal: (applicant: GetClubApplicants) => void;
 }
 
 function ClubMemberApplicants({
@@ -22,7 +25,7 @@ function ClubMemberApplicants({
   return (
     <div className="min-h-[200px]">
       <h2 className="text-black font-bold">동호회 참여 신청</h2>
-      {applicants.length > 0 ? (
+      {applicants.content.length > 0 ? (
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-white h-16">
@@ -32,7 +35,7 @@ function ClubMemberApplicants({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {applicants.map((applicant) => (
+            {applicants.content.map((applicant) => (
               <TableRow
                 key={applicant.club_apply_id}
                 className="hover:bg-white h-16"

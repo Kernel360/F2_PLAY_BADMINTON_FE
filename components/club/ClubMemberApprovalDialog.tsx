@@ -13,12 +13,12 @@ import {
   usePostClubMemberApprove,
   usePostClubMemberReject,
 } from "@/lib/api/hooks/clubMemberHook";
-import type { GetClubApplicantsData } from "@/types/clubTypes";
+import type { GetClubApplicants } from "@/types/clubTypes";
 import React from "react";
 
 interface ClubMemberApprovalDialogProps {
   clubId: string;
-  applicant: GetClubApplicantsData;
+  applicant: GetClubApplicants;
   onClose: () => void;
 }
 
