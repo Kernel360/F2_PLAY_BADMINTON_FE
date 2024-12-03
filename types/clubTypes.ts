@@ -23,10 +23,12 @@ export type GetClubDetailsResponse =
 export type GetClubDetailData = components["schemas"]["ClubDetailsResponse"];
 
 export type GetClubApplicantsResponse =
-  components["schemas"]["CommonResponseListClubApplicantResponse"];
+  components["schemas"]["CommonResponseCustomPageResponseClubApplicantResponse"];
 
 export type GetClubApplicantsData =
-  components["schemas"]["ClubApplicantResponse"];
+  components["schemas"]["CustomPageResponseClubApplicantResponse"];
+
+export type GetClubApplicants = components["schemas"]["ClubApplicantResponse"];
 
 export type PostClubRequest = components["schemas"]["ClubCreateRequest"];
 

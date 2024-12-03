@@ -12,14 +12,14 @@ import {
 import React, { useMemo } from "react";
 import "@xyflow/react/dist/style.css";
 import type { components } from "@/schemas/schema";
-import type { GetMatchesData, MatchParticipant } from "@/types/matchTypes";
+import type { GetMatchesData, MatchParticipantType } from "@/types/matchTypes";
 import { useParams, useRouter } from "next/navigation";
 
 // SinglesMatchResponse는 participant1, participant2만 있음
 type SinglesMatch = components["schemas"]["SinglesMatchResponse"] & {
   match_type: "SINGLE";
-  participant1: MatchParticipant;
-  participant2: MatchParticipant;
+  participant1: MatchParticipantType;
+  participant2: MatchParticipantType;
 };
 
 // DoublesMatchResponse는 team1, team2가 있음
@@ -32,8 +32,8 @@ type DoublesMatch = components["schemas"]["DoublesMatchResponse"] & {
 type Match = SinglesMatch | DoublesMatch;
 
 interface MatchTeamResponse {
-  participant1: MatchParticipant;
-  participant2: MatchParticipant;
+  participant1: MatchParticipantType;
+  participant2: MatchParticipantType;
   team1_win_set_count: number;
 }
 
@@ -65,8 +65,14 @@ function transformDoublesMatch(
 ) {
   const { match_id, team1, team2 } = match;
 
-  const team1Arr: MatchParticipant[] = [team1.participant1, team1.participant2];
-  const team2Arr: MatchParticipant[] = [team2.participant1, team2.participant2];
+  const team1Arr: MatchParticipantType[] = [
+    team1.participant1,
+    team1.participant2,
+  ];
+  const team2Arr: MatchParticipantType[] = [
+    team2.participant1,
+    team2.participant2,
+  ];
 
   return {
     id: match_id?.toString() || "",

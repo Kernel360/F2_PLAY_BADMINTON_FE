@@ -37,11 +37,7 @@ interface MemberListProps {
 }
 
 function ClubMemberList({ members, isJoined, clubId }: MemberListProps) {
-  const allMembers = [
-    ...(members.role_owner ?? []),
-    ...(members.role_manager ?? []),
-    ...(members.role_user ?? []),
-  ];
+  const allMembers = [...(members.content ?? [])];
 
   return (
     <div className="min-h-[200px]">

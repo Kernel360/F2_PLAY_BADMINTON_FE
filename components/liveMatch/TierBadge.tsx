@@ -3,11 +3,11 @@ import { getTierWithEmojiAndText } from "@/utils/getTier";
 import React from "react";
 import { Badge } from "../ui/badge";
 
-interface LeagueTierBadgeProps {
+interface TierBadgeProps {
   tier: Tier;
 }
 
-function LeagueTierBadge(props: LeagueTierBadgeProps) {
+function TierBadge(props: TierBadgeProps) {
   const { tier } = props;
   if (tier === "GOLD") {
     return (
@@ -43,4 +43,4 @@ function LeagueTierBadge(props: LeagueTierBadgeProps) {
   }
 }
 
-export default LeagueTierBadge;
+export default TierBadge;
