@@ -33,6 +33,13 @@ export type PatchMatchSetScoreResponse =
 
 export type PatchMatchSetScoreData = components["schemas"]["SetScoreResponse"];
 
-export type MatchParticipant = components["schemas"]["Participant"];
+export type MatchParticipantType = components["schemas"]["Participant"];
 
-export type MatchStatus = "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
+export type MatchStatusType = "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
+
+export type SetType = {
+  set_number?: number | undefined;
+  score1?: number | undefined;
+  score2?: number | undefined;
+  set_status?: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED" | undefined;
+};

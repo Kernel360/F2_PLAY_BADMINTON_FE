@@ -1,11 +1,10 @@
 import TierBadge from "@/components/liveMatch/TierBadge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { Tier } from "@/types/commonTypes";
-import type { MatchParticipant } from "@/types/matchTypes";
-import React from "react";
+import type { MatchParticipantType } from "@/types/matchTypes";
 
 interface PlayerProfileProps {
-  player: MatchParticipant;
+  player: MatchParticipantType;
 }
 
 function PlayerProfile({ player }: PlayerProfileProps) {
@@ -15,9 +14,9 @@ function PlayerProfile({ player }: PlayerProfileProps) {
         <AvatarImage src={player.image} alt={player.name} />
         <AvatarFallback>{player.name[0]}</AvatarFallback>
       </Avatar>
-      <div className="flex-1 space-y-1">
-        <p className="text-sm font-medium leading-none">{player.name}</p>
+      <div className="flex gap-2 items-center">
         <TierBadge tier={player.tier as Tier} />
+        <p className="text-sm font-medium leading-none">{player.name}</p>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { MatchParticipant } from "@/types/matchTypes";
+import type { MatchParticipantType } from "@/types/matchTypes";
 import React from "react";
 import PlayerProfile from "./PlayerProfile";
 
@@ -7,7 +7,10 @@ function ParticipantSection({
   team,
   teamNumber,
 }: {
-  team: { participant1: MatchParticipant; participant2: MatchParticipant };
+  team: {
+    participant1: MatchParticipantType;
+    participant2: MatchParticipantType;
+  };
   teamNumber: number;
 }) {
   return (

@@ -10,7 +10,7 @@ import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   GetMatchesData,
   GetSetsDetailData,
-  MatchStatus,
+  MatchStatusType,
   PatchMatchSetScoreData,
   PatchMatchSetScoreRequest,
   PatchMatchSetScoreResponse,
@@ -42,12 +42,12 @@ export const useGetSetScore = (
   leagueId: string,
   matchId: string,
   setNumber: string,
-  matchStatus: MatchStatus,
+  matchStatus: MatchStatusType,
 ) => {
   return useQuery({
     queryKey: ["leagueDetails", leagueId],
     queryFn: () => getSetScore(clubId, leagueId, matchId, setNumber),
-    // enabled: !(matchStatus === "IN_PROGRESS"),
+    enabled: !(matchStatus === "NOT_STARTED"),
     refetchInterval: 5000, // 5초마다 재요청
   });
 };
@@ -63,7 +63,7 @@ export const usePostMatches = (
 
   const onSuccessCallback = () => {
     queryClient.invalidateQueries({ queryKey: ["matchesData"] });
-    queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+    queryClient.invalidateQueries({ queryKey: ["leagueDetails", leagueId] });
     onSuccess();
   };
   return useMutationWithToast<PostMatchesData, void>(
@@ -76,7 +76,7 @@ export const usePostMatchStart = (
   clubId: string,
   leagueId: string,
   matchId: string,
-  onSuccess: () => void,
+  // onSuccess: () => void,
 ) => {
   const queryClient = useQueryClient();
 
@@ -86,8 +86,8 @@ export const usePostMatchStart = (
     queryClient.invalidateQueries({
       queryKey: ["matchesData", clubId, leagueId, matchId],
     });
-    queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
-    onSuccess();
+    queryClient.invalidateQueries({ queryKey: ["leagueDetails", leagueId] });
+    // onSuccess();
   };
   return useMutationWithToast<PostMatchStartData, void>(
     mutationFn,
@@ -96,7 +96,6 @@ export const usePostMatchStart = (
 };
 
 export const usePatchSetScore = (
-  score: PatchMatchSetScoreRequest,
   clubId: string,
   leagueId: string,
   matchId: string,
@@ -104,17 +103,17 @@ export const usePatchSetScore = (
 ) => {
   const queryClient = useQueryClient();
 
-  const mutationFn = () =>
+  const mutationFn = (score: PatchMatchSetScoreRequest) =>
     patchSetScore(score, clubId, leagueId, matchId, setNumber);
 
   const onSuccessCallback = () => {
     queryClient.invalidateQueries({
       queryKey: ["matchesData", clubId, leagueId, matchId],
     });
-    queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+    queryClient.invalidateQueries({ queryKey: ["leagueDetails", leagueId] });
   };
-  return useMutationWithToast<PatchMatchSetScoreData, void>(
-    mutationFn,
-    onSuccessCallback,
-  );
+  return useMutationWithToast<
+    PatchMatchSetScoreData,
+    PatchMatchSetScoreRequest
+  >(mutationFn, onSuccessCallback);
 };
