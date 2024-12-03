@@ -5,6 +5,7 @@ import {
   patchSetScore,
   postMatchStart,
   postMatches,
+  postSetScore,
 } from "@/lib/api/functions/matchFn";
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
@@ -14,6 +15,8 @@ import type {
   PatchMatchSetScoreData,
   PatchMatchSetScoreRequest,
   PatchMatchSetScoreResponse,
+  PostMatchSetScoreData,
+  PostMatchSetScoreRequest,
   PostMatchStartData,
   PostMatchesData,
 } from "@/types/matchTypes";
@@ -95,11 +98,34 @@ export const usePostMatchStart = (
   );
 };
 
+export const usePostSetScore = (
+  clubId: string,
+  leagueId: string,
+  matchId: string,
+  setNumber: number,
+) => {
+  const queryClient = useQueryClient();
+
+  const mutationFn = (score: PostMatchSetScoreRequest) =>
+    postSetScore(score, clubId, leagueId, matchId, setNumber);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["matchesData", clubId, leagueId, matchId],
+    });
+    queryClient.invalidateQueries({ queryKey: ["leagueDetails", leagueId] });
+  };
+  return useMutationWithToast<PostMatchSetScoreData, PostMatchSetScoreRequest>(
+    mutationFn,
+    onSuccessCallback,
+  );
+};
+
 export const usePatchSetScore = (
   clubId: string,
   leagueId: string,
   matchId: string,
-  setNumber: string,
+  setNumber: number,
 ) => {
   const queryClient = useQueryClient();
 

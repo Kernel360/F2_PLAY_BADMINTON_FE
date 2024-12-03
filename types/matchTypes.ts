@@ -25,6 +25,15 @@ export type PostMatchStartResponse =
 
 export type PostMatchStartData = string;
 
+export type PostMatchSetScoreRequest =
+  components["schemas"]["SetScoreUpdateRequest"];
+
+export type PostMatchSetScoreResponse =
+  components["schemas"]["CommonResponseSetScoreFinishResponse"];
+
+export type PostMatchSetScoreData =
+  components["schemas"]["SetScoreFinishResponse"];
+
 export type PatchMatchSetScoreRequest =
   components["schemas"]["SetScoreUpdateRequest"];
 

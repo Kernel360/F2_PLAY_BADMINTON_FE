@@ -5,6 +5,7 @@ import {
   useGetSetScore,
   usePatchSetScore,
   usePostMatchStart,
+  usePostSetScore,
 } from "@/lib/api/hooks/matchHook";
 import type { MatchStatusType } from "@/types/matchTypes";
 import { useEffect, useRef, useState } from "react";
@@ -30,7 +31,6 @@ export default function Scoreboard(props: ScoreboardProps) {
     player2,
   } = props;
   const [isEditing, setIsEditing] = useState(false);
-  const [setCount, setSetCount] = useState(1);
   const inputRefPlayer1 = useRef<HTMLInputElement>(null);
   const inputRefPlayer2 = useRef<HTMLInputElement>(null);
   const scoreboardRef = useRef<HTMLDivElement | null>(null);
@@ -63,11 +63,18 @@ export default function Scoreboard(props: ScoreboardProps) {
     }
   }, [scoreData]);
 
+  const { mutate: postSetScore } = usePostSetScore(
+    clubId,
+    leagueId,
+    matchId,
+    currentSetNumber,
+  );
+
   const { mutate: patchSetScore } = usePatchSetScore(
     clubId,
     leagueId,
     matchId,
-    "1",
+    currentSetNumber,
   );
 
   const updateScore = (key: "score1" | "score2", increment: number) => {
@@ -79,6 +86,10 @@ export default function Scoreboard(props: ScoreboardProps) {
       patchSetScore(updatedScore);
       return updatedScore;
     });
+  };
+
+  const postNextSet = () => {
+    postSetScore(score);
   };
 
   const handleSaveScores = () => {
@@ -133,7 +144,7 @@ export default function Scoreboard(props: ScoreboardProps) {
         </button>
 
         <div className="text-3xl font-extrabold tracking-wide text-gray-200">
-          Set {setCount}
+          Set {currentSetNumber}
         </div>
         <div className="grid grid-cols-2 gap-12 w-full max-w-2xl">
           <div className="text-center space-y-4">
@@ -191,7 +202,7 @@ export default function Scoreboard(props: ScoreboardProps) {
           {isEditing ? (
             <button
               type="button"
-              onClick={handleSaveScores}
+              onClick={() => handleSaveScores()}
               className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow transition-all transform hover:scale-[1.02]"
             >
               저장
@@ -207,7 +218,7 @@ export default function Scoreboard(props: ScoreboardProps) {
           )}
           <button
             type="button"
-            onClick={() => setSetCount(setCount + 1)}
+            onClick={() => postNextSet()}
             className="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow transition-all transform hover:scale-[1.02]"
           >
             세트 종료
