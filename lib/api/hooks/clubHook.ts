@@ -13,6 +13,7 @@ import {
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   ClubCardResponse,
+  GetClubApplicants,
   GetClubApplicantsData,
   GetClubDetailData,
   GetClubListResponse,
@@ -126,7 +127,7 @@ export const useGetClubsApplicants = (
   clubId: string,
   options?: { enabled?: boolean },
 ) => {
-  return useQueryWithToast<GetClubApplicantsData[]>(
+  return useQueryWithToast<GetClubApplicantsData>(
     ["clubsApplicants"],
     () => getClubsApplicants(clubId),
     options,
