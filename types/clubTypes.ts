@@ -23,12 +23,10 @@ export type GetClubDetailsResponse =
 export type GetClubDetailData = components["schemas"]["ClubDetailsResponse"];
 
 export type GetClubApplicantsResponse =
-  components["schemas"]["CommonResponseCustomPageResponseClubApplicantResponse"];
+  components["schemas"]["CommonResponseListClubApplicantResponse"];
 
 export type GetClubApplicantsData =
-  components["schemas"]["CustomPageResponseClubApplicantResponse"];
-
-export type GetClubApplicants = components["schemas"]["ClubApplicantResponse"];
+  components["schemas"]["ClubApplicantResponse"];
 
 export type PostClubRequest = components["schemas"]["ClubCreateRequest"];
 
@@ -44,8 +42,6 @@ export type PatchClubRequest = components["schemas"]["ClubUpdateRequest"];
 
 export type PatchClubResponse =
   components["schemas"]["CommonResponseClubUpdateResponse"];
-
-export type PatchClubData = components["schemas"]["ClubUpdateResponse"];
 
 export type ClubParams = {
   page: number;

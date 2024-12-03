@@ -13,14 +13,13 @@ import {
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   ClubCardResponse,
-  GetClubApplicants,
   GetClubApplicantsData,
   GetClubDetailData,
   GetClubListResponse,
-  PatchClubData,
   PatchClubRequest,
   PostClubData,
   PostClubRequest,
+  PostClubResponse,
 } from "@/types/clubTypes";
 import {
   useInfiniteQuery,
@@ -100,34 +99,30 @@ export const usePostClubsImg = () => {
 };
 
 export const useGetClubsById = (clubId: string) => {
-  return useQueryWithToast<GetClubDetailData>(["clubsDataById", clubId], () =>
+  return useQueryWithToast<GetClubDetailData>(["clubsDataById"], () =>
     getClubsById(clubId),
   );
 };
 
-export const usePatchClubs = (clubId: string, onSuccess: () => void) => {
+export const usePatchClubs = (clubId: string) => {
   const queryClient = useQueryClient();
 
-  const mutationFn = (clubUpdateData: PatchClubRequest) =>
-    patchClubs(clubUpdateData, clubId);
-
-  const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["clubList"] });
-    queryClient.invalidateQueries({ queryKey: ["clubsDataById", clubId] });
-    onSuccess();
-  };
-
-  return useMutationWithToast<PatchClubData, PatchClubRequest>(
-    mutationFn,
-    onSuccessCallback,
-  );
+  return useMutation({
+    mutationFn: (clubUpdateData: PatchClubRequest) =>
+      patchClubs(clubUpdateData, clubId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clubList"] });
+      queryClient.invalidateQueries({ queryKey: ["clubsDataById"] });
+    },
+    onError: (error: Error) => alert(error),
+  });
 };
 
 export const useGetClubsApplicants = (
   clubId: string,
   options?: { enabled?: boolean },
 ) => {
-  return useQueryWithToast<GetClubApplicantsData>(
+  return useQueryWithToast<GetClubApplicantsData[]>(
     ["clubsApplicants"],
     () => getClubsApplicants(clubId),
     options,

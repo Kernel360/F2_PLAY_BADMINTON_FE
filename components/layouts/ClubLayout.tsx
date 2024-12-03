@@ -18,7 +18,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto pt-3">
+    <div className="w-full max-w-7xl mx-auto mt-3">
       <Tabs
         defaultValue={activeTab()}
         className="w-full bg-white p-0 rounded-none shadow-none"
@@ -70,7 +70,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
           )}
         </TabsList>
       </Tabs>
-      <div className="mt-3">{children}</div>
+      <div className="mt-6">{children}</div>
     </div>
   );
 }

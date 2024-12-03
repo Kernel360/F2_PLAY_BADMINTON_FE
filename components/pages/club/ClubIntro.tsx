@@ -1,121 +1,129 @@
 "use client";
 
-import Spinner from "@/components/Spinner";
-import ClubParticipateButton from "@/components/club/ClubIntro/ClubParticipateButton";
-import { Separator } from "@/components/ui/separator";
+import { postClubMembers } from "@/lib/api/functions/clubMemberFn";
 import { useGetClubsById } from "@/lib/api/hooks/clubHook";
-import { useGetClubMembersCheck } from "@/lib/api/hooks/clubMemberHook";
-import { getTierWithEmoji } from "@/utils/getTier";
+import {
+  useGetClubMembersCheck,
+  usePostClubMembers,
+} from "@/lib/api/hooks/clubMemberHook";
+import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
 import { format } from "date-fns";
-import { useParams } from "next/navigation";
+import Image from "next/image";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 function ClubIntro() {
   const { clubId } = useParams();
+  const router = useRouter();
+
+  const postClubMembersOnSuccess = () => alert("동호회 신청이 완료되었습니다.");
 
   const { data: clubData, isLoading } = useGetClubsById(clubId as string);
   const { data: clubMemberData } = useGetClubMembersCheck(clubId as string);
+  const { mutate: postClubMembers } = usePostClubMembers(
+    clubId as string,
+    postClubMembersOnSuccess,
+  );
+  const { data: sessionData } = useGetMembersSession();
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen w-full">
-        <Spinner />
+      <div className="flex justify-center items-center h-[464px] w-full">
+        Loading...
       </div>
     );
   }
 
   if (!clubData) {
-    return (
-      <div className="flex justify-center items-center h-screen w-full text-black">
-        동호회가 존재하지 않습니다
-      </div>
-    );
+    return <div>No data available</div>;
   }
 
-  return (
-    <div className="w-full">
-      <div className="w-full h-[400px]">
-        <img
-          src={clubData.club_image}
-          alt="club_banner"
-          className="w-full h-[400px] object-cover"
-        />
-      </div>
-      <div className="max-w-7xl mx-auto">
-        {/* 동호회 이름 */}
-        <div className="p-8 pb-0">
-          <h1 className="text-3xl font-bold text-gray-900 ">
-            {clubData.club_name}
-          </h1>
-        </div>
-        <div className="flex flex-col lg:flex-row gap-12">
-          <div className="flex-1 bg-white p-8">
-            <div className="flex flex-col gap-4">
-              {/* 동호회 소개 */}
-              <div className="flex flex-col gap-4">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-900 pb-2">
-                    동호회 소개
-                  </h2>
-                  <Separator />
-                </div>
+  // TODO: applyReason dialog 생성하기
+  const handlePostClubMember = () => {
+    if (sessionData?.result === "SUCCESS") {
+      return postClubMembers({ apply_reason: "test" });
+    }
+    return router.push("/login");
+  };
 
-                <p className="text-gray-600 leading-relaxed">
-                  {clubData.club_description}
-                </p>
-              </div>
+  return (
+    <div className="flex space-x-8 w-full h-[464px] items-center">
+      <div className="w-[400px] flex flex-col items-center gap-2">
+        <img
+          src={(clubData?.club_image as string) || "/images/dummy-image.jpg"}
+          width={400}
+          height={400}
+          alt="club_banner"
+          className="rounded-md object-cover h-[400px] w-[400px]"
+        />
+        {!clubMemberData?.data?.is_club_member && (
+          <button
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+            type="button"
+            onClick={handlePostClubMember}
+          >
+            동호회 참여하기
+          </button>
+        )}
+      </div>
+      <div className="flex flex-col flex-1 h-[400px] gap-4">
+        <p className="text-3xl font-bold text-black">{clubData?.club_name}</p>
+        <div className="flex flex-col w-full">
+          <p className="border-b-[1px] border-gray-200 font-bold text-black text-lg">
+            동호회 소개
+          </p>
+          <div className="rounded-md mt-2 w-full h-[150px] text-gray-600 overflow-y-scroll">
+            {clubData?.club_description}
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <p className="border-b-[1px] border-gray-200 text-black text-lg font-bold">
+            동호회 정보
+          </p>
+          <div className="flex mt-2 gap-4">
+            <div className="flex items-center">
+              <Image
+                src="/images/tier-gold.png"
+                alt="tier-gold"
+                width={20}
+                height={20}
+              />
+              <p className="pl-1 text-black">
+                {clubData?.gold_club_member_count}명
+              </p>
+            </div>
+            <div className="flex items-center">
+              <Image
+                src="/images/tier-silver.png"
+                alt="tier-silver"
+                width={20}
+                height={20}
+              />
+              <p className="pl-1 text-black">
+                {clubData?.silver_club_member_count}명
+              </p>
+            </div>
+            <div className="flex items-center">
+              <Image
+                src="/images/tier-bronze.png"
+                alt="tier-bronze"
+                width={20}
+                height={20}
+              />
+              <p className="pl-1 text-black">
+                {clubData?.bronze_club_member_count}명
+              </p>
             </div>
           </div>
-
-          <div className="w-full lg:w-[350px] bg-white p-8 flex flex-col justify-between gap-8">
-            <div className="flex flex-col gap-4">
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900 pb-2 ">
-                  동호회 정보
-                </h2>
-                <Separator />
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center">
-                  <p className="font-medium w-24 text-gray-600">개설일</p>
-                  <p className="text-gray-800">
-                    {clubData?.created_at &&
-                      format(new Date(clubData.created_at), "yyyy년 MM월 dd일")}
-                  </p>
-                </div>
-                <div className="flex items-center">
-                  <p className="font-medium w-24 text-gray-600">멤버 수</p>
-                  <p className="text-gray-800">
-                    {clubData?.club_member_count}명
-                  </p>
-                </div>
-                <div>
-                  <div className="flex flex-wrap gap-4">
-                    <div className="flex gap-2">
-                      {getTierWithEmoji("GOLD")}
-                      <p className="text-gray-800">
-                        {clubData.gold_club_member_count}명
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      {getTierWithEmoji("SILVER")}
-                      <p className="text-gray-800">
-                        {clubData.silver_club_member_count}명
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      {getTierWithEmoji("BRONZE")}
-                      <p className="text-gray-800">
-                        {clubData.bronze_club_member_count}명
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {clubMemberData && !clubMemberData.data?.is_club_member && (
-              <ClubParticipateButton clubId={clubId as string} />
-            )}
+          <div className="flex text-black mt-3 gap-4">
+            <p className="font-bold">개설일</p>
+            <p>
+              {clubData?.created_at !== undefined &&
+                format(new Date(clubData?.created_at), "yyyy년 MM월 dd일")}
+            </p>
+          </div>
+          <div className="flex text-black mt-3 gap-4">
+            <p className="font-bold">멤버</p>
+            <p>{clubData?.club_member_count}명</p>
           </div>
         </div>
       </div>
