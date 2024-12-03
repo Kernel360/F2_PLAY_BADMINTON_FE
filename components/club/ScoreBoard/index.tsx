@@ -13,13 +13,22 @@ interface ScoreboardProps {
   clubId: string;
   leagueId: string;
   matchId: string;
+  currentSetNumber: number;
   matchStatus: MatchStatusType;
   player1: string;
   player2: string;
 }
 
 export default function Scoreboard(props: ScoreboardProps) {
-  const { clubId, leagueId, matchId, matchStatus, player1, player2 } = props;
+  const {
+    clubId,
+    leagueId,
+    matchId,
+    currentSetNumber,
+    matchStatus,
+    player1,
+    player2,
+  } = props;
   const [isEditing, setIsEditing] = useState(false);
   const [setCount, setSetCount] = useState(1);
   const inputRefPlayer1 = useRef<HTMLInputElement>(null);
@@ -30,7 +39,7 @@ export default function Scoreboard(props: ScoreboardProps) {
     clubId,
     leagueId,
     matchId,
-    "1",
+    currentSetNumber,
     matchStatus,
   );
 

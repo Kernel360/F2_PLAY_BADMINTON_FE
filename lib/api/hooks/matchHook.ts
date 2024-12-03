@@ -41,7 +41,7 @@ export const useGetSetScore = (
   clubId: string,
   leagueId: string,
   matchId: string,
-  setNumber: string,
+  setNumber: number,
   matchStatus: MatchStatusType,
 ) => {
   return useQuery({

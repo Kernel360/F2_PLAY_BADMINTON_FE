@@ -30,6 +30,10 @@ export default function ScorePage() {
 
   const isDoublesMatch = setDetail?.doubles_match;
 
+  const currentSetNumber = isDoublesMatch
+    ? (setDetail.doubles_sets?.length ?? 0 + 1)
+    : (setDetail?.singles_sets?.length ?? 0 + 1);
+
   const matchSets = isDoublesMatch
     ? setDetail.doubles_sets
     : setDetail?.singles_sets;
@@ -53,6 +57,7 @@ export default function ScorePage() {
               clubId={clubId as string}
               leagueId={leagueId as string}
               matchId={matchId as string}
+              currentSetNumber={currentSetNumber}
               matchStatus={
                 isDoublesMatch
                   ? (setDetail?.doubles_match?.match_status as MatchStatusType)

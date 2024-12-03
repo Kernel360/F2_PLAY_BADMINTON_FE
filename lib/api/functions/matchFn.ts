@@ -32,7 +32,7 @@ export const getSetScore = async (
   clubId: string,
   leagueId: string,
   matchId: string,
-  setNumber: string,
+  setNumber: number,
 ): Promise<GetSetScoreResponse> => {
   return restClient.get<GetSetScoreResponse>(
     `/clubs/${clubId}/leagues/${leagueId}/matches/${matchId}/sets/${setNumber}`,
