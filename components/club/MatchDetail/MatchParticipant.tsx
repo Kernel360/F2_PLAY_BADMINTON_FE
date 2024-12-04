@@ -11,14 +11,14 @@ function MatchParticipant({ participants, matchType }: MatchParticipantProps) {
     <div
       className={`w-full flex ${
         matchType === "DOUBLES"
-          ? "flex-col md:flex-row md:gap-4 items-center"
-          : "flex-col md:flex-row justify-center"
+          ? "flex-col md:flex-row items-center justify-center gap-6"
+          : "flex-col items-center justify-center"
       }`}
     >
       {participants.map((participant) => (
         <div
           key={participant.name}
-          className="w-fit flex flex-col items-center justify-center space-y-2"
+          className="w-fit flex flex-col items-center justify-center space-y-2 text-center"
         >
           <div className="w-20 h-20 rounded-full overflow-hidden">
             <img
@@ -27,8 +27,8 @@ function MatchParticipant({ participants, matchType }: MatchParticipantProps) {
               className="object-cover w-20 h-20"
             />
           </div>
-          <div className="flex justify-center items-center gap-2">
-            <span className="w-fit font-semibold text-gray-800 text-sm sm:text-base">
+          <div className="flex flex-col items-center">
+            <span className="font-semibold text-gray-800 text-sm sm:text-base">
               {getTierWithEmoji(participant.tier)} {participant.name}
             </span>
           </div>

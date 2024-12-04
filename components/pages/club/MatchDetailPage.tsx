@@ -2,7 +2,6 @@
 
 import Spinner from "@/components/Spinner";
 import MatchDetail from "@/components/club/MatchDetail";
-import MatchParticipant from "@/components/club/MatchDetail/MatchParticipant";
 import Scoreboard from "@/components/club/ScoreBoard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetSetsDetail } from "@/lib/api/hooks/matchHook";
@@ -42,22 +41,12 @@ export default function MatchDetailPage() {
       ]
     : [setDetail.singles_match?.participant1];
 
-  const validParticipants1 = participants1?.filter(
-    (participant): participant is MatchParticipantType =>
-      participant !== undefined,
-  );
-
   const participants2 = isDoublesMatch
     ? [
         setDetail.doubles_match?.team2.participant1,
         setDetail.doubles_match?.team2.participant2,
       ]
     : [setDetail.singles_match?.participant2];
-
-  const validParticipants2 = participants2?.filter(
-    (participant): participant is MatchParticipantType =>
-      participant !== undefined,
-  );
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-6">
