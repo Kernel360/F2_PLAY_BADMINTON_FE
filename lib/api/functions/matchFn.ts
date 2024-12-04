@@ -5,6 +5,8 @@ import type {
   GetSetsDetailResponse,
   PatchMatchSetScoreRequest,
   PatchMatchSetScoreResponse,
+  PostMatchSetScoreRequest,
+  PostMatchSetScoreResponse,
   PostMatchStartResponse,
   PostMatchesResponse,
 } from "@/types/matchTypes";
@@ -58,12 +60,25 @@ export const postMatchStart = async (
   );
 };
 
+export const postSetScore = async (
+  score: PostMatchSetScoreRequest,
+  clubId: string,
+  leagueId: string,
+  matchId: string,
+  setNumber: number,
+): Promise<PostMatchSetScoreResponse> => {
+  return restClient.post<PostMatchSetScoreResponse>(
+    `/clubs/${clubId}/leagues/${leagueId}/matches/${matchId}/sets/${setNumber}`,
+    score,
+  );
+};
+
 export const patchSetScore = async (
   score: PatchMatchSetScoreRequest,
   clubId: string,
   leagueId: string,
   matchId: string,
-  setNumber: string,
+  setNumber: number,
 ): Promise<PatchMatchSetScoreResponse> => {
   return restClient.patch<PatchMatchSetScoreResponse>(
     `/clubs/${clubId}/leagues/${leagueId}/matches/${matchId}/sets/${setNumber}`,
