@@ -1,8 +1,7 @@
-import MatchDetail from "@/components/pages/club/MatchDetail";
-import React from "react";
+import MatchDetailPage from "@/components/pages/club/MatchDetailPage";
 
 function page() {
-  return <MatchDetail />;
+  return <MatchDetailPage />;
 }
 
 export default page;

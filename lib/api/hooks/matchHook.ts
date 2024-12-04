@@ -50,7 +50,7 @@ export const useGetSetScore = (
   return useQuery({
     queryKey: ["leagueDetails", leagueId],
     queryFn: () => getSetScore(clubId, leagueId, matchId, setNumber),
-    enabled: !(matchStatus === "NOT_STARTED"),
+    enabled: !(matchStatus !== "IN_PROGRESS"),
     refetchInterval: 5000, // 5초마다 재요청
   });
 };

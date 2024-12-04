@@ -112,7 +112,7 @@ function Header() {
   }
 
   return (
-    <header className="flex flex-col w-full max-w-6xl px-4 sticky top-0 z-50 bg-white/70 backdrop-blur-md">
+    <header className="bg-white flex flex-col w-full max-w-6xl px-4 sticky top-0 z-50">
       {/* 상단: 로고, 검색창, 로그인 버튼 */}
       <div className="flex flex-wrap items-center justify-between gap-4 lg:flex-nowrap lg:gap-8 py-2">
         <div className="flex items-center justify-center gap-2">

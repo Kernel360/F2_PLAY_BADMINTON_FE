@@ -33,6 +33,48 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/v1/clubs/{clubToken}/leagues/{leagueId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 특정 경기를 조회합니다.
+     * @description 특정 경기를 경기 아이디를 통해 데이터베이스에서 조회합니다.
+     */
+    get: operations["leagueRead"];
+    /**
+     * 경기의 세부 정보를 변경합니다.
+     * @description 경기 이름, 설명, 참가자, 싱글/더블, 프리/토너먼트 변경
+     *
+     *     1. 경기 이름 2 ~ 20 글자
+     *     2. 경기 설명 2 ~ 1000 글자
+     *     3. 참가인원:
+     *     	토너먼트 싱글: 2의 제곱
+     *     	토너먼트 더블: 참가자 수/2 가 2의 제곱
+     *     	프리 싱글: 2의 배수
+     *     	프리 더블: 4의 배수
+     *
+     *
+     */
+    put: operations["updateLeague"];
+    post?: never;
+    /**
+     * 경기 취소
+     * @description 경기를 취소합니다.
+     */
+    delete: operations["cancelLeague"];
+    options?: never;
+    head?: never;
+    /**
+     * 경기 모집 마감
+     * @description 경기 모집 마감 기한 전이라도, 경기 Owner가 모집을 마감할 수 있습니다. 이때 단식(2)/복식(4)에 따른 최소 인원 조건은 충족해야 합니다.
+     */
+    patch: operations["completeLeagueRecruiting"];
+    trace?: never;
+  };
   "/v1/members/profileImage": {
     parameters: {
       query?: never;
@@ -374,44 +416,6 @@ export interface paths {
      *        - 파일 확장자: png, jpg, jpeg, gif 중 하나
      */
     patch: operations["updateClub"];
-    trace?: never;
-  };
-  "/v1/clubs/{clubToken}/leagues/{leagueId}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /**
-     * 특정 경기를 조회합니다.
-     * @description 특정 경기를 경기 아이디를 통해 데이터베이스에서 조회합니다.
-     */
-    get: operations["leagueRead"];
-    put?: never;
-    post?: never;
-    /**
-     * 경기 취소
-     * @description 경기를 취소합니다.
-     */
-    delete: operations["cancelLeague"];
-    options?: never;
-    head?: never;
-    /**
-     * 경기의 세부 정보를 변경합니다.
-     * @description 경기 이름, 설명, 참가자, 싱글/더블, 프리/토너먼트 변경
-     *
-     *     1. 경기 이름 2 ~ 20 글자
-     *     2. 경기 설명 2 ~ 1000 글자
-     *     3. 참가인원:
-     *     	토너먼트 싱글: 2의 제곱
-     *     	토너먼트 더블: 참가자 수/2 가 2의 제곱
-     *     	프리 싱글: 2의 배수
-     *     	프리 더블: 4의 배수
-     *
-     *
-     */
-    patch: operations["updateLeague"];
     trace?: never;
   };
   "/v1/clubs/{clubToken}/clubMembers/role": {
@@ -914,6 +918,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -936,8 +941,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -954,6 +960,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -986,6 +993,196 @@ export interface components {
        * @example 1070449979547641023123
        */
       profile_image?: string;
+    };
+    LeagueUpdateRequest: {
+      /**
+       * @description 경기 이름
+       * @example 배드민턴 경기
+       */
+      league_name: string;
+      /**
+       * @description 경기 설명
+       * @example 이 경기는 지역 예선 경기입니다.
+       */
+      description: string;
+      /**
+       * Format: int32
+       * @description 기존 참가 인원보다 적게 입력할 수 없습니다.
+       * @example 16
+       */
+      player_limit_count: number;
+      /**
+       * @description 경기 방식
+       * @example SINGLES
+       * @enum {string}
+       */
+      match_type: "SINGLES" | "DOUBLES";
+      /**
+       * @description 매칭 조건
+       * @example FREE
+       * @enum {string}
+       */
+      match_generation_type: "FREE" | "TOURNAMENT";
+    };
+    CommonResponseLeagueUpdateResponse: {
+      /** @enum {string} */
+      result?: "SUCCESS" | "FAIL";
+      data?: components["schemas"]["LeagueUpdateResponse"];
+      /** @enum {string} */
+      error_code?:
+        | "BAD_REQUEST"
+        | "INVALID_PARAMETER"
+        | "INVALID_RESOURCE"
+        | "MISSING_PARAMETER"
+        | "LIMIT_EXCEEDED"
+        | "OUT_OF_RANGE"
+        | "FILE_NOT_EXIST"
+        | "FILE_SIZE_OVER"
+        | "VALIDATION_ERROR"
+        | "UNAUTHORIZED"
+        | "FORBIDDEN"
+        | "ACCESS_DENIED"
+        | "LIMIT_EXCEEDED_403"
+        | "OUT_OF_RANGE_403"
+        | "UNAUTHORIZED_USER_FOR_BRACKET_GENERATION"
+        | "NOT_FOUND"
+        | "JWT_COOKIE_NOT_FOUND"
+        | "RESOURCE_NOT_EXIST"
+        | "MEMBER_NOT_EXIST"
+        | "CLUB_NOT_EXIST"
+        | "LEAGUE_NOT_EXIST"
+        | "BRACKET_NOT_EXIST"
+        | "MATCH_NOT_EXIST"
+        | "SET_NOT_EXIST"
+        | "MEMBER_NOT_JOINED_CLUB"
+        | "CLUB_MEMBER_NOT_EXIST"
+        | "CLUB_MEMBER_IS_NOT_OWNER"
+        | "CLUB_MEMBER_IS_NOT_ABOVE_MANAGER"
+        | "MATCH_DETAILS_NOT_EXIST"
+        | "IMAGE_FILE_NOT_FOUND"
+        | "SET_NOT_EXIST_IN_CACHE"
+        | "CONFLICT"
+        | "ALREADY_EXIST"
+        | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
+        | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
+        | "CLUB_MEMBER_ALREADY_OWNER"
+        | "LEAGUE_CANNOT_BE_UPDATED"
+        | "RESOURCE_ALREADY_EXIST"
+        | "CLUB_NAME_ALREADY_EXIST"
+        | "LEAGUE_ALREADY_EXIST"
+        | "MEMBER_ALREADY_JOINED_CLUB"
+        | "MEMBER_ALREADY_APPLY_CLUB"
+        | "LEAGUE_ALREADY_PARTICIPATED"
+        | "LEAGUE_NOT_PARTICIPATED"
+        | "LEAGUE_PARTICIPATION_ALREADY_CANCELED"
+        | "CLUB_MEMBER_ALREADY_BANNED"
+        | "LEAGUE_ALREADY_CANCELED"
+        | "LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL"
+        | "CLUB_MEMBER_OWNER_PROTECT"
+        | "DELETED"
+        | "INVALID_PLAYER_COUNT"
+        | "LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION"
+        | "INSUFFICIENT_TIER"
+        | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
+        | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
+        | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
+        | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
+        | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
+        | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
+        | "INVALID_TIME_TO_CANCEL_LEAGUE_PARTICIPATION"
+        | "INVALID_LEAGUE_STATUS_TO_GENERATE_BRACKET"
+        | "INVALID_TIME_TO_PARTICIPATE_IN_LEAGUE"
+        | "INVALID_TIME_TO_CANCEL_LEAGUE"
+        | "MATCH_ALREADY_STARTED_WHEN_BRACKET_GENERATION"
+        | "LEAGUE_NOT_RECRUITING"
+        | "LEAGUE_PARTICIPANT_POWER_OF_TWO"
+        | "LEAGUE_PARTICIPANTS_NOT_EXISTS"
+        | "SET_FINISHED"
+        | "ALREADY_WINNER_DETERMINED"
+        | "CLUB_OWNER_CANT_WITHDRAW"
+        | "NOT_LEAGUE_OWNER"
+        | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
+        | "INTERNAL_SERVER_ERROR"
+        | "SERVICE_UNAVAILABLE";
+      error_message_for_log?: string;
+      error_message_for_client?: string;
+    };
+    LeagueUpdateResponse: {
+      /**
+       * Format: int64
+       * @description 경기 아이디
+       */
+      league_id: number;
+      /** @description 경기 이름 */
+      league_name: string;
+      /** @description 경기 설명 */
+      league_description: string;
+      /** @description 경기 장소 */
+      full_address: string;
+      /** @description 경기 장소 리전 */
+      region: string;
+      /**
+       * @description 최소 티어, (GOLD | SILVER | BRONZE)
+       * @enum {string}
+       */
+      required_tier: "GOLD" | "SILVER" | "BRONZE";
+      /**
+       * @description 현재 경기 상태( ALL | RECRUITING | RECRUITING_COMPLETED | PLAYING | CANCELED | FINISHED)
+       * @enum {string}
+       */
+      league_status:
+        | "ALL"
+        | "RECRUITING"
+        | "RECRUITING_COMPLETED"
+        | "PLAYING"
+        | "CANCELED"
+        | "FINISHED";
+      /**
+       * @description 경기 방식 (SINGLES | DOUBLES)
+       * @enum {string}
+       */
+      match_type: "SINGLES" | "DOUBLES";
+      /**
+       * Format: date-time
+       * @description 경기 시작 날짜
+       */
+      league_at: string;
+      /**
+       * Format: date-time
+       * @description 모집 마감 날짜
+       */
+      recruiting_close_at: string;
+      /**
+       * @description 매칭 조건 (FREE | TOURNAMENT)
+       * @example TIER
+       * @enum {string}
+       */
+      match_generation_type?: "FREE" | "TOURNAMENT";
+      /**
+       * Format: int32
+       * @description 참가 제한 인원
+       */
+      player_limit_count: number;
+      /**
+       * Format: int32
+       * @description 현재까지 참여한 인원
+       */
+      recruited_member_count: number;
+      /**
+       * Format: date-time
+       * @description 생성 일자
+       */
+      created_at: string;
+      /**
+       * Format: date-time
+       * @description 수정 일자
+       */
+      modified_at: string;
     };
     ImageUploadRequest: {
       /** Format: binary */
@@ -1031,6 +1228,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -1053,8 +1251,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -1071,6 +1270,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1154,6 +1354,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -1176,8 +1377,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -1194,6 +1396,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1239,7 +1442,7 @@ export interface components {
       recruiting_closed_at: string;
       /**
        * Format: int32
-       * @description 참가인원: 토너먼트 싱글이면 2의 제곱, 더블이면 참가자수 /2 가 2의 제곱, 프리 싱글이면 2의 배수, 프리 더블이면 4의 배수
+       * @description 참가인원: 복식일 시 짝수여야 합니다
        * @example 16
        */
       player_limit_count: number;
@@ -1290,6 +1493,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -1312,8 +1516,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -1330,6 +1535,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1436,6 +1642,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -1458,8 +1665,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -1476,6 +1684,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1577,6 +1786,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -1599,8 +1809,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -1617,6 +1828,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1638,7 +1850,7 @@ export interface components {
        * @description 매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)
        * @enum {string}
        */
-      match_status: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
+      match_status: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED" | "BYE";
       team1: components["schemas"]["MatchTeamResponse"];
       team2: components["schemas"]["MatchTeamResponse"];
       /** @description 승자의 멤버토큰 */
@@ -1689,7 +1901,7 @@ export interface components {
        * @description 매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)
        * @enum {string}
        */
-      match_status: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
+      match_status: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED" | "BYE";
       participant1: components["schemas"]["Participant"];
       participant2: components["schemas"]["Participant"];
       /** @description 승자의 맴버 토큰 */
@@ -1741,6 +1953,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -1763,8 +1976,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -1781,6 +1995,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1870,6 +2085,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -1892,8 +2108,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -1910,6 +2127,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -1955,6 +2173,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -1977,8 +2196,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -1995,6 +2215,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2061,6 +2282,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -2083,8 +2305,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -2101,6 +2324,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2174,6 +2398,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -2196,8 +2421,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -2214,45 +2440,16 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
       error_message_for_client?: string;
     };
-    LeagueUpdateRequest: {
-      /**
-       * @description 경기 이름
-       * @example 배드민턴 경기
-       */
-      league_name: string;
-      /**
-       * @description 경기 설명
-       * @example 이 경기는 지역 예선 경기입니다.
-       */
-      description: string;
-      /**
-       * Format: int32
-       * @description 기존 참가 인원보다 적게 입력할 수 없습니다.
-       * @example 16
-       */
-      player_limit_count: number;
-      /**
-       * @description 경기 방식
-       * @example SINGLES
-       * @enum {string}
-       */
-      match_type: "SINGLES" | "DOUBLES";
-      /**
-       * @description 매칭 조건
-       * @example FREE
-       * @enum {string}
-       */
-      match_generation_type: "FREE" | "TOURNAMENT";
-    };
-    CommonResponseLeagueUpdateResponse: {
+    CommonResponseLeagueRecruitingCompleteResponse: {
       /** @enum {string} */
       result?: "SUCCESS" | "FAIL";
-      data?: components["schemas"]["LeagueUpdateResponse"];
+      data?: components["schemas"]["LeagueRecruitingCompleteResponse"];
       /** @enum {string} */
       error_code?:
         | "BAD_REQUEST"
@@ -2289,6 +2486,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -2311,8 +2509,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -2329,30 +2528,18 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
       error_message_for_client?: string;
     };
-    LeagueUpdateResponse: {
+    LeagueRecruitingCompleteResponse: {
       /**
        * Format: int64
        * @description 경기 아이디
        */
       league_id: number;
-      /** @description 경기 이름 */
-      league_name: string;
-      /** @description 경기 설명 */
-      league_description: string;
-      /** @description 경기 장소 */
-      full_address: string;
-      /** @description 경기 장소 리전 */
-      region: string;
-      /**
-       * @description 최소 티어, (GOLD | SILVER | BRONZE)
-       * @enum {string}
-       */
-      required_tier: "GOLD" | "SILVER" | "BRONZE";
       /**
        * @description 현재 경기 상태( ALL | RECRUITING | RECRUITING_COMPLETED | PLAYING | CANCELED | FINISHED)
        * @enum {string}
@@ -2364,47 +2551,6 @@ export interface components {
         | "PLAYING"
         | "CANCELED"
         | "FINISHED";
-      /**
-       * @description 경기 방식 (SINGLES | DOUBLES)
-       * @enum {string}
-       */
-      match_type: "SINGLES" | "DOUBLES";
-      /**
-       * Format: date-time
-       * @description 경기 시작 날짜
-       */
-      league_at: string;
-      /**
-       * Format: date-time
-       * @description 모집 마감 날짜
-       */
-      recruiting_close_at: string;
-      /**
-       * @description 매칭 조건 (FREE | TOURNAMENT)
-       * @example TIER
-       * @enum {string}
-       */
-      match_generation_type?: "FREE" | "TOURNAMENT";
-      /**
-       * Format: int32
-       * @description 참가 제한 인원
-       */
-      player_limit_count: number;
-      /**
-       * Format: int32
-       * @description 현재까지 참여한 인원
-       */
-      recruited_member_count: number;
-      /**
-       * Format: date-time
-       * @description 생성 일자
-       */
-      created_at: string;
-      /**
-       * Format: date-time
-       * @description 수정 일자
-       */
-      modified_at: string;
     };
     CommonResponseSetScoreResponse: {
       /** @enum {string} */
@@ -2446,6 +2592,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -2468,8 +2615,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -2486,6 +2634,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2586,6 +2735,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -2608,8 +2758,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -2626,6 +2777,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2700,6 +2852,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -2722,8 +2875,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -2740,6 +2894,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2790,6 +2945,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -2812,8 +2968,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -2830,6 +2987,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -2935,6 +3093,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -2957,8 +3116,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -2975,6 +3135,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3094,6 +3255,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -3116,8 +3278,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -3134,6 +3297,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3179,6 +3343,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -3201,8 +3366,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -3219,6 +3385,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3303,7 +3470,7 @@ export interface components {
        * @description 매치 상태 (NOT_STARTED | IN_PROGRESS | FINISHED
        * @enum {string}
        */
-      match_status: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED";
+      match_status: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED" | "BYE";
       /**
        * Format: date-time
        * @description 경기 날짜 및 시간
@@ -3367,6 +3534,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -3389,8 +3557,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -3407,6 +3576,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3537,6 +3707,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -3559,8 +3730,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -3577,6 +3749,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3681,6 +3854,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -3703,8 +3877,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -3721,6 +3896,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3836,6 +4012,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -3858,8 +4035,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -3876,6 +4054,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -3921,6 +4100,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -3943,8 +4123,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -3961,6 +4142,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4098,6 +4280,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -4120,8 +4303,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -4138,6 +4322,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4259,6 +4444,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -4281,8 +4467,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -4299,6 +4486,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4378,6 +4566,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -4400,8 +4589,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -4418,6 +4608,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4463,6 +4654,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -4485,8 +4677,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -4503,6 +4696,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4552,6 +4746,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -4574,8 +4769,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -4592,6 +4788,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4667,6 +4864,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -4689,8 +4887,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -4707,6 +4906,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4802,6 +5002,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -4824,8 +5025,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -4842,6 +5044,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -4922,6 +5125,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -4944,8 +5148,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -4962,6 +5167,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -5041,6 +5247,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -5063,8 +5270,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -5081,6 +5289,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -5161,6 +5370,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -5183,8 +5393,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -5201,6 +5412,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -5265,6 +5477,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -5287,8 +5500,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -5305,6 +5519,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -5350,6 +5565,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -5372,8 +5588,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -5390,6 +5607,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -5453,6 +5671,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -5475,8 +5694,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -5493,6 +5713,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -5567,6 +5788,7 @@ export interface components {
         | "CONFLICT"
         | "ALREADY_EXIST"
         | "CLUB_MEMBER_ALREADY_EXIST"
+        | "LEAGUE_PARTICIPANT_IS_ALREADY_FULL"
         | "LEAGUE_RECRUITING_ALREADY_COMPLETED"
         | "CLUB_MEMBER_ALREADY_OWNER"
         | "LEAGUE_CANNOT_BE_UPDATED"
@@ -5589,8 +5811,9 @@ export interface components {
         | "ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST"
         | "RECRUITMENT_END_DATE_AFTER_LEAGUE_START"
         | "PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH"
-        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES"
+        | "PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES"
         | "LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION"
         | "LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING"
         | "INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION"
@@ -5607,6 +5830,7 @@ export interface components {
         | "CLUB_OWNER_CANT_WITHDRAW"
         | "NOT_LEAGUE_OWNER"
         | "CLUB_MEMBER_EXPEL_EXCEPTION"
+        | "BYE_MATCH"
         | "INTERNAL_SERVER_ERROR"
         | "SERVICE_UNAVAILABLE";
       error_message_for_log?: string;
@@ -5661,6 +5885,102 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["CommonResponseMemberDeleteResponse"];
+        };
+      };
+    };
+  };
+  leagueRead: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubToken: string;
+        leagueId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseLeagueDetailsResponse"];
+        };
+      };
+    };
+  };
+  updateLeague: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubToken: string;
+        leagueId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LeagueUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseLeagueUpdateResponse"];
+        };
+      };
+    };
+  };
+  cancelLeague: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubToken: string;
+        leagueId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseLeagueCancelResponse"];
+        };
+      };
+    };
+  };
+  completeLeagueRecruiting: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clubToken: string;
+        leagueId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommonResponseLeagueRecruitingCompleteResponse"];
         };
       };
     };
@@ -6193,79 +6513,6 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["CommonResponseClubUpdateResponse"];
-        };
-      };
-    };
-  };
-  leagueRead: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        clubToken: string;
-        leagueId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "*/*": components["schemas"]["CommonResponseLeagueDetailsResponse"];
-        };
-      };
-    };
-  };
-  cancelLeague: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        clubToken: string;
-        leagueId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "*/*": components["schemas"]["CommonResponseLeagueCancelResponse"];
-        };
-      };
-    };
-  };
-  updateLeague: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        clubToken: string;
-        leagueId: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["LeagueUpdateRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "*/*": components["schemas"]["CommonResponseLeagueUpdateResponse"];
         };
       };
     };

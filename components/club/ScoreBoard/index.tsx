@@ -8,7 +8,10 @@ import {
   usePostSetScore,
 } from "@/lib/api/hooks/matchHook";
 import type { MatchStatusType } from "@/types/matchTypes";
+import { Maximize2, Minimize2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import OverlayMessage from "./OverlayMessage";
+import PlayerScore from "./PlayerScore";
 
 interface ScoreboardProps {
   clubId: string;
@@ -30,6 +33,7 @@ export default function Scoreboard(props: ScoreboardProps) {
     player1,
     player2,
   } = props;
+
   const [isEditing, setIsEditing] = useState(false);
   const inputRefPlayer1 = useRef<HTMLInputElement>(null);
   const inputRefPlayer2 = useRef<HTMLInputElement>(null);
@@ -53,6 +57,8 @@ export default function Scoreboard(props: ScoreboardProps) {
     score1: 0,
     score2: 0,
   });
+
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     if (scoreData?.data) {
@@ -114,6 +120,20 @@ export default function Scoreboard(props: ScoreboardProps) {
     }
   };
 
+  useEffect(() => {
+    if (isEditing) {
+      inputRefPlayer1.current?.focus();
+    }
+
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, [isEditing]);
+
   if (isLoading) {
     return <Skeleton className="w-full h-[450px] rounded-md" />;
   }
@@ -121,109 +141,74 @@ export default function Scoreboard(props: ScoreboardProps) {
   return (
     <div
       ref={scoreboardRef}
-      className="bg-gradient-to-br from-gray-800 to-gray-900 h-full flex flex-col items-center justify-center text-white shadow-2xl rounded-lg p-8 space-y-8 relative"
+      className="bg-gradient-to-br from-gray-800 to-gray-900 flex flex-col items-center justify-center text-white shadow-2xl rounded-lg p-6 space-y-6 relative transition-all duration-300"
+      // style={{
+      //   width: isFullscreen ? "95vw" : "100%",
+      //   height: isFullscreen ? "95vh" : "auto",
+      //   maxWidth: "600px",
+      // }}
     >
-      {matchStatus === "NOT_STARTED" && (
-        <div className="absolute inset-0 bg-black bg-opacity-75 flex flex-col items-center justify-center z-50">
-          <button
-            type="button"
-            onClick={() => postMatchStart()}
-            className="bg-primary hover:bg-primary/50 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow transition-all transform hover:scale-[1.02]"
-          >
-            경기 시작하기
-          </button>
-        </div>
-      )}
+      <OverlayMessage
+        matchStatus={matchStatus}
+        postMatchStart={postMatchStart}
+      />
       <>
         <button
           type="button"
           onClick={toggleFullscreen}
-          className="absolute top-4 right-4 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm shadow-md transition-transform transform hover:scale-[1.02]"
+          className="absolute top-4 right-4 bg-none hover:bg-none text-whiterounded-lg hover:scale-105"
         >
-          {document.fullscreenElement ? "Exit Fullscreen" : "Fullscreen"}
+          {isFullscreen ? <Maximize2 size={15} /> : <Minimize2 size={15} />}
         </button>
 
-        <div className="text-3xl font-extrabold tracking-wide text-gray-200">
+        <div className="text-2xl font-extrabold tracking-wide text-gray-200">
           Set {currentSetNumber}
         </div>
-        <div className="grid grid-cols-2 gap-12 w-full max-w-2xl">
-          <div className="text-center space-y-4">
-            <h2 className="text-2xl font-bold tracking-wide text-gray-100">
-              {player1}
-            </h2>
+        <div className="grid grid-cols-2 gap-6 w-full">
+          <PlayerScore
+            player={player1}
+            score={score.score1}
+            isEditing={isEditing}
+            inputRef={inputRefPlayer1}
+            onScoreUpdate={() => updateScore("score1", 1)}
+          />
+          <PlayerScore
+            player={player2}
+            score={score.score2}
+            isEditing={isEditing}
+            inputRef={inputRefPlayer2}
+            onScoreUpdate={() => updateScore("score2", 1)}
+          />
+        </div>
+
+        {!isFullscreen && (
+          <div className="flex justify-center space-x-8 mt-4 gap-6">
             {isEditing ? (
-              <input
-                ref={inputRefPlayer1}
-                type="number"
-                defaultValue={score.score1}
-                min="0"
-                max="30"
-                step="1"
-                className="bg-black w-40 h-40 text-red-500 text-8xl text-center rounded-lg shadow-inner focus:ring-4 focus:ring-primary-400 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              />
+              <button
+                type="button"
+                onClick={handleSaveScores}
+                className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow transition-all transform hover:scale-105"
+              >
+                저장
+              </button>
             ) : (
               <button
                 type="button"
-                onClick={() => updateScore("score1", 1)}
-                className="!mt-4 bg-black w-40 h-40 text-red-500 text-8xl text-center rounded-lg shadow-inner transition-transform transform hover:scale-[1.02]"
+                onClick={() => setIsEditing(true)}
+                className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow transition-all transform hover:scale-105"
               >
-                {score.score1}
+                수정
               </button>
             )}
-          </div>
-
-          <div className="text-center space-y-4">
-            <h2 className="text-2xl font-bold tracking-wide text-gray-100">
-              {player2}
-            </h2>
-            {isEditing ? (
-              <input
-                ref={inputRefPlayer2}
-                type="number"
-                defaultValue={score.score2}
-                min="0"
-                max="30"
-                step="1"
-                className="bg-black w-40 h-40 text-red-500 text-8xl text-center rounded-lg shadow-inner focus:ring-4 focus:ring-primary-400 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              />
-            ) : (
-              <button
-                type="button"
-                onClick={() => updateScore("score2", 1)}
-                className="!mt-4 bg-black w-40 h-40 text-red-500 text-8xl text-center rounded-lg shadow-inner transition-transform transform hover:scale-[1.02]"
-              >
-                {score.score2}
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div className="flex justify-center space-x-6 mt-6">
-          {isEditing ? (
             <button
               type="button"
-              onClick={() => handleSaveScores()}
-              className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow transition-all transform hover:scale-[1.02]"
+              onClick={postNextSet}
+              className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow transition-all transform hover:scale-105"
             >
-              저장
+              세트 종료
             </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setIsEditing(true)}
-              className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow transition-all transform hover:scale-[1.02]"
-            >
-              수정
-            </button>
-          )}
-          <button
-            type="button"
-            onClick={() => postNextSet()}
-            className="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow transition-all transform hover:scale-[1.02]"
-          >
-            세트 종료
-          </button>
-        </div>
+          </div>
+        )}
       </>
     </div>
   );
