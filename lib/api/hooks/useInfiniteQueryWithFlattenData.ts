@@ -19,8 +19,6 @@ const useInfiniteQueryWithFlattenData = <TData>(
     },
   });
 
-  console.log(data);
-
   const flattenData = data
     ? data.pages.flatMap((page) => {
         return page.data ? page.data.content : [];
