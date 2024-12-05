@@ -1,7 +1,7 @@
 import type { CommonPaginationResponse } from "@/types/commonTypes";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const useInfiniteQueryWithToast = <TData>(
+const useInfiniteQueryWithFlattenData = <TData>(
   queryKey: (string | number)[],
   queryFn: ({
     pageParam,
@@ -19,6 +19,8 @@ const useInfiniteQueryWithToast = <TData>(
     },
   });
 
+  console.log(data);
+
   const flattenData = data
     ? data.pages.flatMap((page) => {
         return page.data ? page.data.content : [];
@@ -28,4 +30,4 @@ const useInfiniteQueryWithToast = <TData>(
   return { data: flattenData, isLoading, fetchNextPage, hasNextPage };
 };
 
-export default useInfiniteQueryWithToast;
+export default useInfiniteQueryWithFlattenData;

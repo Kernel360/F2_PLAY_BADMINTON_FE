@@ -1,7 +1,7 @@
 import type { GetMainLeagues } from "@/types/mainLeagueTypes";
 import { useQuery } from "@tanstack/react-query";
 import { getMainLeague, getMainLeagueMatch } from "../functions/mainLeagueFn";
-import useInfiniteQueryWithToast from "./useInfiniteQueryWithToast";
+import useInfiniteQueryWithFlattenData from "./useInfiniteQueryWithFlattenData";
 
 export const useGetMainLeagues = ({
   leagueStatus,
@@ -14,7 +14,7 @@ export const useGetMainLeagues = ({
   date: string;
   size: number;
 }) => {
-  return useInfiniteQueryWithToast<GetMainLeagues>(
+  return useInfiniteQueryWithFlattenData<GetMainLeagues>(
     ["mainLeaguesList", leagueStatus, region, date, size],
     ({ pageParam }) =>
       getMainLeague({ pageParam, leagueStatus, region, date, size }),
