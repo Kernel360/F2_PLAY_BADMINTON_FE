@@ -1,5 +1,6 @@
 "use client";
 
+import Spinner from "@/components/Spinner";
 import ClubCard from "@/components/club/ClubCard";
 import { Button } from "@/components/ui/Button";
 import { useGetSearchClubs } from "@/lib/api/hooks/clubHook";
@@ -19,10 +20,14 @@ function SearchResult() {
   );
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spinner />
+      </div>
+    );
   }
 
-  if (!data || data.pages[0]?.data?.content?.length === 0) {
+  if (data.length === 0) {
     return (
       <div className="flex flex-col justify-center items-center space-y-4 min-h-[50vh]">
         <SearchX className="h-14 w-14 text-gray-400" aria-hidden="true" />
@@ -46,12 +51,8 @@ function SearchResult() {
           </h2>
         </div>
         <div className="mb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {data?.pages.map((group) => (
-            <React.Fragment key={group.data?.number_of_elements}>
-              {group?.data?.content?.map((club: ClubCardResponse) => (
-                <ClubCard key={club.club_token} {...club} />
-              ))}
-            </React.Fragment>
+          {data.map((club: ClubCardResponse) => (
+            <ClubCard key={club.club_token} {...club} />
           ))}
         </div>
         {hasNextPage && (
