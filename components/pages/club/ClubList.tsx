@@ -1,5 +1,6 @@
 "use client";
 
+import Spinner from "@/components/Spinner";
 import ClubCard from "@/components/club/ClubCard";
 import ClubCarousel from "@/components/club/ClubCarousel";
 import { Button } from "@/components/ui/Button";
@@ -42,7 +43,7 @@ function ClubList() {
   ) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <span className="text-lg text-gray-700">Loading...</span>
+        <Spinner />
       </div>
     );
   }
@@ -133,12 +134,8 @@ function ClubList() {
           <h2 className="text-xl font-bold text-gray-800">전체 동호회</h2>
         </div>
         <div className="mb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {data?.pages.map((group) => (
-            <React.Fragment key={group.data?.number_of_elements}>
-              {group?.data?.content?.map((club: ClubCardResponse) => (
-                <ClubCard key={club.club_token} {...club} />
-              ))}
-            </React.Fragment>
+          {data.map((club: ClubCardResponse) => (
+            <ClubCard key={club.club_token} {...club} />
           ))}
         </div>
         {hasNextPage && (

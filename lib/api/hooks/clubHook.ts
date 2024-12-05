@@ -16,6 +16,7 @@ import type {
   GetClubApplicants,
   GetClubApplicantsData,
   GetClubDetailData,
+  GetClubList,
   GetClubListResponse,
   PatchClubData,
   PatchClubRequest,
@@ -27,17 +28,15 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
+import useInfiniteQueryWithFlattenData from "./useInfiniteQueryWithFlattenData";
 import useMutationWithToast from "./useMutationWithToast";
 
 export const useGetClubs = (size: number, sort: string) => {
-  return useInfiniteQuery<GetClubListResponse>({
-    queryKey: ["clubList", size, sort],
-    queryFn: ({ pageParam }) => getClubs({ pageParam, size, sort }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => {
-      return !lastPage?.data?.last ? pages.length : null;
-    },
-  });
+  return useInfiniteQueryWithFlattenData<GetClubList>(
+    ["clubList", size, sort],
+    ({ pageParam }) => getClubs({ pageParam, size, sort }),
+    0,
+  );
 };
 
 export const useGetSearchClubs = (
