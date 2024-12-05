@@ -1,6 +1,7 @@
-import type { GetMainLeaguesResponse } from "@/types/mainLeagueTypes";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import type { GetMainLeagues } from "@/types/mainLeagueTypes";
+import { useQuery } from "@tanstack/react-query";
 import { getMainLeague, getMainLeagueMatch } from "../functions/mainLeagueFn";
+import useInfiniteQueryWithToast from "./useInfiniteQueryWithToast";
 
 export const useGetMainLeagues = ({
   leagueStatus,
@@ -13,15 +14,12 @@ export const useGetMainLeagues = ({
   date: string;
   size: number;
 }) => {
-  return useInfiniteQuery<GetMainLeaguesResponse>({
-    queryKey: ["mainLeaguesList", leagueStatus, region, date, size],
-    queryFn: ({ pageParam }) =>
+  return useInfiniteQueryWithToast<GetMainLeagues>(
+    ["mainLeaguesList", leagueStatus, region, date, size],
+    ({ pageParam }) =>
       getMainLeague({ pageParam, leagueStatus, region, date, size }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => {
-      return !lastPage?.data?.last ? pages.length : null;
-    },
-  });
+    0,
+  );
 };
 
 export const useGetMainLeaguesMatch = (leagueId: string) => {
