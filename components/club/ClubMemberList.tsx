@@ -1,6 +1,8 @@
+import Spinner from "@/components/Spinner";
 import ClubMemberBanDialog from "@/components/club/ClubMemberBanDialog";
 import ClubMemberExpelDialog from "@/components/club/ClubMemberExpelDialog";
 import ClubMemberRoleChangeDialog from "@/components/club/ClubMemberRoleChangeDialog";
+import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -10,12 +12,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type {
-  GetClubMemberCheckData,
-  GetClubMemberListData,
-} from "@/types/clubMemberTypes";
-
+import { useGetClubMembers } from "@/lib/api/hooks/clubMemberHook";
+import type { GetClubMemberCheckData } from "@/types/clubMemberTypes";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
+import { Skeleton } from "../ui/skeleton";
 
 const changeRoleWord = (role: string) => {
   switch (role) {
@@ -31,13 +31,17 @@ const changeRoleWord = (role: string) => {
 };
 
 interface MemberListProps {
-  members: GetClubMemberListData;
-  isJoined: GetClubMemberCheckData;
   clubId: string;
+  isJoined: GetClubMemberCheckData;
 }
 
-function ClubMemberList({ members, isJoined, clubId }: MemberListProps) {
-  const allMembers = [...(members.content ?? [])];
+function ClubMemberList({ clubId, isJoined }: MemberListProps) {
+  const {
+    data: members,
+    isLoading: membersLoading,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetClubMembers(clubId as string, 9);
 
   return (
     <div className="min-h-[200px]">
@@ -49,14 +53,13 @@ function ClubMemberList({ members, isJoined, clubId }: MemberListProps) {
             <TableHead>회원</TableHead>
             <TableHead className="text-center">티어</TableHead>
             <TableHead className="text-center">전적</TableHead>
-            <TableHead className="text-center">정지 상태</TableHead>
             <TableHead className="text-center"> </TableHead>
             <TableHead className="text-center"> </TableHead>
             <TableHead className="text-center"> </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {allMembers.map((member) => (
+          {members.map((member) => (
             <TableRow key={member.club_member_id} className="hover:bg-white">
               <TableCell className="text-black text-center">
                 {changeRoleWord(member.role ?? "")}
@@ -77,9 +80,6 @@ function ClubMemberList({ members, isJoined, clubId }: MemberListProps) {
                 {member.league_record.win_count}승 |{" "}
                 {member.league_record.draw_count}무 |{" "}
                 {member.league_record.lose_count}패
-              </TableCell>
-              <TableCell className="text-black text-center">
-                {member.is_banned ? <p className="text-red-500">정지</p> : ""}
               </TableCell>
               {member.role !== "ROLE_OWNER" &&
                 isJoined?.role === "ROLE_OWNER" && (
@@ -109,6 +109,17 @@ function ClubMemberList({ members, isJoined, clubId }: MemberListProps) {
           ))}
         </TableBody>
       </Table>
+      {hasNextPage && (
+        <div className="w-full flex justify-center items-center">
+          <Button
+            type="button"
+            onClick={() => fetchNextPage()}
+            className="mt-4 px-6 py-2 font-semibold rounded-lg duration-300 shadow-md hover:shadow-lg focus:ring-2"
+          >
+            더보기
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

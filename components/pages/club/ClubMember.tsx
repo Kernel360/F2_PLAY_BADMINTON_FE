@@ -15,9 +15,7 @@ import { useState } from "react";
 
 function ClubMember() {
   const { clubId } = useParams();
-  const { data: members, isLoading: membersLoading } = useGetClubMembers(
-    clubId as string,
-  );
+
   const { data: isJoined, isLoading: isJoinedLoading } = useGetClubMembersCheck(
     clubId as string,
   );
@@ -35,24 +33,20 @@ function ClubMember() {
     setSelectedApplicant(null);
   };
 
-  if (membersLoading || isJoinedLoading) {
-    return <Spinner />;
-  }
+  // if (membersLoading || isJoinedLoading) {
+  //   return <Spinner />;
+  // }
 
   return (
     <div className="flex flex-col gap-6">
-      {applicants && (
+      {/* {applicants && (
         <ClubMemberApplicants
           applicants={applicants}
           onOpenModal={handleModalOpen}
         />
-      )}
-      {members && isJoined?.data && (
-        <ClubMemberList
-          members={members}
-          isJoined={isJoined.data}
-          clubId={clubId as string}
-        />
+      )} */}
+      {isJoined?.data && (
+        <ClubMemberList clubId={clubId as string} isJoined={isJoined.data} />
       )}
       {selectedApplicant && (
         <ClubMemberApprovalDialog

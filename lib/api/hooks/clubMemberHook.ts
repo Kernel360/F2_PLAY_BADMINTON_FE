@@ -1,7 +1,7 @@
 import type { components } from "@/schemas/schema";
 import type {
   GetClubMemberCheckData,
-  GetClubMemberListData,
+  GetClubMemberList,
   PatchClubMemberBanData,
   PatchClubMemberBanRequest,
   PatchClubMemberExpelData,
@@ -24,12 +24,14 @@ import {
   postClubMembersApprove,
   postClubMembersReject,
 } from "../functions/clubMemberFn";
+import useInfiniteQueryWithFlattenData from "./useInfiniteQueryWithFlattenData";
 import useMutationWithToast from "./useMutationWithToast";
-import useQueryWithToast from "./useQueryWithToast";
 
-export const useGetClubMembers = (clubId: string) => {
-  return useQueryWithToast<GetClubMemberListData>(["clubMembers"], () =>
-    getClubMembers(clubId),
+export const useGetClubMembers = (clubId: string, size: number) => {
+  return useInfiniteQueryWithFlattenData<GetClubMemberList>(
+    ["clubMembers"],
+    ({ pageParam }) => getClubMembers({ pageParam, clubId, size }),
+    0,
   );
 };
 

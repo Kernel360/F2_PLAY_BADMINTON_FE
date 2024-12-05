@@ -6,7 +6,7 @@ export type GetClubMemberListResponse =
 export type GetClubMemberListData =
   components["schemas"]["CustomPageResponseClubMemberResponse"];
 
-export type ClubMemberList = components["schemas"]["ClubMemberResponse"];
+export type GetClubMemberList = components["schemas"]["ClubMemberResponse"];
 
 export type GetClubMemberCheckResponse =
   components["schemas"]["CommonResponseMemberIsClubMemberResponse"];

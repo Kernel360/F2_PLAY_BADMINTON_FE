@@ -14,11 +14,17 @@ import type {
 } from "@/types/clubMemberTypes";
 import restClient from "../restClient";
 
-export const getClubMembers = async (
-  clubId: string,
-): Promise<GetClubMemberListResponse> => {
+export const getClubMembers = async ({
+  pageParam,
+  clubId,
+  size,
+}: {
+  pageParam: unknown;
+  clubId: string;
+  size: number;
+}): Promise<GetClubMemberListResponse> => {
   return restClient.get<GetClubMemberListResponse>(
-    `/clubs/${clubId}/clubMembers`,
+    `/clubs/${clubId}/clubMembers?page=${pageParam}&size=${size}`,
   );
 };
 
