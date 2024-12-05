@@ -6,6 +6,8 @@ export type GetClubListResponse =
 export type GetClubListData =
   components["schemas"]["CustomPageResponseClubCardResponse"];
 
+export type GetClubList = components["schemas"]["ClubCardResponse"];
+
 export type GetPopularClubListResponse =
   components["schemas"]["CommonResponseListClubCardResponse"];
 

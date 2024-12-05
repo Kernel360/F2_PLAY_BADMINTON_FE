@@ -10,34 +10,29 @@ import {
   postClubs,
   postClubsImg,
 } from "@/lib/api/functions/clubFn";
+import useInfiniteQueryWithFlattenData from "@/lib/api/hooks/useInfiniteQueryWithFlattenData";
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   ClubCardResponse,
   GetClubApplicants,
   GetClubApplicantsData,
   GetClubDetailData,
+  GetClubList,
   GetClubListResponse,
   PatchClubData,
   PatchClubRequest,
   PostClubData,
   PostClubRequest,
 } from "@/types/clubTypes";
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useMutationWithToast from "./useMutationWithToast";
 
 export const useGetClubs = (size: number, sort: string) => {
-  return useInfiniteQuery<GetClubListResponse>({
-    queryKey: ["clubList", size, sort],
-    queryFn: ({ pageParam }) => getClubs({ pageParam, size, sort }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => {
-      return !lastPage?.data?.last ? pages.length : null;
-    },
-  });
+  return useInfiniteQueryWithFlattenData<GetClubList>(
+    ["clubList", size, sort],
+    ({ pageParam }) => getClubs({ pageParam, size, sort }),
+    0,
+  );
 };
 
 export const useGetSearchClubs = (
@@ -45,15 +40,11 @@ export const useGetSearchClubs = (
   sort: string,
   keyword: string,
 ) => {
-  return useInfiniteQuery<GetClubListResponse>({
-    queryKey: ["searchClubList", size, sort, keyword],
-    queryFn: ({ pageParam }) =>
-      getSearchClubs({ pageParam, size, sort, keyword }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => {
-      return !lastPage?.data?.last ? pages.length : null;
-    },
-  });
+  return useInfiniteQueryWithFlattenData<GetClubList>(
+    ["searchClubList", size, sort, keyword],
+    ({ pageParam }) => getSearchClubs({ pageParam, size, sort, keyword }),
+    0,
+  );
 };
 
 export const useGetPopularClubs = () => {
