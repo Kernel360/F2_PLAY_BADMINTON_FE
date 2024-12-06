@@ -40,7 +40,7 @@ function ClubMemberApplicantsList({
       </CardHeader>
       <CardContent>
         {applicants && applicants.length > 0 ? (
-          <ScrollArea className="h-64">
+          <ScrollArea className="h-80">
             <Table className="relative">
               <TableHeader className="sticky top-0">
                 <TableRow className="bg-white hover:bg-white">
