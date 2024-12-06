@@ -159,7 +159,7 @@ function ClubMemberList({ clubId, isJoined }: MemberListProps) {
           </Table>
         </ScrollArea>
         {hasNextPage && (
-          <div className="w-full flex justify-center items-center">
+          <div className="w-full flex justify-center items-center p-3">
             <Button
               type="button"
               onClick={() => fetchNextPage()}
