@@ -2,6 +2,8 @@ import type { ErrorCode } from "./errorCode";
 
 export type Tier = "GOLD" | "SILVER" | "BRONZE" | undefined;
 
+export type MemberRole = "ROLE_USER" | "ROLE_OWNER" | "ROLE_MANAGER";
+
 export type LeagueStatus =
   | "ALL"
   | "RECRUITING"

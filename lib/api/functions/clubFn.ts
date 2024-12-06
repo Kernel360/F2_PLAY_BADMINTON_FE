@@ -88,8 +88,10 @@ export const patchClubs = async (
 
 export const getClubsApplicants = async (
   clubId: string,
+  pageParam: unknown,
+  size: number,
 ): Promise<GetClubApplicantsResponse> => {
   return restClient.get<GetClubApplicantsResponse>(
-    `/clubs/${clubId}/applicants`,
+    `/clubs/${clubId}/applicants?page=${pageParam}&size=${size}`,
   );
 };

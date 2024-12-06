@@ -1,11 +1,13 @@
 "use client";
 
-import Spinner from "@/components/Spinner";
-import ClubMemberApplicants from "@/components/club/ClubMemberApplicants";
+import ClubMemberApplicantsList from "@/components/club/ClubMemberApplicantsList";
 import ClubMemberApprovalDialog from "@/components/club/ClubMemberApprovalDialog";
+import ClubMemberBanList from "@/components/club/ClubMemberBanList";
 import ClubMemberList from "@/components/club/ClubMemberList";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useGetClubsApplicants } from "@/lib/api/hooks/clubHook";
 import {
+  useGetClubBanMembers,
   useGetClubMembers,
   useGetClubMembersCheck,
 } from "@/lib/api/hooks/clubMemberHook";
@@ -15,15 +17,41 @@ import { useState } from "react";
 
 function ClubMember() {
   const { clubId } = useParams();
-  const { data: members, isLoading: membersLoading } = useGetClubMembers(
-    clubId as string,
-  );
+
   const { data: isJoined, isLoading: isJoinedLoading } = useGetClubMembersCheck(
     clubId as string,
   );
-  const { data: applicants } = useGetClubsApplicants(clubId as string, {
-    enabled: isJoined?.data?.role === "ROLE_OWNER",
+  const {
+    data: applicants,
+    fetchNextPage: fetchApplicantsNextPage,
+    hasNextPage: hasApplicantsNextPage,
+    isLoading: applicantsLoading,
+  } = useGetClubsApplicants(clubId as string, 9, {
+    enabled: !isJoinedLoading && isJoined?.data?.role === "ROLE_OWNER",
   });
+
+  const {
+    data: members,
+    fetchNextPage: fetchMembersNextPage,
+    hasNextPage: hasMembersNextPage,
+    isLoading: membersLoading,
+  } = useGetClubMembers(clubId as string, 9);
+
+  const {
+    data: bannedMembers,
+    fetchNextPage: fetchBannedMembersNextPage,
+    hasNextPage: hasBannedMembersNextPage,
+    isLoading: bannedMembersLoading,
+  } = useGetClubBanMembers(clubId as string, 9);
+
+  // Combine loading states
+  const isLoading =
+    isJoinedLoading ||
+    applicantsLoading ||
+    membersLoading ||
+    bannedMembersLoading;
+
+  // Dialog state management
   const [selectedApplicant, setSelectedApplicant] =
     useState<GetClubApplicants | null>(null);
 
@@ -35,25 +63,41 @@ function ClubMember() {
     setSelectedApplicant(null);
   };
 
-  if (membersLoading || isJoinedLoading) {
-    return <Spinner />;
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-6">
+        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col gap-6">
-      {applicants && (
-        <ClubMemberApplicants
+      {isJoined?.data?.role === "ROLE_OWNER" && (
+        <ClubMemberApplicantsList
           applicants={applicants}
-          onOpenModal={handleModalOpen}
+          fetchNextPage={fetchApplicantsNextPage}
+          hasNextPage={hasApplicantsNextPage}
+          onOpenModal={handleModalOpen} // Pass the modal open handler
         />
       )}
-      {members && isJoined?.data && (
+      {isJoined?.data && (
         <ClubMemberList
-          members={members}
-          isJoined={isJoined.data}
           clubId={clubId as string}
+          members={members}
+          fetchNextPage={fetchMembersNextPage}
+          hasNextPage={hasMembersNextPage}
+          isJoined={isJoined.data}
         />
       )}
+      <ClubMemberBanList
+        bannedMembers={bannedMembers}
+        fetchNextPage={fetchBannedMembersNextPage}
+        hasNextPage={hasBannedMembersNextPage}
+      />
+
       {selectedApplicant && (
         <ClubMemberApprovalDialog
           applicant={selectedApplicant}
