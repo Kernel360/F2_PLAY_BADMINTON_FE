@@ -1,5 +1,6 @@
 import type { components } from "@/schemas/schema";
 import type {
+  GetClubMemberBanListResponse,
   GetClubMemberCheckResponse,
   GetClubMemberListResponse,
   PatchClubMemberBanRequest,
@@ -25,6 +26,20 @@ export const getClubMembers = async ({
 }): Promise<GetClubMemberListResponse> => {
   return restClient.get<GetClubMemberListResponse>(
     `/clubs/${clubId}/clubMembers?page=${pageParam}&size=${size}`,
+  );
+};
+
+export const getClubBanMembers = async ({
+  pageParam,
+  clubId,
+  size,
+}: {
+  pageParam: unknown;
+  clubId: string;
+  size: number;
+}): Promise<GetClubMemberBanListResponse> => {
+  return restClient.get<GetClubMemberBanListResponse>(
+    `/clubs/${clubId}/clubMembers/ban?page=${pageParam}&size=${size}`,
   );
 };
 

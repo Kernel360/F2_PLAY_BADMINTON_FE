@@ -3,6 +3,7 @@
 import Spinner from "@/components/Spinner";
 import ClubMemberApplicants from "@/components/club/ClubMemberApplicants";
 import ClubMemberApprovalDialog from "@/components/club/ClubMemberApprovalDialog";
+import ClubMemberBanList from "@/components/club/ClubMemberBanList";
 import ClubMemberList from "@/components/club/ClubMemberList";
 import { useGetClubsApplicants } from "@/lib/api/hooks/clubHook";
 import {
@@ -49,6 +50,9 @@ function ClubMember() {
       {isJoined?.data && (
         <ClubMemberList clubId={clubId as string} isJoined={isJoined.data} />
       )}
+
+      <ClubMemberBanList clubId={clubId as string} />
+
       {selectedApplicant && (
         <ClubMemberApprovalDialog
           applicant={selectedApplicant}

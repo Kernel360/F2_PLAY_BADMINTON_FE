@@ -14,6 +14,14 @@ export type GetClubMemberCheckResponse =
 export type GetClubMemberCheckData =
   components["schemas"]["MemberIsClubMemberResponse"];
 
+export type GetClubMemberBanListResponse =
+  components["schemas"]["CommonResponseCustomPageResponseClubMemberResponse"];
+
+export type GetClubMemberBanListData =
+  components["schemas"]["CustomPageResponseClubMemberResponse"];
+
+export type GetClubMemberBanList = components["schemas"]["ClubMemberResponse"];
+
 export type PostClubMemberRequest = components["schemas"]["ClubApplyRequest"];
 
 export type PostClubMemberResponse =

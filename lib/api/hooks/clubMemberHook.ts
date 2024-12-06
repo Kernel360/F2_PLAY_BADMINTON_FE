@@ -16,6 +16,7 @@ import type {
 } from "@/types/clubMemberTypes";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  getClubBanMembers,
   getClubMembers,
   getClubMembersCheck,
   patchClubMembersBan,
@@ -31,6 +32,14 @@ export const useGetClubMembers = (clubId: string, size: number) => {
   return useInfiniteQueryReturnFlattenData<GetClubMemberList>(
     ["clubMembers"],
     ({ pageParam }) => getClubMembers({ pageParam, clubId, size }),
+    0,
+  );
+};
+
+export const useGetClubBanMembers = (clubId: string, size: number) => {
+  return useInfiniteQueryReturnFlattenData<GetClubMemberList>(
+    ["clubBanMembers"],
+    ({ pageParam }) => getClubBanMembers({ pageParam, clubId, size }),
     0,
   );
 };
@@ -71,6 +80,7 @@ export const usePatchClubMembersRole = (
 
   const onSuccessCallback = () => {
     queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
+    queryClient.invalidateQueries({ queryKey: ["clubBanMembers"] });
     onSuccess();
   };
 
