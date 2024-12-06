@@ -69,6 +69,8 @@ export default function Scoreboard(props: ScoreboardProps) {
     }
   }, [scoreData]);
 
+  console.log(scoreData);
+
   const { mutate: postSetScore } = usePostSetScore(
     clubId,
     leagueId,
@@ -76,7 +78,7 @@ export default function Scoreboard(props: ScoreboardProps) {
     currentSetNumber,
   );
 
-  const { mutate: patchSetScore } = usePatchSetScore(
+  const { mutate: patchSetScore, isPending } = usePatchSetScore(
     clubId,
     leagueId,
     matchId,
@@ -84,14 +86,12 @@ export default function Scoreboard(props: ScoreboardProps) {
   );
 
   const updateScore = (key: "score1" | "score2", increment: number) => {
-    setScore((prev) => {
-      const updatedScore = {
-        ...prev,
-        [key]: Math.max(0, prev[key] + increment),
-      };
-      patchSetScore(updatedScore);
-      return updatedScore;
-    });
+    const updatedScore = {
+      ...score,
+      [key]: Math.max(0, score[key] + increment),
+    };
+
+    patchSetScore(updatedScore);
   };
 
   const postNextSet = () => {
@@ -107,7 +107,7 @@ export default function Scoreboard(props: ScoreboardProps) {
       score2: Math.min(Math.max(Number(newPlayer2Score), 0), 30),
     };
 
-    setScore(updatedScore);
+    // setScore(updatedScore);
     patchSetScore(updatedScore);
     setIsEditing(false);
   };
