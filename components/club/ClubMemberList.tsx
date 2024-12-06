@@ -68,9 +68,9 @@ function ClubMemberList({ clubId, isJoined }: MemberListProps) {
           <Table className="relative">
             <TableHeader className="sticky top-0">
               <TableRow className="bg-white hover:bg-white">
-                <TableHead className="text-center">회원</TableHead>
-                <TableHead className="text-center">티어</TableHead>
-                <TableHead className="text-center">역할</TableHead>
+                <TableHead className="text-center w-[150px]">회원</TableHead>
+                <TableHead className="text-center w-[100px]">티어</TableHead>
+                <TableHead className="text-center w-[120px]">역할</TableHead>
                 <TableHead className="text-center">전적</TableHead>
                 <TableHead className="text-center"> </TableHead>
                 <TableHead className="text-center"> </TableHead>

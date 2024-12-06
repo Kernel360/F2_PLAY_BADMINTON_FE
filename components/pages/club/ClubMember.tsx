@@ -19,9 +19,7 @@ function ClubMember() {
   const { data: isJoined, isLoading: isJoinedLoading } = useGetClubMembersCheck(
     clubId as string,
   );
-  const { data: applicants } = useGetClubsApplicants(clubId as string, {
-    enabled: isJoined?.data?.role === "ROLE_OWNER",
-  });
+
   const [selectedApplicant, setSelectedApplicant] =
     useState<GetClubApplicants | null>(null);
 
@@ -33,18 +31,21 @@ function ClubMember() {
     setSelectedApplicant(null);
   };
 
-  // if (membersLoading || isJoinedLoading) {
-  //   return <Spinner />;
-  // }
+  if (isJoinedLoading) {
+    <div className="flex justify-center items-center min-h-screen">
+      <Spinner />
+    </div>;
+  }
 
   return (
     <div className="flex flex-col gap-6">
-      {/* {applicants && (
+      {isJoined?.data?.role === "ROLE_OWNER" && (
         <ClubMemberApplicants
-          applicants={applicants}
+          role={isJoined?.data?.role}
+          clubId={clubId as string}
           onOpenModal={handleModalOpen}
         />
-      )} */}
+      )}
       {isJoined?.data && (
         <ClubMemberList clubId={clubId as string} isJoined={isJoined.data} />
       )}

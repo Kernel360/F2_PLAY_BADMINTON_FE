@@ -116,11 +116,13 @@ export const usePatchClubs = (clubId: string, onSuccess: () => void) => {
 
 export const useGetClubsApplicants = (
   clubId: string,
+  size: number,
   options?: { enabled?: boolean },
 ) => {
-  return useInfiniteQueryReturnFlattenData<GetClubApplicantsData>(
-    ["clubsApplicants"],
-    () => getClubsApplicants(clubId),
+  return useInfiniteQueryReturnFlattenData<GetClubApplicants>(
+    ["clubsApplicants", size],
+    ({ pageParam }) => getClubsApplicants(clubId, pageParam, size),
+    0,
     options,
   );
 };

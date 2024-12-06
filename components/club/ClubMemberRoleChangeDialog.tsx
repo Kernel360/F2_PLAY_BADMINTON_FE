@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { usePatchClubMembersRole } from "@/lib/api/hooks/clubMemberHook";
-import type { MemberRole } from "@/types/memberTypes";
+import type { MemberRole } from "@/types/commonTypes";
 import React, { useState } from "react";
 
 interface ClubMemberRoleChangeDialogProps {
