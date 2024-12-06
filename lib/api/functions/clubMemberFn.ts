@@ -1,4 +1,3 @@
-import type { components } from "@/schemas/schema";
 import type {
   GetClubMemberBanListResponse,
   GetClubMemberCheckResponse,

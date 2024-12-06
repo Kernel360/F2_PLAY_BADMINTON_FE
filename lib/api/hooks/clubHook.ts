@@ -15,10 +15,8 @@ import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   ClubCardResponse,
   GetClubApplicants,
-  GetClubApplicantsData,
   GetClubDetailData,
   GetClubList,
-  GetClubListResponse,
   PatchClubData,
   PatchClubRequest,
   PostClubData,
@@ -103,7 +101,7 @@ export const usePatchClubs = (clubId: string, onSuccess: () => void) => {
     patchClubs(clubUpdateData, clubId);
 
   const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["clubList"] });
+    queryClient.invalidateQueries({ queryKey: ["clubList", clubId] });
     queryClient.invalidateQueries({ queryKey: ["clubsDataById", clubId] });
     onSuccess();
   };
@@ -120,7 +118,7 @@ export const useGetClubsApplicants = (
   options?: { enabled?: boolean },
 ) => {
   return useInfiniteQueryReturnFlattenData<GetClubApplicants>(
-    ["clubsApplicants", size],
+    ["clubsApplicants", clubId, size],
     ({ pageParam }) => getClubsApplicants(clubId, pageParam, size),
     0,
     options,

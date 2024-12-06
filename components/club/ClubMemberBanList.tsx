@@ -23,8 +23,12 @@ import {
   useGetClubBanMembers,
   useGetClubMembers,
 } from "@/lib/api/hooks/clubMemberHook";
-import type { GetClubMemberCheckData } from "@/types/clubMemberTypes";
+import type {
+  GetClubMemberCheckData,
+  GetClubMemberList,
+} from "@/types/clubMemberTypes";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
+import { format } from "date-fns";
 import { ScrollArea } from "../ui/scroll-area";
 
 const changeRoleWord = (role: string) => {
@@ -46,18 +50,17 @@ const changeRoleWord = (role: string) => {
   }
 };
 
-interface MemberBanListProps {
-  clubId: string;
+interface ClubMemberBanListProps {
+  bannedMembers: GetClubMemberList[];
+  fetchNextPage: () => void;
+  hasNextPage: boolean;
 }
 
-function ClubMemberBanList({ clubId }: MemberBanListProps) {
-  const {
-    data: members,
-    isLoading: membersLoading,
-    hasNextPage,
-    fetchNextPage,
-  } = useGetClubBanMembers(clubId as string, 9);
-
+function ClubMemberBanList({
+  bannedMembers,
+  fetchNextPage,
+  hasNextPage,
+}: ClubMemberBanListProps) {
   return (
     <Card className="shadow-md">
       <CardHeader>
@@ -76,66 +79,59 @@ function ClubMemberBanList({ clubId }: MemberBanListProps) {
                 <TableHead className="text-center w-[243px]">전적</TableHead>
                 <TableHead className="text-center"> </TableHead>
                 <TableHead className="text-center"> </TableHead>
-                <TableHead className="text-center"> </TableHead>
+                <TableHead className="text-center">제재 종료일</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="overflow-y-auto">
-              {membersLoading ? (
-                <TableRow>
-                  <TableCell colSpan={7} className="text-center">
-                    <div className="flex justify-center items-center h-40">
-                      <Spinner />
+              {bannedMembers.map((member) => (
+                <TableRow
+                  key={member.club_member_id}
+                  className="hover:bg-white items-center"
+                >
+                  <TableCell className="text-black text-center">
+                    <div className="flex gap-2 justify-start items-center">
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <p
+                              className="text-black truncate max-w-24"
+                              title={member.name}
+                            >
+                              {member.name}
+                            </p>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{member.name}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
                   </TableCell>
+                  <TableCell className="text-black text-center">
+                    {getTierWithEmojiAndText(member.tier as string)}
+                  </TableCell>
+                  <TableCell className="text-black text-center">
+                    {changeRoleWord(member.role ?? "")}
+                  </TableCell>
+                  <TableCell className="text-black text-center">
+                    {member.league_record.match_count}전 |{" "}
+                    {member.league_record.win_count}승 |{" "}
+                    {member.league_record.draw_count}무 |{" "}
+                    {member.league_record.lose_count}패
+                  </TableCell>
+                  <TableCell />
+                  <TableCell />
+                  <TableCell className="text-black text-center">
+                    {member.banned_end_date &&
+                      format(member.banned_end_date, "yyyy년 MM월 dd일")}
+                  </TableCell>
                 </TableRow>
-              ) : (
-                members.map((member) => (
-                  <TableRow
-                    key={member.club_member_id}
-                    className="hover:bg-white items-center"
-                  >
-                    <TableCell className="text-black text-center">
-                      <div className="flex gap-2 justify-start items-center">
-                        <img
-                          src={member.image}
-                          alt={member.name}
-                          className="w-8 h-8 rounded-full object-cover"
-                        />
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <p
-                                className="text-black truncate max-w-24"
-                                title={member.name}
-                              >
-                                {member.name}
-                              </p>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{member.name}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-black text-center">
-                      {getTierWithEmojiAndText(member.tier as string)}
-                    </TableCell>
-                    <TableCell className="text-black text-center">
-                      {changeRoleWord(member.role ?? "")}
-                    </TableCell>
-                    <TableCell className="text-black text-center">
-                      {member.league_record.match_count}전 |{" "}
-                      {member.league_record.win_count}승 |{" "}
-                      {member.league_record.draw_count}무 |{" "}
-                      {member.league_record.lose_count}패
-                    </TableCell>
-                    <TableCell />
-                    <TableCell />
-                    <TableCell />
-                  </TableRow>
-                ))
-              )}
+              ))}
             </TableBody>
           </Table>
           {hasNextPage && (

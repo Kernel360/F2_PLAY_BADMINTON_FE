@@ -1,7 +1,5 @@
 import useInfiniteQueryReturnFlattenData from "@/lib/api/hooks//useInfiniteQueryReturnFlattenData";
-import type { components } from "@/schemas/schema";
 import type {
-  GetClubMemberCheckData,
   GetClubMemberList,
   PatchClubMemberBanData,
   PatchClubMemberBanRequest,
@@ -30,7 +28,7 @@ import useMutationWithToast from "./useMutationWithToast";
 
 export const useGetClubMembers = (clubId: string, size: number) => {
   return useInfiniteQueryReturnFlattenData<GetClubMemberList>(
-    ["clubMembers"],
+    ["clubMembers", clubId],
     ({ pageParam }) => getClubMembers({ pageParam, clubId, size }),
     0,
   );
@@ -38,7 +36,7 @@ export const useGetClubMembers = (clubId: string, size: number) => {
 
 export const useGetClubBanMembers = (clubId: string, size: number) => {
   return useInfiniteQueryReturnFlattenData<GetClubMemberList>(
-    ["clubBanMembers"],
+    ["clubBanMembers", clubId],
     ({ pageParam }) => getClubBanMembers({ pageParam, clubId, size }),
     0,
   );
@@ -46,7 +44,7 @@ export const useGetClubBanMembers = (clubId: string, size: number) => {
 
 export const useGetClubMembersCheck = (clubId: string) => {
   return useQuery({
-    queryKey: ["clubMembersCheck"],
+    queryKey: ["clubMembersCheck", clubId],
     queryFn: () => getClubMembersCheck(clubId),
   });
 };
@@ -58,7 +56,7 @@ export const usePostClubMembers = (clubId: string, onSuccess: () => void) => {
     postClubMembers(clubId, applyReason);
 
   const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
+    queryClient.invalidateQueries({ queryKey: ["clubMembers", clubId] });
     onSuccess();
   };
 
@@ -79,8 +77,7 @@ export const usePatchClubMembersRole = (
     patchClubMembersRole(role, clubId, clubMemberId);
 
   const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
-    queryClient.invalidateQueries({ queryKey: ["clubBanMembers"] });
+    queryClient.invalidateQueries({ queryKey: ["clubMembers", clubId] });
     onSuccess();
   };
 
@@ -101,7 +98,8 @@ export const usePatchClubMembersExpel = (
     patchClubMembersExpel(expelReason, clubId, clubMemberId);
 
   const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
+    queryClient.invalidateQueries({ queryKey: ["clubMembers", clubId] });
+
     onSuccess();
   };
 
@@ -122,7 +120,8 @@ export const usePatchClubMembersBan = (
     patchClubMembersBan(ban, clubId, clubMemberId);
 
   const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
+    queryClient.invalidateQueries({ queryKey: ["clubMembers", clubId] });
+    queryClient.invalidateQueries({ queryKey: ["clubBanMembers", clubId] });
     onSuccess();
   };
 
@@ -142,8 +141,8 @@ export const usePostClubMemberApprove = (
     postClubMembersApprove(clubId, clubApplyId);
 
   const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
-    queryClient.invalidateQueries({ queryKey: ["clubsApplicants"] });
+    queryClient.invalidateQueries({ queryKey: ["clubMembers", clubId] });
+    queryClient.invalidateQueries({ queryKey: ["clubsApplicants", clubId] });
     onSuccess();
   };
 
@@ -163,8 +162,7 @@ export const usePostClubMemberReject = (
     postClubMembersReject(clubId, clubApplyId);
 
   const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["clubMembers"] });
-    queryClient.invalidateQueries({ queryKey: ["clubsApplicants"] });
+    queryClient.invalidateQueries({ queryKey: ["clubsApplicants", clubId] });
     onSuccess();
   };
 

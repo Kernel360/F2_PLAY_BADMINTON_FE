@@ -15,29 +15,22 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useGetClubsApplicants } from "@/lib/api/hooks/clubHook";
 import type { GetClubApplicants } from "@/types/clubTypes";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
 
-interface ClubMemberApplicantsProps {
-  role: string; // ROLE_OWNER, ROLE_MANAGER 등
-  clubId: string;
-  onOpenModal: (applicant: GetClubApplicants) => void;
+interface ClubMemberApplicantsListProps {
+  applicants: GetClubApplicants[];
+  fetchNextPage: () => void;
+  hasNextPage: boolean;
+  onOpenModal: (applicant: GetClubApplicants) => void; // Modal open handler
 }
 
 function ClubMemberApplicantsList({
-  role,
-  clubId,
+  applicants,
+  fetchNextPage,
+  hasNextPage,
   onOpenModal,
-}: ClubMemberApplicantsProps) {
-  const {
-    data: applicants,
-    fetchNextPage,
-    hasNextPage,
-  } = useGetClubsApplicants(clubId, 9, {
-    enabled: role === "ROLE_OWNER",
-  });
-
+}: ClubMemberApplicantsListProps) {
   return (
     <Card className="shadow-md">
       <CardHeader>
