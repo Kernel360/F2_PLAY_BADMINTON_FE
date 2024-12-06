@@ -1,3 +1,4 @@
+import useInfiniteQueryReturnFlattenData from "@/lib/api/hooks//useInfiniteQueryReturnFlattenData";
 import type { components } from "@/schemas/schema";
 import type {
   GetClubMemberCheckData,
@@ -24,11 +25,10 @@ import {
   postClubMembersApprove,
   postClubMembersReject,
 } from "../functions/clubMemberFn";
-import useInfiniteQueryWithFlattenData from "./useInfiniteQueryWithFlattenData";
 import useMutationWithToast from "./useMutationWithToast";
 
 export const useGetClubMembers = (clubId: string, size: number) => {
-  return useInfiniteQueryWithFlattenData<GetClubMemberList>(
+  return useInfiniteQueryReturnFlattenData<GetClubMemberList>(
     ["clubMembers"],
     ({ pageParam }) => getClubMembers({ pageParam, clubId, size }),
     0,

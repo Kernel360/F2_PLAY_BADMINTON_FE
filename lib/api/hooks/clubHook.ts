@@ -10,7 +10,7 @@ import {
   postClubs,
   postClubsImg,
 } from "@/lib/api/functions/clubFn";
-import useInfiniteQueryWithFlattenData from "@/lib/api/hooks/useInfiniteQueryWithFlattenData";
+import useInfiniteQueryReturnFlattenData from "@/lib/api/hooks/useInfiniteQueryReturnFlattenData";
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   ClubCardResponse,
@@ -28,7 +28,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useMutationWithToast from "./useMutationWithToast";
 
 export const useGetClubs = (size: number, sort: string) => {
-  return useInfiniteQueryWithFlattenData<GetClubList>(
+  return useInfiniteQueryReturnFlattenData<GetClubList>(
     ["clubList", size, sort],
     ({ pageParam }) => getClubs({ pageParam, size, sort }),
     0,
@@ -40,7 +40,7 @@ export const useGetSearchClubs = (
   sort: string,
   keyword: string,
 ) => {
-  return useInfiniteQueryWithFlattenData<GetClubList>(
+  return useInfiniteQueryReturnFlattenData<GetClubList>(
     ["searchClubList", size, sort, keyword],
     ({ pageParam }) => getSearchClubs({ pageParam, size, sort, keyword }),
     0,
@@ -118,7 +118,7 @@ export const useGetClubsApplicants = (
   clubId: string,
   options?: { enabled?: boolean },
 ) => {
-  return useQueryWithToast<GetClubApplicantsData>(
+  return useInfiniteQueryReturnFlattenData<GetClubApplicantsData>(
     ["clubsApplicants"],
     () => getClubsApplicants(clubId),
     options,
