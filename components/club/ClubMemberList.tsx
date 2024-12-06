@@ -71,7 +71,7 @@ function ClubMemberList({ clubId, isJoined }: MemberListProps) {
                 <TableHead className="text-center w-[150px]">회원</TableHead>
                 <TableHead className="text-center w-[100px]">티어</TableHead>
                 <TableHead className="text-center w-[120px]">역할</TableHead>
-                <TableHead className="text-center">전적</TableHead>
+                <TableHead className="text-center w-[243px]">전적</TableHead>
                 <TableHead className="text-center"> </TableHead>
                 <TableHead className="text-center"> </TableHead>
                 <TableHead className="text-center"> </TableHead>
@@ -157,18 +157,18 @@ function ClubMemberList({ clubId, isJoined }: MemberListProps) {
               )}
             </TableBody>
           </Table>
+          {hasNextPage && (
+            <div className="w-full flex justify-center items-center p-3">
+              <Button
+                type="button"
+                onClick={() => fetchNextPage()}
+                className="mt-4 px-6 py-2 font-semibold rounded-lg duration-300 shadow-md hover:shadow-lg focus:ring-2"
+              >
+                더보기
+              </Button>
+            </div>
+          )}
         </ScrollArea>
-        {hasNextPage && (
-          <div className="w-full flex justify-center items-center p-3">
-            <Button
-              type="button"
-              onClick={() => fetchNextPage()}
-              className="mt-4 px-6 py-2 font-semibold rounded-lg duration-300 shadow-md hover:shadow-lg focus:ring-2"
-            >
-              더보기
-            </Button>
-          </div>
-        )}
       </CardContent>
     </Card>
   );
