@@ -68,7 +68,7 @@ function ClubMemberExpelDialog({
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="link" className="text-gray-500">
+        <Button variant="link" className="text-gray-500 p-0 h-fit">
           회원 내보내기
         </Button>
       </DialogTrigger>

@@ -44,7 +44,7 @@ function ClubMemberRoleChangeDialog({
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="link" className="text-gray-500">
+        <Button variant="link" className="text-gray-500 p-0 h-fit">
           역할 변경
         </Button>
       </DialogTrigger>
