@@ -25,7 +25,7 @@ interface ClubMemberApplicantsProps {
   onOpenModal: (applicant: GetClubApplicants) => void;
 }
 
-function ClubMemberApplicants({
+function ClubMemberApplicantsList({
   role,
   clubId,
   onOpenModal,
@@ -132,4 +132,4 @@ function ClubMemberApplicants({
   );
 }
 
-export default ClubMemberApplicants;
+export default ClubMemberApplicantsList;

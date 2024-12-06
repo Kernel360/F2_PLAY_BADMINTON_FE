@@ -1,15 +1,11 @@
 "use client";
 
 import Spinner from "@/components/Spinner";
-import ClubMemberApplicants from "@/components/club/ClubMemberApplicants";
+import ClubMemberApplicantsList from "@/components/club/ClubMemberApplicantsList";
 import ClubMemberApprovalDialog from "@/components/club/ClubMemberApprovalDialog";
 import ClubMemberBanList from "@/components/club/ClubMemberBanList";
 import ClubMemberList from "@/components/club/ClubMemberList";
-import { useGetClubsApplicants } from "@/lib/api/hooks/clubHook";
-import {
-  useGetClubMembers,
-  useGetClubMembersCheck,
-} from "@/lib/api/hooks/clubMemberHook";
+import { useGetClubMembersCheck } from "@/lib/api/hooks/clubMemberHook";
 import type { GetClubApplicants } from "@/types/clubTypes";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -41,7 +37,7 @@ function ClubMember() {
   return (
     <div className="flex flex-col gap-6">
       {isJoined?.data?.role === "ROLE_OWNER" && (
-        <ClubMemberApplicants
+        <ClubMemberApplicantsList
           role={isJoined?.data?.role}
           clubId={clubId as string}
           onOpenModal={handleModalOpen}
