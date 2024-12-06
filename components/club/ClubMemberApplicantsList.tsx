@@ -16,7 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import type { GetClubApplicants } from "@/types/clubTypes";
-import { getTierWithEmojiAndText } from "@/utils/getTier";
+import { getTierWithEmoji } from "@/utils/getTier";
 
 interface ClubMemberApplicantsListProps {
   applicants: GetClubApplicants[];
@@ -46,11 +46,11 @@ function ClubMemberApplicantsList({
                 <TableRow className="bg-white hover:bg-white">
                   <TableHead className="w-[150px] text-center">회원</TableHead>
                   <TableHead className="w-[100px] text-center">티어</TableHead>
-                  <TableHead className="text-center"> </TableHead>
-                  <TableHead className="text-center"> </TableHead>
-                  <TableHead className="text-center"> </TableHead>
-                  <TableHead className="text-center"> </TableHead>
-                  <TableHead className="w-[120px] text-center"> </TableHead>
+                  <TableHead className="hidden md:table-cell text-center" />
+                  <TableHead className="hidden lg:table-cell text-center" />
+                  <TableHead className="hidden lg:table-cell text-center" />
+                  <TableHead className="hidden xl:table-cell text-center" />
+                  <TableHead className="w-[120px] text-center" />
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -84,12 +84,12 @@ function ClubMemberApplicantsList({
                       </div>
                     </TableCell>
                     <TableCell className="text-black text-center">
-                      {getTierWithEmojiAndText(applicant.tier)}
+                      {getTierWithEmoji(applicant.tier)}
                     </TableCell>
-                    <TableCell> </TableCell>
-                    <TableCell> </TableCell>
-                    <TableCell> </TableCell>
-                    <TableCell> </TableCell>
+                    <TableCell className="hidden md:table-cell" />
+                    <TableCell className="hidden lg:table-cell" />
+                    <TableCell className="hidden lg:table-cell" />
+                    <TableCell className="hidden xl:table-cell" />
                     <TableCell className="text-center">
                       <Button
                         variant="link"

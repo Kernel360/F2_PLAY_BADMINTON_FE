@@ -19,15 +19,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  useGetClubBanMembers,
-  useGetClubMembers,
-} from "@/lib/api/hooks/clubMemberHook";
-import type {
-  GetClubMemberCheckData,
-  GetClubMemberList,
-} from "@/types/clubMemberTypes";
-import { getTierWithEmojiAndText } from "@/utils/getTier";
+import type { GetClubMemberList } from "@/types/clubMemberTypes";
+import { getTierWithEmoji } from "@/utils/getTier";
 import { format } from "date-fns";
 import { ScrollArea } from "../ui/scroll-area";
 
@@ -73,16 +66,18 @@ function ClubMemberBanList({
           <Table className="relative">
             <TableHeader className="sticky top-0">
               <TableRow className="bg-white hover:bg-white">
-                <TableHead className="text-center w-[150px]">회원</TableHead>
-                <TableHead className="text-center w-[100px]">티어</TableHead>
-                <TableHead className="text-center w-[120px]">역할</TableHead>
-                <TableHead className="text-center w-[243px]">전적</TableHead>
-                <TableHead className="text-center"> </TableHead>
-                <TableHead className="text-center"> </TableHead>
-                <TableHead className="text-center">제재 종료일</TableHead>
+                <TableHead className="w-[150px] text-center">회원</TableHead>
+                <TableHead className="w-[100px] text-center">티어</TableHead>
+                <TableHead className="w-[120px] text-center">역할</TableHead>
+                <TableHead className="hidden lg:table-cell text-center w-[243px]">
+                  전적
+                </TableHead>
+                <TableHead className="hidden xl:table-cell text-center">
+                  제재 종료일
+                </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="overflow-y-auto">
+            <TableBody>
               {bannedMembers.map((member) => (
                 <TableRow
                   key={member.club_member_id}
@@ -112,21 +107,23 @@ function ClubMemberBanList({
                       </TooltipProvider>
                     </div>
                   </TableCell>
+
                   <TableCell className="text-black text-center">
-                    {getTierWithEmojiAndText(member.tier as string)}
+                    {getTierWithEmoji(member.tier as string)}
                   </TableCell>
+
                   <TableCell className="text-black text-center">
                     {changeRoleWord(member.role ?? "")}
                   </TableCell>
-                  <TableCell className="text-black text-center">
+
+                  <TableCell className="hidden lg:table-cell text-black text-center">
                     {member.league_record.match_count}전 |{" "}
                     {member.league_record.win_count}승 |{" "}
                     {member.league_record.draw_count}무 |{" "}
                     {member.league_record.lose_count}패
                   </TableCell>
-                  <TableCell />
-                  <TableCell />
-                  <TableCell className="text-black text-center">
+
+                  <TableCell className="hidden xl:table-cell text-black text-center">
                     {member.banned_end_date &&
                       format(member.banned_end_date, "yyyy년 MM월 dd일")}
                   </TableCell>
@@ -134,6 +131,7 @@ function ClubMemberBanList({
               ))}
             </TableBody>
           </Table>
+          {/* 페이지네이션 */}
           {hasNextPage && (
             <div className="w-full flex justify-center items-center p-3">
               <Button
