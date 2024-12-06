@@ -30,7 +30,11 @@ function ClubMemberApplicants({
   clubId,
   onOpenModal,
 }: ClubMemberApplicantsProps) {
-  const { data: applicants } = useGetClubsApplicants(clubId, 9, {
+  const {
+    data: applicants,
+    fetchNextPage,
+    hasNextPage,
+  } = useGetClubsApplicants(clubId, 9, {
     enabled: role === "ROLE_OWNER",
   });
 
@@ -45,7 +49,7 @@ function ClubMemberApplicants({
         {applicants && applicants.length > 0 ? (
           <ScrollArea className="h-64">
             <Table className="relative">
-              <TableHeader>
+              <TableHeader className="sticky top-0">
                 <TableRow className="bg-white hover:bg-white">
                   <TableHead className="w-[150px] text-center">회원</TableHead>
                   <TableHead className="w-[100px] text-center">티어</TableHead>
@@ -106,6 +110,17 @@ function ClubMemberApplicants({
                 ))}
               </TableBody>
             </Table>
+            {hasNextPage && (
+              <div className="w-full flex justify-center items-center p-3">
+                <Button
+                  type="button"
+                  onClick={() => fetchNextPage()}
+                  className="mt-4 px-6 py-2 font-semibold rounded-lg duration-300 shadow-md hover:shadow-lg focus:ring-2"
+                >
+                  더보기
+                </Button>
+              </div>
+            )}
           </ScrollArea>
         ) : (
           <div className="min-h-[200px] flex justify-center items-center text-center text-gray-500 mt-4">
