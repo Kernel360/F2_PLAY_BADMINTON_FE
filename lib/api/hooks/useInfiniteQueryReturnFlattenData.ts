@@ -1,12 +1,17 @@
 import type { CommonPaginationResponse } from "@/types/commonTypes";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const useInfiniteQueryWithFlattenData = <TData>(
+interface useInfiniteQueryReturnFlattenDataProps {
+  enabled?: boolean; // enabled 옵션을 옵셔널로 추가
+}
+
+const useInfiniteQueryReturnFlattenData = <TData>(
   queryKey: (string | number)[],
   queryFn: ({
     pageParam,
   }: { pageParam: unknown }) => Promise<CommonPaginationResponse<TData>>,
   initialPageParam: number,
+  options?: useInfiniteQueryReturnFlattenDataProps,
 ) => {
   const { data, isLoading, fetchNextPage, hasNextPage } = useInfiniteQuery<
     CommonPaginationResponse<TData>
@@ -17,9 +22,8 @@ const useInfiniteQueryWithFlattenData = <TData>(
     getNextPageParam: (lastPage, pages) => {
       return !lastPage?.data?.last ? pages.length : null;
     },
+    enabled: options?.enabled ?? true,
   });
-
-  console.log(data);
 
   const flattenData = data
     ? data.pages.flatMap((page) => {
@@ -30,4 +34,4 @@ const useInfiniteQueryWithFlattenData = <TData>(
   return { data: flattenData, isLoading, fetchNextPage, hasNextPage };
 };
 
-export default useInfiniteQueryWithFlattenData;
+export default useInfiniteQueryReturnFlattenData;

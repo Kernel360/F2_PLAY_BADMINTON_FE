@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { usePatchClubMembersRole } from "@/lib/api/hooks/clubMemberHook";
-import type { MemberRole } from "@/types/memberTypes";
+import type { MemberRole } from "@/types/commonTypes";
 import React, { useState } from "react";
 
 interface ClubMemberRoleChangeDialogProps {
@@ -44,7 +44,7 @@ function ClubMemberRoleChangeDialog({
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="link" className="text-gray-500">
+        <Button variant="link" className="text-gray-500 p-0 h-fit">
           역할 변경
         </Button>
       </DialogTrigger>

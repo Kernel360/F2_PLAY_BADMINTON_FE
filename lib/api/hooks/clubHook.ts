@@ -10,15 +10,13 @@ import {
   postClubs,
   postClubsImg,
 } from "@/lib/api/functions/clubFn";
-import useInfiniteQueryWithFlattenData from "@/lib/api/hooks/useInfiniteQueryWithFlattenData";
+import useInfiniteQueryReturnFlattenData from "@/lib/api/hooks/useInfiniteQueryReturnFlattenData";
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   ClubCardResponse,
   GetClubApplicants,
-  GetClubApplicantsData,
   GetClubDetailData,
   GetClubList,
-  GetClubListResponse,
   PatchClubData,
   PatchClubRequest,
   PostClubData,
@@ -28,7 +26,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useMutationWithToast from "./useMutationWithToast";
 
 export const useGetClubs = (size: number, sort: string) => {
-  return useInfiniteQueryWithFlattenData<GetClubList>(
+  return useInfiniteQueryReturnFlattenData<GetClubList>(
     ["clubList", size, sort],
     ({ pageParam }) => getClubs({ pageParam, size, sort }),
     0,
@@ -40,7 +38,7 @@ export const useGetSearchClubs = (
   sort: string,
   keyword: string,
 ) => {
-  return useInfiniteQueryWithFlattenData<GetClubList>(
+  return useInfiniteQueryReturnFlattenData<GetClubList>(
     ["searchClubList", size, sort, keyword],
     ({ pageParam }) => getSearchClubs({ pageParam, size, sort, keyword }),
     0,
@@ -103,7 +101,7 @@ export const usePatchClubs = (clubId: string, onSuccess: () => void) => {
     patchClubs(clubUpdateData, clubId);
 
   const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["clubList"] });
+    queryClient.invalidateQueries({ queryKey: ["clubList", clubId] });
     queryClient.invalidateQueries({ queryKey: ["clubsDataById", clubId] });
     onSuccess();
   };
@@ -116,11 +114,13 @@ export const usePatchClubs = (clubId: string, onSuccess: () => void) => {
 
 export const useGetClubsApplicants = (
   clubId: string,
+  size: number,
   options?: { enabled?: boolean },
 ) => {
-  return useQueryWithToast<GetClubApplicantsData>(
-    ["clubsApplicants"],
-    () => getClubsApplicants(clubId),
+  return useInfiniteQueryReturnFlattenData<GetClubApplicants>(
+    ["clubsApplicants", clubId, size],
+    ({ pageParam }) => getClubsApplicants(clubId, pageParam, size),
+    0,
     options,
   );
 };
