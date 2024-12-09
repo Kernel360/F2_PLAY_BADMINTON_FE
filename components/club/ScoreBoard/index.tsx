@@ -86,6 +86,8 @@ export default function Scoreboard(props: ScoreboardProps) {
   );
 
   const updateScore = (key: "score1" | "score2", increment: number) => {
+    if (isLoading || isPending) return;
+
     const updatedScore = {
       ...score,
       [key]: Math.max(0, score[key] + increment),
@@ -166,6 +168,7 @@ export default function Scoreboard(props: ScoreboardProps) {
             isEditing={isEditing}
             inputRef={inputRefPlayer1}
             onScoreUpdate={() => updateScore("score1", 1)}
+            disabled={isLoading || isPending}
           />
           <PlayerScore
             player={player2}
@@ -173,6 +176,7 @@ export default function Scoreboard(props: ScoreboardProps) {
             isEditing={isEditing}
             inputRef={inputRefPlayer2}
             onScoreUpdate={() => updateScore("score2", 1)}
+            disabled={isLoading || isPending}
           />
         </div>
 
