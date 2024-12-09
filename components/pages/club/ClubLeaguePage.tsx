@@ -28,7 +28,7 @@ function ClubLeaguePage() {
   }, [month]);
 
   return (
-    <div className="w-full flex">
+    <div className="w-full flex py-5">
       <Calendar
         mode="single"
         showOutsideDays={false}
