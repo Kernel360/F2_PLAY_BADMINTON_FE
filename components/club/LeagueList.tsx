@@ -1,5 +1,6 @@
 import IconButton from "@/components/ui/IconButton";
 import { Text } from "@/components/ui/Text";
+import { useGetClubMembersCheck } from "@/lib/api/hooks/clubMemberHook";
 import { useGetDateLeagues } from "@/lib/api/hooks/leagueHook";
 import type { GetLeagueDateData } from "@/types/leagueTypes";
 import { getLeagueType } from "@/utils/getLeagueType";
@@ -9,6 +10,7 @@ import { CalendarPlus } from "lucide-react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 function ScheduleList() {
   const date = useSearchParams().get("date");
@@ -16,10 +18,17 @@ function ScheduleList() {
   const selectedDate = date === null ? String(new Date()) : date;
   const { clubId } = useParams();
 
-  const { data: schedules, refetch: schedulesRefetch } = useGetDateLeagues(
+  const {
+    data: schedules,
+    isLoading,
+    refetch: schedulesRefetch,
+  } = useGetDateLeagues(
     clubId as string,
     format(selectedDate as string, "yyyy-MM-dd"),
   );
+
+  const { data: isJoined } = useGetClubMembersCheck(clubId as string);
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     schedulesRefetch();
@@ -67,6 +76,32 @@ function ScheduleList() {
         </Link>
       ));
     }
+    if (isLoading) {
+      return (
+        <div className="space-y-4">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div
+              key={`leagueSkeleton${
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                index
+              }`}
+              className="bg-white py-4 px-6 rounded-xl border border-solid hover:shadow-lg transform transition-transform duration-300 cursor-pointer"
+            >
+              <Skeleton className="h-6 w-3/4" />
+              <div className="flex justify-between items-center mt-2">
+                <Skeleton className="h-6 w-12 rounded-full" />
+                <Skeleton className="h-6 w-16 rounded-full" />
+              </div>
+              <div className="flex justify-between items-center mt-4">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-12" />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     return (
       <div className="text-center text-gray-500 py-10">
         <p className="text-lg">아직 등록된 스케줄이 없습니다</p>
@@ -76,16 +111,18 @@ function ScheduleList() {
 
   return (
     <div className="w-full px-6 py-3 bg-white relative">
-      <Link href={`/club/${clubId}/league/create`}>
-        <IconButton
-          size="sm"
-          color="transparent"
-          radius="round"
-          className="group hover:bg-primary hover:text-white absolute -right-4 -top-4"
-        >
-          <CalendarPlus className="text-primary group-hover:text-white" />
-        </IconButton>
-      </Link>
+      {isJoined?.data?.is_club_member && (
+        <Link href={`/club/${clubId}/league/create`}>
+          <IconButton
+            size="sm"
+            color="transparent"
+            radius="round"
+            className="group hover:bg-primary hover:text-white absolute -right-4 -top-4"
+          >
+            <CalendarPlus className="text-primary group-hover:text-white" />
+          </IconButton>
+        </Link>
+      )}
       <div className="mb-5 text-center">
         <h1 className="text-2xl font-extrabold text-gray-800">
           {format(selectedDate as string, "yyyy년 MM월 dd일")}
