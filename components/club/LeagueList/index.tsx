@@ -22,7 +22,7 @@ function ScheduleList() {
             size="sm"
             color="transparent"
             radius="round"
-            className="group hover:bg-primary hover:text-white absolute -right-4 -top-4"
+            className="group hover:bg-primary hover:text-white absolute lg:-right-4 lg:-top-4 right-0"
           >
             <CalendarPlus className="text-primary group-hover:text-white" />
           </IconButton>

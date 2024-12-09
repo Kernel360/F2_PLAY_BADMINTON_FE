@@ -78,7 +78,7 @@ function ClubLeaguePage() {
       </div>
 
       {/* 리스트 영역 */}
-      <div className="flex-1 basis-full lg:basis-1/2 h-full bg-white p-4 rounded-lg overflow-y-auto">
+      <div className="w-full flex-1 basis-full lg:basis-1/2 h-full bg-white lg:p-4 rounded-lg overflow-y-auto">
         <LeagueList />
       </div>
     </div>
