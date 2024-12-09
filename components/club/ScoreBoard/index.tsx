@@ -1,7 +1,5 @@
 "use client";
 
-// https://github.com/TanStack/query/discussions/3132
-
 import OverlayMessage from "@/components/club/ScoreBoard/OverlayMessage";
 import PlayerScore from "@/components/club/ScoreBoard/PlayerScore";
 import { Skeleton } from "@/components/ui/skeleton";
