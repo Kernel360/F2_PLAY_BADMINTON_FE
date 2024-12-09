@@ -35,7 +35,6 @@ function ClubLeaguePage() {
         selected={selectedDate}
         onSelect={(selectedDate) => {
           if (selectedDate) {
-            // setDate(selectedDate);
             router.push(
               `/club/${clubId}/league?date=${format(selectedDate, "yyyy-MM-dd")}`,
             );
