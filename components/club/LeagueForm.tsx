@@ -62,15 +62,21 @@ interface LeagueFormProps {
 
 const leagueFormSchema = z.object({
   league_name: z
-    .string()
+    .string({
+      required_error: "경기 이름을 입력해주세요",
+    })
     .min(2, { message: "경기 이름은 최소 2글자 이상이어야 합니다." })
     .max(20, { message: "경기 이름은 최대 20글자 이하로 입력해주세요." }),
   description: z
-    .string()
+    .string({
+      required_error: "경기 설명을 입력해주세요",
+    })
     .min(2, "경기 설명은 최소 2글자 이상이어야 합니다.")
     .max(1000, "경기 설명은 최대 1000글자 이하로 입력해주세요."),
   full_address: z
-    .string()
+    .string({
+      required_error: "경기 장소를 입력해주세요",
+    })
     .min(2, "경기 장소는 최소 2글자 이상이어야 합니다.")
     .max(100, "경기 장소는 최대 100글자 이하로 입력해주세요."),
   tier_limit: z.enum(["BRONZE", "SILVER", "GOLD"], {
@@ -79,16 +85,24 @@ const leagueFormSchema = z.object({
   match_type: z.enum(["SINGLES", "DOUBLES"], {
     required_error: "경기 타입을 선택해주세요.",
   }),
-  league_at: z.string().refine((date) => new Date(date) > new Date(), {
-    message: "경기 시작 날짜는 현재 시간보다 뒤에 설정되어야 합니다.",
-  }),
+  league_at: z
+    .string({
+      required_error: "경기 시작 날짜를 입력해주세요",
+    })
+    .refine((date) => new Date(date) > new Date(), {
+      message: "경기 시작 날짜는 현재 시간보다 뒤에 설정되어야 합니다.",
+    }),
   recruiting_closed_at: z
-    .string()
+    .string({
+      required_error: "모집 마감 날짜를 입력해주세요",
+    })
     .refine((date) => new Date(date) > new Date(), {
       message: "모집 마감 날짜는 현재 시간보다 뒤에 설정되어야 합니다.",
     }),
   player_limit_count: z
-    .number()
+    .number({
+      required_error: "참가 인원을 입력해주세요",
+    })
     .int("참가 인원은 정수여야 합니다.")
     .min(2)
     .max(100),
@@ -292,6 +306,9 @@ function LeagueForm(props: LeagueFormProps) {
                   </Popover>
                 </FormControl>
                 <FormMessage />
+                <p className="text-xs text-gray-500">
+                  경기 시간은 수정할 수 없습니다
+                </p>
               </FormItem>
             )}
           />
@@ -372,6 +389,9 @@ function LeagueForm(props: LeagueFormProps) {
                   </Select>
                 </FormControl>
                 <FormMessage />
+                <p className="text-xs text-gray-500">
+                  지원 가능 티어는 수정할 수 없습니다
+                </p>
               </FormItem>
             )}
           />
@@ -420,6 +440,9 @@ function LeagueForm(props: LeagueFormProps) {
                   />
                 </FormControl>
                 <FormMessage />
+                <p className="text-xs text-gray-500">
+                  경기 장소는 수정할 수 없습니다
+                </p>
               </FormItem>
             )}
           />
@@ -467,6 +490,9 @@ function LeagueForm(props: LeagueFormProps) {
                   </Popover>
                 </FormControl>
                 <FormMessage />
+                <p className="text-xs text-gray-500">
+                  모집 마감 날짜는 수정할 수 없습니다
+                </p>
               </FormItem>
             )}
           />
