@@ -40,9 +40,8 @@ function DayCell({ date, displayMonth, scheduleList }: DayCellProps) {
   const remainingSchedules = dayScheduleList.length - maxVisibleSchedules;
   const selectedColorIndex = scheduleList?.length % colors.length;
 
-  // TODO(Yejin0O0): 티어, 모집 마감 여부도 알 수 있었으면 좋겠다는 백엔드 의견 있었음
   return (
-    <div className="w-full h-full flex flex-col justify-between p-1">
+    <div className="w-full h-full flex flex-col justify-between p-[3%] sm:p-[2%]">
       <div className="text-center text-sm font-medium mb-1">
         <DayContent
           displayMonth={displayMonth}
@@ -54,9 +53,8 @@ function DayCell({ date, displayMonth, scheduleList }: DayCellProps) {
       {visibleSchedules.length > 0 && (
         <div className="w-full space-y-[2px] overflow-hidden">
           {visibleSchedules.map((item) => {
-            // league_id에 따라 고유한 색상을 선택
             const colorIndex = item.league_id
-              ? item.league_id % colors.length
+              ? (item.league_id + selectedColorIndex) % colors.length
               : 0;
             return (
               <div
