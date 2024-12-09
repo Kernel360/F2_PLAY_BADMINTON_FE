@@ -7,17 +7,20 @@ import { useGetMonthLeagues } from "@/lib/api/hooks/leagueHook";
 import type { GetLeagueMonthData } from "@/types/leagueTypes";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-function ClubLeague() {
-  const [date, setDate] = useState<Date>(new Date());
+function ClubLeaguePage() {
   const [month, setMonth] = useState<string>(format(new Date(), "yyyy-MM"));
   const { clubId } = useParams();
   const { data: leagueList, refetch } = useGetMonthLeagues(
     clubId as string,
     month,
   );
+  const router = useRouter();
+  const date = useSearchParams().get("date");
+
+  const selectedDate = date === null ? new Date() : new Date(date);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -29,10 +32,13 @@ function ClubLeague() {
       <Calendar
         mode="single"
         showOutsideDays={false}
-        selected={date}
+        selected={selectedDate}
         onSelect={(selectedDate) => {
           if (selectedDate) {
-            setDate(selectedDate);
+            // setDate(selectedDate);
+            router.push(
+              `/club/${clubId}/league?date=${format(selectedDate, "yyyy-MM-dd")}`,
+            );
           }
         }}
         onMonthChange={(newMonth) => {
@@ -61,9 +67,9 @@ function ClubLeague() {
           ),
         }}
       />
-      <LeagueList selectedDate={date} />
+      <LeagueList />
     </div>
   );
 }
 
-export default ClubLeague;
+export default ClubLeaguePage;

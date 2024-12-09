@@ -1,27 +1,24 @@
 import IconButton from "@/components/ui/IconButton";
 import { Text } from "@/components/ui/Text";
 import { useGetDateLeagues } from "@/lib/api/hooks/leagueHook";
-// import { useGetMyInfo } from "@/lib/api/hooks/memberHook";
-import type { components } from "@/schemas/schema";
 import type { GetLeagueDateData } from "@/types/leagueTypes";
 import { getLeagueType } from "@/utils/getLeagueType";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
 import { CalendarPlus } from "lucide-react";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-interface ScheduleListProps {
-  selectedDate: Date;
-}
+function ScheduleList() {
+  const date = useSearchParams().get("date");
 
-function ScheduleList(props: ScheduleListProps) {
-  const { selectedDate } = props;
+  const selectedDate = date === null ? String(new Date()) : date;
   const { clubId } = useParams();
+
   const { data: schedules, refetch: schedulesRefetch } = useGetDateLeagues(
     clubId as string,
-    format(selectedDate, "yyyy-MM-dd"),
+    format(selectedDate as string, "yyyy-MM-dd"),
   );
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -91,7 +88,7 @@ function ScheduleList(props: ScheduleListProps) {
       </Link>
       <div className="mb-5 text-center">
         <h1 className="text-2xl font-extrabold text-gray-800">
-          {format(selectedDate, "yyyy년 MM월 dd일")}
+          {format(selectedDate as string, "yyyy년 MM월 dd일")}
         </h1>
       </div>
 
