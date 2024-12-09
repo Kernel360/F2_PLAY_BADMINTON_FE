@@ -1,5 +1,7 @@
 "use client";
 
+import OverlayMessage from "@/components/club/ScoreBoard/OverlayMessage";
+import PlayerScore from "@/components/club/ScoreBoard/PlayerScore";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   useGetSetScore,
@@ -10,8 +12,6 @@ import {
 import type { MatchStatusType } from "@/types/matchTypes";
 import { Maximize2, Minimize2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import OverlayMessage from "./OverlayMessage";
-import PlayerScore from "./PlayerScore";
 
 interface ScoreboardProps {
   clubId: string;
@@ -76,7 +76,7 @@ export default function Scoreboard(props: ScoreboardProps) {
     currentSetNumber,
   );
 
-  const { mutate: patchSetScore } = usePatchSetScore(
+  const { mutate: patchSetScore, isPending } = usePatchSetScore(
     clubId,
     leagueId,
     matchId,
@@ -84,14 +84,14 @@ export default function Scoreboard(props: ScoreboardProps) {
   );
 
   const updateScore = (key: "score1" | "score2", increment: number) => {
-    setScore((prev) => {
-      const updatedScore = {
-        ...prev,
-        [key]: Math.max(0, prev[key] + increment),
-      };
-      patchSetScore(updatedScore);
-      return updatedScore;
-    });
+    if (isLoading || isPending) return;
+
+    const updatedScore = {
+      ...score,
+      [key]: Math.max(0, score[key] + increment),
+    };
+
+    patchSetScore(updatedScore);
   };
 
   const postNextSet = () => {
@@ -107,7 +107,7 @@ export default function Scoreboard(props: ScoreboardProps) {
       score2: Math.min(Math.max(Number(newPlayer2Score), 0), 30),
     };
 
-    setScore(updatedScore);
+    // setScore(updatedScore);
     patchSetScore(updatedScore);
     setIsEditing(false);
   };
@@ -142,11 +142,6 @@ export default function Scoreboard(props: ScoreboardProps) {
     <div
       ref={scoreboardRef}
       className="bg-gradient-to-br from-gray-800 to-gray-900 flex flex-col items-center justify-center text-white shadow-2xl rounded-lg p-6 space-y-6 relative transition-all duration-300"
-      // style={{
-      //   width: isFullscreen ? "95vw" : "100%",
-      //   height: isFullscreen ? "95vh" : "auto",
-      //   maxWidth: "600px",
-      // }}
     >
       <OverlayMessage
         matchStatus={matchStatus}
@@ -158,7 +153,7 @@ export default function Scoreboard(props: ScoreboardProps) {
           onClick={toggleFullscreen}
           className="absolute top-4 right-4 bg-none hover:bg-none text-whiterounded-lg hover:scale-105"
         >
-          {isFullscreen ? <Maximize2 size={15} /> : <Minimize2 size={15} />}
+          {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
         </button>
 
         <div className="text-2xl font-extrabold tracking-wide text-gray-200">
@@ -171,6 +166,7 @@ export default function Scoreboard(props: ScoreboardProps) {
             isEditing={isEditing}
             inputRef={inputRefPlayer1}
             onScoreUpdate={() => updateScore("score1", 1)}
+            disabled={isLoading || isPending}
           />
           <PlayerScore
             player={player2}
@@ -178,6 +174,7 @@ export default function Scoreboard(props: ScoreboardProps) {
             isEditing={isEditing}
             inputRef={inputRefPlayer2}
             onScoreUpdate={() => updateScore("score2", 1)}
+            disabled={isLoading || isPending}
           />
         </div>
 
