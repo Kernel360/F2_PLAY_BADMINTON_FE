@@ -48,6 +48,9 @@ function ClubLeaguePage() {
           }
         }}
         locale={ko}
+        formatters={{
+          formatCaption: (date) => format(date, "yyyy년 MM월"),
+        }}
         className="rounded-md text-gray-800"
         classNames={{
           head_cell: "w-[80px]",
@@ -56,6 +59,7 @@ function ClubLeaguePage() {
           day_selected:
             "w-full border border-primary bg-inherit text-primary hover:bg-inherit hover:text-inherit",
           day_today: "hover: bg-inherit",
+          caption_label: "text-base text-bold",
         }}
         components={{
           DayContent: (dayProps) => (
