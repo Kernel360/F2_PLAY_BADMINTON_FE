@@ -112,9 +112,13 @@ function LeagueForm(props: LeagueFormProps) {
     const [hours, minutes] = time.split(":").map(Number);
     if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
       const newDate = setHours(setMinutes(date, minutes ?? 0), hours ?? 0);
-      setDate(newDate);
+      const formattedDate = format(newDate, "yyyy-MM-dd kk:mm:00").replace(
+        " ",
+        "T",
+      );
+      setDate(formattedDate);
       setTimeValue(time);
-      setValue(fieldName, newDate.toString());
+      setValue(fieldName, formattedDate);
     }
   };
 
@@ -125,7 +129,7 @@ function LeagueForm(props: LeagueFormProps) {
   ) => {
     const closingDate = endOfDay(selectedDate);
     setClosedAt(formatISO(closingDate));
-    setValue(fieldName, closingDate.toString());
+    setValue(fieldName, closingDate.toISOString());
   };
 
   return (
@@ -402,7 +406,7 @@ function LeagueForm(props: LeagueFormProps) {
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
                             handleClosedAtSelect(
-                              selectedDate.toString(),
+                              selectedDate.toISOString(),
                               form.setValue,
                               "recruiting_closed_at",
                             );
