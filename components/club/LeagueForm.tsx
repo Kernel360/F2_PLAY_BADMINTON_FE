@@ -216,6 +216,7 @@ function LeagueForm(props: LeagueFormProps) {
                       />
                       <Calendar
                         mode="single"
+                        selected={date ? new Date(date) : undefined}
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
                             setDate(selectedDate);
@@ -224,6 +225,7 @@ function LeagueForm(props: LeagueFormProps) {
                         }}
                         locale={ko}
                         className="text-black"
+                        disabled={{ before: new Date() }}
                       />
                     </PopoverContent>
                   </Popover>
@@ -408,6 +410,7 @@ function LeagueForm(props: LeagueFormProps) {
                         }}
                         locale={ko}
                         className="text-black"
+                        disabled={{ before: new Date() }}
                       />
                     </PopoverContent>
                   </Popover>
