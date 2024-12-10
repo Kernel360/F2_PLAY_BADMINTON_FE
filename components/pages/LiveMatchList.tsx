@@ -3,13 +3,14 @@
 import DateCarousel from "@/components/DayCarousel";
 import MainBannerCarousel from "@/components/MainBannerCarousel";
 import Spinner from "@/components/Spinner";
+import LeagueStatusButton from "@/components/liveMatch/LeagueStatusButton";
+import LeagueTierBadge from "@/components/liveMatch/TierBadge";
 import { Button } from "@/components/ui/Button";
 import SImage from "@/components/ui/Image";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -24,8 +25,6 @@ import type {
 import { format } from "date-fns";
 import Link from "next/link";
 import React, { useState } from "react";
-import LeagueStatusButton from "../liveMatch/LeagueStatusButton";
-import LeagueTierBadge from "../liveMatch/TierBadge";
 
 function LiveMatchList() {
   const today = format(new Date(), "yyyy-MM-dd");
@@ -63,6 +62,11 @@ function LiveMatchList() {
           {isLoading ? (
             <div>
               <Spinner />
+            </div>
+          ) : data.length === 0 ? (
+            <div className="w-full min-h-[25vh] col-span-1 sm:col-span-2 lg:col-span-3  flex flex-col justify-center items-center gap-2 text-black">
+              <img src="/images/logo.png" alt="logo" className="w-24 h-24" />
+              예정된 경기가 없습니다
             </div>
           ) : (
             <Accordion

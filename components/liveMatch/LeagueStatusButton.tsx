@@ -56,7 +56,7 @@ function LeagueStatusButton(props: LeagueStatusButtonProps) {
   if (status === "FINISHED") {
     return (
       <Link href={`/club/${clubToken}/league/${leagueId}`}>
-        <Button className="p-2 h-8 rounded-md text-xs w-[105px] border-primary hover:border-primary hover:text-primay hover:bg-white">
+        <Button className="p-2 h-8 rounded-md text-xs w-[105px] border border-gray-600 text-gray-600 bg-white hover:bg-white hover:text-gray-600">
           종료된 경기
         </Button>
       </Link>
