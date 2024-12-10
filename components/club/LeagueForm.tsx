@@ -62,9 +62,9 @@ interface LeagueFormProps {
 function LeagueForm(props: LeagueFormProps) {
   const { clubId, leagueId, initialData } = props;
   const router = useRouter();
-  const [leagueAtDate, setLeagueAtDate] = useState<Date | string>();
+  const [leagueAtDate, setLeagueAtDate] = useState<Date | string>(new Date());
   const [leagueTimeValue, setLeagueTimeValue] = useState<string>("00:00");
-  const [closedAtDate, setClosedAtDate] = useState<Date | string>();
+  const [closedAtDate, setClosedAtDate] = useState<Date | string>(new Date());
   const [closedTimeValue, setClosedTimeValue] = useState<string>("00:00");
 
   const postLeagueOnSuccess = () => router.push(`/club/${clubId}/league`);
@@ -108,17 +108,12 @@ function LeagueForm(props: LeagueFormProps) {
     const [hours, minutes] = time.split(":").map(Number);
 
     if (fieldName === "league_at") {
-      if (!leagueAtDate) {
-        setLeagueTimeValue(time);
-        return;
-      }
       if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
         const newDate = setHours(
           setMinutes(leagueAtDate, minutes ?? 0),
           hours ?? 0,
         );
 
-        console.log(newDate);
         const formattedDate = format(newDate, "yyyy-MM-dd kk:mm:00").replace(
           " ",
           "T",
@@ -129,10 +124,6 @@ function LeagueForm(props: LeagueFormProps) {
       }
     }
     if (fieldName === "recruiting_closed_at") {
-      if (!closedAtDate) {
-        setClosedTimeValue(time);
-        return;
-      }
       if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
         const newDate = setHours(
           setMinutes(closedAtDate, minutes ?? 0),
@@ -238,12 +229,13 @@ function LeagueForm(props: LeagueFormProps) {
                       <Calendar
                         mode="single"
                         selected={
-                          leagueAtDate ? new Date(leagueAtDate) : new Date()
+                          leagueAtDate ? new Date(leagueAtDate) : undefined
                         }
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
                             setLeagueAtDate(selectedDate);
                             form.setValue("league_at", selectedDate.toString());
+                            setLeagueTimeValue("00:00");
                           }
                         }}
                         locale={ko}
@@ -438,7 +430,7 @@ function LeagueForm(props: LeagueFormProps) {
                       <Calendar
                         mode="single"
                         selected={
-                          closedAtDate ? new Date(closedAtDate) : new Date()
+                          closedAtDate ? new Date(closedAtDate) : undefined
                         }
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
@@ -447,6 +439,7 @@ function LeagueForm(props: LeagueFormProps) {
                               "recruiting_closed_at",
                               selectedDate.toString(),
                             );
+                            setClosedTimeValue("00:00");
                           }
                         }}
                         locale={ko}
