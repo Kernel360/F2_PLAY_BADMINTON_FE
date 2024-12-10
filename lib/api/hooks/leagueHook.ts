@@ -5,9 +5,9 @@ import {
   getLeagueCheck,
   getLeagueDetail,
   getMonthLeagues,
-  patchLeague,
   postLeague,
   postParticipateLeague,
+  putLeague,
 } from "@/lib/api/functions/leagueFn";
 import useMutationWithToast from "@/lib/api/hooks/useMutationWithToast";
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
@@ -17,12 +17,13 @@ import type {
   GetLeagueDateData,
   GetLeagueDetailData,
   GetLeagueMonthData,
-  PatchLeagueRequest,
   PostLeagueData,
   PostLeagueParticipantData,
   PostLeagueRequest,
+  PutLeagueData,
+  PutLeagueRequest,
 } from "@/types/leagueTypes";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const usePostLeague = (clubId: string, onSuccess: () => void) => {
   const queryClient = useQueryClient();
@@ -32,7 +33,7 @@ export const usePostLeague = (clubId: string, onSuccess: () => void) => {
   };
 
   const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["leaguesMonthData"] });
+    queryClient.invalidateQueries({ queryKey: ["leaguesMonthData", clubId] });
     queryClient.invalidateQueries({ queryKey: ["leaguesDateData"] });
     onSuccess();
   };
@@ -44,26 +45,29 @@ export const usePostLeague = (clubId: string, onSuccess: () => void) => {
 };
 
 export const useGetMonthLeagues = (clubId: string, date: string) => {
-  return useQueryWithToast<GetLeagueMonthData[]>(["leaguesMonthData"], () =>
-    getMonthLeagues(clubId, date),
+  return useQueryWithToast<GetLeagueMonthData[]>(
+    ["leaguesMonthData", clubId, date],
+    () => getMonthLeagues(clubId, date),
   );
 };
 
 export const useGetDateLeagues = (clubId: string, date: string) => {
-  return useQueryWithToast<GetLeagueDateData[]>(["leaguesDateData"], () =>
-    getDateLeague(clubId, date),
+  return useQueryWithToast<GetLeagueDateData[]>(
+    ["leaguesDateData", clubId, date],
+    () => getDateLeague(clubId, date),
   );
 };
 
 export const useGetLeagueDetail = (clubId: string, leagueId: string) => {
-  return useQueryWithToast<GetLeagueDetailData>(["leagueDetailData"], () =>
-    getLeagueDetail(clubId, leagueId),
+  return useQueryWithToast<GetLeagueDetailData>(
+    ["leagueDetailData", clubId, leagueId],
+    () => getLeagueDetail(clubId, leagueId),
   );
 };
 
 export const useGetLeagueCheck = (clubId: string, leagueId: string) => {
   return useQuery({
-    queryKey: ["leagueDetailDataCheck"],
+    queryKey: ["leagueDetailDataCheck", clubId, leagueId],
     queryFn: () => getLeagueCheck(clubId, leagueId),
   });
 };
@@ -78,8 +82,12 @@ export const usePostParticipantLeague = (
   const mutationFn = () => postParticipateLeague({ clubId, leagueId });
 
   const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
-    queryClient.invalidateQueries({ queryKey: ["leagueDetailDataCheck"] });
+    queryClient.invalidateQueries({
+      queryKey: ["leagueDetailData", clubId, leagueId],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["leagueDetailDataCheck", clubId, leagueId],
+    });
     onSuccess();
   };
 
@@ -99,8 +107,12 @@ export const useDeleteParticipantLeague = (
   const mutationFn = () => deleteParticipateLeague({ clubId, leagueId });
 
   const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
-    queryClient.invalidateQueries({ queryKey: ["leagueDetailDataCheck"] });
+    queryClient.invalidateQueries({
+      queryKey: ["leagueDetailData", clubId, leagueId],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["leagueDetailDataCheck", clubId, leagueId],
+    });
     onSuccess();
   };
 
@@ -110,17 +122,27 @@ export const useDeleteParticipantLeague = (
   );
 };
 
-export const usePatchLeague = (clubId: string, leagueId: string) => {
+export const usePutLeague = (
+  clubId: string,
+  leagueId: string,
+  onSuccess: () => void,
+) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (leagueData: PatchLeagueRequest) =>
-      patchLeague(leagueData, clubId, leagueId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = (leagueData: PutLeagueRequest) =>
+    putLeague(leagueData, clubId, leagueId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["leagueDetailData", clubId, leagueId],
+    });
+    onSuccess();
+  };
+
+  return useMutationWithToast<PutLeagueData, PutLeagueRequest>(
+    mutationFn,
+    onSuccessCallback,
+  );
 };
 
 export const useDeleteLeague = (
@@ -133,7 +155,9 @@ export const useDeleteLeague = (
   const mutationFn = () => deleteLeagues(clubId, leagueId);
 
   const onSuccessCallback = () => {
-    queryClient.invalidateQueries({ queryKey: ["leagueDetailData"] });
+    queryClient.invalidateQueries({
+      queryKey: ["leagueDetailData", clubId, leagueId],
+    });
     onSuccess();
   };
 
