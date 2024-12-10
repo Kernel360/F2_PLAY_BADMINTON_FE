@@ -196,7 +196,10 @@ function LeagueDetail() {
           label="모집 마감 일자"
           value={
             league?.recruiting_closed_at &&
-            format(new Date(league.recruiting_closed_at), "yyyy-MM-dd")
+            format(
+              new Date(league.recruiting_closed_at),
+              "yyyy-MM-dd HH시 mm분",
+            )
           }
         />
 
