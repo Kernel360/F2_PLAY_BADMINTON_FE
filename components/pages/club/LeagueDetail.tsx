@@ -179,7 +179,11 @@ function LeagueDetail() {
           value={getRecruitmentStatusLabel(league?.league_status || "")}
         />
 
-        <LeagueInfo icon={MapPin} label="경기 장소" value={league?.region} />
+        <LeagueInfo
+          icon={MapPin}
+          label="경기 장소"
+          value={league?.full_address}
+        />
 
         <LeagueInfo
           icon={User}

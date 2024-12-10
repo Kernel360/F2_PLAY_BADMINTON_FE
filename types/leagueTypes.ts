@@ -35,12 +35,12 @@ export type PostLeagueParticipantResponse =
 export type PostLeagueParticipantData =
   components["schemas"]["LeagueParticipantResponse"];
 
-export type PatchLeagueRequest = components["schemas"]["LeagueUpdateRequest"];
+export type PutLeagueRequest = components["schemas"]["LeagueUpdateRequest"];
 
-export type PatchLeagueResponse =
+export type PutLeagueResponse =
   components["schemas"]["CommonResponseLeagueUpdateResponse"];
 
-export type PatchLeagueData = components["schemas"]["LeagueUpdateResponse"];
+export type PutLeagueData = components["schemas"]["LeagueUpdateResponse"];
 
 export type DeleteLeagueResponse =
   components["schemas"]["CommonResponseLeagueCancelResponse"];

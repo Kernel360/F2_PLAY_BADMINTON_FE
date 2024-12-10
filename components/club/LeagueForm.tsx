@@ -4,6 +4,14 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Calendar } from "@/components/ui/calendar";
 import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -11,12 +19,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { usePatchLeague, usePostLeague } from "@/lib/api/hooks/leagueHook";
+import { usePostLeague, usePutLeague } from "@/lib/api/hooks/leagueHook";
 import type {
   GetLeagueDetailData,
-  PatchLeagueRequest,
   PostLeagueRequest,
+  PutLeagueRequest,
 } from "@/types/leagueTypes";
+import leagueFormSchema from "@/validations/leagueFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Popover,
@@ -37,89 +46,19 @@ import {
   Users,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Path, UseFormSetValue } from "react-hook-form";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
 
 type LeagueFormRequest =
   | (PostLeagueRequest & { mode: "create" })
-  | (PatchLeagueRequest & { mode: "update" });
+  | (PutLeagueRequest & { mode: "update" });
 
 interface LeagueFormProps {
   clubId: string;
   leagueId?: string;
   initialData?: GetLeagueDetailData;
 }
-
-const leagueFormSchema = z.object({
-  league_name: z
-    .string()
-    .min(2, { message: "경기 이름은 최소 2글자 이상이어야 합니다." })
-    .max(20, { message: "경기 이름은 최대 20글자 이하로 입력해주세요." }),
-  description: z
-    .string()
-    .min(2, "경기 설명은 최소 2글자 이상이어야 합니다.")
-    .max(1000, "경기 설명은 최대 1000글자 이하로 입력해주세요."),
-  full_address: z
-    .string()
-    .min(2, "경기 장소는 최소 2글자 이상이어야 합니다.")
-    .max(100, "경기 장소는 최대 100글자 이하로 입력해주세요."),
-  tier_limit: z.enum(["BRONZE", "SILVER", "GOLD"], {
-    required_error: "지원 가능한 티어를 선택해주세요.",
-  }),
-  match_type: z.enum(["SINGLES", "DOUBLES"], {
-    required_error: "경기 타입을 선택해주세요.",
-  }),
-  league_at: z.string().refine((date) => new Date(date) > new Date(), {
-    message: "경기 시작 날짜는 현재 시간보다 뒤에 설정되어야 합니다.",
-  }),
-  recruiting_closed_at: z
-    .string()
-    .refine((date) => new Date(date) > new Date(), {
-      message: "모집 마감 날짜는 현재 시간보다 뒤에 설정되어야 합니다.",
-    }),
-  player_limit_count: z
-    .number()
-    .int("참가 인원은 정수여야 합니다.")
-    .min(2)
-    .max(100),
-  match_generation_type: z.enum(["FREE", "TOURNAMENT"], {
-    required_error: "대진표 타입을 선택해주세요.",
-  }),
-});
-// .superRefine((data, ctx) => {
-//   const { player_limit_count, match_type } = data;
-
-//   if (
-//     match_type === "SINGLES" &&
-//     !Number.isInteger(Math.log2(player_limit_count))
-//   ) {
-//     ctx.addIssue({
-//       code: "custom",
-//       path: ["player_limit_count"],
-//       message: "참가인원: 토너먼트 싱글이면 2의 제곱이어야 합니다.",
-//     });
-//   } else if (
-//     match_type === "DOUBLES" &&
-//     !Number.isInteger(Math.log2(player_limit_count / 2))
-//   ) {
-//     ctx.addIssue({
-//       code: "custom",
-//       path: ["player_limit_count"],
-//       message:
-//         "참가인원: 토너먼트 더블이면 참가자수 / 2 가 2의 제곱이어야 합니다.",
-//     });
-//   }
-// });
 
 function LeagueForm(props: LeagueFormProps) {
   const { clubId, leagueId, initialData } = props;
@@ -130,11 +69,14 @@ function LeagueForm(props: LeagueFormProps) {
 
   const postLeagueOnSuccess = () => router.push(`/club/${clubId}/league`);
 
+  const putLeagueOnSuccess = () => router.push(`/club/${clubId}/league`);
+
   const { mutate: createLeague } = usePostLeague(clubId, postLeagueOnSuccess);
 
-  const { mutate: updateLeague } = usePatchLeague(
+  const { mutate: updateLeague } = usePutLeague(
     clubId as string,
     leagueId as string,
+    putLeagueOnSuccess,
   );
 
   const form = useForm<LeagueFormRequest>({
@@ -154,9 +96,7 @@ function LeagueForm(props: LeagueFormProps) {
     if (data.mode === "create") {
       createLeague(data);
     } else {
-      updateLeague(data, {
-        onSuccess: () => router.push(`/club/${clubId}/league`),
-      });
+      updateLeague(data);
     }
   };
 
@@ -174,7 +114,7 @@ function LeagueForm(props: LeagueFormProps) {
       const newDate = setHours(setMinutes(date, minutes ?? 0), hours ?? 0);
       setDate(newDate);
       setTimeValue(time);
-      setValue(fieldName, newDate.toISOString()); // Update the form field value
+      setValue(fieldName, newDate.toISOString());
     }
   };
 
@@ -185,7 +125,7 @@ function LeagueForm(props: LeagueFormProps) {
   ) => {
     const closingDate = endOfDay(selectedDate);
     setClosedAt(formatISO(closingDate));
-    setValue(fieldName, closingDate.toISOString()); // Update the form field value
+    setValue(fieldName, closingDate.toISOString());
   };
 
   return (
@@ -292,6 +232,9 @@ function LeagueForm(props: LeagueFormProps) {
                   </Popover>
                 </FormControl>
                 <FormMessage />
+                <p className="text-xs text-gray-500">
+                  경기 시간은 수정할 수 없습니다
+                </p>
               </FormItem>
             )}
           />
@@ -372,6 +315,9 @@ function LeagueForm(props: LeagueFormProps) {
                   </Select>
                 </FormControl>
                 <FormMessage />
+                <p className="text-xs text-gray-500">
+                  지원 가능 티어는 수정할 수 없습니다
+                </p>
               </FormItem>
             )}
           />
@@ -420,6 +366,9 @@ function LeagueForm(props: LeagueFormProps) {
                   />
                 </FormControl>
                 <FormMessage />
+                <p className="text-xs text-gray-500">
+                  경기 장소는 수정할 수 없습니다
+                </p>
               </FormItem>
             )}
           />
@@ -467,6 +416,9 @@ function LeagueForm(props: LeagueFormProps) {
                   </Popover>
                 </FormControl>
                 <FormMessage />
+                <p className="text-xs text-gray-500">
+                  모집 마감 날짜는 수정할 수 없습니다
+                </p>
               </FormItem>
             )}
           />
