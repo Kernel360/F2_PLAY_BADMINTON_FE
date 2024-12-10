@@ -62,9 +62,9 @@ interface LeagueFormProps {
 function LeagueForm(props: LeagueFormProps) {
   const { clubId, leagueId, initialData } = props;
   const router = useRouter();
-  const [leagueAtDate, setLeagueAtDate] = useState<Date | string>("");
+  const [leagueAtDate, setLeagueAtDate] = useState<Date | string>();
   const [leagueTimeValue, setLeagueTimeValue] = useState<string>("00:00");
-  const [closedAtDate, setClosedAtDate] = useState<Date | string>("");
+  const [closedAtDate, setClosedAtDate] = useState<Date | string>();
   const [closedTimeValue, setClosedTimeValue] = useState<string>("00:00");
 
   const postLeagueOnSuccess = () => router.push(`/club/${clubId}/league`);
@@ -110,12 +110,15 @@ function LeagueForm(props: LeagueFormProps) {
     if (fieldName === "league_at") {
       if (!leagueAtDate) {
         setLeagueTimeValue(time);
+        return;
       }
       if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
         const newDate = setHours(
           setMinutes(leagueAtDate, minutes ?? 0),
           hours ?? 0,
         );
+
+        console.log(newDate);
         const formattedDate = format(newDate, "yyyy-MM-dd kk:mm:00").replace(
           " ",
           "T",
@@ -128,10 +131,11 @@ function LeagueForm(props: LeagueFormProps) {
     if (fieldName === "recruiting_closed_at") {
       if (!closedAtDate) {
         setClosedTimeValue(time);
+        return;
       }
       if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
         const newDate = setHours(
-          setMinutes(leagueAtDate, minutes ?? 0),
+          setMinutes(closedAtDate, minutes ?? 0),
           hours ?? 0,
         );
         const formattedDate = format(newDate, "yyyy-MM-dd kk:mm:00").replace(
@@ -189,7 +193,7 @@ function LeagueForm(props: LeagueFormProps) {
           )}
         />
 
-        <div className="grid grid-cols-2 gap-4 gap-y-8">
+        <div className="grid gap-4 md:grid-cols-2">
           <FormField
             control={form.control}
             name="league_at"
@@ -218,7 +222,7 @@ function LeagueForm(props: LeagueFormProps) {
                           : "경기 시간 선택"}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-4 bg-white border rounded-md shadow-md">
+                    <PopoverContent className="w-auto max-w-xs">
                       <Input
                         type="time"
                         value={leagueTimeValue}
@@ -234,7 +238,7 @@ function LeagueForm(props: LeagueFormProps) {
                       <Calendar
                         mode="single"
                         selected={
-                          leagueAtDate ? new Date(leagueAtDate) : undefined
+                          leagueAtDate ? new Date(leagueAtDate) : new Date()
                         }
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
@@ -418,7 +422,7 @@ function LeagueForm(props: LeagueFormProps) {
                           : "모집 마감 시간 선택"}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-4 bg-white border rounded-md shadow-md">
+                    <PopoverContent className="w-auto max-w-xs">
                       <Input
                         type="time"
                         value={closedTimeValue}
@@ -434,7 +438,7 @@ function LeagueForm(props: LeagueFormProps) {
                       <Calendar
                         mode="single"
                         selected={
-                          closedAtDate ? new Date(closedAtDate) : undefined
+                          closedAtDate ? new Date(closedAtDate) : new Date()
                         }
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
@@ -497,7 +501,7 @@ function LeagueForm(props: LeagueFormProps) {
         </div>
 
         <div className="flex justify-center pt-8 gap-4">
-          <Button size="lg" className="w-1/4 p-3 font-semibold">
+          <Button size="lg" className="w-1/4 md:w-1/3 p-3 font-semibold">
             {initialData ? "경기 수정" : "경기 생성"}
           </Button>
         </div>
