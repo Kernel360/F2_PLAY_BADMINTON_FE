@@ -63,7 +63,7 @@ interface LeagueFormProps {
 function LeagueForm(props: LeagueFormProps) {
   const { clubId, leagueId, initialData } = props;
   const router = useRouter();
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date | string>();
   const [timeValue, setTimeValue] = useState<string>("00:00");
   const [closedAt, setClosedAt] = useState<string>("");
 
@@ -114,18 +114,18 @@ function LeagueForm(props: LeagueFormProps) {
       const newDate = setHours(setMinutes(date, minutes ?? 0), hours ?? 0);
       setDate(newDate);
       setTimeValue(time);
-      setValue(fieldName, newDate.toISOString());
+      setValue(fieldName, newDate.toString());
     }
   };
 
   const handleClosedAtSelect = (
-    selectedDate: Date,
+    selectedDate: string,
     setValue: UseFormSetValue<LeagueFormRequest>,
     fieldName: Path<LeagueFormRequest>,
   ) => {
     const closingDate = endOfDay(selectedDate);
     setClosedAt(formatISO(closingDate));
-    setValue(fieldName, closingDate.toISOString());
+    setValue(fieldName, closingDate.toString());
   };
 
   return (
@@ -219,10 +219,7 @@ function LeagueForm(props: LeagueFormProps) {
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
                             setDate(selectedDate);
-                            form.setValue(
-                              "league_at",
-                              selectedDate.toISOString(),
-                            );
+                            form.setValue("league_at", selectedDate.toString());
                           }
                         }}
                         locale={ko}
@@ -403,7 +400,7 @@ function LeagueForm(props: LeagueFormProps) {
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
                             handleClosedAtSelect(
-                              selectedDate,
+                              selectedDate.toString(),
                               form.setValue,
                               "recruiting_closed_at",
                             );
