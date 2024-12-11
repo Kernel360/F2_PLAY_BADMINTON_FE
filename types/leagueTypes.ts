@@ -35,6 +35,12 @@ export type PostLeagueParticipantResponse =
 export type PostLeagueParticipantData =
   components["schemas"]["LeagueParticipantResponse"];
 
+export type PatchLeagueResponse =
+  components["schemas"]["CommonResponseLeagueRecruitingCompleteResponse"];
+
+export type PatchLeagueData =
+  components["schemas"]["LeagueRecruitingCompleteResponse"];
+
 export type PutLeagueRequest = components["schemas"]["LeagueUpdateRequest"];
 
 export type PutLeagueResponse =

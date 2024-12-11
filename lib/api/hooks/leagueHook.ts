@@ -5,6 +5,7 @@ import {
   getLeagueCheck,
   getLeagueDetail,
   getMonthLeagues,
+  patchLeague,
   postLeague,
   postParticipateLeague,
   putLeague,
@@ -17,6 +18,7 @@ import type {
   GetLeagueDateData,
   GetLeagueDetailData,
   GetLeagueMonthData,
+  PatchLeagueData,
   PostLeagueData,
   PostLeagueParticipantData,
   PostLeagueRequest,
@@ -117,6 +119,28 @@ export const useDeleteParticipantLeague = (
   };
 
   return useMutationWithToast<DeleteLeagueParticipantData, void>(
+    mutationFn,
+    onSuccessCallback,
+  );
+};
+
+export const usePatchLeague = (
+  clubId: string,
+  leagueId: string,
+  onSuccess: () => void,
+) => {
+  const queryClient = useQueryClient();
+
+  const mutationFn = () => patchLeague(clubId, leagueId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["leagueDetailData", clubId, leagueId],
+    });
+    onSuccess();
+  };
+
+  return useMutationWithToast<PatchLeagueData, void>(
     mutationFn,
     onSuccessCallback,
   );
