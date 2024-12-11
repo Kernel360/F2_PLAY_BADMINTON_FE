@@ -103,10 +103,6 @@ function LeagueDetail() {
     }
   };
 
-  const makeMatch = () => {
-    createMatch();
-  };
-
   const cancelLeague = () => {
     if (confirm("정말로 경기를 취소하시겠습니까?")) {
       deleteLeague();
@@ -231,13 +227,15 @@ function LeagueDetail() {
           <Text color="black">{league?.league_description || "설명 없음"}</Text>
         </div>
       </div>
+
       <div className="flex w-full justify-evenly items-center mt-8">
-        {league && (
+        {league && loginedUser?.data && (
           <MatchButton
             clubId={clubId as string}
             leagueId={leagueId as string}
             league={league}
-            createMatch={makeMatch}
+            loginedUser={loginedUser?.data}
+            createMatch={createMatch}
           />
         )}
         {league && loginedUser && (
