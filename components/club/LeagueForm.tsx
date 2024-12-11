@@ -33,7 +33,7 @@ import type {
 import { currentTimeZone } from "@/utils/getTimezone";
 import leagueFormSchema from "@/validations/leagueFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { add, format, setHours, setMinutes } from "date-fns";
+import { add, format, setHours, setMinutes, sub } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { ko } from "date-fns/locale";
 import {
@@ -68,11 +68,7 @@ function LeagueForm(props: LeagueFormProps) {
   const [leagueAtTimeValue, setLeagueAtTimeValue] = useState<string>("00:00");
   const [closedAtDate, setClosedAtDate] = useState<Date>(new Date());
   const [closedAtTimeValue, setClosedAtTimeValue] = useState<string>("00:00");
-  console.log(
-    "timezone",
-    initialData?.league_at &&
-      toZonedTime(initialData?.league_at, currentTimeZone),
-  );
+
   const postLeagueOnSuccess = () => router.push(`/club/${clubId}/league`);
 
   const putLeagueOnSuccess = () => router.push(`/club/${clubId}/league`);
@@ -100,7 +96,22 @@ function LeagueForm(props: LeagueFormProps) {
       data.mode = "create";
     }
     if (data.mode === "create") {
-      createLeague(data);
+      const formattedLeagueDate = format(
+        data.league_at,
+        "yyyy-MM-dd HH:mm:00",
+      ).replace(" ", "T");
+
+      const formattedClosedDate = format(
+        data.recruiting_closed_at,
+        "yyyy-MM-dd HH:mm:00",
+      ).replace(" ", "T");
+
+      const formattedData = {
+        ...data,
+        league_at: formattedLeagueDate,
+        recruiting_closed_at: formattedClosedDate,
+      };
+      createLeague(formattedData);
     } else {
       updateLeague(data);
     }
@@ -196,28 +207,15 @@ function LeagueForm(props: LeagueFormProps) {
                         variant="outline"
                         className="w-full text-left p-3 text-black hover:bg-white hover:text-black"
                       >
-                        {field.value ? (
-                          <>
-                            {(() => {
-                              const zonedTime = toZonedTime(
-                                field.value,
-                                currentTimeZone,
-                              );
-
-                              const updatedDate = add(zonedTime, { hours: 9 });
-
-                              return format(
-                                updatedDate,
-                                "yyyy년 MM월 dd일 a hh시 mm분",
-                                {
-                                  locale: ko,
-                                },
-                              );
-                            })()}
-                          </>
-                        ) : (
-                          "경기 시간 선택"
-                        )}
+                        {field.value
+                          ? format(
+                              field.value,
+                              "yyyy년 MM월 dd일 a hh시 mm분",
+                              {
+                                locale: ko,
+                              },
+                            )
+                          : "경기 시간 선택"}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-4 bg-white border rounded-md shadow-md">
@@ -414,28 +412,15 @@ function LeagueForm(props: LeagueFormProps) {
                         variant="outline"
                         className="w-full text-left p-3  text-black hover:bg-white hover:text-black"
                       >
-                        {field.value ? (
-                          <>
-                            {(() => {
-                              const zonedTime = toZonedTime(
-                                field.value,
-                                currentTimeZone,
-                              );
-
-                              const updatedDate = add(zonedTime, { hours: 9 });
-
-                              return format(
-                                updatedDate,
-                                "yyyy년 MM월 dd일 a hh시 mm분",
-                                {
-                                  locale: ko,
-                                },
-                              );
-                            })()}
-                          </>
-                        ) : (
-                          "모집 마감 시간 선택"
-                        )}
+                        {field.value
+                          ? format(
+                              field.value,
+                              "yyyy년 MM월 dd일 a hh시 mm분",
+                              {
+                                locale: ko,
+                              },
+                            )
+                          : "모집 마감 시간 선택"}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-4 bg-white border rounded-md shadow-md">
