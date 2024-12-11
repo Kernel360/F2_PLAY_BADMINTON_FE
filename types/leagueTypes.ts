@@ -1,3 +1,4 @@
+import LeagueParticipant from "@/components/club/LeagueDetail/LeagueParticipant";
 import type { components } from "@/schemas/schema";
 
 export type GetLeagueDetailResponse =
@@ -58,3 +59,6 @@ export type DeleteLeagueParticipantResponse =
 
 export type DeleteLeagueParticipantData =
   components["schemas"]["LeagueParticipationCancelResponse"];
+
+export type LeagueParticipantType =
+  components["schemas"]["LeagueParticipantDetailsResponse"];
