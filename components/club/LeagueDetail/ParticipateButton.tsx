@@ -150,11 +150,11 @@ function ParticipateButton({
     return (
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger className={buttonClass}>
+          <TooltipTrigger className="w-full">
             <Button
               size="lg"
               variant="destructive"
-              className={`${buttonClass} border-primary`}
+              className={`${buttonClass} `}
               onClick={() => {
                 if (league.league_status === "RECRUITING") {
                   handleParticipate(true);
@@ -188,7 +188,7 @@ function ParticipateButton({
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger className={buttonClass}>
+        <TooltipTrigger className="w-full">
           <Button
             size="lg"
             variant="outline"
