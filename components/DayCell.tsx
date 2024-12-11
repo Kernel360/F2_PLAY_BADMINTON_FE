@@ -38,7 +38,6 @@ function DayCell({ date, displayMonth, scheduleList }: DayCellProps) {
   const maxVisibleSchedules = 1; // 최대 1개의 일정만 표시
   const visibleSchedules = dayScheduleList.slice(0, maxVisibleSchedules);
   const remainingSchedules = dayScheduleList.length - maxVisibleSchedules;
-  const selectedColorIndex = scheduleList?.length % colors.length;
 
   return (
     <div className="w-full h-full flex flex-col justify-between p-[3%] sm:p-[2%]">
@@ -50,36 +49,53 @@ function DayCell({ date, displayMonth, scheduleList }: DayCellProps) {
         />
       </div>
 
-      {visibleSchedules.length > 0 && (
+      {dayScheduleList.length > 0 && (
         <div className="w-full space-y-[2px] overflow-hidden">
-          {visibleSchedules.map((item) => {
-            const colorIndex = item.league_id
-              ? (item.league_id + selectedColorIndex) % colors.length
-              : 0;
-            const isCanceled = item.status === "CANCELED";
-            return (
-              <div
-                key={item.league_id}
-                className={`text-xs text-center rounded-md truncate px-2 py-[2px] ${
-                  isCanceled
-                    ? "bg-gray-200 text-gray-500"
-                    : `${colors[colorIndex]} text-white`
-                }`}
-              >
-                <span
-                  className={`${isCanceled ? "line-through" : ""} text-inherit`}
+          {/* Mobile view: Hidden by default, visible only on small screens */}
+          <div className="block sm:hidden text-[0.5rem] text-center flex justify-center items-center">
+            {(() => {
+              const colorIndex = Math.floor(Math.random() * colors.length);
+              return (
+                <div
+                  className={`flex items-center justify-center rounded-full text-white w-4 h-4 ${colors[colorIndex]}`}
                 >
-                  {item.league_name}
-                </span>
-              </div>
-            );
-          })}
+                  +{dayScheduleList.length}
+                </div>
+              );
+            })()}
+          </div>
 
-          {remainingSchedules > 0 && (
-            <div className="text-xs text-center text-gray-500">
-              +{remainingSchedules}
-            </div>
-          )}
+          {/* Desktop view: Hidden on small screens */}
+          <div className="hidden sm:block">
+            {visibleSchedules.map((item) => {
+              const colorIndex = Math.floor(Math.random() * colors.length);
+              const isCanceled = item.status === "CANCELED";
+              return (
+                <div
+                  key={item.league_id}
+                  className={`text-xs text-center rounded-md truncate px-2 py-[2px] ${
+                    isCanceled
+                      ? "bg-gray-200 text-gray-500"
+                      : `${colors[colorIndex]} text-white`
+                  }`}
+                >
+                  <span
+                    className={`${
+                      isCanceled ? "line-through" : ""
+                    } text-inherit`}
+                  >
+                    {item.league_name}
+                  </span>
+                </div>
+              );
+            })}
+
+            {remainingSchedules > 0 && (
+              <div className="text-xs text-center text-gray-500">
+                +{remainingSchedules}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
