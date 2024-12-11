@@ -1,4 +1,10 @@
 import { Button } from "@/components/ui/Button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import type { Tier } from "@/types/commonTypes";
 import type { GetLeagueDetailData } from "@/types/leagueTypes";
 import type { GetMemberSessionResponse } from "@/types/memberTypes";
@@ -105,15 +111,28 @@ function ParticipateButton({
   // 참여 신청 한 사람 처리
   if (isParticipating) {
     return (
-      <Button
-        size="lg"
-        variant="destructive"
-        className="items-center justify-center gap-2 border-primary w-1/3"
-        onClick={() => handleParticipate(true)}
-      >
-        <User size={20} />
-        참가 취소
-      </Button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger className="w-full sm:w-1/2 lg:w-1/3">
+            <Button
+              size="lg"
+              variant="destructive"
+              className="items-center justify-center gap-2 border-primary w-full"
+              onClick={() => {
+                if (league.league_status === "RECRUITING") {
+                  handleParticipate(true);
+                }
+              }}
+            >
+              <User size={20} />
+              참가 취소
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            모집 마감 전까지 경기 참여를 취소할 수 있습니다!
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     );
   }
 
@@ -145,15 +164,24 @@ function ParticipateButton({
 
   // 참가 신청 가능 버튼
   return (
-    <Button
-      size="lg"
-      variant="outline"
-      className="items-center justify-center gap-2 border-primary w-1/3 hover:bg-white hover:text-primary"
-      onClick={() => handleParticipate(false)}
-    >
-      <User size={20} />
-      경기 참가
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger className="w-full sm:w-1/2 lg:w-1/3">
+          <Button
+            size="lg"
+            variant="outline"
+            className="items-center justify-center gap-2 border-primary w-1/3 hover:bg-white hover:text-primary"
+            onClick={() => handleParticipate(false)}
+          >
+            <User size={20} />
+            경기 참가
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          모집 마감 전까지 경기 참여를 할 수 있습니다!
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
