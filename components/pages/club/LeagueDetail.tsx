@@ -4,15 +4,14 @@ import Spinner from "@/components/Spinner";
 import LeagueInfo from "@/components/club/LeagueDetail/LeagueInfo";
 import MatchButton from "@/components/club/LeagueDetail/MatchButton";
 import ParticipateButton from "@/components/club/LeagueDetail/ParticipateButton";
+import RecruitmentInfoDialog from "@/components/club/LeagueDetail/RecruitmentInfoDialog";
 import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
-import { useGetClubMembersCheck } from "@/lib/api/hooks/clubMemberHook";
+
 import {
   useDeleteLeague,
-  useDeleteParticipantLeague,
   useGetLeagueCheck,
   useGetLeagueDetail,
-  usePostParticipantLeague,
 } from "@/lib/api/hooks/leagueHook";
 import { usePostMatches } from "@/lib/api/hooks/matchHook";
 import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
@@ -63,17 +62,7 @@ function LeagueDetail() {
     clubId as string,
     leagueId as string,
   );
-  const { data: clubMemberCheck } = useGetClubMembersCheck(clubId as string);
-  const { mutate: postParticipate } = usePostParticipantLeague(
-    clubId as string,
-    leagueId as string,
-    () => alert("경기 신청이 완료되었습니다"),
-  );
-  const { mutate: deleteParticipate } = useDeleteParticipantLeague(
-    clubId as string,
-    leagueId as string,
-    () => alert("경기 참여 취소가 완료되었습니다"),
-  );
+
   const { mutate: deleteLeague } = useDeleteLeague(
     clubId as string,
     leagueId as string,
@@ -84,24 +73,6 @@ function LeagueDetail() {
     leagueId as string,
     () => router.push(`/club/${clubId}/league/${leagueId}/match`),
   );
-
-  const handleParticipate = (status: boolean) => {
-    if (loginedUser?.result === "FAIL") {
-      alert("로그인이 필요한 기능입니다");
-      return router.push("/login");
-    }
-
-    if (!clubMemberCheck?.data?.is_club_member) {
-      alert("동호회 가입이 필요합니다");
-      return router.push(`/club/${clubId}`);
-    }
-
-    if (!status) {
-      postParticipate();
-    } else {
-      deleteParticipate();
-    }
-  };
 
   const cancelLeague = () => {
     if (confirm("정말로 경기를 취소하시겠습니까?")) {
@@ -132,10 +103,18 @@ function LeagueDetail() {
             </Text>
           </div>
         </div>
+
         {!!loginedUser?.data &&
           loginedUser.data.member_token === league?.league_owner_token &&
           league?.league_status !== "CANCELED" && (
             <div className="flex flex-wrap gap-2">
+              {league?.league_status === "RECRUITING" && (
+                <RecruitmentInfoDialog
+                  clubId={clubId as string}
+                  leagueId={leagueId as string}
+                />
+              )}
+
               <Link href={`/club/${clubId}/league/${leagueId}/update`}>
                 <Button
                   size="sm"
@@ -233,9 +212,10 @@ function LeagueDetail() {
         )}
         {league && loginedUser && (
           <ParticipateButton
+            clubId={clubId as string}
+            leagueId={leagueId as string}
             league={league}
-            loginedUser={loginedUser}
-            handleParticipate={handleParticipate}
+            loginedUser={loginedUser?.data}
             isParticipating={!!leagueCheck?.data?.is_participated_in_league}
           />
         )}
