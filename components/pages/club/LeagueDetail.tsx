@@ -204,6 +204,7 @@ function LeagueDetail() {
 
       <div>
         <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+          <Users2Icon className="text-gray-500" size={20} />
           경기 참여자
         </h3>
         <div className="mt-4 max-h-[400px] overflow-y-auto pt-2">
