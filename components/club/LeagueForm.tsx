@@ -114,7 +114,6 @@ function LeagueForm(props: LeagueFormProps) {
         hours ?? 0,
       );
       setLeagueAtDate(newDate);
-      setLeagueAtTimeValue(time);
       setValue(fieldName, newDate.toISOString());
     }
 
@@ -125,7 +124,6 @@ function LeagueForm(props: LeagueFormProps) {
         hours ?? 0,
       );
       setClosedAtDate(newDate);
-      setClosedAtTimeValue(time);
       setValue(fieldName, newDate.toISOString());
     }
   };
@@ -134,7 +132,7 @@ function LeagueForm(props: LeagueFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSumbitSchedule)}
-        className="space-y-4 w-full flex flex-auto flex-col gap-5 px-4 sm:px-6 md:px-8 max-w-4xl mx-auto overflow-y-auto"
+        className="space-y-4 w-full flex flex-auto flex-col gap-5 px-4 sm:px-6 md:px-8 max-w-4xl mx-auto"
       >
         <FormField
           control={form.control}
@@ -221,11 +219,15 @@ function LeagueForm(props: LeagueFormProps) {
                         selected={leagueAtDate}
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
-                            setLeagueAtDate(selectedDate);
-                            form.setValue(
-                              "league_at",
-                              selectedDate.toISOString(),
+                            const [hours, minutes] = leagueAtTimeValue
+                              .split(":")
+                              .map(Number);
+                            const newDate = setHours(
+                              setMinutes(selectedDate, minutes ?? 0),
+                              hours ?? 0,
                             );
+                            setLeagueAtDate(newDate);
+                            form.setValue("league_at", newDate.toISOString());
                           }
                         }}
                         locale={ko}
@@ -422,10 +424,17 @@ function LeagueForm(props: LeagueFormProps) {
                         selected={closedAtDate}
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
-                            setClosedAtDate(selectedDate);
+                            const [hours, minutes] = closedAtTimeValue
+                              .split(":")
+                              .map(Number);
+                            const newDate = setHours(
+                              setMinutes(selectedDate, minutes ?? 0),
+                              hours ?? 0,
+                            );
+                            setClosedAtDate(newDate);
                             form.setValue(
                               "recruiting_closed_at",
-                              selectedDate.toISOString(),
+                              newDate.toISOString(),
                             );
                           }
                         }}
