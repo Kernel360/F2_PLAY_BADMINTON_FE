@@ -108,35 +108,31 @@ function LeagueForm(props: LeagueFormProps) {
     const [hours, minutes] = time.split(":").map(Number);
 
     if (fieldName === "league_at") {
-      if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
-        const newDate = setHours(
-          setMinutes(leagueAtDate, minutes ?? 0),
-          hours ?? 0,
-        );
+      const newDate = setHours(
+        setMinutes(leagueAtDate, minutes ?? 0),
+        hours ?? 0,
+      );
 
-        const formattedDate = format(newDate, "yyyy-MM-dd kk:mm:00").replace(
-          " ",
-          "T",
-        );
-        setLeagueAtDate(formattedDate);
-        setLeagueTimeValue(time);
-        setValue(fieldName, formattedDate);
-      }
+      const formattedDate = format(newDate, "yyyy-MM-dd kk:mm:00").replace(
+        " ",
+        "T",
+      );
+      setLeagueAtDate(formattedDate);
+      setLeagueTimeValue(time);
+      setValue(fieldName, formattedDate);
     }
     if (fieldName === "recruiting_closed_at") {
-      if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
-        const newDate = setHours(
-          setMinutes(closedAtDate, minutes ?? 0),
-          hours ?? 0,
-        );
-        const formattedDate = format(newDate, "yyyy-MM-dd kk:mm:00").replace(
-          " ",
-          "T",
-        );
-        setClosedAtDate(formattedDate);
-        setClosedTimeValue(time);
-        setValue(fieldName, formattedDate);
-      }
+      const newDate = setHours(
+        setMinutes(closedAtDate, minutes ?? 0),
+        hours ?? 0,
+      );
+      const formattedDate = format(newDate, "yyyy-MM-dd kk:mm:00").replace(
+        " ",
+        "T",
+      );
+      setClosedAtDate(formattedDate);
+      setClosedTimeValue(time);
+      setValue(fieldName, formattedDate);
     }
   };
 
@@ -233,8 +229,12 @@ function LeagueForm(props: LeagueFormProps) {
                         }
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
-                            setLeagueAtDate(selectedDate);
-                            form.setValue("league_at", selectedDate.toString());
+                            const formattedDate = format(
+                              selectedDate,
+                              "yyyy-MM-dd kk:mm:00",
+                            ).replace(" ", "T");
+                            setLeagueAtDate(formattedDate);
+                            form.setValue("league_at", formattedDate);
                             setLeagueTimeValue("00:00");
                           }
                         }}
@@ -434,12 +434,16 @@ function LeagueForm(props: LeagueFormProps) {
                         }
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
-                            setClosedAtDate(selectedDate);
+                            const formattedDate = format(
+                              selectedDate,
+                              "yyyy-MM-dd kk:mm:00",
+                            ).replace(" ", "T");
+                            setLeagueAtDate(formattedDate);
                             form.setValue(
                               "recruiting_closed_at",
-                              selectedDate.toString(),
+                              formattedDate,
                             );
-                            setClosedTimeValue("00:00");
+                            setLeagueTimeValue("00:00");
                           }
                         }}
                         locale={ko}
