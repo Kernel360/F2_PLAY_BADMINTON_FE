@@ -6,6 +6,7 @@ import type {
   GetLeagueDateResponse,
   GetLeagueDetailResponse,
   GetLeagueMonthResponse,
+  PatchLeagueResponse,
   PostLeagueParticipantResponse,
   PostLeagueRequest,
   PostLeagueResponse,
@@ -79,6 +80,16 @@ export const deleteParticipateLeague = async ({
 }): Promise<DeleteLeagueParticipantResponse> => {
   return restClient.delete(
     `/clubs/${clubId}/leagues/${leagueId}/participation`,
+  );
+};
+
+export const patchLeague = async (
+  clubId: string,
+  leagueId: string,
+): Promise<PatchLeagueResponse> => {
+  return restClient.patch<PatchLeagueResponse>(
+    `/clubs/${clubId}/leagues/${leagueId}`,
+    {},
   );
 };
 

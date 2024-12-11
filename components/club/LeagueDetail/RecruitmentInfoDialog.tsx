@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -9,6 +8,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { usePatchLeague } from "@/lib/api/hooks/leagueHook";
+import { useState } from "react";
 
 interface RecruitmentInfoDialog {
   clubId: string;
@@ -16,10 +17,19 @@ interface RecruitmentInfoDialog {
 }
 
 const RecruitmentInfoDialog = ({ clubId, leagueId }: RecruitmentInfoDialog) => {
+  const [open, setOpen] = useState(false);
+
+  const patchLeagueOnSuccess = () => setOpen(false);
+
+  const { mutate: patchLeague } = usePatchLeague(
+    clubId,
+    leagueId,
+    patchLeagueOnSuccess,
+  );
+
   return (
     <>
-      {/* Dialog 컴포넌트 */}
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button size="sm" variant="default">
             모집 마감
@@ -36,24 +46,23 @@ const RecruitmentInfoDialog = ({ clubId, leagueId }: RecruitmentInfoDialog) => {
           {/* 안내 내용 */}
           <ul className="space-y-4">
             <li className="text-black text-sm">
-              ▶ 모집 마감 버튼을 누르면 <strong>되돌릴 수 없어요</strong>
+              - 모집 마감 버튼을 누르면 <strong>되돌릴 수 없어요</strong>
             </li>
             <li className="text-black text-sm">
-              ▶ <strong>적절한 인원이 충족되지 않으면</strong>, 모집을 마감할 수
+              - <strong>적절한 인원이 충족되지 않으면</strong>, 모집을 마감할 수
               없어요
             </li>
             <li className="text-black text-sm">
-              ▶ 모집 마감 시간 전까지 <strong>인원이 부족하면</strong>, 경기가
+              - 모집 마감 시간 전까지 <strong>인원이 부족하면</strong>, 경기가
               자동으로 취소돼요
             </li>
             <li className="text-black text-sm">
-              ▶ <strong>경기 규칙에 맞는 인원이 필요해요!</strong> 아래 조건을
+              - <strong>경기 규칙에 맞는 인원이 필요해요!</strong> 아래 조건을
               꼭 확인해 주세요
             </li>
           </ul>
           <Separator className="my-4" />
 
-          {/* 적절한 인원 기준 */}
           <div className="text-black text-sm text-left space-y-3">
             <p className="font-bold text-black">⚡ 적절한 인원 기준</p>
             <ul className="space-y-2 list-disc pl-5">
@@ -72,12 +81,12 @@ const RecruitmentInfoDialog = ({ clubId, leagueId }: RecruitmentInfoDialog) => {
             </ul>
           </div>
 
-          {/* 하단 버튼 */}
           <DialogFooter className="mt-6 flex justify-center">
             <Button
               size="sm"
               variant="outline"
               className="text-black hover:text-black hover:bg-white"
+              onClick={() => patchLeague()}
             >
               모집 마감 하기
             </Button>
