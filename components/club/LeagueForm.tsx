@@ -32,7 +32,8 @@ import type {
 } from "@/types/leagueTypes";
 import leagueFormSchema from "@/validations/leagueFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, setHours, setMinutes } from "date-fns";
+import { endOfDay } from "date-fns";
+import { format, formatISO, setHours, setMinutes } from "date-fns";
 import { ko } from "date-fns/locale";
 import {
   Award,
@@ -62,10 +63,10 @@ interface LeagueFormProps {
 function LeagueForm(props: LeagueFormProps) {
   const { clubId, leagueId, initialData } = props;
   const router = useRouter();
-  const [leagueAtDate, setLeagueAtDate] = useState<Date | string>(new Date());
-  const [leagueTimeValue, setLeagueTimeValue] = useState<string>("00:00");
-  const [closedAtDate, setClosedAtDate] = useState<Date | string>(new Date());
-  const [closedTimeValue, setClosedTimeValue] = useState<string>("00:00");
+  const [leagueAtDate, setLeagueAtDate] = useState<Date>(new Date());
+  const [leagueAtTimeValue, setLeagueAtTimeValue] = useState<string>("00:00");
+  const [closedAtDate, setClosedAtDate] = useState<Date>(new Date());
+  const [closedAtTimeValue, setClosedAtTimeValue] = useState<string>("00:00");
 
   const postLeagueOnSuccess = () => router.push(`/club/${clubId}/league`);
 
@@ -108,31 +109,25 @@ function LeagueForm(props: LeagueFormProps) {
     const [hours, minutes] = time.split(":").map(Number);
 
     if (fieldName === "league_at") {
+      setLeagueAtTimeValue(time);
       const newDate = setHours(
         setMinutes(leagueAtDate, minutes ?? 0),
         hours ?? 0,
       );
-
-      const formattedDate = format(newDate, "yyyy-MM-dd kk:mm:00").replace(
-        " ",
-        "T",
-      );
-      setLeagueAtDate(formattedDate);
-      setLeagueTimeValue(time);
-      setValue(fieldName, formattedDate);
+      setLeagueAtDate(newDate);
+      setLeagueAtTimeValue(time);
+      setValue(fieldName, newDate.toISOString());
     }
+
     if (fieldName === "recruiting_closed_at") {
+      setClosedAtTimeValue(time);
       const newDate = setHours(
         setMinutes(closedAtDate, minutes ?? 0),
         hours ?? 0,
       );
-      const formattedDate = format(newDate, "yyyy-MM-dd kk:mm:00").replace(
-        " ",
-        "T",
-      );
-      setClosedAtDate(formattedDate);
-      setClosedTimeValue(time);
-      setValue(fieldName, formattedDate);
+      setClosedAtDate(newDate);
+      setClosedAtTimeValue(time);
+      setValue(fieldName, newDate.toISOString());
     }
   };
 
@@ -180,7 +175,7 @@ function LeagueForm(props: LeagueFormProps) {
           )}
         />
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-2 gap-4 gap-y-8">
           <FormField
             control={form.control}
             name="league_at"
@@ -209,10 +204,10 @@ function LeagueForm(props: LeagueFormProps) {
                           : "경기 시간 선택"}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto max-w-xs">
+                    <PopoverContent className="w-auto p-4 bg-white border rounded-md shadow-md">
                       <Input
                         type="time"
-                        value={leagueTimeValue}
+                        value={leagueAtTimeValue}
                         onChange={(e) =>
                           handleTimeChange(
                             e.target.value,
@@ -224,18 +219,14 @@ function LeagueForm(props: LeagueFormProps) {
                       />
                       <Calendar
                         mode="single"
-                        selected={
-                          leagueAtDate ? new Date(leagueAtDate) : undefined
-                        }
+                        selected={leagueAtDate}
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
-                            const formattedDate = format(
-                              selectedDate,
-                              "yyyy-MM-dd kk:mm:00",
-                            ).replace(" ", "T");
-                            setLeagueAtDate(formattedDate);
-                            form.setValue("league_at", formattedDate);
-                            setLeagueTimeValue("00:00");
+                            setLeagueAtDate(selectedDate);
+                            form.setValue(
+                              "league_at",
+                              selectedDate.toISOString(),
+                            );
                           }
                         }}
                         locale={ko}
@@ -394,14 +385,14 @@ function LeagueForm(props: LeagueFormProps) {
               <FormItem className="flex flex-col gap-2 mb-4 items-center ">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <CalendarIcon className="text-gray-500" size={20} />
-                  모집 마감 시간
+                  모집 마감 날짜
                 </FormLabel>
                 <FormControl>
                   <Popover>
-                    <PopoverTrigger asChild disabled={!!initialData}>
+                    <PopoverTrigger disabled={!!initialData} asChild>
                       <Button
                         variant="outline"
-                        className="w-full text-left p-3 text-black hover:bg-white hover:text-black"
+                        className="w-full text-left p-3  text-black hover:bg-white hover:text-black"
                       >
                         {field.value
                           ? format(
@@ -411,13 +402,13 @@ function LeagueForm(props: LeagueFormProps) {
                                 locale: ko,
                               },
                             )
-                          : "모집 마감 시간 선택"}
+                          : "모집 마감 날짜 선택"}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto max-w-xs">
+                    <PopoverContent className="w-auto p-4 bg-white border rounded-md shadow-md">
                       <Input
                         type="time"
-                        value={closedTimeValue}
+                        value={closedAtTimeValue}
                         onChange={(e) =>
                           handleTimeChange(
                             e.target.value,
@@ -429,21 +420,14 @@ function LeagueForm(props: LeagueFormProps) {
                       />
                       <Calendar
                         mode="single"
-                        selected={
-                          closedAtDate ? new Date(closedAtDate) : undefined
-                        }
+                        selected={closedAtDate}
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
-                            const formattedDate = format(
-                              selectedDate,
-                              "yyyy-MM-dd kk:mm:00",
-                            ).replace(" ", "T");
-                            setLeagueAtDate(formattedDate);
+                            setClosedAtDate(selectedDate);
                             form.setValue(
                               "recruiting_closed_at",
-                              formattedDate,
+                              selectedDate.toISOString(),
                             );
-                            setLeagueTimeValue("00:00");
                           }
                         }}
                         locale={ko}
@@ -498,7 +482,7 @@ function LeagueForm(props: LeagueFormProps) {
         </div>
 
         <div className="flex justify-center pt-8 gap-4">
-          <Button size="lg" className="w-1/4 md:w-1/3 p-3 font-semibold">
+          <Button size="lg" className="w-1/4 p-3 font-semibold">
             {initialData ? "경기 수정" : "경기 생성"}
           </Button>
         </div>
