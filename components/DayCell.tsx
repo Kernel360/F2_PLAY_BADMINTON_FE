@@ -24,6 +24,8 @@ function DayCell({ date, displayMonth, scheduleList }: DayCellProps) {
     customModifier: true,
   };
 
+  const getColorIndex = (key: number) => key % colors.length;
+
   const dayScheduleList =
     scheduleList?.filter((schedule) => {
       if (!schedule.league_at) return false;
@@ -51,24 +53,23 @@ function DayCell({ date, displayMonth, scheduleList }: DayCellProps) {
 
       {dayScheduleList.length > 0 && (
         <div className="w-full space-y-[2px] overflow-hidden">
-          {/* Mobile view: Hidden by default, visible only on small screens */}
-          <div className="block sm:hidden text-[0.5rem] text-center flex justify-center items-center">
-            {(() => {
-              const colorIndex = Math.floor(Math.random() * colors.length);
-              return (
-                <div
-                  className={`flex items-center justify-center rounded-full text-white w-4 h-4 ${colors[colorIndex]}`}
-                >
-                  +{dayScheduleList.length}
-                </div>
-              );
-            })()}
+          {/* 모바일 */}
+          <div className="sm:hidden text-[0.5rem] text-center flex justify-center items-center">
+            <div
+              className={`flex items-center justify-center rounded-full text-white w-4 h-4 ${
+                colors[getColorIndex(date.getDate() + date.getMonth())]
+              }`}
+            >
+              +{dayScheduleList.length}
+            </div>
           </div>
 
-          {/* Desktop view: Hidden on small screens */}
+          {/* 데스크탑 */}
           <div className="hidden sm:block">
             {visibleSchedules.map((item) => {
-              const colorIndex = Math.floor(Math.random() * colors.length);
+              const colorIndex = getColorIndex(
+                date.getDate() + date.getMonth() + item.league_id,
+              );
               const isCanceled = item.status === "CANCELED";
               return (
                 <div
