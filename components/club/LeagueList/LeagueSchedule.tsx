@@ -34,10 +34,7 @@ function LeagueSchedule(props: LeagueScheduleProps) {
       return (
         <Link
           key={schedule.league_id}
-          href={
-            isCanceled ? "#" : `/club/${clubId}/league/${schedule.league_id}`
-          }
-          className={isCanceled ? "pointer-events-none" : ""}
+          href={`/club/${clubId}/league/${schedule.league_id}`}
         >
           <div className="relative bg-white py-4 px-6 rounded-xl border border-solid hover:shadow-lg transform transition-transform duration-300 cursor-pointer">
             {isCanceled && (
