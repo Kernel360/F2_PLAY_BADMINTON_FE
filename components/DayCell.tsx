@@ -56,12 +56,21 @@ function DayCell({ date, displayMonth, scheduleList }: DayCellProps) {
             const colorIndex = item.league_id
               ? (item.league_id + selectedColorIndex) % colors.length
               : 0;
+            const isCanceled = item.status === "CANCELED";
             return (
               <div
                 key={item.league_id}
-                className={`text-xs text-center text-white rounded-md truncate px-2 py-[2px] ${colors[colorIndex]}`}
+                className={`text-xs text-center rounded-md truncate px-2 py-[2px] ${
+                  isCanceled
+                    ? "bg-gray-200 text-gray-500"
+                    : `${colors[colorIndex]} text-white`
+                }`}
               >
-                {item.league_name}
+                <span
+                  className={`${isCanceled ? "line-through" : ""} text-inherit`}
+                >
+                  {item.league_name}
+                </span>
               </div>
             );
           })}
