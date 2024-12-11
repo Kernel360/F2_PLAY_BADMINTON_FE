@@ -32,8 +32,7 @@ import type {
 } from "@/types/leagueTypes";
 import leagueFormSchema from "@/validations/leagueFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { endOfDay } from "date-fns";
-import { format, formatISO, setHours, setMinutes } from "date-fns";
+import { format, setHours, setMinutes } from "date-fns";
 import { ko } from "date-fns/locale";
 import {
   Award,
