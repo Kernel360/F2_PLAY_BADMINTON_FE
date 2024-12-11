@@ -37,7 +37,7 @@ import { format, formatISO, setHours, setMinutes } from "date-fns";
 import { ko } from "date-fns/locale";
 import {
   Award,
-  Calendar as CalendarIcon,
+  CalendarIcon,
   GitCompare,
   MapPin,
   Milestone,
@@ -135,13 +135,13 @@ function LeagueForm(props: LeagueFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSumbitSchedule)}
-        className="space-y-4 w-full flex flex-auto flex-col gap-5"
+        className="space-y-4 w-full flex flex-auto flex-col gap-5 px-4 sm:px-6 md:px-8 max-w-4xl mx-auto overflow-y-auto"
       >
         <FormField
           control={form.control}
           name="league_name"
           render={({ field }) => (
-            <FormItem className="flex flex-col gap-2 mb-4 items-center">
+            <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
               <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                 <Milestone className="text-gray-500" size={20} />
                 경기 이름
@@ -158,7 +158,7 @@ function LeagueForm(props: LeagueFormProps) {
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+            <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
               <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                 <PencilLine className="text-gray-500" size={20} />
                 경기 설명
@@ -175,12 +175,12 @@ function LeagueForm(props: LeagueFormProps) {
           )}
         />
 
-        <div className="grid grid-cols-2 gap-4 gap-y-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 gap-y-8">
           <FormField
             control={form.control}
             name="league_at"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <CalendarIcon className="text-gray-500" size={20} />
                   경기 시간
@@ -248,14 +248,14 @@ function LeagueForm(props: LeagueFormProps) {
             control={form.control}
             name="match_type"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <Users className="text-gray-500" size={20} />
                   경기 타입
                 </FormLabel>
                 <FormControl>
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black">
+                    <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black w-full">
                       <SelectValue placeholder="경기 타입 선택하기" />
                     </SelectTrigger>
                     <SelectContent className="w-full border cursor-pointer border-gray-200 bg-white rounded-md shadow-lg">
@@ -283,7 +283,7 @@ function LeagueForm(props: LeagueFormProps) {
             control={form.control}
             name="tier_limit"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <Award className="text-gray-500" size={20} />
                   지원 가능 티어
@@ -294,7 +294,7 @@ function LeagueForm(props: LeagueFormProps) {
                     onValueChange={field.onChange}
                     disabled={!!initialData}
                   >
-                    <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black">
+                    <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black w-full">
                       <SelectValue placeholder="최소 티어 선택하기" />
                     </SelectTrigger>
                     <SelectContent className="w-full border cursor-pointer border-gray-200 bg-white rounded-md shadow-lg">
@@ -331,7 +331,7 @@ function LeagueForm(props: LeagueFormProps) {
             control={form.control}
             name="player_limit_count"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <User className="text-gray-500" size={20} />
                   모집 인원
@@ -357,7 +357,7 @@ function LeagueForm(props: LeagueFormProps) {
             control={form.control}
             name="full_address"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <MapPin className="text-gray-500" size={20} />
                   경기 장소
@@ -382,7 +382,7 @@ function LeagueForm(props: LeagueFormProps) {
             control={form.control}
             name="recruiting_closed_at"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <CalendarIcon className="text-gray-500" size={20} />
                   모집 마감 날짜
@@ -449,14 +449,14 @@ function LeagueForm(props: LeagueFormProps) {
             control={form.control}
             name="match_generation_type"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <GitCompare className="text-gray-500" size={20} />
                   대진표 타입
                 </FormLabel>
                 <FormControl>
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black">
+                    <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black w-full">
                       <SelectValue placeholder="경기 타입 선택하기" />
                     </SelectTrigger>
                     <SelectContent className="w-full border cursor-pointer border-gray-200 bg-white rounded-md shadow-lg">
@@ -482,7 +482,10 @@ function LeagueForm(props: LeagueFormProps) {
         </div>
 
         <div className="flex justify-center pt-8 gap-4">
-          <Button size="lg" className="w-1/4 p-3 font-semibold">
+          <Button
+            size="lg"
+            className="w-full sm:w-1/2 md:w-1/3 p-3 font-semibold"
+          >
             {initialData ? "경기 수정" : "경기 생성"}
           </Button>
         </div>
