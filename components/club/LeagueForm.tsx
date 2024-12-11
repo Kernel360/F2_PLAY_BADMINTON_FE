@@ -30,13 +30,15 @@ import type {
   PostLeagueRequest,
   PutLeagueRequest,
 } from "@/types/leagueTypes";
+import { currentTimeZone } from "@/utils/getTimezone";
 import leagueFormSchema from "@/validations/leagueFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, setHours, setMinutes } from "date-fns";
+import { add, format, setHours, setMinutes, sub } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 import { ko } from "date-fns/locale";
 import {
   Award,
-  Calendar as CalendarIcon,
+  CalendarIcon,
   GitCompare,
   MapPin,
   Milestone,
@@ -62,10 +64,10 @@ interface LeagueFormProps {
 function LeagueForm(props: LeagueFormProps) {
   const { clubId, leagueId, initialData } = props;
   const router = useRouter();
-  const [leagueAtDate, setLeagueAtDate] = useState<Date | string>(new Date());
-  const [leagueTimeValue, setLeagueTimeValue] = useState<string>("00:00");
-  const [closedAtDate, setClosedAtDate] = useState<Date | string>(new Date());
-  const [closedTimeValue, setClosedTimeValue] = useState<string>("00:00");
+  const [leagueAtDate, setLeagueAtDate] = useState<Date>(new Date());
+  const [leagueAtTimeValue, setLeagueAtTimeValue] = useState<string>("00:00");
+  const [closedAtDate, setClosedAtDate] = useState<Date>(new Date());
+  const [closedAtTimeValue, setClosedAtTimeValue] = useState<string>("00:00");
 
   const postLeagueOnSuccess = () => router.push(`/club/${clubId}/league`);
 
@@ -94,7 +96,22 @@ function LeagueForm(props: LeagueFormProps) {
       data.mode = "create";
     }
     if (data.mode === "create") {
-      createLeague(data);
+      const formattedLeagueDate = format(
+        data.league_at,
+        "yyyy-MM-dd HH:mm:00",
+      ).replace(" ", "T");
+
+      const formattedClosedDate = format(
+        data.recruiting_closed_at,
+        "yyyy-MM-dd HH:mm:00",
+      ).replace(" ", "T");
+
+      const formattedData = {
+        ...data,
+        league_at: formattedLeagueDate,
+        recruiting_closed_at: formattedClosedDate,
+      };
+      createLeague(formattedData);
     } else {
       updateLeague(data);
     }
@@ -108,31 +125,23 @@ function LeagueForm(props: LeagueFormProps) {
     const [hours, minutes] = time.split(":").map(Number);
 
     if (fieldName === "league_at") {
+      setLeagueAtTimeValue(time);
       const newDate = setHours(
         setMinutes(leagueAtDate, minutes ?? 0),
         hours ?? 0,
       );
-
-      const formattedDate = format(newDate, "yyyy-MM-dd kk:mm:00").replace(
-        " ",
-        "T",
-      );
-      setLeagueAtDate(formattedDate);
-      setLeagueTimeValue(time);
-      setValue(fieldName, formattedDate);
+      setLeagueAtDate(newDate);
+      setValue(fieldName, newDate.toISOString());
     }
+
     if (fieldName === "recruiting_closed_at") {
+      setClosedAtTimeValue(time);
       const newDate = setHours(
         setMinutes(closedAtDate, minutes ?? 0),
         hours ?? 0,
       );
-      const formattedDate = format(newDate, "yyyy-MM-dd kk:mm:00").replace(
-        " ",
-        "T",
-      );
-      setClosedAtDate(formattedDate);
-      setClosedTimeValue(time);
-      setValue(fieldName, formattedDate);
+      setClosedAtDate(newDate);
+      setValue(fieldName, newDate.toISOString());
     }
   };
 
@@ -140,13 +149,13 @@ function LeagueForm(props: LeagueFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSumbitSchedule)}
-        className="space-y-4 w-full flex flex-auto flex-col gap-5"
+        className="space-y-4 w-full flex flex-auto flex-col gap-5 px-4 sm:px-6 md:px-8 max-w-4xl mx-auto"
       >
         <FormField
           control={form.control}
           name="league_name"
           render={({ field }) => (
-            <FormItem className="flex flex-col gap-2 mb-4 items-center">
+            <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
               <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                 <Milestone className="text-gray-500" size={20} />
                 경기 이름
@@ -163,7 +172,7 @@ function LeagueForm(props: LeagueFormProps) {
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+            <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
               <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                 <PencilLine className="text-gray-500" size={20} />
                 경기 설명
@@ -180,12 +189,12 @@ function LeagueForm(props: LeagueFormProps) {
           )}
         />
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 gap-y-8">
           <FormField
             control={form.control}
             name="league_at"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <CalendarIcon className="text-gray-500" size={20} />
                   경기 시간
@@ -209,10 +218,10 @@ function LeagueForm(props: LeagueFormProps) {
                           : "경기 시간 선택"}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto max-w-xs">
+                    <PopoverContent className="w-auto p-4 bg-white border rounded-md shadow-md">
                       <Input
                         type="time"
-                        value={leagueTimeValue}
+                        value={leagueAtTimeValue}
                         onChange={(e) =>
                           handleTimeChange(
                             e.target.value,
@@ -224,18 +233,18 @@ function LeagueForm(props: LeagueFormProps) {
                       />
                       <Calendar
                         mode="single"
-                        selected={
-                          leagueAtDate ? new Date(leagueAtDate) : undefined
-                        }
+                        selected={leagueAtDate}
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
-                            const formattedDate = format(
-                              selectedDate,
-                              "yyyy-MM-dd kk:mm:00",
-                            ).replace(" ", "T");
-                            setLeagueAtDate(formattedDate);
-                            form.setValue("league_at", formattedDate);
-                            setLeagueTimeValue("00:00");
+                            const [hours, minutes] = leagueAtTimeValue
+                              .split(":")
+                              .map(Number);
+                            const newDate = setHours(
+                              setMinutes(selectedDate, minutes ?? 0),
+                              hours ?? 0,
+                            );
+                            setLeagueAtDate(newDate);
+                            form.setValue("league_at", newDate.toISOString());
                           }
                         }}
                         locale={ko}
@@ -257,14 +266,14 @@ function LeagueForm(props: LeagueFormProps) {
             control={form.control}
             name="match_type"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <Users className="text-gray-500" size={20} />
                   경기 타입
                 </FormLabel>
                 <FormControl>
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black">
+                    <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black w-full">
                       <SelectValue placeholder="경기 타입 선택하기" />
                     </SelectTrigger>
                     <SelectContent className="w-full border cursor-pointer border-gray-200 bg-white rounded-md shadow-lg">
@@ -292,7 +301,7 @@ function LeagueForm(props: LeagueFormProps) {
             control={form.control}
             name="tier_limit"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <Award className="text-gray-500" size={20} />
                   지원 가능 티어
@@ -303,7 +312,7 @@ function LeagueForm(props: LeagueFormProps) {
                     onValueChange={field.onChange}
                     disabled={!!initialData}
                   >
-                    <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black">
+                    <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black w-full">
                       <SelectValue placeholder="최소 티어 선택하기" />
                     </SelectTrigger>
                     <SelectContent className="w-full border cursor-pointer border-gray-200 bg-white rounded-md shadow-lg">
@@ -340,7 +349,7 @@ function LeagueForm(props: LeagueFormProps) {
             control={form.control}
             name="player_limit_count"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <User className="text-gray-500" size={20} />
                   모집 인원
@@ -366,7 +375,7 @@ function LeagueForm(props: LeagueFormProps) {
             control={form.control}
             name="full_address"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <MapPin className="text-gray-500" size={20} />
                   경기 장소
@@ -391,17 +400,17 @@ function LeagueForm(props: LeagueFormProps) {
             control={form.control}
             name="recruiting_closed_at"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <CalendarIcon className="text-gray-500" size={20} />
-                  모집 마감 시간
+                  모집 마감 날짜
                 </FormLabel>
                 <FormControl>
                   <Popover>
-                    <PopoverTrigger asChild disabled={!!initialData}>
+                    <PopoverTrigger disabled={!!initialData} asChild>
                       <Button
                         variant="outline"
-                        className="w-full text-left p-3 text-black hover:bg-white hover:text-black"
+                        className="w-full text-left p-3  text-black hover:bg-white hover:text-black"
                       >
                         {field.value
                           ? format(
@@ -414,10 +423,10 @@ function LeagueForm(props: LeagueFormProps) {
                           : "모집 마감 시간 선택"}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto max-w-xs">
+                    <PopoverContent className="w-auto p-4 bg-white border rounded-md shadow-md">
                       <Input
                         type="time"
-                        value={closedTimeValue}
+                        value={closedAtTimeValue}
                         onChange={(e) =>
                           handleTimeChange(
                             e.target.value,
@@ -429,21 +438,21 @@ function LeagueForm(props: LeagueFormProps) {
                       />
                       <Calendar
                         mode="single"
-                        selected={
-                          closedAtDate ? new Date(closedAtDate) : undefined
-                        }
+                        selected={closedAtDate}
                         onSelect={(selectedDate) => {
                           if (selectedDate) {
-                            const formattedDate = format(
-                              selectedDate,
-                              "yyyy-MM-dd kk:mm:00",
-                            ).replace(" ", "T");
-                            setLeagueAtDate(formattedDate);
+                            const [hours, minutes] = closedAtTimeValue
+                              .split(":")
+                              .map(Number);
+                            const newDate = setHours(
+                              setMinutes(selectedDate, minutes ?? 0),
+                              hours ?? 0,
+                            );
+                            setClosedAtDate(newDate);
                             form.setValue(
                               "recruiting_closed_at",
-                              formattedDate,
+                              newDate.toISOString(),
                             );
-                            setLeagueTimeValue("00:00");
                           }
                         }}
                         locale={ko}
@@ -465,14 +474,14 @@ function LeagueForm(props: LeagueFormProps) {
             control={form.control}
             name="match_generation_type"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 mb-4 items-center ">
+              <FormItem className="flex flex-col gap-2 mb-4 items-center w-full">
                 <FormLabel className="flex justify-start items-center gap-2 w-full text-gray-600">
                   <GitCompare className="text-gray-500" size={20} />
                   대진표 타입
                 </FormLabel>
                 <FormControl>
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black">
+                    <SelectTrigger className="text-black text-left flex items-center justify-between border-gray-200 rounded-md hover:bg-white hover:text-black w-full">
                       <SelectValue placeholder="경기 타입 선택하기" />
                     </SelectTrigger>
                     <SelectContent className="w-full border cursor-pointer border-gray-200 bg-white rounded-md shadow-lg">
@@ -498,7 +507,10 @@ function LeagueForm(props: LeagueFormProps) {
         </div>
 
         <div className="flex justify-center pt-8 gap-4">
-          <Button size="lg" className="w-1/4 md:w-1/3 p-3 font-semibold">
+          <Button
+            size="lg"
+            className="w-full sm:w-1/2 md:w-1/3 p-3 font-semibold"
+          >
             {initialData ? "경기 수정" : "경기 생성"}
           </Button>
         </div>
