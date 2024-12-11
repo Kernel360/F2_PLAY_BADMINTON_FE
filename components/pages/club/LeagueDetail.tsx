@@ -2,6 +2,7 @@
 
 import Spinner from "@/components/Spinner";
 import LeagueInfo from "@/components/club/LeagueDetail/LeagueInfo";
+import LeagueParticipant from "@/components/club/LeagueDetail/LeagueParticipant";
 import MatchButton from "@/components/club/LeagueDetail/MatchButton";
 import ParticipateButton from "@/components/club/LeagueDetail/ParticipateButton";
 import RecruitmentInfoDialog from "@/components/club/LeagueDetail/RecruitmentInfoDialog";
@@ -29,6 +30,7 @@ import {
   Pyramid,
   TicketX,
   User,
+  Users2Icon,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -197,6 +199,23 @@ function LeagueDetail() {
         </h3>
         <div className="mt-5">
           <Text color="black">{league?.league_description || "설명 없음"}</Text>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+          <Users2Icon className="text-gray-500" size={20} />
+          경기 참여자
+        </h3>
+        <div className="mt-4 max-h-[400px] overflow-y-auto pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {league?.league_participants.map((participant) => (
+              <LeagueParticipant
+                key={participant.member_token}
+                participant={participant}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
