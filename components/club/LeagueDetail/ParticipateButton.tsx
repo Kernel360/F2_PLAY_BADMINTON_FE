@@ -5,17 +5,23 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useGetClubMembersCheck } from "@/lib/api/hooks/clubMemberHook";
+import {
+  useDeleteParticipantLeague,
+  usePostParticipantLeague,
+} from "@/lib/api/hooks/leagueHook";
 import type { Tier } from "@/types/commonTypes";
 import type { GetLeagueDetailData } from "@/types/leagueTypes";
-import type { GetMemberSessionResponse } from "@/types/memberTypes";
+import type { GetMemberSessionData } from "@/types/memberTypes";
 import { User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type React from "react";
 
 interface ParticipateButtonProps {
+  clubId: string;
+  leagueId: string;
   league: GetLeagueDetailData;
-  loginedUser: GetMemberSessionResponse;
-  handleParticipate: (status: boolean) => void;
+  loginedUser?: GetMemberSessionData;
   isParticipating: boolean;
 }
 
@@ -33,22 +39,57 @@ const canParticipate = (userTier: Tier, requiredTier: Tier): boolean => {
 };
 
 function ParticipateButton({
+  clubId,
+  leagueId,
   league,
   loginedUser,
-  handleParticipate,
   isParticipating,
 }: ParticipateButtonProps) {
   const router = useRouter();
 
-  const isLeagueOwner =
-    loginedUser?.data?.member_token === league.league_owner_token;
+  const isLeagueOwner = loginedUser?.member_token === league.league_owner_token;
+
   const isRecruitingOrCompleted =
     league.league_status === "RECRUITING" ||
     league.league_status === "RECRUITING_COMPLETED";
+
   const isFull = league.recruited_member_count === league.player_limit_count;
+
   const canUserParticipate =
     loginedUser &&
-    canParticipate(loginedUser?.data?.member_tier, league.required_tier);
+    canParticipate(loginedUser?.member_tier, league.required_tier);
+
+  const { data: clubMemberCheck } = useGetClubMembersCheck(clubId as string);
+
+  const { mutate: postParticipate } = usePostParticipantLeague(
+    clubId as string,
+    leagueId,
+    () => alert("경기 신청이 완료되었습니다"),
+  );
+
+  const { mutate: deleteParticipate } = useDeleteParticipantLeague(
+    clubId as string,
+    leagueId,
+    () => alert("경기 참여 취소가 완료되었습니다"),
+  );
+
+  const handleParticipate = (status: boolean) => {
+    if (!loginedUser) {
+      alert("로그인이 필요한 기능입니다");
+      return router.push("/login");
+    }
+
+    if (!clubMemberCheck?.data?.is_club_member) {
+      alert("동호회 가입이 필요합니다");
+      return router.push(`/club/${clubId}`);
+    }
+
+    if (!status) {
+      postParticipate();
+    } else {
+      deleteParticipate();
+    }
+  };
 
   const buttonClass =
     "items-center justify-center gap-2 border-primary w-full sm:w-1/2 lg:w-1/3";
@@ -67,7 +108,7 @@ function ParticipateButton({
     );
   }
 
-  if (loginedUser.result === "FAIL") {
+  if (!loginedUser) {
     return (
       <Button
         size="lg"
