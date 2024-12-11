@@ -111,15 +111,15 @@ function LeagueDetail() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto  min-h-[530px] flex items-center justify-center bg-white rounded-lg space-y-6">
+      <div className="container mx-auto min-h-[530px] flex items-center justify-center bg-white rounded-lg">
         <Spinner />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto bg-white rounded-lg space-y-6">
-      <div className="flex items-center justify-between border-b pb-4">
+    <div className="container mx-auto bg-white rounded-lg p-4 space-y-6">
+      <div className="flex flex-wrap items-center justify-between border-b pb-4 gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
             {league?.league_name}
@@ -135,7 +135,7 @@ function LeagueDetail() {
         {!!loginedUser?.data &&
           loginedUser.data.member_token === league?.league_owner_token &&
           league?.league_status !== "CANCELED" && (
-            <div className="flex justify-center gap-2">
+            <div className="flex flex-wrap gap-2">
               <Link href={`/club/${clubId}/league/${leagueId}/update`}>
                 <Button
                   size="sm"
@@ -159,7 +159,7 @@ function LeagueDetail() {
           )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <LeagueInfo
           icon={Calendar}
           label="경기 일자"
@@ -168,25 +168,21 @@ function LeagueDetail() {
             format(new Date(league.league_at), "yyyy-MM-dd HH시 mm분")
           }
         />
-
         <LeagueInfo
           icon={Flag}
           label="모집 상태"
           value={getRecruitmentStatusLabel(league?.league_status || "")}
         />
-
         <LeagueInfo
           icon={MapPin}
           label="경기 장소"
           value={league?.full_address}
         />
-
         <LeagueInfo
           icon={User}
           label="모집 인원"
           value={`${league?.recruited_member_count} / ${league?.player_limit_count} 명`}
         />
-
         <LeagueInfo
           icon={Calendar}
           label="모집 마감 일자"
@@ -198,19 +194,16 @@ function LeagueDetail() {
             )
           }
         />
-
         <LeagueInfo
           icon={Award}
           label="지원 가능 티어"
           value={getTierWithEmojiAndText(league?.required_tier || "")}
         />
-
         <LeagueInfo
           icon={Pyramid}
           label="경기 유형"
           value={league?.match_type === "SINGLES" ? "단식" : "복식"}
         />
-
         <LeagueInfo
           icon={GitCompare}
           label="대진표 타입"
@@ -228,7 +221,7 @@ function LeagueDetail() {
         </div>
       </div>
 
-      <div className="flex w-full justify-evenly items-center mt-8">
+      <div className="flex flex-wrap justify-evenly items-center gap-4 mt-8">
         {league && loginedUser?.data && (
           <MatchButton
             clubId={clubId as string}

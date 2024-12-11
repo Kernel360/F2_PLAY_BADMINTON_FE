@@ -15,7 +15,7 @@ interface MatchButtonProps {
   leagueId: string;
   league: GetLeagueDetailData;
   loginedUser: GetMemberSessionData;
-  createMatch: () => void; // 대진표 생성 함수 타입 정의;
+  createMatch: () => void; // 대진표 생성 함수 타입 정의
 }
 
 const MatchButton = ({
@@ -34,7 +34,7 @@ const MatchButton = ({
     return (
       <Link
         href={`/club/${clubId}/league/${leagueId}/match`}
-        className="flex justify-center items-center gap-4 w-1/3"
+        className="flex justify-center items-center gap-4 w-full sm:w-1/2 lg:w-1/3"
       >
         <Button
           size="lg"
@@ -52,11 +52,11 @@ const MatchButton = ({
     return (
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger className="w-full sm:w-1/2 lg:w-1/3">
             <Button
               size="lg"
               variant="outline"
-              className="items-center justify-center gap-2 border-primary w-1/3 hover:bg-white hover:text-primary"
+              className="items-center justify-center gap-2 border-primary w-full hover:bg-white hover:text-primary"
               onClick={() => {
                 if (matchCreateCondition) {
                   createMatch();
@@ -68,8 +68,8 @@ const MatchButton = ({
             </Button>
           </TooltipTrigger>
           {league.league_status !== "RECRUITING_COMPLETED" && (
-            <TooltipContent>
-              모집을 먼저 마감하고, 대진표를 만들어주세요
+            <TooltipContent className="text-sm text-gray-700">
+              모집을 먼저 마감하고, 대진표를 만들어주세요.
             </TooltipContent>
           )}
         </Tooltip>
