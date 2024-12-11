@@ -30,9 +30,11 @@ import type {
   PostLeagueRequest,
   PutLeagueRequest,
 } from "@/types/leagueTypes";
+import { currentTimeZone } from "@/utils/getTimezone";
 import leagueFormSchema from "@/validations/leagueFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, setHours, setMinutes } from "date-fns";
+import { add, format, setHours, setMinutes } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 import { ko } from "date-fns/locale";
 import {
   Award,
@@ -66,7 +68,11 @@ function LeagueForm(props: LeagueFormProps) {
   const [leagueAtTimeValue, setLeagueAtTimeValue] = useState<string>("00:00");
   const [closedAtDate, setClosedAtDate] = useState<Date>(new Date());
   const [closedAtTimeValue, setClosedAtTimeValue] = useState<string>("00:00");
-
+  console.log(
+    "timezone",
+    initialData?.league_at &&
+      toZonedTime(initialData?.league_at, currentTimeZone),
+  );
   const postLeagueOnSuccess = () => router.push(`/club/${clubId}/league`);
 
   const putLeagueOnSuccess = () => router.push(`/club/${clubId}/league`);
@@ -190,15 +196,28 @@ function LeagueForm(props: LeagueFormProps) {
                         variant="outline"
                         className="w-full text-left p-3 text-black hover:bg-white hover:text-black"
                       >
-                        {field.value
-                          ? format(
-                              field.value,
-                              "yyyy년 MM월 dd일 a hh시 mm분",
-                              {
-                                locale: ko,
-                              },
-                            )
-                          : "경기 시간 선택"}
+                        {field.value ? (
+                          <>
+                            {(() => {
+                              const zonedTime = toZonedTime(
+                                field.value,
+                                currentTimeZone,
+                              );
+
+                              const updatedDate = add(zonedTime, { hours: 9 });
+
+                              return format(
+                                updatedDate,
+                                "yyyy년 MM월 dd일 a hh시 mm분",
+                                {
+                                  locale: ko,
+                                },
+                              );
+                            })()}
+                          </>
+                        ) : (
+                          "경기 시간 선택"
+                        )}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-4 bg-white border rounded-md shadow-md">
@@ -395,15 +414,28 @@ function LeagueForm(props: LeagueFormProps) {
                         variant="outline"
                         className="w-full text-left p-3  text-black hover:bg-white hover:text-black"
                       >
-                        {field.value
-                          ? format(
-                              field.value,
-                              "yyyy년 MM월 dd일 a hh시 mm분",
-                              {
-                                locale: ko,
-                              },
-                            )
-                          : "모집 마감 날짜 선택"}
+                        {field.value ? (
+                          <>
+                            {(() => {
+                              const zonedTime = toZonedTime(
+                                field.value,
+                                currentTimeZone,
+                              );
+
+                              const updatedDate = add(zonedTime, { hours: 9 });
+
+                              return format(
+                                updatedDate,
+                                "yyyy년 MM월 dd일 a hh시 mm분",
+                                {
+                                  locale: ko,
+                                },
+                              );
+                            })()}
+                          </>
+                        ) : (
+                          "모집 마감 시간 선택"
+                        )}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-4 bg-white border rounded-md shadow-md">
