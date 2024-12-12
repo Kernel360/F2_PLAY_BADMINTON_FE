@@ -1,5 +1,6 @@
 "use client";
 
+import Spinner from "@/components/Spinner";
 import FreeBracket from "@/components/club/FreeBracket";
 import TournamentBracket from "@/components/club/TournamentBracket";
 import { useGetMatches } from "@/lib/api/hooks/matchHook";
@@ -14,8 +15,8 @@ function Match() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-[464px] w-full">
-        Loading...
+      <div className="container mx-auto  min-h-[530px] flex items-center justify-center bg-white rounded-lg space-y-6">
+        <Spinner />
       </div>
     );
   }
