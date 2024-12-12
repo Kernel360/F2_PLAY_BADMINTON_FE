@@ -14,7 +14,6 @@ import {
   useGetLeagueCheck,
   useGetLeagueDetail,
 } from "@/lib/api/hooks/leagueHook";
-import { usePostMatches } from "@/lib/api/hooks/matchHook";
 import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
@@ -54,7 +53,6 @@ const getRecruitmentStatusLabel = (status: string) => {
 
 function LeagueDetail() {
   const { clubId, leagueId } = useParams();
-  const router = useRouter();
   const { data: league, isLoading } = useGetLeagueDetail(
     clubId as string,
     leagueId as string,
@@ -69,11 +67,6 @@ function LeagueDetail() {
     clubId as string,
     leagueId as string,
     () => alert("경기 취소가 완료되었습니다"),
-  );
-  const { mutate: createMatch } = usePostMatches(
-    clubId as string,
-    leagueId as string,
-    () => router.push(`/club/${clubId}/league/${leagueId}/match`),
   );
 
   const cancelLeague = () => {
@@ -226,7 +219,6 @@ function LeagueDetail() {
             leagueId={leagueId as string}
             league={league}
             loginedUser={loginedUser?.data}
-            createMatch={createMatch}
           />
         )}
         {league && loginedUser && (

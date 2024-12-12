@@ -5,17 +5,18 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { usePostMatches } from "@/lib/api/hooks/matchHook";
 import type { GetLeagueDetailData } from "@/types/leagueTypes";
 import type { GetMemberSessionData } from "@/types/memberTypes";
 import { BookUser } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface MatchButtonProps {
   clubId: string;
   leagueId: string;
   league: GetLeagueDetailData;
   loginedUser: GetMemberSessionData;
-  createMatch: () => void; // 대진표 생성 함수 타입 정의
 }
 
 const MatchButton = ({
@@ -23,12 +24,23 @@ const MatchButton = ({
   clubId,
   league,
   loginedUser,
-  createMatch,
 }: MatchButtonProps) => {
+  const router = useRouter();
+
   const matchCreateCondition =
     (league.league_status === "RECRUITING_COMPLETED" ||
       league.league_status === "PLAYING") &&
     !league?.is_match_created;
+
+  const createMatchOnSuccess = () => {
+    router.push(`/club/${clubId}/league/${leagueId}/match`);
+  };
+
+  const { mutate: createMatch } = usePostMatches(
+    clubId as string,
+    leagueId as string,
+    () => createMatchOnSuccess(),
+  );
 
   if (league.is_match_created) {
     return (
@@ -56,7 +68,12 @@ const MatchButton = ({
             <Button
               size="lg"
               variant="outline"
-              className="items-center justify-center gap-2 border-primary w-full hover:bg-white hover:text-primary"
+              className={`items-center justify-center gap-2 w-full 
+                ${
+                  matchCreateCondition
+                    ? "border-primary hover:bg-white hover:text-primary"
+                    : "cursor-not-allowed border-zinc-300 text-zinc-500 hover:bg-white hover:text-zinc-500"
+                }`}
               onClick={() => {
                 if (matchCreateCondition) {
                   createMatch();
