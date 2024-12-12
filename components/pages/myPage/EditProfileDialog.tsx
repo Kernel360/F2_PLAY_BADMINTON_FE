@@ -69,32 +69,27 @@ function EditProfileDialog({
     const file = e.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
-      setUploadedImageFile(file);
+      setProfileImage(imageUrl); // 미리보기에 반영
+      setUploadedImageFile(file); // 업로드할 파일 설정
+      form.clearErrors("profileImage"); // 기존 에러 제거
+    } else {
+      form.setError("profileImage", {
+        type: "manual",
+        message: "유효한 이미지를 선택하세요.",
+      });
     }
   };
 
   const handleImageRemove = () => {
     // 이미지 삭제 후 기본 이미지 설정
     // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    setProfileImage(DEFAULT_IMAGE!); // 기본 이미지 설정
+    setProfileImage(DEFAULT_IMAGE!); // 기본 이미지로 설정
     setUploadedImageFile(null); // 업로드된 파일 정보 초기화
     form.setValue("profileImage", DEFAULT_IMAGE); // 폼 값도 기본 이미지로 설정
   };
 
   const onSubmit: SubmitHandler<ProfileFormInputs> = (data) => {
     const { name } = data;
-    let profileImageUrl: string;
-
-    // 이미지 삭제 후, 수정할 때 기본 이미지를 설정하는 부분
-    if (uploadedImageFile) {
-      profileImageUrl = profileImage; // 업로드된 이미지 사용
-    } else if (profileImage === DEFAULT_IMAGE) {
-      // biome-ignore lint/style/noNonNullAssertion: <explanation>
-      profileImageUrl = DEFAULT_IMAGE!; // 기본 이미지 사용
-    } else {
-      profileImageUrl = initialProfileImage; // 이름만 수정 시 기존 이미지 그대로 사용
-    }
 
     if (uploadedImageFile) {
       const formData = new FormData();
@@ -110,14 +105,16 @@ function EditProfileDialog({
             });
           }
         },
-        onError: (error) => {
-          console.error("이미지 업로드 실패:", error);
+        onError: () => {
+          alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
+          // biome-ignore lint/style/noNonNullAssertion: <explanation>
+          setProfileImage(DEFAULT_IMAGE!);
         },
       });
     } else {
       putProfile({
         name,
-        profile_image_url: profileImageUrl, // 선택된 이미지로 업데이트
+        profile_image_url: profileImage,
       });
     }
   };
