@@ -1,6 +1,12 @@
 import SImage from "@/components/ui/Image";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import type { GetMatchesData } from "@/types/matchTypes";
 import React from "react";
 
@@ -57,6 +63,9 @@ function FreeBracket(props: FreeBracketProps) {
       {nodeData.match_type === "DOUBLES" &&
         nodeData.doubles_match_response_list?.map((match) => (
           <div key={match.match_id} className="flex flex-col gap-8">
+            <Badge className="bg-yellow-500 hover:bg-yellow-500 text-xs font-semibold text-center mb-2 rounded-sm flex justify-center">
+              round {match.round_number}
+            </Badge>
             <div className="flex flex-col items-center gap-6">
               <div className="w-full flex flex-wrap justify-center gap-4">
                 <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
@@ -70,9 +79,18 @@ function FreeBracket(props: FreeBracketProps) {
                     height={50}
                     alt={match.team1.participant1.name}
                   />
-                  <span className="text-gray-800 text-sm font-semibold truncate">
-                    {match.team1.participant1.name}
-                  </span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <span className="text-gray-800 text-sm font-semibold truncate max-w-[5rem] sm:max-w-[7rem] md:max-w-[8rem] block">
+                          {match.team1.participant1.name || ""}
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{match.team1.participant1.name}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
                 <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
                   <SImage
@@ -85,9 +103,18 @@ function FreeBracket(props: FreeBracketProps) {
                     height={50}
                     alt={match.team1.participant2.name}
                   />
-                  <span className="text-gray-800 text-sm font-semibold truncate">
-                    {match.team1.participant2.name}
-                  </span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <span className="text-gray-800 text-sm font-semibold truncate max-w-[5rem] sm:max-w-[7rem] md:max-w-[8rem] block">
+                          {match.team1.participant2.name || ""}
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{match.team1.participant2.name}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
               </div>
               <div className="w-full flex flex-col items-center justify-center gap-2 text-xl font-semibold text-gray-900">
@@ -110,10 +137,20 @@ function FreeBracket(props: FreeBracketProps) {
                     height={50}
                     alt={match.team2.participant1.name}
                   />
-                  <span className="text-gray-800 text-sm font-semibold truncate">
-                    {match.team2.participant1.name}
-                  </span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <span className="text-gray-800 text-sm font-semibold truncate max-w-[5rem] sm:max-w-[7rem] md:max-w-[8rem] block">
+                          {match.team2.participant1.name || ""}
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{match.team2.participant1.name}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
+
                 <div className="flex flex-col items-center gap-2 w-full sm:w-1/2 lg:w-1/3">
                   <SImage
                     src={
@@ -125,9 +162,18 @@ function FreeBracket(props: FreeBracketProps) {
                     height={50}
                     alt={match.team2.participant2.name}
                   />
-                  <span className="text-gray-800 text-sm font-semibold truncate">
-                    {match.team2.participant2.name}
-                  </span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <span className="text-gray-800 text-sm font-semibold truncate max-w-[5rem] sm:max-w-[7rem] md:max-w-[8rem] block">
+                          {match.team2.participant2.name || ""}
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{match.team2.participant2.name}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
               </div>
             </div>
