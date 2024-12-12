@@ -52,3 +52,7 @@ export type SetType = {
   score2?: number | undefined;
   set_status?: "NOT_STARTED" | "IN_PROGRESS" | "FINISHED" | undefined;
 };
+
+export type SinglesMatchType = components["schemas"]["SinglesMatchResponse"];
+
+export type DoublesMatchType = components["schemas"]["DoublesMatchResponse"];
