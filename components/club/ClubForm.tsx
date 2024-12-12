@@ -79,16 +79,17 @@ function ClubForm(props: ClubFormProps) {
   });
 
   const uploadImage = (file: File) => {
+    const previewUrl = URL.createObjectURL(file);
+    setImgUrl(previewUrl);
+
     const formData = new FormData();
     formData.append("multipartFile", file);
-    console.log("2");
+
     createClubImg(formData, {
       onSuccess: (data) => {
         if (data.data) {
-          setImgUrl(data.data || undefined);
           form.setValue("club_image", data.data);
           form.clearErrors("club_image");
-          console.log(data);
         }
       },
       onError: () => {
@@ -111,6 +112,14 @@ function ClubForm(props: ClubFormProps) {
         type: "manual",
         message: "이미지를 다시 업로드하세요",
       });
+    }
+  };
+
+  const handleImageRemove = () => {
+    setImgUrl(undefined);
+    form.setValue("club_image", "");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // 파일 입력 값 초기화
     }
   };
 
@@ -145,14 +154,6 @@ function ClubForm(props: ClubFormProps) {
 
     if (initialData) return patchClub(newClubData);
     createClub(newClubData);
-  };
-
-  const handleImageRemove = () => {
-    setImgUrl(undefined);
-    form.setValue("club_image", "");
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""; // 파일 입력 값 초기화
-    }
   };
 
   return (
