@@ -82,11 +82,10 @@ export const usePostClubs = (onSuccess: (clubToken: string) => void) => {
 };
 
 export const usePostClubsImg = () => {
-  return useMutation({
-    mutationFn: (clubImg: FormData) => postClubsImg(clubImg),
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = (clubImg: FormData) => postClubsImg(clubImg);
+  return useMutationWithToast(mutationFn);
 };
+
 export const useGetClubsById = (clubId: string) => {
   return useQueryWithToast<GetClubDetailData>(
     ["clubsDataById", clubId],
