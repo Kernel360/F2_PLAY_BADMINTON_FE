@@ -87,6 +87,7 @@ export const usePostClubsImg = () => {
     onError: (error: Error) => alert(error),
   });
 };
+
 export const useGetClubsById = (clubId: string) => {
   return useQueryWithToast<GetClubDetailData>(
     ["clubsDataById", clubId],

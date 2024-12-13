@@ -149,7 +149,7 @@ function ClubForm(props: ClubFormProps) {
     const newClubData: ClubForm = {
       club_name: data.club_name,
       club_description: data.club_description,
-      club_image: imgUrl,
+      club_image: data.club_image,
     };
 
     if (initialData) return patchClub(newClubData);
