@@ -114,7 +114,7 @@ function EditProfileDialog({
     } else {
       putProfile({
         name,
-        profile_image_url: profileImage,
+        profile_image_url: data.profileImage,
       });
     }
   };
