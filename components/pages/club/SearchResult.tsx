@@ -11,13 +11,31 @@ import React from "react";
 
 function SearchResult() {
   const searchParams = useSearchParams();
-  const query = searchParams.get("q") || "";
+  const query = searchParams.get("search") || "";
 
-  const { data, isLoading, fetchNextPage, hasNextPage } = useGetSearchClubs(
-    12,
-    "clubId",
-    query,
-  );
+  // 검색어 길이가 50자를 초과하는 경우 에러 처리
+  const isQueryValid = query.length <= 50;
+
+  const {
+    data = [],
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+  } = useGetSearchClubs(12, "clubId", isQueryValid ? query : "");
+
+  if (!isQueryValid) {
+    return (
+      <div className="flex flex-col justify-center items-center space-y-4 min-h-[50vh] gap-3">
+        <SearchX className="h-14 w-14 text-gray-400" aria-hidden="true" />
+        <h2 className="text-xl font-medium text-gray-800">
+          검색은 50자 이내만 가능합니다
+        </h2>
+        <p className="text-base text-gray-600 text-center">
+          다른 검색어를 시도해보세요.
+        </p>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -27,9 +45,9 @@ function SearchResult() {
     );
   }
 
-  if (data.length === 0) {
+  if (!data || data.length === 0) {
     return (
-      <div className="flex flex-col justify-center items-center space-y-4 min-h-[50vh]">
+      <div className="flex flex-col justify-center items-center space-y-4 min-h-[50vh] gap-3">
         <SearchX className="h-14 w-14 text-gray-400" aria-hidden="true" />
         <h2 className="text-xl font-medium text-gray-800">검색 결과 없음</h2>
         <p className="text-base text-gray-600 text-center">
