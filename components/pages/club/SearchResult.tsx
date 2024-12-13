@@ -27,10 +27,9 @@ function SearchResult() {
     return (
       <div className="flex flex-col justify-center items-center space-y-4 min-h-[50vh] gap-3">
         <SearchX className="h-14 w-14 text-gray-400" aria-hidden="true" />
-        <h2 className="text-xl font-medium text-gray-800">검색 결과 없음</h2>
-        <p className="text-base text-gray-600 text-center">
+        <h2 className="text-xl font-medium text-gray-800">
           검색은 50자 이내만 가능합니다
-        </p>
+        </h2>
         <p className="text-base text-gray-600 text-center">
           다른 검색어를 시도해보세요.
         </p>
