@@ -13,7 +13,7 @@ import type {
 
 export const getMatches = async (
   clubId: string,
-  leagueId: number,
+  leagueId: string,
 ): Promise<GetMatchesResponse> => {
   return restClient.get<GetMatchesResponse>(
     `/clubs/${clubId}/leagues/${leagueId}/matches`,

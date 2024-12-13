@@ -23,7 +23,7 @@ import type {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useMutationWithToast from "./useMutationWithToast";
 
-export const useGetMatches = (clubId: string, leagueId: number) => {
+export const useGetMatches = (clubId: string, leagueId: string) => {
   return useQueryWithToast<GetMatchesData>(["matchesData"], () =>
     getMatches(clubId, leagueId),
   );
@@ -48,7 +48,7 @@ export const useGetSetScore = (
   matchStatus: MatchStatusType,
 ) => {
   return useQuery({
-    queryKey: ["leagueDetails", leagueId],
+    queryKey: ["matchDetail", leagueId, matchId, setNumber, matchStatus],
     queryFn: () => getSetScore(clubId, leagueId, matchId, setNumber),
     enabled: !(matchStatus !== "IN_PROGRESS"),
     refetchInterval: 5000, // 5초마다 재요청

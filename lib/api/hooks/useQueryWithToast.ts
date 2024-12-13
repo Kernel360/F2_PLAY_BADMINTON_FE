@@ -8,6 +8,7 @@ import { useEffect } from "react";
 interface UseQueryWithToastOptions {
   enabled?: boolean;
   staleTime?: number; // 서버 fetching을 위한 staleTime 설정
+  refetchInterval?: number;
 }
 
 const useQueryWithToast = <TData>(
@@ -26,6 +27,7 @@ const useQueryWithToast = <TData>(
     queryFn,
     enabled: options?.enabled ?? true,
     staleTime: options?.staleTime,
+    refetchInterval: options?.refetchInterval,
   });
 
   useEffect(() => {

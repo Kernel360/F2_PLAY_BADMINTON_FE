@@ -1,7 +1,10 @@
 import useInfiniteQueryReturnFlattenData from "@/lib/api/hooks/useInfiniteQueryReturnFlattenData";
-import type { GetMainLeagues } from "@/types/mainLeagueTypes";
-import { useQuery } from "@tanstack/react-query";
+import type {
+  GetMainLeagues,
+  GetMainLeaguesMatchData,
+} from "@/types/mainLeagueTypes";
 import { getMainLeague, getMainLeagueMatch } from "../functions/mainLeagueFn";
+import useQueryWithToast from "./useQueryWithToast";
 
 export const useGetMainLeagues = ({
   leagueStatus,
@@ -22,11 +25,13 @@ export const useGetMainLeagues = ({
   );
 };
 
-export const useGetMainLeaguesMatch = (leagueId: string) => {
-  return useQuery({
-    queryKey: ["leagueDetails", leagueId],
-    queryFn: () => getMainLeagueMatch(leagueId),
-    enabled: !!leagueId,
-    refetchInterval: 5000, // 5초마다 재요청
-  });
+export const useGetMainLeaguesMatch = (leagueId: string | null) => {
+  return useQueryWithToast<GetMainLeaguesMatchData[]>(
+    ["leagueDetails", leagueId ?? ""],
+    () => getMainLeagueMatch(leagueId ?? ""),
+    {
+      enabled: !!leagueId,
+      refetchInterval: 5000, // 5초마다 재요청
+    },
+  );
 };
