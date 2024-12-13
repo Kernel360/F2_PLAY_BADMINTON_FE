@@ -34,6 +34,7 @@ async function ClubIntroPage({ params }: Props) {
   await queryClient.prefetchQuery({
     queryKey: ["clubsDataById", clubId],
     queryFn: () => getClubsById(clubId),
+    staleTime: 1000 * 60 * 1, // stale time은 1분
   });
 
   return (

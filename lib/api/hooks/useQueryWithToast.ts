@@ -6,7 +6,8 @@ import { type QueryObserverResult, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 interface UseQueryWithToastOptions {
-  enabled?: boolean; // enabled 옵션을 옵셔널로 추가
+  enabled?: boolean;
+  staleTime?: number; // 서버 fetching을 위한 staleTime 설정
 }
 
 const useQueryWithToast = <TData>(
@@ -24,6 +25,7 @@ const useQueryWithToast = <TData>(
     queryKey,
     queryFn,
     enabled: options?.enabled ?? true,
+    staleTime: options?.staleTime,
   });
 
   useEffect(() => {

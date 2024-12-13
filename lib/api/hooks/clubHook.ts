@@ -87,10 +87,13 @@ export const usePostClubsImg = () => {
     onError: (error: Error) => alert(error),
   });
 };
-
 export const useGetClubsById = (clubId: string) => {
-  return useQueryWithToast<GetClubDetailData>(["clubsDataById", clubId], () =>
-    getClubsById(clubId),
+  return useQueryWithToast<GetClubDetailData>(
+    ["clubsDataById", clubId],
+    () => getClubsById(clubId),
+    {
+      staleTime: 1000 * 60 * 1, // stale time은 1분
+    },
   );
 };
 
