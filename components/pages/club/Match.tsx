@@ -11,7 +11,10 @@ function Match() {
   const { clubId, leagueId } = useParams();
 
   // data의 match_generation_type에 따라 다른 컴포넌트 렌더링해줘야 함
-  const { data, isLoading } = useGetMatches(clubId as string, Number(leagueId));
+  const { data, isLoading } = useGetMatches(
+    clubId as string,
+    leagueId as string,
+  );
 
   if (isLoading) {
     return (

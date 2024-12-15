@@ -38,13 +38,9 @@ function LiveMatchList() {
     size: 9,
   });
 
-  console.log(data);
+  const { data: leagueDetails } = useGetMainLeaguesMatch(openedLeagueId);
 
-  const { data: leagueDetails } = useGetMainLeaguesMatch(
-    openedLeagueId as string,
-  );
-
-  const handleAccordionChange = (leagueId: string | null) => {
+  const handleAccordionChange = (leagueId: string) => {
     setOpenedLeagueId(leagueId); // 아코디언 열림 상태 업데이트
   };
 
@@ -120,7 +116,7 @@ function LiveMatchList() {
                     </div>
                     <AccordionContent>
                       <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-                        {leagueDetails?.data?.length === 0 ? (
+                        {leagueDetails?.length === 0 ? (
                           <div className="w-full h-20 col-span-1 sm:col-span-2 lg:col-span-3  flex flex-col justify-center items-center gap-2 text-black">
                             <img
                               src="/images/logo.png"
@@ -130,7 +126,7 @@ function LiveMatchList() {
                             아직 진행중인 경기가 없습니다
                           </div>
                         ) : (
-                          leagueDetails?.data?.map(
+                          leagueDetails?.map(
                             (match: GetMainLeaguesMatchData) => (
                               <div
                                 key={match.match_id}
@@ -188,7 +184,7 @@ function LiveMatchList() {
                                   )}
                                   {/* 복식 */}
                                   {match.doubles_match_player_response &&
-                                    leagueDetails.data?.length !== 0 && (
+                                    leagueDetails?.length !== 0 && (
                                       <div className="flex flex-col gap-8">
                                         <div className="flex flex-col items-center gap-6">
                                           <div className="w-full flex flex-wrap justify-center gap-4">

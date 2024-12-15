@@ -104,7 +104,6 @@ function ClubForm(props: ClubFormProps) {
   const onImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      console.log(file);
       uploadImage(file);
     } else {
       setImgUrl(undefined);
