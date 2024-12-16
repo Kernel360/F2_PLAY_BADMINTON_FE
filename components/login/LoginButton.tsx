@@ -6,6 +6,7 @@ import naver from "@/public/images/naver-logo.png";
 interface LoginButtonProps {
   method?: "naver" | "kakao" | "google";
 }
+
 function LoginButton(props: LoginButtonProps) {
   const { method } = props;
 
@@ -28,12 +29,13 @@ function LoginButton(props: LoginButtonProps) {
     default:
       break;
   }
+
   return (
     <div
-      className={`h-16 w-72 rounded-full flex justify-center items-center ${color}`}
+      className={`h-12 w-56 rounded-lg flex justify-center items-center ${color}`}
     >
-      {imgSrc && <Image src={imgSrc} alt={method} width={50} height={50} />}
-      <span className="text-md font-bold">로그인 하기</span>
+      {imgSrc && <Image src={imgSrc} alt={method} width={30} height={30} />}
+      <span className="text-sm font-medium ml-2">로그인 하기</span>
     </div>
   );
 }
