@@ -197,13 +197,15 @@ export default function Scoreboard(props: ScoreboardProps) {
                 수정
               </button>
             )}
-            <button
-              type="button"
-              onClick={postNextSet}
-              className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow transition-all transform hover:scale-105"
-            >
-              세트 종료
-            </button>
+            {!isEditing && (
+              <button
+                type="button"
+                onClick={postNextSet}
+                className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow transition-all transform hover:scale-105"
+              >
+                세트 종료
+              </button>
+            )}
           </div>
         )}
       </>
