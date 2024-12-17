@@ -15,8 +15,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return allClubs.data?.content?.map((content) => ({
       url: `https://www.badminton.run/club/${content.club_token}`,
-      lastModified: content.modified_at,
-      changeFrequency: "yearly",
+      lastModified: new Date(content.modified_at).toISOString(),
+      changeFrequency: "weekly",
       priority: 1,
       images: [content.club_image],
     }));
