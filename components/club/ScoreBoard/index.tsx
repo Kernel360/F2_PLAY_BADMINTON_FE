@@ -4,7 +4,6 @@ import OverlayMessage from "@/components/club/ScoreBoard/OverlayMessage";
 import PlayerScore from "@/components/club/ScoreBoard/PlayerScore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
-import { postSetScore } from "@/lib/api/functions/matchFn";
 import {
   useGetSetScore,
   usePatchSetScore,
@@ -15,8 +14,8 @@ import type {
   MatchStatusType,
   PatchMatchSetScoreRequest,
 } from "@/types/matchTypes";
-import { Maximize2, Minimize2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { debounce } from "lodash";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface ScoreboardProps {
   clubId: string;
@@ -27,6 +26,19 @@ interface ScoreboardProps {
   player1: string;
   player2: string;
 }
+
+// 디바운스된 점수 업데이트 함수를 생성하는 훅
+const useDebouncedUpdateScore = (
+  patchSetScore: (updatedScore: PatchMatchSetScoreRequest) => void,
+) => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  return useCallback(
+    debounce((updatedScore: PatchMatchSetScoreRequest) => {
+      patchSetScore(updatedScore);
+    }, 300), // 0.3초
+    [patchSetScore], // patchSetScore 의존성 추가
+  );
+};
 
 export default function Scoreboard(props: ScoreboardProps) {
   const {
@@ -56,17 +68,17 @@ export default function Scoreboard(props: ScoreboardProps) {
     matchStatus,
   );
 
-  const { mutate: postMatchStart } = usePostMatchStart(
-    clubId,
-    leagueId,
-    matchId,
-  );
-
   const { mutate: patchSetScore } = usePatchSetScore(
     clubId,
     leagueId,
     matchId,
     currentSetNumber,
+  );
+
+  const { mutate: postMatchStart } = usePostMatchStart(
+    clubId,
+    leagueId,
+    matchId,
   );
 
   const { mutate: postSetScore } = usePostSetScore(
@@ -75,6 +87,8 @@ export default function Scoreboard(props: ScoreboardProps) {
     matchId,
     currentSetNumber,
   );
+
+  const debouncedUpdateScore = useDebouncedUpdateScore(patchSetScore);
 
   useEffect(() => {
     if (scoreData?.data) {
@@ -103,12 +117,14 @@ export default function Scoreboard(props: ScoreboardProps) {
       [key]: Math.min(30, currentScore + increment),
     };
 
-    setTempScore(updatedScore);
-    patchSetScore(updatedScore);
+    setTempScore(updatedScore); // 로컬 상태 업데이트
+    debouncedUpdateScore(updatedScore); // 디바운스된 API 호출
   };
 
   const handleInputChange = (player: "score1" | "score2", value: string) => {
-    if (Number(value) >= 30) {
+    const parsedValue = Number(value);
+
+    if (parsedValue > 30) {
       toast({
         title: "최대 점수 제한",
         description: "점수는 30점을 초과할 수 없습니다.",
@@ -116,10 +132,14 @@ export default function Scoreboard(props: ScoreboardProps) {
       });
       return;
     }
-    setTempScore((prev) => ({
-      ...prev,
-      [player]: Math.min(Math.max(Number(value), 0), 30),
-    }));
+
+    const updatedScore = {
+      ...tempScore,
+      [player]: Math.min(Math.max(parsedValue, 0), 30),
+    };
+
+    setTempScore(updatedScore); // 로컬 상태 업데이트
+    debouncedUpdateScore(updatedScore); // 디바운스된 API 호출
   };
 
   const handleSaveScores = () => {
@@ -138,6 +158,7 @@ export default function Scoreboard(props: ScoreboardProps) {
   const postNextSet = () => {
     postSetScore(tempScore);
   };
+
   if (isLoading) {
     return <Skeleton className="w-full h-[450px] rounded-md" />;
   }

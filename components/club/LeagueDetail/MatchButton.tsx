@@ -10,7 +10,7 @@ import type { GetLeagueDetailData } from "@/types/leagueTypes";
 import type { GetMemberSessionData } from "@/types/memberTypes";
 import { BookUser } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 interface MatchButtonProps {
   clubId: string;
@@ -26,6 +26,7 @@ const MatchButton = ({
   loginedUser,
 }: MatchButtonProps) => {
   const router = useRouter();
+  const { matchId } = useParams();
 
   const matchCreateCondition =
     (league.league_status === "RECRUITING_COMPLETED" ||
@@ -37,8 +38,9 @@ const MatchButton = ({
   };
 
   const { mutate: createMatch } = usePostMatches(
-    clubId as string,
-    leagueId as string,
+    clubId,
+    leagueId,
+    matchId as string,
     () => createMatchOnSuccess(),
   );
 
