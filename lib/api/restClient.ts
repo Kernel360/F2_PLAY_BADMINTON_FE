@@ -9,10 +9,12 @@ const restClient = {
         "Content-Type": "application/json",
       },
       credentials: "include",
+      // Note: Next.js의 default fetch caching 전략: 'force-cache' [서버]
+      // https://nextjs.org/docs/14/app/building-your-application/caching#fetch
+      // no-store를 통해서 이전에 서버에서 fetching 하는 것들의 캐싱을 막아줘야 예상 밖의 동작이 일어나지 않는다
+      cache: "no-store",
     });
-    // if (!response.ok) {
-    //   return response.status;
-    // }
+
     const data = await response.json();
     return data as T;
   },

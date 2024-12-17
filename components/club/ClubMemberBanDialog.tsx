@@ -74,7 +74,7 @@ function ClubMemberBanDialog({
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="link" className="text-gray-500">
+        <Button variant="link" className="text-gray-500 p-0 h-fit">
           회원 정지
         </Button>
       </DialogTrigger>

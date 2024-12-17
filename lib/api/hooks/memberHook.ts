@@ -1,11 +1,3 @@
-import type {
-  GetMemberMachesRecordData,
-  GetMemberMyClubsData,
-  GetMemberMyPageData,
-  PutMemberProfileData,
-  PutMemberProfileRequest,
-} from "@/types/memberTypes";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getMembersMatchesRecord,
   getMembersMyClubs,
@@ -13,9 +5,16 @@ import {
   getMembersSession,
   postMembersProfileImage,
   putMembersProfile,
-} from "../functions/memberFn";
-import useMutationWithToast from "./useMutationWithToast";
-import useQueryWithToast from "./useQueryWithToast";
+} from "@/lib/api/functions/memberFn";
+import useMutationWithToast from "@/lib/api/hooks/useMutationWithToast";
+import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
+import type {
+  GetMemberMachesRecordData,
+  GetMemberMyPageData,
+  PutMemberProfileData,
+  PutMemberProfileRequest,
+} from "@/types/memberTypes";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetMembersSession = () => {
   return useQuery({

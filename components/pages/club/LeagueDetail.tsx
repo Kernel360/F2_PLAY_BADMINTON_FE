@@ -2,19 +2,18 @@
 
 import Spinner from "@/components/Spinner";
 import LeagueInfo from "@/components/club/LeagueDetail/LeagueInfo";
+import LeagueParticipant from "@/components/club/LeagueDetail/LeagueParticipant";
 import MatchButton from "@/components/club/LeagueDetail/MatchButton";
 import ParticipateButton from "@/components/club/LeagueDetail/ParticipateButton";
+import RecruitmentInfoDialog from "@/components/club/LeagueDetail/RecruitmentInfoDialog";
 import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
-import { useGetClubMembersCheck } from "@/lib/api/hooks/clubMemberHook";
+
 import {
   useDeleteLeague,
-  useDeleteParticipantLeague,
   useGetLeagueCheck,
   useGetLeagueDetail,
-  usePostParticipantLeague,
 } from "@/lib/api/hooks/leagueHook";
-import { usePostMatches } from "@/lib/api/hooks/matchHook";
 import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
 import { getTierWithEmojiAndText } from "@/utils/getTier";
 import { format } from "date-fns";
@@ -30,6 +29,7 @@ import {
   Pyramid,
   TicketX,
   User,
+  Users2Icon,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -53,7 +53,6 @@ const getRecruitmentStatusLabel = (status: string) => {
 
 function LeagueDetail() {
   const { clubId, leagueId } = useParams();
-  const router = useRouter();
   const { data: league, isLoading } = useGetLeagueDetail(
     clubId as string,
     leagueId as string,
@@ -63,49 +62,12 @@ function LeagueDetail() {
     clubId as string,
     leagueId as string,
   );
-  const { data: clubMemberCheck } = useGetClubMembersCheck(clubId as string);
-  const { mutate: postParticipate } = usePostParticipantLeague(
-    clubId as string,
-    leagueId as string,
-    () => alert("경기 신청이 완료되었습니다"),
-  );
-  const { mutate: deleteParticipate } = useDeleteParticipantLeague(
-    clubId as string,
-    leagueId as string,
-    () => alert("경기 참여 취소가 완료되었습니다"),
-  );
+
   const { mutate: deleteLeague } = useDeleteLeague(
     clubId as string,
     leagueId as string,
     () => alert("경기 취소가 완료되었습니다"),
   );
-  const { mutate: createMatch } = usePostMatches(
-    clubId as string,
-    leagueId as string,
-    () => router.push(`/club/${clubId}/league/${leagueId}/match`),
-  );
-
-  const handleParticipate = (status: boolean) => {
-    if (loginedUser?.result === "FAIL") {
-      alert("로그인이 필요한 기능입니다");
-      return router.push("/login");
-    }
-
-    if (!clubMemberCheck?.data?.is_club_member) {
-      alert("동호회 가입이 필요합니다");
-      return router.push(`/club/${clubId}`);
-    }
-
-    if (!status) {
-      postParticipate();
-    } else {
-      deleteParticipate();
-    }
-  };
-
-  const makeMatch = () => {
-    createMatch();
-  };
 
   const cancelLeague = () => {
     if (confirm("정말로 경기를 취소하시겠습니까?")) {
@@ -115,15 +77,15 @@ function LeagueDetail() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto  min-h-[530px] flex items-center justify-center bg-white rounded-lg space-y-6">
+      <div className="container mx-auto min-h-[530px] flex items-center justify-center bg-white rounded-lg">
         <Spinner />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto bg-white rounded-lg space-y-6">
-      <div className="flex items-center justify-between border-b pb-4">
+    <div className="container mx-auto bg-white rounded-lg p-4 space-y-6">
+      <div className="flex flex-wrap items-center justify-between border-b pb-4 gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
             {league?.league_name}
@@ -136,10 +98,18 @@ function LeagueDetail() {
             </Text>
           </div>
         </div>
+
         {!!loginedUser?.data &&
           loginedUser.data.member_token === league?.league_owner_token &&
           league?.league_status !== "CANCELED" && (
-            <div className="flex justify-center gap-2">
+            <div className="flex flex-wrap gap-2">
+              {league?.league_status === "RECRUITING" && (
+                <RecruitmentInfoDialog
+                  clubId={clubId as string}
+                  leagueId={leagueId as string}
+                />
+              )}
+
               <Link href={`/club/${clubId}/league/${leagueId}/update`}>
                 <Button
                   size="sm"
@@ -163,7 +133,7 @@ function LeagueDetail() {
           )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <LeagueInfo
           icon={Calendar}
           label="경기 일자"
@@ -172,42 +142,42 @@ function LeagueDetail() {
             format(new Date(league.league_at), "yyyy-MM-dd HH시 mm분")
           }
         />
-
         <LeagueInfo
           icon={Flag}
           label="모집 상태"
           value={getRecruitmentStatusLabel(league?.league_status || "")}
         />
-
-        <LeagueInfo icon={MapPin} label="경기 장소" value={league?.region} />
-
+        <LeagueInfo
+          icon={MapPin}
+          label="경기 장소"
+          value={league?.full_address}
+        />
         <LeagueInfo
           icon={User}
           label="모집 인원"
           value={`${league?.recruited_member_count} / ${league?.player_limit_count} 명`}
         />
-
         <LeagueInfo
           icon={Calendar}
           label="모집 마감 일자"
           value={
             league?.recruiting_closed_at &&
-            format(new Date(league.recruiting_closed_at), "yyyy-MM-dd")
+            format(
+              new Date(league.recruiting_closed_at),
+              "yyyy-MM-dd HH시 mm분",
+            )
           }
         />
-
         <LeagueInfo
           icon={Award}
           label="지원 가능 티어"
           value={getTierWithEmojiAndText(league?.required_tier || "")}
         />
-
         <LeagueInfo
           icon={Pyramid}
           label="경기 유형"
           value={league?.match_type === "SINGLES" ? "단식" : "복식"}
         />
-
         <LeagueInfo
           icon={GitCompare}
           label="대진표 타입"
@@ -224,20 +194,39 @@ function LeagueDetail() {
           <Text color="black">{league?.league_description || "설명 없음"}</Text>
         </div>
       </div>
-      <div className="flex w-full justify-evenly items-center mt-8">
-        {league && (
+
+      <div>
+        <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+          <Users2Icon className="text-gray-500" size={20} />
+          경기 참여자
+        </h3>
+        <div className="mt-4 max-h-[400px] overflow-y-auto pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {league?.league_participants.map((participant) => (
+              <LeagueParticipant
+                key={participant.member_token}
+                participant={participant}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap justify-evenly items-center gap-4 mt-8">
+        {league && loginedUser?.data && (
           <MatchButton
             clubId={clubId as string}
             leagueId={leagueId as string}
             league={league}
-            createMatch={makeMatch}
+            loginedUser={loginedUser?.data}
           />
         )}
         {league && loginedUser && (
           <ParticipateButton
+            clubId={clubId as string}
+            leagueId={leagueId as string}
             league={league}
-            loginedUser={loginedUser}
-            handleParticipate={handleParticipate}
+            loginedUser={loginedUser?.data}
             isParticipating={!!leagueCheck?.data?.is_participated_in_league}
           />
         )}

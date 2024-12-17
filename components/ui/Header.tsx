@@ -5,7 +5,7 @@ import { usePostLogout } from "@/lib/api/hooks/SessionHook";
 import { useGetMembersSession } from "@/lib/api/hooks/memberHook";
 import { BadgeAlert, Search } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { ReactNode } from "react";
 import { useRef, useState } from "react";
 
@@ -22,12 +22,15 @@ function Header() {
   const { data, isLoading } = useGetMembersSession();
   const inputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get("search");
 
   const handleSearch = () => {
     if (inputRef.current) {
       const query = inputRef.current.value.replace(/\n/g, "").trim();
       if (query) {
-        router.push(`/search?q=${encodeURIComponent(query)}`);
+        router.push(`/search?search=${encodeURIComponent(query)}`);
       }
     }
   };
@@ -112,7 +115,7 @@ function Header() {
   }
 
   return (
-    <header className="flex flex-col w-full max-w-6xl px-4 sticky top-0 z-50 bg-white/70 backdrop-blur-md">
+    <header className="bg-white flex flex-col w-full max-w-6xl px-4 sticky top-0 z-50">
       {/* 상단: 로고, 검색창, 로그인 버튼 */}
       <div className="flex flex-wrap items-center justify-between gap-4 lg:flex-nowrap lg:gap-8 py-2">
         <div className="flex items-center justify-center gap-2">
@@ -146,6 +149,7 @@ function Header() {
           <div className="relative flex-grow max-w-[400px]">
             <input
               ref={inputRef}
+              defaultValue={search || ""}
               type="text"
               placeholder="동호회 이름을 검색하세요"
               className="w-full h-10 pl-4 pr-12 text-sm outline-none border-none rounded-lg bg-gray-50 text-gray-500 focus-visible:ring-2 placeholder-transparent md:placeholder-gray-400"

@@ -1,5 +1,5 @@
-import ClubLeague from "@/components/pages/club/ClubLeague";
+import ClubLeaguePage from "@/components/pages/club/ClubLeaguePage";
 
-export default function ClubLeaguePage() {
-  return <ClubLeague />;
+export default function Page() {
+  return <ClubLeaguePage />;
 }

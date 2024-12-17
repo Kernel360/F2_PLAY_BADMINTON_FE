@@ -24,6 +24,8 @@ function DayCell({ date, displayMonth, scheduleList }: DayCellProps) {
     customModifier: true,
   };
 
+  const getColorIndex = (key: number) => key % colors.length;
+
   const dayScheduleList =
     scheduleList?.filter((schedule) => {
       if (!schedule.league_at) return false;
@@ -38,11 +40,9 @@ function DayCell({ date, displayMonth, scheduleList }: DayCellProps) {
   const maxVisibleSchedules = 1; // 최대 1개의 일정만 표시
   const visibleSchedules = dayScheduleList.slice(0, maxVisibleSchedules);
   const remainingSchedules = dayScheduleList.length - maxVisibleSchedules;
-  const selectedColorIndex = scheduleList?.length % colors.length;
 
-  // TODO(Yejin0O0): 티어, 모집 마감 여부도 알 수 있었으면 좋겠다는 백엔드 의견 있었음
   return (
-    <div className="w-full h-full flex flex-col justify-between p-1">
+    <div className="w-full h-full flex flex-col justify-between p-[3%] sm:p-[2%]">
       <div className="text-center text-sm font-medium mb-1">
         <DayContent
           displayMonth={displayMonth}
@@ -51,28 +51,52 @@ function DayCell({ date, displayMonth, scheduleList }: DayCellProps) {
         />
       </div>
 
-      {visibleSchedules.length > 0 && (
+      {dayScheduleList.length > 0 && (
         <div className="w-full space-y-[2px] overflow-hidden">
-          {visibleSchedules.map((item) => {
-            // league_id에 따라 고유한 색상을 선택
-            const colorIndex = item.league_id
-              ? item.league_id % colors.length
-              : 0;
-            return (
-              <div
-                key={item.league_id}
-                className={`text-xs text-center text-white rounded-md truncate px-2 py-[2px] ${colors[colorIndex]}`}
-              >
-                {item.league_name}
-              </div>
-            );
-          })}
-
-          {remainingSchedules > 0 && (
-            <div className="text-xs text-center text-gray-500">
-              +{remainingSchedules}
+          {/* 모바일 */}
+          <div className="sm:hidden text-[0.5rem] text-center flex justify-center items-center">
+            <div
+              className={`flex items-center justify-center rounded-full text-white w-4 h-4 ${
+                colors[getColorIndex(date.getDate() + date.getMonth())]
+              }`}
+            >
+              +{dayScheduleList.length}
             </div>
-          )}
+          </div>
+
+          {/* 데스크탑 */}
+          <div className="hidden sm:block">
+            {visibleSchedules.map((item) => {
+              const colorIndex = getColorIndex(
+                date.getDate() + date.getMonth() + item.league_id,
+              );
+              const isCanceled = item.status === "CANCELED";
+              return (
+                <div
+                  key={item.league_id}
+                  className={`text-xs text-center rounded-md truncate px-2 py-[2px] ${
+                    isCanceled
+                      ? "bg-gray-200 text-gray-500"
+                      : `${colors[colorIndex]} text-white`
+                  }`}
+                >
+                  <span
+                    className={`${
+                      isCanceled ? "line-through" : ""
+                    } text-inherit`}
+                  >
+                    {item.league_name}
+                  </span>
+                </div>
+              );
+            })}
+
+            {remainingSchedules > 0 && (
+              <div className="text-xs text-center text-gray-500">
+                +{remainingSchedules}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

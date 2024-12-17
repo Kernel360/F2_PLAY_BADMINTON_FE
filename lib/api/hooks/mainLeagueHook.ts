@@ -1,6 +1,10 @@
-import type { GetMainLeaguesResponse } from "@/types/mainLeagueTypes";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import useInfiniteQueryReturnFlattenData from "@/lib/api/hooks/useInfiniteQueryReturnFlattenData";
+import type {
+  GetMainLeagues,
+  GetMainLeaguesMatchData,
+} from "@/types/mainLeagueTypes";
 import { getMainLeague, getMainLeagueMatch } from "../functions/mainLeagueFn";
+import useQueryWithToast from "./useQueryWithToast";
 
 export const useGetMainLeagues = ({
   leagueStatus,
@@ -13,22 +17,21 @@ export const useGetMainLeagues = ({
   date: string;
   size: number;
 }) => {
-  return useInfiniteQuery<GetMainLeaguesResponse>({
-    queryKey: ["mainLeaguesList", leagueStatus, region, date, size],
-    queryFn: ({ pageParam }) =>
+  return useInfiniteQueryReturnFlattenData<GetMainLeagues>(
+    ["mainLeaguesList", leagueStatus, region, date, size],
+    ({ pageParam }) =>
       getMainLeague({ pageParam, leagueStatus, region, date, size }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => {
-      return !lastPage?.data?.last ? pages.length : null;
-    },
-  });
+    0,
+  );
 };
 
-export const useGetMainLeaguesMatch = (leagueId: string) => {
-  return useQuery({
-    queryKey: ["leagueDetails", leagueId],
-    queryFn: () => getMainLeagueMatch(leagueId),
-    enabled: !!leagueId,
-    refetchInterval: 5000, // 5초마다 재요청
-  });
+export const useGetMainLeaguesMatch = (leagueId: string | null) => {
+  return useQueryWithToast<GetMainLeaguesMatchData[]>(
+    ["leagueDetails", leagueId ?? ""],
+    () => getMainLeagueMatch(leagueId ?? ""),
+    {
+      enabled: !!leagueId,
+      refetchInterval: 5000, // 5초마다 재요청
+    },
+  );
 };

@@ -1,20 +1,14 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
-import type { ErrorCode } from "@/types/errorCode";
+import type { CommonResponse } from "@/types/commonTypes";
 import { type QueryObserverResult, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-interface CommonResponse<T> {
-  result?: "SUCCESS" | "FAIL";
-  data?: T;
-  errorCode?: ErrorCode;
-  error_message_for_log?: string;
-  error_message_for_client?: string;
-}
-
 interface UseQueryWithToastOptions {
-  enabled?: boolean; // enabled 옵션을 옵셔널로 추가
+  enabled?: boolean;
+  staleTime?: number; // 서버 fetching을 위한 staleTime 설정
+  refetchInterval?: number;
 }
 
 const useQueryWithToast = <TData>(
@@ -32,6 +26,8 @@ const useQueryWithToast = <TData>(
     queryKey,
     queryFn,
     enabled: options?.enabled ?? true,
+    staleTime: options?.staleTime,
+    refetchInterval: options?.refetchInterval,
   });
 
   useEffect(() => {

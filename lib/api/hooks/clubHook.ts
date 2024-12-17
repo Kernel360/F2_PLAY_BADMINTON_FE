@@ -10,33 +10,27 @@ import {
   postClubs,
   postClubsImg,
 } from "@/lib/api/functions/clubFn";
+import useInfiniteQueryReturnFlattenData from "@/lib/api/hooks/useInfiniteQueryReturnFlattenData";
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   ClubCardResponse,
-  GetClubApplicantsData,
+  GetClubApplicants,
   GetClubDetailData,
-  GetClubListResponse,
+  GetClubList,
+  PatchClubData,
   PatchClubRequest,
   PostClubData,
   PostClubRequest,
-  PostClubResponse,
 } from "@/types/clubTypes";
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useMutationWithToast from "./useMutationWithToast";
 
 export const useGetClubs = (size: number, sort: string) => {
-  return useInfiniteQuery<GetClubListResponse>({
-    queryKey: ["clubList", size, sort],
-    queryFn: ({ pageParam }) => getClubs({ pageParam, size, sort }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => {
-      return !lastPage?.data?.last ? pages.length : null;
-    },
-  });
+  return useInfiniteQueryReturnFlattenData<GetClubList>(
+    ["clubList", size, sort],
+    ({ pageParam }) => getClubs({ pageParam, size, sort }),
+    0,
+  );
 };
 
 export const useGetSearchClubs = (
@@ -44,15 +38,11 @@ export const useGetSearchClubs = (
   sort: string,
   keyword: string,
 ) => {
-  return useInfiniteQuery<GetClubListResponse>({
-    queryKey: ["searchClubList", size, sort, keyword],
-    queryFn: ({ pageParam }) =>
-      getSearchClubs({ pageParam, size, sort, keyword }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => {
-      return !lastPage?.data?.last ? pages.length : null;
-    },
-  });
+  return useInfiniteQueryReturnFlattenData<GetClubList>(
+    ["searchClubList", size, sort, keyword],
+    ({ pageParam }) => getSearchClubs({ pageParam, size, sort, keyword }),
+    0,
+  );
 };
 
 export const useGetPopularClubs = () => {
@@ -99,32 +89,42 @@ export const usePostClubsImg = () => {
 };
 
 export const useGetClubsById = (clubId: string) => {
-  return useQueryWithToast<GetClubDetailData>(["clubsDataById"], () =>
-    getClubsById(clubId),
+  return useQueryWithToast<GetClubDetailData>(
+    ["clubsDataById", clubId],
+    () => getClubsById(clubId),
+    {
+      staleTime: 1000 * 60 * 1, // stale time은 1분
+    },
   );
 };
 
-export const usePatchClubs = (clubId: string) => {
+export const usePatchClubs = (clubId: string, onSuccess: () => void) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (clubUpdateData: PatchClubRequest) =>
-      patchClubs(clubUpdateData, clubId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clubList"] });
-      queryClient.invalidateQueries({ queryKey: ["clubsDataById"] });
-    },
-    onError: (error: Error) => alert(error),
-  });
+  const mutationFn = (clubUpdateData: PatchClubRequest) =>
+    patchClubs(clubUpdateData, clubId);
+
+  const onSuccessCallback = () => {
+    queryClient.invalidateQueries({ queryKey: ["clubList", clubId] });
+    queryClient.invalidateQueries({ queryKey: ["clubsDataById", clubId] });
+    onSuccess();
+  };
+
+  return useMutationWithToast<PatchClubData, PatchClubRequest>(
+    mutationFn,
+    onSuccessCallback,
+  );
 };
 
 export const useGetClubsApplicants = (
   clubId: string,
+  size: number,
   options?: { enabled?: boolean },
 ) => {
-  return useQueryWithToast<GetClubApplicantsData[]>(
-    ["clubsApplicants"],
-    () => getClubsApplicants(clubId),
+  return useInfiniteQueryReturnFlattenData<GetClubApplicants>(
+    ["clubsApplicants", clubId, size],
+    ({ pageParam }) => getClubsApplicants(clubId, pageParam, size),
+    0,
     options,
   );
 };

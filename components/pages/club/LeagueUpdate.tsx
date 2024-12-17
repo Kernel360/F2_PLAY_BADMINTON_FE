@@ -12,7 +12,7 @@ function LeagueUpdate() {
   );
 
   return (
-    <div className="container mx-auto rounded-lg space-y-6 ">
+    <div className="container mx-auto rounded-lg space-y-6 lg:p-6 md:p-4 p-3">
       <div className="border-b pb-4">
         <h2 className="text-2xl font-bold text-gray-800">경기 수정</h2>
       </div>

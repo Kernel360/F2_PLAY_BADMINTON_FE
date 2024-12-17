@@ -1,3 +1,4 @@
+import LeagueParticipant from "@/components/club/LeagueDetail/LeagueParticipant";
 import type { components } from "@/schemas/schema";
 
 export type GetLeagueDetailResponse =
@@ -35,12 +36,18 @@ export type PostLeagueParticipantResponse =
 export type PostLeagueParticipantData =
   components["schemas"]["LeagueParticipantResponse"];
 
-export type PatchLeagueRequest = components["schemas"]["LeagueUpdateRequest"];
-
 export type PatchLeagueResponse =
+  components["schemas"]["CommonResponseLeagueRecruitingCompleteResponse"];
+
+export type PatchLeagueData =
+  components["schemas"]["LeagueRecruitingCompleteResponse"];
+
+export type PutLeagueRequest = components["schemas"]["LeagueUpdateRequest"];
+
+export type PutLeagueResponse =
   components["schemas"]["CommonResponseLeagueUpdateResponse"];
 
-export type PatchLeagueData = components["schemas"]["LeagueUpdateResponse"];
+export type PutLeagueData = components["schemas"]["LeagueUpdateResponse"];
 
 export type DeleteLeagueResponse =
   components["schemas"]["CommonResponseLeagueCancelResponse"];
@@ -52,3 +59,6 @@ export type DeleteLeagueParticipantResponse =
 
 export type DeleteLeagueParticipantData =
   components["schemas"]["LeagueParticipationCancelResponse"];
+
+export type LeagueParticipantType =
+  components["schemas"]["LeagueParticipantDetailsResponse"];
