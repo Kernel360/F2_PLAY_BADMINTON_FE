@@ -79,8 +79,8 @@ export default function MatchDetailPage() {
               matchId={matchId as string}
               currentSetNumber={setDetail?.set_number_in_progress}
               matchStatus={matchStatus as MatchStatusType}
-              player1={participants1[0]?.name || "Player 1"}
-              player2={participants2[0]?.name || "Player 2"}
+              player1={participants1?.filter((p) => p !== undefined) || []}
+              player2={participants2?.filter((p) => p !== undefined) || []}
             />
           </CardContent>
         </Card>

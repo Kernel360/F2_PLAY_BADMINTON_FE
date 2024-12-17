@@ -11,6 +11,7 @@ import {
   usePostSetScore,
 } from "@/lib/api/hooks/matchHook";
 import type {
+  MatchParticipantType,
   MatchStatusType,
   PatchMatchSetScoreRequest,
 } from "@/types/matchTypes";
@@ -23,8 +24,8 @@ interface ScoreboardProps {
   matchId: string;
   currentSetNumber: number;
   matchStatus: MatchStatusType;
-  player1: string;
-  player2: string;
+  player1: MatchParticipantType[];
+  player2: MatchParticipantType[];
 }
 
 // 디바운스된 점수 업데이트 함수를 생성하는 훅
@@ -171,7 +172,7 @@ export default function Scoreboard(props: ScoreboardProps) {
       />
       <div className="grid grid-cols-2 gap-6 w-full">
         <PlayerScore
-          player={player1}
+          players={player1}
           score={tempScore.score1}
           isEditing={isEditing}
           inputRef={inputRefPlayer1}
@@ -179,7 +180,7 @@ export default function Scoreboard(props: ScoreboardProps) {
           onScoreUpdate={() => updateScore("score1", 1)}
         />
         <PlayerScore
-          player={player2}
+          players={player2}
           score={tempScore.score2}
           isEditing={isEditing}
           inputRef={inputRefPlayer2}

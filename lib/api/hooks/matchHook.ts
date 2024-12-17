@@ -13,7 +13,6 @@ import type {
   GetMatchesData,
   GetSetsDetailData,
   MatchStatusType,
-  PatchMatchSetScoreData,
   PatchMatchSetScoreRequest,
   PatchMatchSetScoreResponse,
   PostMatchSetScoreData,

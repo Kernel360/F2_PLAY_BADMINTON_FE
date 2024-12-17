@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/Button";
+import type { MatchParticipantType } from "@/types/matchTypes";
 import type { RefObject } from "react";
 
 interface PlayerScoreProps {
-  player: string;
+  players: MatchParticipantType[];
   score: number;
   isEditing: boolean;
   inputRef: RefObject<HTMLInputElement>;
@@ -12,7 +13,7 @@ interface PlayerScoreProps {
 }
 
 function PlayerScore({
-  player,
+  players,
   score,
   isEditing,
   inputRef,
@@ -22,9 +23,14 @@ function PlayerScore({
 }: PlayerScoreProps) {
   return (
     <div className="text-center space-y-4">
-      <h2 className="text-xl sm:text-2xl font-bold tracking-wide text-gray-100">
-        {player}
-      </h2>
+      {players?.map((player) => (
+        <h2
+          key={player.image}
+          className="text-lg sm:text-xl font-bold tracking-wide text-gray-100"
+        >
+          {player.name}
+        </h2>
+      ))}
       {isEditing ? (
         <input
           ref={inputRef}
