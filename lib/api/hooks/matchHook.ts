@@ -38,6 +38,7 @@ export const useGetSetsDetail = (
   return useQueryWithToast<GetSetsDetailData>(
     ["matchesData", clubId, leagueId, matchId],
     () => getSetsDetail(clubId, leagueId, matchId),
+    { refetchInterval: 5000 },
   );
 };
 
@@ -53,7 +54,7 @@ export const useGetSetScore = (
     () => getSetScore(clubId, leagueId, matchId, setNumber),
     {
       enabled: !(matchStatus !== "IN_PROGRESS"),
-      refetchInterval: 5000, // 5초마다 재요청
+      refetchInterval: 3000, // 3초마다 재요청
     },
   );
 };
