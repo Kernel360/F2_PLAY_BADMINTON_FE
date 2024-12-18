@@ -4,6 +4,7 @@ import type { RefObject } from "react";
 
 interface PlayerScoreProps {
   players: MatchParticipantType[];
+
   score: number;
   isEditing: boolean;
   inputRef: RefObject<HTMLInputElement>;

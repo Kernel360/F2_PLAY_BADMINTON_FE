@@ -100,6 +100,7 @@ export default function Scoreboard(props: ScoreboardProps) {
     }
   }, [scoreData]);
 
+
   const updateScore = (key: "score1" | "score2", increment: number) => {
     if (isEditing) return;
 
