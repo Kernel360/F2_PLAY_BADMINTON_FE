@@ -170,6 +170,7 @@ export default function Scoreboard(props: ScoreboardProps) {
         matchStatus={matchStatus}
         postMatchStart={postMatchStart}
       />
+      <h3 className="text-lg">Set {currentSetNumber}</h3>
       <div className="grid grid-cols-2 gap-6 w-full">
         <PlayerScore
           players={player1}
