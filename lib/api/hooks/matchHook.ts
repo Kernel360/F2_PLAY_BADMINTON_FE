@@ -11,6 +11,7 @@ import {
 import useQueryWithToast from "@/lib/api/hooks/useQueryWithToast";
 import type {
   GetMatchesData,
+  GetSetScoreData,
   GetSetsDetailData,
   MatchStatusType,
   PatchMatchSetScoreRequest,
@@ -20,7 +21,7 @@ import type {
   PostMatchStartData,
   PostMatchesData,
 } from "@/types/matchTypes";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useMutationWithToast from "./useMutationWithToast";
 
 export const useGetMatches = (clubId: string, leagueId: string) => {
@@ -47,12 +48,14 @@ export const useGetSetScore = (
   setNumber: number,
   matchStatus: MatchStatusType,
 ) => {
-  return useQuery({
-    queryKey: ["matchDetail", leagueId, matchId, setNumber],
-    queryFn: () => getSetScore(clubId, leagueId, matchId, setNumber),
-    enabled: !(matchStatus !== "IN_PROGRESS"),
-    refetchInterval: 5000, // 5초마다 재요청
-  });
+  return useQueryWithToast<GetSetScoreData>(
+    ["matchDetail", leagueId, matchId, String(setNumber)],
+    () => getSetScore(clubId, leagueId, matchId, setNumber),
+    {
+      enabled: !(matchStatus !== "IN_PROGRESS"),
+      refetchInterval: 5000, // 5초마다 재요청
+    },
+  );
 };
 
 export const usePostMatches = (

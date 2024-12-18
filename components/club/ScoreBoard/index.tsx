@@ -92,10 +92,10 @@ export default function Scoreboard(props: ScoreboardProps) {
   const debouncedUpdateScore = useDebouncedUpdateScore(patchSetScore);
 
   useEffect(() => {
-    if (scoreData?.data) {
+    if (scoreData) {
       setTempScore({
-        score1: scoreData.data.set_score1,
-        score2: scoreData.data.set_score2,
+        score1: scoreData.set_score1,
+        score2: scoreData.set_score2,
       });
     }
   }, [scoreData]);
@@ -150,8 +150,8 @@ export default function Scoreboard(props: ScoreboardProps) {
 
   const handleCancelEditing = () => {
     setTempScore({
-      score1: scoreData?.data?.set_score1 || 0,
-      score2: scoreData?.data?.set_score2 || 0,
+      score1: scoreData?.set_score1 || 0,
+      score2: scoreData?.set_score2 || 0,
     });
     setIsEditing(false);
   };

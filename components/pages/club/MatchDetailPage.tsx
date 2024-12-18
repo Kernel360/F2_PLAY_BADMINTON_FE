@@ -5,7 +5,7 @@ import MatchDetail from "@/components/club/MatchDetail";
 import Scoreboard from "@/components/club/ScoreBoard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetSetsDetail } from "@/lib/api/hooks/matchHook";
-import type { MatchParticipantType, MatchStatusType } from "@/types/matchTypes";
+import type { MatchStatusType } from "@/types/matchTypes";
 import { RadioTower, Trophy } from "lucide-react";
 import { useParams } from "next/navigation";
 
