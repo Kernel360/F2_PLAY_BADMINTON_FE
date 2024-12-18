@@ -12,7 +12,6 @@ import { BookUser } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
-
 interface MatchButtonProps {
   clubId: string;
   leagueId: string;
