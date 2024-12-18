@@ -5,7 +5,7 @@ import MatchDetail from "@/components/club/MatchDetail";
 import Scoreboard from "@/components/club/ScoreBoard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetSetsDetail } from "@/lib/api/hooks/matchHook";
-import type { MatchParticipantType, MatchStatusType } from "@/types/matchTypes";
+import type { MatchStatusType } from "@/types/matchTypes";
 import { RadioTower, Trophy } from "lucide-react";
 import { useParams } from "next/navigation";
 
@@ -79,8 +79,8 @@ export default function MatchDetailPage() {
               matchId={matchId as string}
               currentSetNumber={setDetail?.set_number_in_progress}
               matchStatus={matchStatus as MatchStatusType}
-              player1={participants1[0]?.name || "Player 1"}
-              player2={participants2[0]?.name || "Player 2"}
+              player1={participants1?.filter((p) => p !== undefined) || []}
+              player2={participants2?.filter((p) => p !== undefined) || []}
             />
           </CardContent>
         </Card>

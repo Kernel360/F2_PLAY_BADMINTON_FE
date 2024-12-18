@@ -1,8 +1,8 @@
 "use client";
 import { useToast } from "@/hooks/use-toast";
 import type { ErrorCode } from "@/types/errorCode";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 
 interface CommonResponse<T> {
   result?: "SUCCESS" | "FAIL";
