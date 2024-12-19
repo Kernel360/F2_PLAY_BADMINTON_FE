@@ -52,27 +52,24 @@ function MainBannerCarousel() {
       >
         <CarouselContent>
           {imageUrl.map((url, index) => (
-            <CarouselItem key={url} className="w-full h-[346px]">
+            <CarouselItem key={url} className="w-full">
               <img
                 src={`${url}`}
                 alt={`banner ${index + 1}`}
-                className="w-[1048px] h-[346px] object-fit rounded-lg"
+                className="w-full h-auto max-h-[346px] sm:max-h-[300px] md:max-h-[400px] lg:max-h-[500px] object-cover rounded-lg"
               />
             </CarouselItem>
           ))}
         </CarouselContent>
       </Carousel>
       <div className="flex justify-center space-x-2 mt-4 gap-2">
-        {Array.from({ length: count }).map((_, index) => (
+        {Array.from({ length: count }).map((number, index) => (
           <button
             type="button"
-            key={`dots-${
-              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-              index
-            }`}
+            key={`dots-${number}`}
             className={`w-2 h-2 rounded-full transition-colors duration-200 ${
               index === current ? "bg-primary" : "bg-gray-300"
-            }`}
+            } md:w-3 md:h-3`}
             onClick={() => scrollTo(index)}
           />
         ))}
